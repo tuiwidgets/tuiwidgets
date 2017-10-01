@@ -12,14 +12,15 @@ TUIWIDGETS_NS_START
 class ZEventPrivate;
 class ZRawSequenceEventPrivate;
 
+namespace ZEventType {
+    QEvent::Type paint();
+    QEvent::Type rawSequence();
+    QEvent::Type pendingRawSequence();
+}
+
 class TUIWIDGETS_EXPORT ZEvent : public QEvent {
 public:
     virtual ~ZEvent();
-
-public:
-    static QEvent::Type paint();
-    static QEvent::Type rawSequence();
-    static QEvent::Type pendingRawSequence();
 
 protected:
     ZEvent(Type type, std::unique_ptr<ZEventPrivate> pimpl);
