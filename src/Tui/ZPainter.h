@@ -5,6 +5,7 @@
 
 #include <QString>
 
+#include <Tui/ZColor.h>
 #include <Tui/tuiwidgets_internal.h>
 
 TUIWIDGETS_NS_START
@@ -19,8 +20,8 @@ public:
 public:
     ZPainter translateAndClip(int x, int y, int width, int height);
 
-    void writeWithColors(int x, int y, QString string, int fg, int bg);
-    void clear(int bg);
+    void writeWithColors(int x, int y, QString string, ZColor fg, ZColor bg);
+    void clear(ZColor bg);
     void flush();
 
 private:

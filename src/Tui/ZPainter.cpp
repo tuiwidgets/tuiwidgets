@@ -2,8 +2,15 @@
 
 #include <Tui/ZPainter_p.h>
 
+#include <Tui/ZColor.h>
 
 TUIWIDGETS_NS_START
+
+namespace {
+    int toTermPaintColor(ZColor color) {
+        return color.nativeValue();
+    }
+}
 
 ZPainterPrivate::ZPainterPrivate(termpaint_surface *surface, int width, int height)
     : surface(surface), x(0), y(0), width(width), height(height)
@@ -42,14 +49,14 @@ ZPainter ZPainter::translateAndClip(int x, int y, int width, int height) {
     return ret;
 }
 
-void ZPainter::writeWithColors(int x, int y, QString string, int fg, int bg) {
+void ZPainter::writeWithColors(int x, int y, QString string, ZColor fg, ZColor bg) {
     auto pimpl = tuiwidgets_impl();
-    termpaint_surface_write_with_colors(pimpl->surface, x + pimpl->x, y + pimpl->y, string.toUtf8().data(), fg, bg);
+    termpaint_surface_write_with_colors(pimpl->surface, x + pimpl->x, y + pimpl->y, string.toUtf8().data(), toTermPaintColor(fg), toTermPaintColor(bg));
 }
 
-void ZPainter::clear(int bg) {
+void ZPainter::clear(ZColor bg) {
     auto pimpl = tuiwidgets_impl();
-    termpaint_surface_clear(pimpl->surface, bg);
+    termpaint_surface_clear(pimpl->surface, toTermPaintColor(bg));
 }
 
 
