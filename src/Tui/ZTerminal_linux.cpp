@@ -8,11 +8,12 @@
 #include <errno.h>
 #include <stdbool.h>
 
-#include <QSocketNotifier>
 #include <stdio.h>
 #include <stdlib.h>
 #include <termios.h>
+#include <sys/ioctl.h>
 
+#include <QSocketNotifier>
 #include <QCoreApplication>
 
 #include <Tui/ZEvent.h>
@@ -102,7 +103,13 @@ bool ZTerminalPrivate::commonStuff() {
     awaiting_response = false;
     surface = termpaint_surface_new(&integration);
     termpaint_auto_detect(surface);
-    termpaint_surface_resize(surface, 80, 24);
+
+    struct winsize s;
+    if (isatty(fd) && ioctl(fd, TIOCGWINSZ, &s) >= 0) {
+        termpaint_surface_resize(surface, s.ws_col, s.ws_row);
+    } else {
+        termpaint_surface_resize(surface, 80, 24);
+    }
     //termpaint_surface_clear(surface, 0x1000000);
     termpaint_surface_clear(surface, 0xff0000);
     termpaint_surface_flush(surface);
