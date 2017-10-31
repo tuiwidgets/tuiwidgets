@@ -8,6 +8,8 @@
 #include <Tui/ZColor.h>
 #include <Tui/tuiwidgets_internal.h>
 
+class QRect;
+
 TUIWIDGETS_NS_START
 
 class ZPainterPrivate;
@@ -18,6 +20,7 @@ public:
     virtual ~ZPainter();
 
 public:
+    ZPainter translateAndClip(QRect transform);
     ZPainter translateAndClip(int x, int y, int width, int height);
 
     void writeWithColors(int x, int y, QString string, ZColor fg, ZColor bg);

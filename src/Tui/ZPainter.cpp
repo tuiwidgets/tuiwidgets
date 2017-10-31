@@ -1,6 +1,7 @@
 #include "ZPainter.h"
-
 #include <Tui/ZPainter_p.h>
+
+#include <QRect>
 
 #include <Tui/ZColor.h>
 
@@ -37,26 +38,42 @@ ZPainter::ZPainter(const ZPainter &other)
 ZPainter::~ZPainter() {
 }
 
+ZPainter ZPainter::translateAndClip(QRect transform) {
+    return translateAndClip(transform.x(), transform.y(), transform.width(), transform.height());
+}
+
 ZPainter ZPainter::translateAndClip(int x, int y, int width, int height) {
     ZPainter ret = *this;
 
-    auto pimpl = ret.tuiwidgets_impl();
+    auto *const pimpl = ret.tuiwidgets_impl();
+
+    // translate
     pimpl->width -= x;
     pimpl->height -= y;
     pimpl->x += x;
     pimpl->y += y;
 
+    // clip
+    pimpl->width = std::min(pimpl->width, width);
+    pimpl->height = std::min(pimpl->height, height);
+
     return ret;
 }
 
 void ZPainter::writeWithColors(int x, int y, QString string, ZColor fg, ZColor bg) {
-    auto pimpl = tuiwidgets_impl();
-    termpaint_surface_write_with_colors(pimpl->surface, x + pimpl->x, y + pimpl->y, string.toUtf8().data(), toTermPaintColor(fg), toTermPaintColor(bg));
+    auto *const pimpl = tuiwidgets_impl();
+    if (y >= pimpl->height) return;
+
+    termpaint_surface_write_with_colors_clipped(pimpl->surface,
+                                             x + pimpl->x, y + pimpl->y,
+                                             string.toUtf8().data(),
+                                             toTermPaintColor(fg), toTermPaintColor(bg),
+                                             pimpl->x, pimpl->x + pimpl->width - 1);
 }
 
 void ZPainter::clear(ZColor bg) {
-    auto pimpl = tuiwidgets_impl();
-    termpaint_surface_clear(pimpl->surface, toTermPaintColor(bg));
+    auto *const pimpl = tuiwidgets_impl();
+    termpaint_surface_clear_rect(pimpl->surface, pimpl->x, pimpl->y, pimpl->width, pimpl->height, toTermPaintColor(bg));
 }
 
 
