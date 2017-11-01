@@ -10,6 +10,8 @@
 
 TUIWIDGETS_NS_START
 
+class ZTerminal;
+
 class ZWidgetPrivate;
 
 class TUIWIDGETS_EXPORT ZWidget : public QObject {
@@ -31,6 +33,7 @@ public:
     void setGeometry(const QRect &geometry);
     bool isVisible() const;
     void setVisible(bool v);
+    ZTerminal *terminal();
 
     bool isAncestorOf(const ZWidget *child) const;
     bool isVisibleTo(const ZWidget *ancestor) const;

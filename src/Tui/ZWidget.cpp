@@ -5,6 +5,7 @@
 #include <QCoreApplication>
 
 #include <Tui/ZPainter.h>
+#include <Tui/ZTerminal_p.h>
 
 TUIWIDGETS_NS_START
 
@@ -72,6 +73,10 @@ void ZWidget::setVisible(bool v) {
     // TODO trigger repaint (Qt does not use events here)
 }
 
+ZTerminal *ZWidget::terminal() {
+    return tuiwidgets_impl()->findTerminal();
+}
+
 bool ZWidget::isAncestorOf(const ZWidget *child) const {
     while (child) {
         if (child == this) {
@@ -136,6 +141,25 @@ void ZWidgetPrivate::updateRequestEvent(ZPaintEvent *event)
         Tui::ZPaintEvent nestedEvent(ZPaintEvent::update, &transformedPainter);
         QCoreApplication::instance()->sendEvent(child, &nestedEvent);
     }
+}
+
+ZTerminal *ZWidgetPrivate::findTerminal() const {
+    ZWidget const *w = pub();
+    while (w) {
+        if (w->tuiwidgets_impl()->terminal) {
+            return w->tuiwidgets_impl()->terminal;
+        }
+        w = w->parentWidget();
+    };
+    return nullptr;
+}
+
+void ZWidgetPrivate::unsetTerminal() {
+    terminal = nullptr;
+}
+
+void ZWidgetPrivate::setManagingTerminal(ZTerminal *terminal) {
+    this->terminal = terminal;
 }
 
 void ZWidget::paintEvent(ZPaintEvent *event) {

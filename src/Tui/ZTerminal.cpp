@@ -5,6 +5,7 @@
 #include <Tui/ZEvent.h>
 #include <Tui/ZPainter_p.h>
 #include <Tui/ZWidget.h>
+#include <Tui/ZWidget_p.h>
 
 TUIWIDGETS_NS_START
 
@@ -43,9 +44,11 @@ ZWidget *ZTerminal::mainWidget() {
 
 void ZTerminal::setMainWidget(ZWidget *w) {
     if (tuiwidgets_impl()->mainWidget) {
+        ZWidgetPrivate::get(tuiwidgets_impl()->mainWidget.get())->unsetTerminal();
         tuiwidgets_impl()->mainWidget.release();
     }
     tuiwidgets_impl()->mainWidget.reset(w);
+    ZWidgetPrivate::get(w)->setManagingTerminal(this);
     update();
 }
 
