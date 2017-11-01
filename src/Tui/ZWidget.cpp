@@ -4,7 +4,9 @@
 
 TUIWIDGETS_NS_START
 
-ZWidgetPrivate::ZWidgetPrivate()
+
+ZWidgetPrivate::ZWidgetPrivate(ZWidget *pub)
+    : pub_ptr(pub)
 {
 
 }
@@ -15,7 +17,7 @@ ZWidgetPrivate::~ZWidgetPrivate()
 }
 
 ZWidget::ZWidget(ZWidget *parent) :
-    QObject(parent)
+    QObject(parent), tuiwidgets_pimpl_ptr(std::make_unique<ZWidgetPrivate>(this))
 {
     // ??? maybe delay parenting to after some code here was run?
     // ??? should there be a posted event after creation? Could be useful for two phase init, but could be to late anyway

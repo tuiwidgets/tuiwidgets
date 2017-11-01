@@ -11,13 +11,14 @@ TUIWIDGETS_NS_START
 
 class ZWidgetPrivate {
 public:
-    ZWidgetPrivate();
+    ZWidgetPrivate(ZWidget *pub);
     virtual ~ZWidgetPrivate();
 
+
+
+    // internal
     const unsigned int tui_magic = tui_magic_v0;
-
     ZWidget* pub_ptr;
-
     TUIWIDGETS_DECLARE_PUBLIC(ZWidget)
 };
 
