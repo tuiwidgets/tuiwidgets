@@ -31,6 +31,13 @@ tuiwidgets_sources += [
 ]
 
 tui_cpp_args = [
+  '-DQT_DISABLE_DEPRECATED_BEFORE=0x050900',
+  '-DQT_NO_CAST_FROM_ASCII',
+  '-DQT_NO_CAST_TO_ASCII',
+  '-DQT_NO_CAST_FROM_BYTEARRAY',
+  '-DQT_NO_FOREACH',
+  '-DQT_NO_KEYWORDS'
+  #'-Werror=old-style-cast'
 ]
 
 tuiwidgets_generated = qt5.preprocess(moc_headers: tuiwidgets_moc_headers, include_directories: '../src')
