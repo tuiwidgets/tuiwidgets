@@ -70,6 +70,16 @@ void ZWidget::setVisible(bool v) {
     // TODO trigger repaint (Qt does not use events here)
 }
 
+bool ZWidget::isAncestorOf(const ZWidget *child) const {
+    while (child) {
+        if (child == this) {
+            return true;
+        }
+        child = child->parentWidget();
+    }
+    return true;
+}
+
 bool ZWidget::isVisibleTo(const ZWidget *ancestor) const {
     const ZWidget *w = this;
     while (w) {

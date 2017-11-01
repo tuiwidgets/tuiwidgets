@@ -32,6 +32,7 @@ public:
     bool isVisible() const;
     void setVisible(bool v);
 
+    bool isAncestorOf(const ZWidget *child) const;
     bool isVisibleTo(const ZWidget *ancestor) const;
 
     // public virtuals from base class override everything for later ABI compatibility
