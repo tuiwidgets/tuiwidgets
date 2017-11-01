@@ -34,6 +34,10 @@ public:
     termpaint_integration integration;
     termpaint_input *input = nullptr;
 
+    bool updateRequested = false;
+
+    std::unique_ptr<ZWidget> mainWidget;
+
     // stuff from integration
     int fd = -1;
     bool auto_close = false;

@@ -12,8 +12,11 @@ class QSize;
 
 TUIWIDGETS_NS_START
 
+class ZPainter;
+
 class ZEventPrivate;
 class ZRawSequenceEventPrivate;
+class ZPaintEventPrivate;
 class ZMoveEventPrivate;
 class ZResizeEventPrivate;
 
@@ -21,6 +24,8 @@ namespace ZEventType {
     QEvent::Type paint();
     QEvent::Type move();
     QEvent::Type resize();
+
+    QEvent::Type updateRequest();
     QEvent::Type rawSequence();
     QEvent::Type pendingRawSequence();
 }
@@ -50,6 +55,20 @@ public:
 
 private:
     TUIWIDGETS_DECLARE_PRIVATE(ZRawSequenceEvent)
+};
+
+class TUIWIDGETS_EXPORT ZPaintEvent : public ZEvent {
+public:
+    class Update{}; static constexpr Update update {};
+
+    ZPaintEvent(ZPainter *painter);
+    ZPaintEvent(Update, ZPainter *painter);
+
+public:
+    ZPainter *painter() const;
+
+private:
+    TUIWIDGETS_DECLARE_PRIVATE(ZPaintEvent)
 };
 
 class TUIWIDGETS_EXPORT ZResizeEvent : public ZEvent {

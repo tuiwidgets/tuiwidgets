@@ -9,6 +9,8 @@
 
 TUIWIDGETS_NS_START
 
+class TUIWIDGETS_EXPORT ZPainter;
+
 class ZEventPrivate {
 public:
     virtual ~ZEventPrivate();
@@ -18,6 +20,12 @@ class ZRawSequenceEventPrivate : public ZEventPrivate {
 public:
     ZRawSequenceEventPrivate(QString seq);
     QString sequence;
+};
+
+class ZPaintEventPrivate : public ZEventPrivate {
+public:
+    ZPaintEventPrivate(ZPainter *painter);
+    ZPainter *painter;
 };
 
 class ZResizeEventPrivate : public ZEventPrivate {

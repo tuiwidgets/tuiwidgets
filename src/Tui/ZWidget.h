@@ -40,6 +40,7 @@ public:
     bool eventFilter(QObject *watched, QEvent *event) override;
 
 protected:
+    virtual void paintEvent(ZPaintEvent *event);
     virtual void resizeEvent(ZResizeEvent *event);
     virtual void moveEvent(ZMoveEvent *event);
     // protected virtuals from base class override everything for later ABI compatibility

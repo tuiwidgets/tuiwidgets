@@ -4,6 +4,8 @@
 
 #include <QCoreApplication>
 
+#include <Tui/ZPainter.h>
+
 TUIWIDGETS_NS_START
 
 
@@ -95,7 +97,13 @@ bool ZWidget::isVisibleTo(const ZWidget *ancestor) const {
 }
 
 bool ZWidget::event(QEvent *event) {
-    if (event->type() == ZEventType::resize()) {
+    if (event->type() == ZEventType::paint()) {
+        paintEvent(static_cast<ZPaintEvent*>(event));
+        return true;
+    } else if (event->type() == ZEventType::updateRequest()) {
+        tuiwidgets_impl()->updateRequestEvent(static_cast<ZPaintEvent*>(event));
+        return true;
+    } else if (event->type() == ZEventType::resize()) {
         resizeEvent(static_cast<ZResizeEvent*>(event));
         return true;
     } else if (event->type() == ZEventType::move()) {
@@ -108,6 +116,30 @@ bool ZWidget::event(QEvent *event) {
 
 bool ZWidget::eventFilter(QObject *watched, QEvent *event) {
     return QObject::eventFilter(watched, event);
+}
+
+void ZWidgetPrivate::updateRequestEvent(ZPaintEvent *event)
+{
+    auto *painter = event->painter();
+    // TODO think about mitigations about childs beeing deleted while in paint event
+    {
+        Tui::ZPaintEvent nestedEvent(painter);
+        QCoreApplication::instance()->sendEvent(pub(), &nestedEvent);
+    }
+    for (QObject *childQObj : pub()->children()) {
+        ZWidget* child = qobject_cast<ZWidget*>(childQObj);
+        if (!child) {
+            continue;
+        }
+        const QRect &childRect = child->tuiwidgets_impl()->rect;
+        ZPainter transformedPainter = painter->translateAndClip(childRect);
+        Tui::ZPaintEvent nestedEvent(ZPaintEvent::update, &transformedPainter);
+        QCoreApplication::instance()->sendEvent(child, &nestedEvent);
+    }
+}
+
+void ZWidget::paintEvent(ZPaintEvent *event) {
+    Q_UNUSED(event);
 }
 
 void ZWidget::resizeEvent(ZResizeEvent *event)

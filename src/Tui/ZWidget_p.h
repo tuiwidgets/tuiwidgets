@@ -17,6 +17,8 @@ public:
     virtual ~ZWidgetPrivate();
 
 
+    void updateRequestEvent(ZPaintEvent *event);
+
     // variables
     QRect rect;
     bool visible = true;

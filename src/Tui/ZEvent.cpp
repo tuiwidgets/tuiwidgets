@@ -22,6 +22,10 @@ QEvent::Type ZEventType::resize() {
     CALL_ONCE_REGISTEREVENTTYPE;
 }
 
+TUIWIDGETS_EXPORT QEvent::Type ZEventType::updateRequest() {
+    CALL_ONCE_REGISTEREVENTTYPE;
+}
+
 TUIWIDGETS_EXPORT QEvent::Type ZEventType::rawSequence() {
     CALL_ONCE_REGISTEREVENTTYPE;
 }
@@ -59,6 +63,25 @@ QString ZRawSequenceEvent::sequence() {
 
 Tui::ZRawSequenceEventPrivate::ZRawSequenceEventPrivate(QString seq)
     : sequence(seq)
+{
+}
+
+ZPaintEvent::ZPaintEvent(ZPainter *painter)
+    : ZEvent(ZEventType::paint(), std::make_unique<ZPaintEventPrivate>(painter))
+{
+}
+
+ZPaintEvent::ZPaintEvent(ZPaintEvent::Update, ZPainter *painter)
+    : ZEvent(ZEventType::updateRequest(), std::make_unique<ZPaintEventPrivate>(painter))
+{
+}
+
+ZPainter *ZPaintEvent::painter() const {
+    return tuiwidgets_impl()->painter;
+}
+
+ZPaintEventPrivate::ZPaintEventPrivate(ZPainter *painter)
+    : painter(painter)
 {
 }
 

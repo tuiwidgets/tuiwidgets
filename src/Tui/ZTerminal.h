@@ -10,7 +10,9 @@
 
 TUIWIDGETS_NS_START
 
+class ZWidget;
 class ZPainter;
+
 class ZTerminalPrivate;
 
 class TUIWIDGETS_EXPORT ZTerminal : public QObject {
@@ -21,10 +23,13 @@ public:
 
 public:
     ZPainter painter();
+    ZWidget* mainWidget();
+    void setMainWidget(ZWidget* w);
 
-signals:
+    void update();
 
-public slots:
+
+public Q_SLOTS:
 
 protected:
     std::unique_ptr<ZTerminalPrivate> tuiwidgets_pimpl_ptr;
