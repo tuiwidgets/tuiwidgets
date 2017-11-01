@@ -1,6 +1,8 @@
 #ifndef TUIWIDGETS_ZEVENT_P_INCLUDED
 #define TUIWIDGETS_ZEVENT_P_INCLUDED
 
+#include <QPoint>
+#include <QSize>
 #include <QString>
 
 #include <Tui/tuiwidgets_internal.h>
@@ -17,6 +19,25 @@ public:
     ZRawSequenceEventPrivate(QString seq);
     QString sequence;
 };
+
+class ZResizeEventPrivate : public ZEventPrivate {
+public:
+    ZResizeEventPrivate(QSize size, QSize oldSize);
+
+public:
+    QSize size;
+    QSize oldSize;
+};
+
+class ZMoveEventPrivate : public ZEventPrivate {
+public:
+    ZMoveEventPrivate(QPoint pos, QPoint oldPos);
+
+public:
+    QPoint pos;
+    QPoint oldPos;
+};
+
 
 TUIWIDGETS_NS_END
 

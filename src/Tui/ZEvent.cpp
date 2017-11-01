@@ -1,13 +1,24 @@
 #include "ZEvent.h"
 #include "ZEvent_p.h"
 
+#include <QPoint>
+#include <QSize>
+
 TUIWIDGETS_NS_START
 
 #define CALL_ONCE_REGISTEREVENTTYPE     \
-    static QEvent::Type event = (QEvent::Type)QEvent::registerEventType(); \
+    static QEvent::Type event = static_cast<QEvent::Type>(QEvent::registerEventType()); \
     return event
 
 TUIWIDGETS_EXPORT QEvent::Type ZEventType::paint() {
+    CALL_ONCE_REGISTEREVENTTYPE;
+}
+
+QEvent::Type ZEventType::move() {
+    CALL_ONCE_REGISTEREVENTTYPE;
+}
+
+QEvent::Type ZEventType::resize() {
     CALL_ONCE_REGISTEREVENTTYPE;
 }
 
@@ -51,6 +62,45 @@ Tui::ZRawSequenceEventPrivate::ZRawSequenceEventPrivate(QString seq)
 {
 }
 
+ZResizeEventPrivate::ZResizeEventPrivate(QSize size, QSize oldSize)
+    : size(size), oldSize(oldSize)
+{
+}
+
+ZResizeEvent::ZResizeEvent(QSize size, QSize oldSize)
+    : ZEvent(ZEventType::resize(), std::make_unique<ZResizeEventPrivate>(size, oldSize))
+{
+}
+
+QSize ZResizeEvent::size() const
+{
+    return tuiwidgets_impl()->size;
+}
+
+QSize ZResizeEvent::oldSize() const
+{
+    return tuiwidgets_impl()->oldSize;
+}
+
+ZMoveEventPrivate::ZMoveEventPrivate(QPoint pos, QPoint oldPos)
+    : pos(pos), oldPos(oldPos)
+{
+}
+
+ZMoveEvent::ZMoveEvent(QPoint pos, QPoint oldPos)
+    : ZEvent(ZEventType::move(), std::make_unique<ZMoveEventPrivate>(pos, oldPos))
+{
+}
+
+QPoint ZMoveEvent::pos() const
+{
+    return tuiwidgets_impl()->pos;
+}
+
+QPoint ZMoveEvent::oldPos() const
+{
+    return tuiwidgets_impl()->oldPos;
+}
 
 
 TUIWIDGETS_NS_END

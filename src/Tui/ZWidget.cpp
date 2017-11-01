@@ -2,6 +2,8 @@
 
 #include <Tui/ZWidget_p.h>
 
+#include <QCoreApplication>
+
 TUIWIDGETS_NS_START
 
 
@@ -36,12 +38,46 @@ void ZWidget::setParent(ZWidget *parent) {
     // QEvent::ParentChange
 }
 
+QRect ZWidget::geometry() const {
+    return tuiwidgets_impl()->rect;
+}
+
+void ZWidget::setGeometry(const QRect &rect) {
+    auto *const p = tuiwidgets_impl();
+    QRect oldRect = p->rect;
+    p->rect = rect;
+    if (oldRect.topLeft() != rect.topLeft()) {
+        ZMoveEvent e {rect.topLeft(), oldRect.topLeft()};
+        QCoreApplication::sendEvent(this, &e);
+    }
+    if (oldRect.size() != rect.size()) {
+        ZResizeEvent e {rect.size(), oldRect.size()};
+        QCoreApplication::sendEvent(this, &e);
+    }
+}
+
 bool ZWidget::event(QEvent *event) {
-    return QObject::event(event);
+    if (event->type() == ZEventType::resize()) {
+        resizeEvent(static_cast<ZResizeEvent*>(event));
+        return true;
+    } else if (event->type() == ZEventType::move()) {
+        moveEvent(static_cast<ZMoveEvent*>(event));
+        return true;
+    } else {
+        return QObject::event(event);
+    }
 }
 
 bool ZWidget::eventFilter(QObject *watched, QEvent *event) {
     return QObject::eventFilter(watched, event);
+}
+
+void ZWidget::resizeEvent(ZResizeEvent *event)
+{
+}
+
+void ZWidget::moveEvent(ZMoveEvent *event)
+{
 }
 
 void ZWidget::timerEvent(QTimerEvent *event) {

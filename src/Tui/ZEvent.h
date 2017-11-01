@@ -7,13 +7,20 @@
 
 #include <Tui/tuiwidgets_internal.h>
 
+class QPoint;
+class QSize;
+
 TUIWIDGETS_NS_START
 
 class ZEventPrivate;
 class ZRawSequenceEventPrivate;
+class ZMoveEventPrivate;
+class ZResizeEventPrivate;
 
 namespace ZEventType {
     QEvent::Type paint();
+    QEvent::Type move();
+    QEvent::Type resize();
     QEvent::Type rawSequence();
     QEvent::Type pendingRawSequence();
 }
@@ -43,6 +50,30 @@ public:
 
 private:
     TUIWIDGETS_DECLARE_PRIVATE(ZRawSequenceEvent)
+};
+
+class TUIWIDGETS_EXPORT ZResizeEvent : public ZEvent {
+public:
+    ZResizeEvent(QSize size, QSize oldSize);
+
+public:
+    QSize size() const;
+    QSize oldSize() const;
+
+private:
+    TUIWIDGETS_DECLARE_PRIVATE(ZResizeEvent)
+};
+
+class TUIWIDGETS_EXPORT ZMoveEvent : public ZEvent {
+public:
+    ZMoveEvent(QPoint pos, QPoint oldPos);
+
+public:
+    QPoint pos() const;
+    QPoint oldPos() const;
+
+private:
+    TUIWIDGETS_DECLARE_PRIVATE(ZMoveEvent)
 };
 
 TUIWIDGETS_NS_END

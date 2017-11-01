@@ -1,6 +1,8 @@
 #ifndef TUIWIDGETS_ZWIDGET_P_INCLUDED
 #define TUIWIDGETS_ZWIDGET_P_INCLUDED
 
+#include <QRect>
+
 #include <Tui/tuiwidgets_internal.h>
 
 #include <Tui/ZWidget.h>
@@ -15,6 +17,8 @@ public:
     virtual ~ZWidgetPrivate();
 
 
+    // variables
+    QRect rect;
 
     // internal
     const unsigned int tui_magic = tui_magic_v0;
