@@ -37,6 +37,8 @@ public:
 
     void update();
 
+    void setFocus(Qt::FocusReason reason = Qt::OtherFocusReason);
+
     bool isAncestorOf(const ZWidget *child) const;
     bool isVisibleTo(const ZWidget *ancestor) const;
 
@@ -46,6 +48,7 @@ public:
 
 protected:
     virtual void paintEvent(ZPaintEvent *event);
+    virtual void keyEvent(ZKeyEvent *event);
     virtual void resizeEvent(ZResizeEvent *event);
     virtual void moveEvent(ZMoveEvent *event);
     // protected virtuals from base class override everything for later ABI compatibility

@@ -16,16 +16,20 @@ class ZPainter;
 
 class ZEventPrivate;
 class ZRawSequenceEventPrivate;
+class ZTerminalNativeEventPrivate;
 class ZPaintEventPrivate;
+class ZKeyEventPrivate;
 class ZMoveEventPrivate;
 class ZResizeEventPrivate;
 
 namespace ZEventType {
     QEvent::Type paint();
+    QEvent::Type key();
     QEvent::Type move();
     QEvent::Type resize();
 
     QEvent::Type updateRequest();
+    QEvent::Type terminalNativeEvent();
     QEvent::Type rawSequence();
     QEvent::Type pendingRawSequence();
 }
@@ -51,10 +55,21 @@ public:
 
 
 public:
-    QString sequence();
+    QString sequence() const;
 
 private:
     TUIWIDGETS_DECLARE_PRIVATE(ZRawSequenceEvent)
+};
+
+class TUIWIDGETS_EXPORT ZTerminalNativeEvent : public ZEvent {
+public:
+    ZTerminalNativeEvent(void *native);
+
+public:
+    void *nativeEventPointer() const;
+
+private:
+    TUIWIDGETS_DECLARE_PRIVATE(ZTerminalNativeEvent)
 };
 
 class TUIWIDGETS_EXPORT ZPaintEvent : public ZEvent {
@@ -69,6 +84,19 @@ public:
 
 private:
     TUIWIDGETS_DECLARE_PRIVATE(ZPaintEvent)
+};
+
+class TUIWIDGETS_EXPORT ZKeyEvent : public ZEvent {
+public:
+    ZKeyEvent(int key, Qt::KeyboardModifiers modifiers, const QString &text);
+
+public:
+    int key() const;
+    QString text() const;
+    Qt::KeyboardModifiers modifiers() const;
+
+private:
+    TUIWIDGETS_DECLARE_PRIVATE(ZKeyEvent)
 };
 
 class TUIWIDGETS_EXPORT ZResizeEvent : public ZEvent {

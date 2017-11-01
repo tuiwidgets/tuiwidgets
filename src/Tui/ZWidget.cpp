@@ -83,6 +83,11 @@ void ZWidget::update() {
     if (terminal) terminal->update();
 }
 
+void ZWidget::setFocus(Qt::FocusReason reason) {
+    ZTerminalPrivate *termp = ZTerminalPrivate::get(tuiwidgets_impl()->findTerminal());
+    termp->setFocus(this);
+}
+
 bool ZWidget::isAncestorOf(const ZWidget *child) const {
     while (child) {
         if (child == this) {
@@ -110,6 +115,9 @@ bool ZWidget::isVisibleTo(const ZWidget *ancestor) const {
 bool ZWidget::event(QEvent *event) {
     if (event->type() == ZEventType::paint()) {
         paintEvent(static_cast<ZPaintEvent*>(event));
+        return true;
+    } else if (event->type() == ZEventType::key()) {
+        keyEvent(static_cast<ZKeyEvent*>(event));
         return true;
     } else if (event->type() == ZEventType::updateRequest()) {
         tuiwidgets_impl()->updateRequestEvent(static_cast<ZPaintEvent*>(event));
@@ -170,6 +178,10 @@ void ZWidgetPrivate::setManagingTerminal(ZTerminal *terminal) {
 
 void ZWidget::paintEvent(ZPaintEvent *event) {
     Q_UNUSED(event);
+}
+
+void ZWidget::keyEvent(ZKeyEvent *event) {
+    event->ignore();
 }
 
 void ZWidget::resizeEvent(ZResizeEvent *event)

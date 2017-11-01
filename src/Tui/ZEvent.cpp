@@ -14,6 +14,10 @@ TUIWIDGETS_EXPORT QEvent::Type ZEventType::paint() {
     CALL_ONCE_REGISTEREVENTTYPE;
 }
 
+TUIWIDGETS_EXPORT QEvent::Type ZEventType::key() {
+    CALL_ONCE_REGISTEREVENTTYPE;
+}
+
 QEvent::Type ZEventType::move() {
     CALL_ONCE_REGISTEREVENTTYPE;
 }
@@ -23,6 +27,10 @@ QEvent::Type ZEventType::resize() {
 }
 
 TUIWIDGETS_EXPORT QEvent::Type ZEventType::updateRequest() {
+    CALL_ONCE_REGISTEREVENTTYPE;
+}
+
+TUIWIDGETS_EXPORT QEvent::Type ZEventType::terminalNativeEvent() {
     CALL_ONCE_REGISTEREVENTTYPE;
 }
 
@@ -57,7 +65,7 @@ ZRawSequenceEvent::ZRawSequenceEvent(Pending, QString seq)
 {
 }
 
-QString ZRawSequenceEvent::sequence() {
+QString ZRawSequenceEvent::sequence() const {
     return tuiwidgets_impl()->sequence;
 }
 
@@ -83,6 +91,42 @@ ZPainter *ZPaintEvent::painter() const {
 ZPaintEventPrivate::ZPaintEventPrivate(ZPainter *painter)
     : painter(painter)
 {
+}
+
+ZTerminalNativeEvent::ZTerminalNativeEvent(void *native)
+    : ZEvent(ZEventType::terminalNativeEvent(), std::make_unique<ZTerminalNativeEventPrivate>(native))
+{
+}
+
+void *ZTerminalNativeEvent::nativeEventPointer() const {
+    return tuiwidgets_impl()->native;
+}
+
+ZTerminalNativeEventPrivate::ZTerminalNativeEventPrivate(void *native)
+    : native(native)
+{
+}
+
+ZKeyEventPrivate::ZKeyEventPrivate(int key, Qt::KeyboardModifiers modifiers, const QString &text)
+    : key(key), text(text), modifiers(modifiers)
+{
+}
+
+ZKeyEvent::ZKeyEvent(int key, Qt::KeyboardModifiers modifiers, const QString &text)
+    : ZEvent(ZEventType::key(), std::make_unique<ZKeyEventPrivate>(key, modifiers, text))
+{
+}
+
+int ZKeyEvent::key() const {
+    return tuiwidgets_impl()->key;
+}
+
+QString ZKeyEvent::text() const {
+    return tuiwidgets_impl()->text;
+}
+
+Qt::KeyboardModifiers ZKeyEvent::modifiers() const {
+    return tuiwidgets_impl()->modifiers;
 }
 
 ZResizeEventPrivate::ZResizeEventPrivate(QSize size, QSize oldSize)

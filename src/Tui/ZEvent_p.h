@@ -22,10 +22,26 @@ public:
     QString sequence;
 };
 
+class ZTerminalNativeEventPrivate : public ZEventPrivate {
+public:
+    ZTerminalNativeEventPrivate(void *native);
+    void* native;
+};
+
 class ZPaintEventPrivate : public ZEventPrivate {
 public:
     ZPaintEventPrivate(ZPainter *painter);
     ZPainter *painter;
+};
+
+class ZKeyEventPrivate : public ZEventPrivate {
+public:
+    ZKeyEventPrivate(int key, Qt::KeyboardModifiers modifiers, const QString &text);
+
+public:
+    int key = Qt::Key_unknown;
+    QString text;
+    Qt::KeyboardModifiers modifiers = 0;
 };
 
 class ZResizeEventPrivate : public ZEventPrivate {

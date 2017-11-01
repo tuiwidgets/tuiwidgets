@@ -11,7 +11,9 @@
 TUIWIDGETS_NS_START
 
 class ZWidget;
+class ZTerminalNativeEvent;
 class ZPainter;
+class ZKeyEvent;
 
 class ZTerminalPrivate;
 
@@ -26,7 +28,12 @@ public:
     ZWidget* mainWidget();
     void setMainWidget(ZWidget* w);
 
+    ZWidget *focusWidget();
+
     void update();
+
+protected:
+    std::unique_ptr<ZKeyEvent> translateKeyEvent(const ZTerminalNativeEvent &nativeEvent);
 
 
 public Q_SLOTS:

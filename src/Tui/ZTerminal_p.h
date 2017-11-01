@@ -10,10 +10,16 @@
 
 TUIWIDGETS_NS_START
 
+class ZWidgetPrivate;
+
 class ZTerminalPrivate {
 public:
     ZTerminalPrivate(ZTerminal *pub);
     virtual ~ZTerminalPrivate();
+    static ZTerminalPrivate *get(ZTerminal *terminal);
+
+    void setFocus(ZWidget *w);
+    ZWidget *focus();
 
     bool initTerminal();
     void deinitTerminal();
@@ -37,6 +43,7 @@ public:
     bool updateRequested = false;
 
     std::unique_ptr<ZWidget> mainWidget;
+    ZWidgetPrivate *focusWidget = nullptr;
 
     // stuff from integration
     int fd = -1;

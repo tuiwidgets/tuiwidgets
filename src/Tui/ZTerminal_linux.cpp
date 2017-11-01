@@ -90,11 +90,17 @@ bool ZTerminalPrivate::setupFromControllingTerminal() {
 
 
 
-_Bool raw_filter(void *user_data, const char *data, unsigned length, _Bool overflow) {
+static _Bool raw_filter(void *user_data, const char *data, unsigned length, _Bool overflow) {
     ZTerminal* that = static_cast<ZTerminal*>(user_data);
     QString rawSequence = QString::fromUtf8(data, length);
     ZRawSequenceEvent event{rawSequence};
     return QCoreApplication::sendEvent(that, &event);
+}
+
+static void event_handler(void *user_data, termpaint_input_event *event) {
+    ZTerminal* that = static_cast<ZTerminal*>(user_data);
+    ZTerminalNativeEvent tuiEvent{event};
+    QCoreApplication::sendEvent(that, &tuiEvent);
 }
 
 bool ZTerminalPrivate::commonStuff() {
@@ -128,6 +134,7 @@ bool ZTerminalPrivate::commonStuff() {
 
     input = termpaint_input_new();
     termpaint_input_set_raw_filter_cb(input, raw_filter, pub());
+    termpaint_input_set_event_cb(input, event_handler, pub());
 
     auto notifier = new QSocketNotifier(fd, QSocketNotifier::Read); // TODO don't leak
     QObject::connect(notifier, &QSocketNotifier::activated, [input=this->input, that=pub()] (int socket) -> void {
