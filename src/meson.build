@@ -21,20 +21,25 @@ tuiwidgets_public_headers = [
 tuiwidgets_sources = [
   'Tui/ZColor.cpp',
   'Tui/ZEvent.cpp',
-  'Tui/ZWidget.cpp',
+  'Tui/ZPainter.cpp',
   'Tui/ZTerminal.cpp',
-  'Tui/ZPainter.cpp'
+  'Tui/ZWidget.cpp',
 ]
 
 tuiwidgets_sources += [
-    'Tui/ZTerminal_linux.cpp'
+  'Tui/ZTerminal_linux.cpp'
 ]
 
-moc_files = qt5.preprocess(moc_headers: tuiwidgets_moc_headers, include_directories: '../src', install: true)
+tui_cpp_args = [
+]
 
-tuiwidgets = library('tuiwidgets', tuiwidgets_sources, moc_files,
+tuiwidgets_generated = qt5.preprocess(moc_headers: tuiwidgets_moc_headers, include_directories: '../src')
+
+tuiwidgets = library('tuiwidgets', tuiwidgets_sources, tuiwidgets_generated,
   dependencies : [qt5_dep, termpaint_dep],
-  install: true)
+  cpp_args: tui_cpp_args,
+  install: true
+)
 
 install_headers(tuiwidgets_public_headers, subdir:'Tui')
 
