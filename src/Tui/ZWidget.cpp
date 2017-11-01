@@ -77,6 +77,11 @@ ZTerminal *ZWidget::terminal() {
     return tuiwidgets_impl()->findTerminal();
 }
 
+void ZWidget::update() {
+    auto *terminal = tuiwidgets_impl()->findTerminal();
+    if (terminal) terminal->update();
+}
+
 bool ZWidget::isAncestorOf(const ZWidget *child) const {
     while (child) {
         if (child == this) {

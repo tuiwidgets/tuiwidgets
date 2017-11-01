@@ -35,6 +35,8 @@ public:
     void setVisible(bool v);
     ZTerminal *terminal();
 
+    void update();
+
     bool isAncestorOf(const ZWidget *child) const;
     bool isVisibleTo(const ZWidget *ancestor) const;
 
