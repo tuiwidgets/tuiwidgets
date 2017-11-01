@@ -31,6 +31,7 @@ public:
     ZWidget *focusWidget();
 
     void update();
+    void forceRepaint();
 
 protected:
     std::unique_ptr<ZKeyEvent> translateKeyEvent(const ZTerminalNativeEvent &nativeEvent);

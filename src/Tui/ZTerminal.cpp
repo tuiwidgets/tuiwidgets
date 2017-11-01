@@ -79,6 +79,15 @@ void ZTerminal::update() {
     QCoreApplication::postEvent(this, new ZPaintEvent(ZPaintEvent::update, nullptr), Qt::LowEventPriority);
 }
 
+void ZTerminal::forceRepaint()
+{
+    // XXX disable delta drawing algorithm here when implemented later.
+    ZPainter p = painter();
+    ZPaintEvent event(ZPaintEvent::update, &p);
+    QCoreApplication::sendEvent(tuiwidgets_impl()->mainWidget.get(), &event);
+    p.flush();
+}
+
 std::unique_ptr<ZKeyEvent> ZTerminal::translateKeyEvent(const ZTerminalNativeEvent &nativeEvent) {
     termpaint_input_event* native = static_cast<termpaint_input_event*>(nativeEvent.nativeEventPointer());
 
@@ -137,6 +146,12 @@ bool ZTerminal::event(QEvent *event) {
                     break;
                 }
                 w = w->parentWidget();
+            }
+            if (!translated->isAccepted()) {
+                if (translated->modifiers() == Qt::ControlModifier
+                    && translated->text() == QStringLiteral("l")) {
+                    forceRepaint();
+                }
             }
         }
         return true; // ???
