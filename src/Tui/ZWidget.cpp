@@ -89,6 +89,24 @@ void ZWidget::setVisible(bool v) {
     // TODO trigger repaint (Qt does not use events here)
 }
 
+void ZWidget::showCursor(QPoint position) {
+    ZTerminal *term = terminal();
+    if (term && term->focusWidget() == this) {
+        ZTerminalPrivate *termp = ZTerminalPrivate::get(term);
+        if (position.x() >= 0 && position.x() < geometry().width()
+         && position.y() >= 0 && position.y() < geometry().height()) {
+            ZWidget *w = this;
+            while (w) {
+                position += w->geometry().topLeft();
+                w = w->parentWidget();
+            }
+            termp->cursorPosition = position;
+        } else {
+            termp->cursorPosition = QPoint{-1, -1};
+        }
+    }
+}
+
 ZTerminal *ZWidget::terminal() {
     return tuiwidgets_impl()->findTerminal();
 }

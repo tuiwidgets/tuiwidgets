@@ -41,6 +41,7 @@ public:
     void setEnabled(bool e);
     bool isVisible() const;
     void setVisible(bool v);
+    void showCursor(QPoint position);
     ZTerminal *terminal();
 
     void update();

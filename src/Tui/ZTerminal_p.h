@@ -1,6 +1,8 @@
 #ifndef TUIWIDGETS_ZTERMINAL_P_INCLUDED
 #define TUIWIDGETS_ZTERMINAL_P_INCLUDED
 
+#include <QPoint>
+
 #include <termpaint.h>
 #include <termpaint_input.h>
 
@@ -43,6 +45,7 @@ public:
     bool updateRequested = false;
 
     std::unique_ptr<ZWidget> mainWidget;
+    QPoint cursorPosition = {-1, -1};
     ZWidgetPrivate *focusWidget = nullptr;
 
     // stuff from integration

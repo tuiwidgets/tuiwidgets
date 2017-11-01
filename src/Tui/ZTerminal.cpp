@@ -25,6 +25,7 @@ ZTerminalPrivate *ZTerminalPrivate::get(ZTerminal *terminal) {
 
 void ZTerminalPrivate::setFocus(ZWidget *w) {
     focusWidget = ZWidgetPrivate::get(w);
+    cursorPosition = QPoint{-1, -1};
 }
 
 ZWidget *ZTerminalPrivate::focus() {
@@ -163,6 +164,10 @@ bool ZTerminal::event(QEvent *event) {
         ZPaintEvent event(ZPaintEvent::update, &p);
         QCoreApplication::sendEvent(tuiwidgets_impl()->mainWidget.get(), &event);
         p.flush();
+        if (tuiwidgets_impl()->cursorPosition != QPoint{-1, -1}) {
+            termpaint_surface_set_cursor(tuiwidgets_impl()->surface,
+                                         tuiwidgets_impl()->cursorPosition.x(), tuiwidgets_impl()->cursorPosition.y());
+        }
     }
 
     return QObject::event(event);
