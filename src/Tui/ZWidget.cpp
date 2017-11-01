@@ -57,6 +57,7 @@ void ZWidget::setGeometry(const QRect &rect) {
         ZResizeEvent e {rect.size(), oldRect.size()};
         QCoreApplication::sendEvent(this, &e);
     }
+    update();
 }
 
 bool ZWidget::isVisible() const {
