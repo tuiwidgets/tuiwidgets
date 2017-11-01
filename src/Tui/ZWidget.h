@@ -12,6 +12,12 @@ TUIWIDGETS_NS_START
 
 class ZTerminal;
 
+enum class FocusContainerMode {
+    None,
+    SubOrdering,
+    Cycle
+};
+
 class ZWidgetPrivate;
 
 class TUIWIDGETS_EXPORT ZWidget : public QObject {
@@ -39,11 +45,24 @@ public:
 
     void update();
 
+    void setFocusPolicy(Qt::FocusPolicy policy);
+    Qt::FocusPolicy focusPolicy() const;
+    void setFocusMode(FocusContainerMode mode);
+    FocusContainerMode focusMode() const;
+    void setFocusOrder(int order);
+    int focusOrder() const;
+
     void setFocus(Qt::FocusReason reason = Qt::OtherFocusReason);
 
     bool isAncestorOf(const ZWidget *child) const;
     bool isEnabledTo(const ZWidget *ancestor) const;
     bool isVisibleTo(const ZWidget *ancestor) const;
+
+    ZWidget const* prevFocusable() const;
+    ZWidget* prevFocusable();
+    ZWidget const* nextFocusable() const;
+    ZWidget* nextFocusable();
+    const ZWidget *placeFocus(bool last = false) const;
 
     // public virtuals from base class override everything for later ABI compatibility
     bool event(QEvent *event) override;
@@ -52,6 +71,8 @@ public:
 protected:
     virtual void paintEvent(ZPaintEvent *event);
     virtual void keyEvent(ZKeyEvent *event);
+    virtual void focusInEvent(ZFocusEvent *event);
+    virtual void focusOutEvent(ZFocusEvent *event);
     virtual void resizeEvent(ZResizeEvent *event);
     virtual void moveEvent(ZMoveEvent *event);
     // protected virtuals from base class override everything for later ABI compatibility

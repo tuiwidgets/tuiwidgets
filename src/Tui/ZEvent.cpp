@@ -18,6 +18,14 @@ TUIWIDGETS_EXPORT QEvent::Type ZEventType::key() {
     CALL_ONCE_REGISTEREVENTTYPE;
 }
 
+TUIWIDGETS_EXPORT QEvent::Type ZEventType::focusIn() {
+    CALL_ONCE_REGISTEREVENTTYPE;
+}
+
+TUIWIDGETS_EXPORT QEvent::Type ZEventType::focusOut() {
+    CALL_ONCE_REGISTEREVENTTYPE;
+}
+
 QEvent::Type ZEventType::move() {
     CALL_ONCE_REGISTEREVENTTYPE;
 }
@@ -127,6 +135,22 @@ QString ZKeyEvent::text() const {
 
 Qt::KeyboardModifiers ZKeyEvent::modifiers() const {
     return tuiwidgets_impl()->modifiers;
+}
+
+ZFocusEventPrivate::ZFocusEventPrivate(Qt::FocusReason reason)
+    : reason(reason)
+{
+}
+
+ZFocusEvent::ZFocusEvent(ZFocusEvent::FocusIn, Qt::FocusReason reason)
+    : ZEvent(ZEventType::focusIn(), std::make_unique<ZFocusEventPrivate>(reason))
+{
+
+}
+
+ZFocusEvent::ZFocusEvent(ZFocusEvent::FocusOut, Qt::FocusReason reason)
+    : ZEvent(ZEventType::focusOut(), std::make_unique<ZFocusEventPrivate>(reason))
+{
 }
 
 ZResizeEventPrivate::ZResizeEventPrivate(QSize size, QSize oldSize)

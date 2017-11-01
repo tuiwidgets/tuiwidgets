@@ -44,6 +44,15 @@ public:
     Qt::KeyboardModifiers modifiers = 0;
 };
 
+class ZFocusEventPrivate : public ZEventPrivate {
+public:
+    ZFocusEventPrivate(Qt::FocusReason reason);
+
+public:
+    Qt::FocusReason reason;
+};
+
+
 class ZResizeEventPrivate : public ZEventPrivate {
 public:
     ZResizeEventPrivate(QSize size, QSize oldSize);

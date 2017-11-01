@@ -26,8 +26,13 @@ public:
     void unsetTerminal();
     void setManagingTerminal(ZTerminal *terminal);
 
+    bool isFocusable() const { return enabled && focusPolicy != Qt::FocusPolicy::NoFocus; }
+
     // variables
     QRect rect;
+    Qt::FocusPolicy focusPolicy = Qt::NoFocus;
+    FocusContainerMode focusMode = FocusContainerMode::None;
+    int focusOrder = 0;
 
     bool enabled = true;
     bool visible = true;

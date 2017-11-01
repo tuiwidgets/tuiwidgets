@@ -1,7 +1,9 @@
 #include <Tui/ZWidget.h>
-
 #include <Tui/ZWidget_p.h>
 
+#include <limits>
+
+#include <QPointer>
 #include <QCoreApplication>
 
 #include <Tui/ZPainter.h>
@@ -96,9 +98,52 @@ void ZWidget::update() {
     if (terminal) terminal->update();
 }
 
+void ZWidget::setFocusPolicy(Qt::FocusPolicy policy) {
+    auto *const p = tuiwidgets_impl();
+    p->focusPolicy = policy;
+}
+
+Qt::FocusPolicy ZWidget::focusPolicy() const {
+    auto *const p = tuiwidgets_impl();
+    return p->focusPolicy;
+}
+
+void ZWidget::setFocusMode(FocusContainerMode mode) {
+    auto *const p = tuiwidgets_impl();
+    p->focusMode = mode;
+}
+
+FocusContainerMode ZWidget::focusMode() const {
+    auto *const p = tuiwidgets_impl();
+    return p->focusMode;
+}
+
+void ZWidget::setFocusOrder(int order) {
+    auto *const p = tuiwidgets_impl();
+    p->focusOrder = order;
+}
+
+int ZWidget::focusOrder() const {
+    auto *const p = tuiwidgets_impl();
+    return p->focusOrder;
+}
+
 void ZWidget::setFocus(Qt::FocusReason reason) {
     ZTerminalPrivate *termp = ZTerminalPrivate::get(tuiwidgets_impl()->findTerminal());
+    QPointer<ZWidget> previousFocus = termp->focus();
+    if (this == previousFocus) {
+        return;
+    }
+    if (previousFocus) {
+        ZFocusEvent e {ZFocusEvent::focusOut, reason};
+        QCoreApplication::sendEvent(previousFocus, &e);
+    }
     termp->setFocus(this);
+    {
+        ZFocusEvent e {ZFocusEvent::focusIn, reason};
+        QCoreApplication::sendEvent(this, &e);
+    }
+    // TODO trigger repaint(qt does this in the specific virtual for the event)
 }
 
 bool ZWidget::isAncestorOf(const ZWidget *child) const {
@@ -139,6 +184,394 @@ bool ZWidget::isVisibleTo(const ZWidget *ancestor) const {
     return false;
 }
 
+/*
+    class FocusSearchIterator {
+    public:
+        FocusSearchIterator(ZWidget *w) : w(w), start(w) {}
+
+        void nextInSub() {
+            QObjectList children;
+            children = w->children();
+            if (children.size()) {
+                ZWidget* tmp = nullptr;
+                for (int i = 0; i < children.size(); i++) {
+                    tmp = qobject_cast<ZWidget*>(children[i]);
+                    if (tmp) {
+                        w = tmp;
+                        return;
+                    }
+                }
+            }
+
+            ZWidget *p = w;
+            while (p->parentWidget()) {
+                p = p->parentWidget();
+                children = p->children();
+
+                int i = 0;
+                for (; i < children.size(); i++) {
+                    if (children[i] == w) {
+                        ++i;
+                        break;
+                    }
+                }
+                ZWidget* tmp = nullptr;
+                for (; i < children.size(); i++) {
+                    tmp = qobject_cast<ZWidget*>(children[i]);
+                    if (tmp) {
+                        w = tmp;
+                        return;
+                    }
+                }
+                w = p;
+            }
+        }
+
+        bool groupCompleted() {
+            return true;
+        }
+
+        ZWidget *w;
+        ZWidget *start;
+    };
+*/
+
+namespace {
+    template <typename Func>
+    void forTree(ZWidget *w, Func func) {
+        func(w);
+        const QObjectList &children = w->children();
+        for (int i = 0; i < children.size(); i++) {
+            ZWidget* tmp = qobject_cast<ZWidget*>(children[i]);
+            if (!tmp) continue;
+            forTree(tmp, func);
+        }
+    }
+
+    template <typename Func>
+    void forFocusTree(const ZWidget *w, Func func) {
+        func(w, false);
+        const QObjectList &children = w->children();
+        for (int i = 0; i < children.size(); i++) {
+            ZWidget* tmp = qobject_cast<ZWidget*>(children[i]);
+            if (!tmp) continue;
+            if (tmp->focusMode() != FocusContainerMode::None) {
+                func(tmp, true);
+            }
+            forFocusTree(tmp, func);
+        }
+    }
+
+    const ZWidget *focusTreeRoot(const ZWidget *w) {
+        while (w->parentWidget() && w->focusMode() == FocusContainerMode::None) {
+            w = w->parentWidget();
+        }
+        return w;
+    }
+
+    bool canFocusAndUpdateTarget(ZWidget const *&c, bool subTree, bool last) {
+        if (!subTree) {
+            if (!ZWidgetPrivate::get(c)->isFocusable()) {
+                return false;
+            }
+        } else {
+            // focus probe for sub ordering
+            c = c->placeFocus(last);
+            if (!c) return false;
+        }
+        return true;
+    }
+
+    const ZWidget *searchBackwardInGroup(const ZWidget* currentFocus, const ZWidget *currentTree, FocusContainerMode focusMode) {
+
+        unsigned int position = 0;
+
+        const qint64 currentFocusOrder = (static_cast<qint64>(currentFocus->focusOrder()) << 32)
+                + 0x80000000u;
+
+        qint64 lowerFocusOrder = std::numeric_limits<qint64>::min();
+        const ZWidget *lowerFocusWidget = nullptr;
+        qint64 highestFocusOrder = std::numeric_limits<qint64>::min();
+        const ZWidget *highestFocusWidget = nullptr;
+
+        forFocusTree(currentTree, [&] (const ZWidget *c, bool subTree) {
+            if (c == currentFocus) {
+                position = 0x80000000u + 1;
+                return;
+            }
+            const qint64 focusOrder = (static_cast<qint64>(c->focusOrder()) << 32)
+                    + position;
+            ++position;
+            if (!canFocusAndUpdateTarget(c, subTree, false)) {
+                return;
+            }
+
+            if (focusOrder < currentFocusOrder && focusOrder > lowerFocusOrder) {
+                lowerFocusOrder = focusOrder;
+                lowerFocusWidget = c;
+            }
+            if (focusOrder > highestFocusOrder) {
+                highestFocusOrder = focusOrder;
+                highestFocusWidget = c;
+            }
+        });
+
+        if (lowerFocusWidget) {
+            return lowerFocusWidget;
+        }
+        if (focusMode == FocusContainerMode::SubOrdering) {
+            // back out of sub ordering
+            if (currentTree->parentWidget()) {
+                const ZWidget *parentTree = focusTreeRoot(currentTree->parentWidget());
+                if (parentTree->parentWidget()) {
+                    return searchBackwardInGroup(currentTree, parentTree, currentTree->focusMode());
+                } else {
+                    return searchBackwardInGroup(currentTree, parentTree, FocusContainerMode::Cycle);
+                }
+            }
+        }
+        if (highestFocusWidget && highestFocusOrder > currentFocusOrder) {
+            return highestFocusWidget;
+        }
+        return currentFocus;
+    }
+
+    ZWidget const *searchForwardInGroup(const ZWidget* currentFocus,
+                     const ZWidget *currentTree, FocusContainerMode focusMode) {
+
+        unsigned int position = 0;
+
+        const qint64 currentFocusOrder = (static_cast<qint64>(currentFocus->focusOrder()) << 32)
+                + 0x80000000u;
+
+        qint64 higherFocusOrder = std::numeric_limits<qint64>::max();
+        ZWidget const *higherFocusWidget = nullptr;
+        qint64 lowestFocusOrder = std::numeric_limits<qint64>::max();
+        ZWidget const *lowestFocusWidget = nullptr;
+
+        forFocusTree(currentTree, [&] (ZWidget const *c, bool subTree) {
+            if (c == currentFocus) {
+                position = 0x80000000u + 1;
+                return;
+            }
+            const qint64 focusOrder = (static_cast<qint64>(c->focusOrder()) << 32)
+                    + position;
+            ++position;
+            if (!canFocusAndUpdateTarget(c, subTree, false)) {
+                return;
+            }
+
+            if (focusOrder > currentFocusOrder && focusOrder < higherFocusOrder) {
+                higherFocusOrder = focusOrder;
+                higherFocusWidget = c;
+            }
+            if (focusOrder < lowestFocusOrder) {
+                lowestFocusOrder = focusOrder;
+                lowestFocusWidget = c;
+            }
+
+        });
+
+        if (higherFocusWidget) {
+            return higherFocusWidget;
+        }
+        if (focusMode == FocusContainerMode::SubOrdering) {
+            // back out of sub ordering
+            if (currentTree->parentWidget()) {
+                ZWidget const *parentTree = focusTreeRoot(currentTree->parentWidget());
+
+                if (parentTree->parentWidget()) {
+                    return searchForwardInGroup(currentTree, parentTree, currentTree->focusMode());
+                } else {
+                    return searchForwardInGroup(currentTree, parentTree, FocusContainerMode::Cycle);
+                }
+            }
+        }
+        if (lowestFocusWidget && lowestFocusOrder < currentFocusOrder) {
+            return lowestFocusWidget;
+        }
+        return currentFocus;
+    }
+}
+
+ZWidget const *ZWidget::prevFocusable() const {
+    const ZWidget *currentTree = focusTreeRoot(this);
+    FocusContainerMode focusMode = currentTree->focusMode();
+
+    if (!currentTree->parentWidget()) {
+        focusMode = FocusContainerMode::Cycle;
+    }
+
+    if (focusMode == FocusContainerMode::Cycle || focusMode == FocusContainerMode::SubOrdering) {
+        return searchBackwardInGroup(this, currentTree, focusMode);
+    } else {
+        Q_UNREACHABLE();
+    }
+}
+
+ZWidget *ZWidget::prevFocusable() {
+    return const_cast<ZWidget *>(static_cast<ZWidget const *>(this)->prevFocusable());
+}
+
+
+ZWidget const *ZWidget::nextFocusable() const {
+    const ZWidget *currentTree = focusTreeRoot(this);
+    FocusContainerMode focusMode = currentTree->focusMode();
+
+    if (!currentTree->parentWidget()) {
+        focusMode = FocusContainerMode::Cycle;
+    }
+
+    if (focusMode == FocusContainerMode::Cycle || focusMode == FocusContainerMode::SubOrdering) {
+        return searchForwardInGroup(this, currentTree, focusMode);
+    } else {
+        Q_UNREACHABLE();
+    }
+}
+
+ZWidget *ZWidget::nextFocusable() {
+    return const_cast<ZWidget *>(static_cast<ZWidget const *>(this)->nextFocusable());
+}
+
+ZWidget const *ZWidget::placeFocus(bool last) const {
+    int bestFocusOrder = last ? std::numeric_limits<int>::max() : std::numeric_limits<int>::min();
+    ZWidget const *bestFocusWidget = nullptr;
+
+    forFocusTree(this, [&] (ZWidget const *c, bool subTree) {
+        const int focusOrder = ZWidgetPrivate::get(c)->focusOrder;
+        if (last) {
+            if (focusOrder <= bestFocusOrder) {
+                return;
+            }
+        } else {
+            if (focusOrder >= bestFocusOrder) {
+                return;
+            }
+        }
+        if (!canFocusAndUpdateTarget(c, subTree, last)) {
+            return;
+        }
+        bestFocusOrder = focusOrder;
+        bestFocusWidget = c;
+    });
+    return bestFocusWidget;
+}
+
+/*
+ZWidget *ZWidget::nextFocusable(bool outside) {
+    auto *const p = tuiwidgets_impl();
+
+    const int currentFocusOrder = p->focusOrder;
+
+    ZWidget *currentTree = focusTreeRoot(this);
+    if (currentTree == this && outside) {
+        if (this->parentWidget()) {
+            currentTree = focusTreeRoot(this->parentWidget());
+        } else {
+            return this->placeFocus();
+        }
+    }
+    FocusContainerMode focusMode = ZWidgetPrivate::get(currentTree)->focusMode;
+
+    if (focusMode == FocusContainerMode::Cycle || focusMode == FocusContainerMode::SubOrdering) {
+        struct {
+            int higherFocusOrder = std::numeric_limits<int>::max();
+            ZWidget *higherFocusWidget = nullptr;
+            int lowestFocusOrder = std::numeric_limits<int>::max();
+            ZWidget *lowestFocusWidget = nullptr;
+        } before, after;
+
+        bool crossed = false;
+
+        forFocusTree(currentTree, [&] (ZWidget *c, bool subTree) {
+            if (c == this) {
+                crossed = true;
+                return;
+            }
+            auto updateHalf = [&](auto &half) {
+                const int focusOrder = ZWidgetPrivate::get(c)->focusOrder;
+                if (!canFocusAndUpdateTarget(c, subTree, false)) {
+                    return;
+                }
+
+                if (focusOrder >= currentFocusOrder && focusOrder < half.higherFocusOrder) {
+                    half.higherFocusOrder = focusOrder;
+                    half.higherFocusWidget = c;
+                }
+                if (focusOrder < currentFocusOrder && focusOrder < half.lowestFocusOrder) {
+                    half.lowestFocusOrder = focusOrder;
+                    half.lowestFocusWidget = c;
+                }
+            };
+
+            if (crossed) {
+                updateHalf(after);
+            } else {
+                updateHalf(before);
+            }
+        });
+
+        if (before.higherFocusOrder < after.higherFocusOrder) {
+            return before.higherFocusWidget;
+        }
+        if (after.higherFocusWidget) {
+            return after.higherFocusWidget;
+        }
+        if (focusMode == FocusContainerMode::SubOrdering) {
+            // back out of sub ordering
+            return currentTree->nextFocusable(true);
+        }
+        if (before.lowestFocusOrder < after.lowestFocusOrder) {
+            return before.lowestFocusWidget;
+        }
+        if (after.lowestFocusWidget) {
+            return after.lowestFocusWidget;
+        }
+        return this;
+    } else {
+        Q_UNREACHABLE();
+    }
+    return nullptr;
+}
+*/
+
+
+/*ZWidget *ZWidget::placeFocus(bool last) {
+    if (last) {
+        int highestFocusOrder = std::numeric_limits<int>::min();
+        ZWidget *highestFocusWidget = nullptr;
+
+        forFocusTree(this, [&] (ZWidget *c, bool subTree) {
+            const int focusOrder = ZWidgetPrivate::get(c)->focusOrder;
+            if (focusOrder <= highestFocusOrder) {
+                return;
+            }
+            if (!canFocusAndUpdateTarget(c, subTree, last)) {
+                return;
+            }
+            highestFocusOrder = focusOrder;
+            highestFocusWidget = c;
+        });
+        return highestFocusWidget;
+    } else {
+        int lowestFocusOrder = std::numeric_limits<int>::max();
+        ZWidget *lowestFocusWidget = nullptr;
+
+        forFocusTree(this, [&] (ZWidget *c, bool subTree) {
+            const int focusOrder = ZWidgetPrivate::get(c)->focusOrder;
+            if (focusOrder >= lowestFocusOrder) {
+                return;
+            }
+            if (!canFocusAndUpdateTarget(c, subTree, last)) {
+                return;
+            }
+            lowestFocusOrder = focusOrder;
+            lowestFocusWidget = c;
+        });
+        return lowestFocusWidget;
+    }
+}*/
+
 bool ZWidget::event(QEvent *event) {
     if (event->type() == ZEventType::paint()) {
         paintEvent(static_cast<ZPaintEvent*>(event));
@@ -148,6 +581,12 @@ bool ZWidget::event(QEvent *event) {
         return true;
     } else if (event->type() == ZEventType::updateRequest()) {
         tuiwidgets_impl()->updateRequestEvent(static_cast<ZPaintEvent*>(event));
+        return true;
+    } else if (event->type() == ZEventType::focusIn()) {
+        focusInEvent(static_cast<ZFocusEvent*>(event));
+        return true;
+    } else if (event->type() == ZEventType::focusOut()) {
+        focusOutEvent(static_cast<ZFocusEvent*>(event));
         return true;
     } else if (event->type() == ZEventType::resize()) {
         resizeEvent(static_cast<ZResizeEvent*>(event));
@@ -209,6 +648,18 @@ void ZWidget::paintEvent(ZPaintEvent *event) {
 
 void ZWidget::keyEvent(ZKeyEvent *event) {
     event->ignore();
+}
+
+void ZWidget::focusInEvent(ZFocusEvent *event) {
+    if (focusPolicy() != Qt::NoFocus) {
+        update();
+    }
+}
+
+void ZWidget::focusOutEvent(ZFocusEvent *event) {
+    if (focusPolicy() != Qt::NoFocus) {
+        update();
+    }
 }
 
 void ZWidget::resizeEvent(ZResizeEvent *event)

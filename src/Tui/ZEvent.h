@@ -19,12 +19,15 @@ class ZRawSequenceEventPrivate;
 class ZTerminalNativeEventPrivate;
 class ZPaintEventPrivate;
 class ZKeyEventPrivate;
+class ZFocusEventPrivate;
 class ZMoveEventPrivate;
 class ZResizeEventPrivate;
 
 namespace ZEventType {
     QEvent::Type paint();
     QEvent::Type key();
+    QEvent::Type focusIn();
+    QEvent::Type focusOut();
     QEvent::Type move();
     QEvent::Type resize();
 
@@ -97,6 +100,20 @@ public:
 
 private:
     TUIWIDGETS_DECLARE_PRIVATE(ZKeyEvent)
+};
+
+class TUIWIDGETS_EXPORT ZFocusEvent : public ZEvent {
+public:
+    class FocusIn{}; static constexpr FocusIn focusIn {};
+    class FocusOut{}; static constexpr FocusOut focusOut {};
+    ZFocusEvent(FocusIn, Qt::FocusReason reason = Qt::OtherFocusReason);
+    ZFocusEvent(FocusOut, Qt::FocusReason reason = Qt::OtherFocusReason);
+
+public:
+    Qt::FocusReason reason() const;
+
+private:
+    TUIWIDGETS_DECLARE_PRIVATE(ZFocusEvent)
 };
 
 class TUIWIDGETS_EXPORT ZResizeEvent : public ZEvent {
