@@ -14,7 +14,7 @@ class ZWidgetPrivate;
 class TUIWIDGETS_EXPORT ZWidget : public QObject {
     Q_OBJECT
 public:
-    explicit ZWidget(QObject *parent = 0);
+    explicit ZWidget(ZWidget *parent = 0);
     ~ZWidget();
 
 protected:
@@ -25,6 +25,9 @@ protected:
 
     // override everything for later ABI compatibility
 public:
+    ZWidget* parentWidget() const { return static_cast<ZWidget*>(parent()); }
+    void setParent(ZWidget *parent);
+
     bool event(QEvent *event) override;
     bool eventFilter(QObject *watched, QEvent *event) override;
 
