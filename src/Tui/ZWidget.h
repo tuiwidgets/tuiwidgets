@@ -29,6 +29,10 @@ public:
     void setParent(ZWidget *parent);
     QRect geometry() const;
     void setGeometry(const QRect &geometry);
+    bool isVisible() const;
+    void setVisible(bool v);
+
+    bool isVisibleTo(const ZWidget *ancestor) const;
 
     // public virtuals from base class override everything for later ABI compatibility
     bool event(QEvent *event) override;

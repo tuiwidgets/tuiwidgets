@@ -19,6 +19,7 @@ public:
 
     // variables
     QRect rect;
+    bool visible = true;
 
     // internal
     const unsigned int tui_magic = tui_magic_v0;

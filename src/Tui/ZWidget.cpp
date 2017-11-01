@@ -56,6 +56,34 @@ void ZWidget::setGeometry(const QRect &rect) {
     }
 }
 
+bool ZWidget::isVisible() const {
+    return tuiwidgets_impl()->visible;
+
+}
+
+void ZWidget::setVisible(bool v) {
+    auto *const p = tuiwidgets_impl();
+    p->visible = v;
+    // TODO care about focus
+    // TODO cache effect in hierarchy
+    // TODO send events (QShowEvent  QHideEvent? QEvent::HideToParent? QEvent::ShowToParent?)
+    // TODO trigger repaint (Qt does not use events here)
+}
+
+bool ZWidget::isVisibleTo(const ZWidget *ancestor) const {
+    const ZWidget *w = this;
+    while (w) {
+        if (w == ancestor) {
+            return true;
+        }
+        if (!w->isVisible()) {
+            return false;
+        }
+        w = w->parentWidget();
+    }
+    return false;
+}
+
 bool ZWidget::event(QEvent *event) {
     if (event->type() == ZEventType::resize()) {
         resizeEvent(static_cast<ZResizeEvent*>(event));
