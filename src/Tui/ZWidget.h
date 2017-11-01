@@ -31,6 +31,8 @@ public:
     void setParent(ZWidget *parent);
     QRect geometry() const;
     void setGeometry(const QRect &geometry);
+    bool isEnabled() const;
+    void setEnabled(bool e);
     bool isVisible() const;
     void setVisible(bool v);
     ZTerminal *terminal();
@@ -40,6 +42,7 @@ public:
     void setFocus(Qt::FocusReason reason = Qt::OtherFocusReason);
 
     bool isAncestorOf(const ZWidget *child) const;
+    bool isEnabledTo(const ZWidget *ancestor) const;
     bool isVisibleTo(const ZWidget *ancestor) const;
 
     // public virtuals from base class override everything for later ABI compatibility

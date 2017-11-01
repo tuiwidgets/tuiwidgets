@@ -60,6 +60,19 @@ void ZWidget::setGeometry(const QRect &rect) {
     update();
 }
 
+bool ZWidget::isEnabled() const {
+    return tuiwidgets_impl()->enabled;
+}
+
+void ZWidget::setEnabled(bool e) {
+    auto *const p = tuiwidgets_impl();
+    p->enabled = e;
+    // TODO care about focus
+    // TODO cache effect in hierarchy
+    // TODO send events (QEvent::EnabledChange ? )
+    // TODO trigger repaint (qt does this in the specific virtual for the event)
+}
+
 bool ZWidget::isVisible() const {
     return tuiwidgets_impl()->visible;
 
@@ -96,6 +109,20 @@ bool ZWidget::isAncestorOf(const ZWidget *child) const {
         child = child->parentWidget();
     }
     return true;
+}
+
+bool ZWidget::isEnabledTo(const ZWidget *ancestor) const {
+    const ZWidget *w = this;
+    while (w) {
+        if (w == ancestor) {
+            return true;
+        }
+        if (!w->isEnabled()) {
+            return false;
+        }
+        w = w->parentWidget();
+    }
+    return false;
 }
 
 bool ZWidget::isVisibleTo(const ZWidget *ancestor) const {

@@ -28,6 +28,8 @@ public:
 
     // variables
     QRect rect;
+
+    bool enabled = true;
     bool visible = true;
 
     ZTerminal *terminal = nullptr;
