@@ -122,6 +122,12 @@ std::unique_ptr<ZKeyEvent> ZTerminal::translateKeyEvent(const ZTerminalNativeEve
             key = Qt::Key_Enter;
         } else if  (native->atom_or_string == termpaint_input_backspace()) {
             key = Qt::Key_Backspace;
+        } else if  (native->atom_or_string == termpaint_input_delete()) {
+            key = Qt::Key_Delete;
+        } else if  (native->atom_or_string == termpaint_input_home()) {
+            key = Qt::Key_Home;
+        } else if  (native->atom_or_string == termpaint_input_end()) {
+            key = Qt::Key_End;
         }
         return std::unique_ptr<ZKeyEvent>{ new ZKeyEvent(key, modifiers, QString()) };
     } else if (native->type == TERMPAINT_EV_CHAR) {
