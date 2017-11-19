@@ -43,7 +43,7 @@ tui_cpp_args = [
 tuiwidgets_generated = qt5.preprocess(moc_headers: tuiwidgets_moc_headers, include_directories: '../src')
 
 tuiwidgets = library('tuiwidgets', tuiwidgets_sources, tuiwidgets_generated,
-  dependencies : [qt5_dep, termpaint_dep],
+  dependencies : [qt5_dep, termpaint_dep, posixsignalmanager_dep],
   cpp_args: tui_cpp_args,
   install: true
 )

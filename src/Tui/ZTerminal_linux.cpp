@@ -1,6 +1,7 @@
 #include <Tui/ZTerminal_p.h>
 
 #include <unistd.h>
+#include <signal.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -15,6 +16,9 @@
 
 #include <QSocketNotifier>
 #include <QCoreApplication>
+#include <QPointer>
+
+#include <PosixSignalManager.h>
 
 #include <Tui/ZEvent.h>
 
@@ -27,6 +31,50 @@ TUIWIDGETS_NS_START
 #pragma GCC diagnostic ignored "-Winvalid-offsetof"
 #endif
 #define container_of(ptr, type, member) ((type *)((char *)ptr - offsetof(type, member)))
+
+// signal based terminal restore...
+static bool systemRestoreInited = false;
+static int systemRestoreFd = -1;
+static termios systemOriginalTerminalAttributes;
+static const char *systemRestoreEscape = nullptr;
+static termios systemPresuspendTerminalAttributes;
+static std::unique_ptr<PosixSignalNotifier> systemTerminalResumeNotifier;
+static QPointer<ZTerminal> systemTerminal;
+
+static void restoreSystemHandler(const siginfo_t *info, void *context) {
+    // !!! signal handler code, only use async-safe calls (see signal-safety(7)) , no Qt at all.
+    Q_UNUSED(info);
+    Q_UNUSED(context);
+
+    tcsetattr(systemRestoreFd, TCSAFLUSH, &systemOriginalTerminalAttributes);
+    if (systemRestoreEscape) {
+        write(systemRestoreFd, systemRestoreEscape, strlen(systemRestoreEscape));
+    }
+}
+
+static void suspendHandler(PosixSignalFlags &flags, const siginfo_t *info, void *context) {
+    // !!! signal handler code, only use async-safe calls (see signal-safety(7)) , no Qt at all.
+    Q_UNUSED(info);
+    Q_UNUSED(context);
+
+    tcgetattr(systemRestoreFd, &systemPresuspendTerminalAttributes);
+
+    tcsetattr(systemRestoreFd, TCSAFLUSH, &systemOriginalTerminalAttributes);
+    if (systemRestoreEscape) {
+        write(systemRestoreFd, systemRestoreEscape, strlen(systemRestoreEscape));
+    }
+
+    flags.reraise();
+}
+
+static void resumeHandler(PosixSignalFlags &flags, const siginfo_t *info, void *context) {
+    // !!! signal handler code, only use async-safe calls (see signal-safety(7)) , no Qt at all.
+    Q_UNUSED(info);
+    Q_UNUSED(context);
+
+    tcsetattr(systemRestoreFd, TCSAFLUSH, &systemPresuspendTerminalAttributes);
+}
+// end of signal handling part
 
 bool ZTerminalPrivate::terminalAvailable() {
     bool from_std_fd = false;
@@ -122,7 +170,36 @@ bool ZTerminalPrivate::commonStuff(ZTerminal::Options options) {
 
     struct termios tattr;
 
-    tcgetattr (STDIN_FILENO, &originalTerminalAttributes);
+    tcgetattr(STDIN_FILENO, &originalTerminalAttributes);
+
+    if (!systemRestoreInited) {
+        // TODO this only really works well for the first terminal in an process.
+        // Thats ok for now, but destructing a terminal should reset it enough to
+        // connect to a newly created instance.
+        systemOriginalTerminalAttributes = originalTerminalAttributes;
+        systemRestoreInited = true;
+        systemRestoreFd = fd;
+        if (!PosixSignalManager::isCreated()) {
+            PosixSignalManager::create();
+        }
+        systemRestoreEscape = "\e[0m\r\n"; // TODO this should come from termpaint
+        PosixSignalManager::instance()->addSyncTerminationHandler(restoreSystemHandler);
+        PosixSignalManager::instance()->addSyncCrashHandler(restoreSystemHandler);
+        PosixSignalManager::instance()->addSyncSignalHandler(SIGTSTP, suspendHandler);
+        PosixSignalManager::instance()->addSyncSignalHandler(SIGTTIN, suspendHandler);
+        PosixSignalManager::instance()->addSyncSignalHandler(SIGTTOU, suspendHandler);
+        // resume is two step. A synchronous part which restores terminal mode
+        PosixSignalManager::instance()->addSyncSignalHandler(SIGCONT, resumeHandler);
+        // and a notifier part that triggers repaint in the next main loop interation
+        systemTerminalResumeNotifier = std::unique_ptr<PosixSignalNotifier>(new PosixSignalNotifier(SIGCONT));
+        QObject::connect(systemTerminalResumeNotifier.get(), &PosixSignalNotifier::activated, [] {
+            if (systemTerminal) {
+                systemTerminal->forceRepaint();
+            }
+        });
+        systemTerminal = pub();
+    }
+
     tcgetattr (STDIN_FILENO, &tattr);
     tattr.c_iflag |= IGNBRK|IGNPAR;
     tattr.c_iflag &= ~(BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL | IXON | IXOFF);

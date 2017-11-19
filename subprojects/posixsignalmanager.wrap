@@ -1,0 +1,4 @@
+[wrap-git]
+directory=posixsignalmanager
+url=git@git.uchuujin.de:posixsignalmanager
+revision=master

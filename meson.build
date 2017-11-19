@@ -1,5 +1,7 @@
 project('toolkit', ['c', 'cpp'], default_options : ['buildtype=debugoptimized'])
 
+posixsignalmanager_dep = subproject('posixsignalmanager').get_variable('posixsignalmanager_dep')
+
 if meson.get_compiler('cpp').get_id() == 'gcc'
   add_project_arguments('-fvisibility=hidden', '-fvisibility-inlines-hidden', language: 'cpp')
 endif
