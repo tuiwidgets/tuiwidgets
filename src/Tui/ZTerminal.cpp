@@ -73,7 +73,11 @@ void ZTerminal::setMainWidget(ZWidget *w) {
 }
 
 ZWidget *ZTerminal::focusWidget() {
-    return tuiwidgets_impl()->focusWidget->pub();
+    if (tuiwidgets_impl()->focusWidget) {
+        return tuiwidgets_impl()->focusWidget->pub();
+    } else {
+        return nullptr;
+    }
 }
 
 void ZTerminal::update() {
