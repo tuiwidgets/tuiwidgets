@@ -23,14 +23,14 @@ public:
     void setFocus(ZWidget *w);
     ZWidget *focus();
 
-    bool initTerminal();
+    bool initTerminal(ZTerminal::Options options);
     void deinitTerminal();
 
     void init_fns();
     bool terminalAvailable();
-    bool setup();
-    bool setupFromControllingTerminal();
-    bool commonStuff();
+    bool setup(ZTerminal::Options options);
+    bool setupFromControllingTerminal(ZTerminal::Options options);
+    bool commonStuff(ZTerminal::Options options);
 
     void integration_free();
     void integration_write(char *data, int length);

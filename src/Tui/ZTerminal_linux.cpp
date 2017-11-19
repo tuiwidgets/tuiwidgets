@@ -43,7 +43,7 @@ bool ZTerminalPrivate::terminalAvailable() {
     return false;
 }
 
-bool ZTerminalPrivate::setup() {
+bool ZTerminalPrivate::setup(ZTerminal::Options options) {
     if (fd != -1) {
         return false;
     }
@@ -65,7 +65,7 @@ bool ZTerminalPrivate::setup() {
         }
     }
 
-    return commonStuff();
+    return commonStuff(options);
 }
 
 void ZTerminalPrivate::deinitTerminal() {
@@ -73,7 +73,7 @@ void ZTerminalPrivate::deinitTerminal() {
     termpaint_surface_reset_attributes(surface);
 }
 
-bool ZTerminalPrivate::setupFromControllingTerminal() {
+bool ZTerminalPrivate::setupFromControllingTerminal(ZTerminal::Options options) {
     if (fd != -1) {
         return false;
     }
@@ -85,7 +85,7 @@ bool ZTerminalPrivate::setupFromControllingTerminal() {
     }
     auto_close = true;
 
-    return commonStuff();
+    return commonStuff(options);
 }
 
 
@@ -103,7 +103,7 @@ static void event_handler(void *user_data, termpaint_input_event *event) {
     QCoreApplication::sendEvent(that, &tuiEvent);
 }
 
-bool ZTerminalPrivate::commonStuff() {
+bool ZTerminalPrivate::commonStuff(ZTerminal::Options options) {
     // TODO zero out integration
     init_fns();
     awaiting_response = false;
@@ -130,6 +130,21 @@ bool ZTerminalPrivate::commonStuff() {
     tattr.c_lflag &= ~(ICANON|IEXTEN|ECHO);
     tattr.c_cc[VMIN] = 1;
     tattr.c_cc[VTIME] = 0;
+
+    if ((options & (ZTerminal::AllowInterrupt | ZTerminal::AllowQuit | ZTerminal::AllowSuspend)) == 0) {
+        tattr.c_lflag &= ~ISIG;
+    } else {
+        if (!options.testFlag(ZTerminal::AllowInterrupt)) {
+            tattr.c_cc[VINTR] = 0;
+        }
+        if (!options.testFlag(ZTerminal::AllowQuit)) {
+            tattr.c_cc[VQUIT] = 0;
+        }
+        if (!options.testFlag(ZTerminal::AllowSuspend)) {
+            tattr.c_cc[VSUSP] = 0;
+        }
+    }
+
     tcsetattr (STDIN_FILENO, TCSAFLUSH, &tattr);
 
     input = termpaint_input_new();

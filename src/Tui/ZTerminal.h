@@ -20,7 +20,16 @@ class ZTerminalPrivate;
 class TUIWIDGETS_EXPORT ZTerminal : public QObject {
     Q_OBJECT
 public:
+    enum Option {
+        AllowInterrupt = 1 << 0,
+        AllowSuspend = 1 << 1,
+        AllowQuit = 1 << 2
+    };
+    Q_DECLARE_FLAGS(Options, Option)
+
+public:
     explicit ZTerminal(QObject *parent = 0);
+    explicit ZTerminal(Options options, QObject *parent = 0);
     virtual ~ZTerminal();
 
 public:
@@ -59,6 +68,7 @@ private:
     TUIWIDGETS_DECLARE_PRIVATE(ZTerminal)
 
 };
+Q_DECLARE_OPERATORS_FOR_FLAGS(ZTerminal::Options)
 
 TUIWIDGETS_NS_END
 

@@ -32,15 +32,20 @@ ZWidget *ZTerminalPrivate::focus() {
     return focusWidget ? focusWidget->pub() : nullptr;
 }
 
-ZTerminal::ZTerminal(QObject *parent) :
-    QObject(parent), tuiwidgets_pimpl_ptr(std::make_unique<ZTerminalPrivate>(this))
+ZTerminal::ZTerminal(QObject *parent)
+    : ZTerminal(0, parent)
 {
-    tuiwidgets_impl()->initTerminal();
+}
+
+ZTerminal::ZTerminal(Options options, QObject *parent)
+    : QObject(parent), tuiwidgets_pimpl_ptr(std::make_unique<ZTerminalPrivate>(this))
+{
+    tuiwidgets_impl()->initTerminal(options);
 }
 
 
-bool ZTerminalPrivate::initTerminal() {
-    return setup();
+bool ZTerminalPrivate::initTerminal(ZTerminal::Options options) {
+    return setup(options);
 }
 
 ZTerminal::~ZTerminal() {
