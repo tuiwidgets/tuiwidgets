@@ -137,6 +137,8 @@ std::unique_ptr<ZKeyEvent> ZTerminal::translateKeyEvent(const ZTerminalNativeEve
             key = Qt::Key_Home;
         } else if  (native->atom_or_string == termpaint_input_end()) {
             key = Qt::Key_End;
+        } else if  (native->atom_or_string == termpaint_input_space()) {
+            key = Qt::Key_Space;
         }
         return std::unique_ptr<ZKeyEvent>{ new ZKeyEvent(key, modifiers, QString()) };
     } else if (native->type == TERMPAINT_EV_CHAR) {
