@@ -78,6 +78,7 @@ public:
     ZWidget const* nextFocusable() const;
     ZWidget* nextFocusable();
     const ZWidget *placeFocus(bool last = false) const;
+    ZWidget *placeFocus(bool last = false);
 
     // public virtuals from base class override everything for later ABI compatibility
     bool event(QEvent *event) override;

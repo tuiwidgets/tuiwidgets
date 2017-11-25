@@ -511,7 +511,7 @@ ZWidget *ZWidget::nextFocusable() {
 }
 
 ZWidget const *ZWidget::placeFocus(bool last) const {
-    int bestFocusOrder = last ? std::numeric_limits<int>::max() : std::numeric_limits<int>::min();
+    int bestFocusOrder = last ? std::numeric_limits<int>::min() : std::numeric_limits<int>::max();
     ZWidget const *bestFocusWidget = nullptr;
 
     forFocusTree(this, [&] (ZWidget const *c, bool subTree) {
@@ -532,6 +532,10 @@ ZWidget const *ZWidget::placeFocus(bool last) const {
         bestFocusWidget = c;
     });
     return bestFocusWidget;
+}
+
+ZWidget *ZWidget::placeFocus(bool last) {
+    return const_cast<ZWidget *>(static_cast<ZWidget const *>(this)->placeFocus(last));
 }
 
 /*
