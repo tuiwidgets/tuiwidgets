@@ -78,6 +78,29 @@ void ZPainter::clear(ZColor fg, ZColor bg) {
                                  toTermPaintColor(fg), toTermPaintColor(bg));
 }
 
+void ZPainter::clearRect(int x, int y, int width, int height, ZColor fg, ZColor bg) {
+    auto *const pimpl = tuiwidgets_impl();
+    if (x < 0) {
+        width += x;
+        x = 0;
+    }
+    if (y < 0) {
+        height += y;
+        y = 0;
+    }
+    width = std::min(pimpl->width - x, width);
+    height = std::min(pimpl->height, height);
+    if (width < 0 || height < 0) {
+        return;
+    }
+    x += pimpl->x;
+    y += pimpl->y;
+
+    termpaint_surface_clear_rect(pimpl->surface,
+                                 x, y, width, height,
+                                 toTermPaintColor(fg), toTermPaintColor(bg));
+}
+
 
 void ZPainter::flush() {
     termpaint_surface_flush(tuiwidgets_impl()->surface);
