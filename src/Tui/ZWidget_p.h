@@ -5,6 +5,8 @@
 
 #include <Tui/tuiwidgets_internal.h>
 
+#include <Tui/ZPalette.h>
+
 #include <Tui/ZWidget.h>
 
 TUIWIDGETS_NS_START
@@ -36,6 +38,9 @@ public:
 
     bool enabled = true;
     bool visible = true;
+
+    ZPalette palette;
+    QStringList paletteClass;
 
     ZTerminal *terminal = nullptr;
 

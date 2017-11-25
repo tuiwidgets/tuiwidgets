@@ -7,6 +7,7 @@
 #include <QCoreApplication>
 
 #include <Tui/ZPainter.h>
+#include <Tui/ZPalette.h>
 #include <Tui/ZTerminal_p.h>
 
 TUIWIDGETS_NS_START
@@ -144,6 +145,46 @@ void ZWidget::setFocusOrder(int order) {
 int ZWidget::focusOrder() const {
     auto *const p = tuiwidgets_impl();
     return p->focusOrder;
+}
+
+const ZPalette &ZWidget::palette() const {
+    auto *const p = tuiwidgets_impl();
+    return p->palette;
+}
+
+void ZWidget::setPalette(const ZPalette &pal) {
+    auto *const p = tuiwidgets_impl();
+    p->palette = pal;
+}
+
+ZColor ZWidget::getColor(const QString &x) {
+    auto *const p = tuiwidgets_impl();
+
+    return p->palette.getColor(this, x);
+}
+
+QStringList ZWidget::paletteClass() {
+    auto *const p = tuiwidgets_impl();
+    return p->paletteClass;
+}
+
+void ZWidget::setPaletteClass(QStringList classes) {
+    auto *const p = tuiwidgets_impl();
+    classes.removeDuplicates();
+    // TODO some event
+    p->paletteClass = classes;
+}
+
+void ZWidget::addPaletteClass(QString clazz) {
+    QStringList cls = paletteClass();
+    cls.append(clazz);
+    setPaletteClass(cls);
+}
+
+void ZWidget::removePaletteClass(QString clazz) {
+    QStringList cls = paletteClass();
+    cls.removeAll(clazz);
+    setPaletteClass(cls);
 }
 
 void ZWidget::setFocus(Qt::FocusReason reason) {

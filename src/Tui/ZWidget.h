@@ -10,6 +10,8 @@
 
 TUIWIDGETS_NS_START
 
+class ZColor;
+class ZPalette;
 class ZTerminal;
 
 enum class FocusContainerMode {
@@ -52,6 +54,15 @@ public:
     FocusContainerMode focusMode() const;
     void setFocusOrder(int order);
     int focusOrder() const;
+
+    const ZPalette &palette() const;
+    void setPalette(const ZPalette &pal);
+    ZColor getColor(const QString &x);
+
+    QStringList paletteClass();
+    void setPaletteClass(QStringList classes);
+    void addPaletteClass(QString clazz);
+    void removePaletteClass(QString clazz);
 
     void setFocus(Qt::FocusReason reason = Qt::OtherFocusReason);
 
