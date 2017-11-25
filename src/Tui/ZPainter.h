@@ -24,7 +24,7 @@ public:
     ZPainter translateAndClip(int x, int y, int width, int height);
 
     void writeWithColors(int x, int y, QString string, ZColor fg, ZColor bg);
-    void clear(ZColor bg);
+    void clear(ZColor fg, ZColor bg);
     void flush();
 
 private:

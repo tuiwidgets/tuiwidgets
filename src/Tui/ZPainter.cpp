@@ -71,9 +71,11 @@ void ZPainter::writeWithColors(int x, int y, QString string, ZColor fg, ZColor b
                                              pimpl->x, pimpl->x + pimpl->width - 1);
 }
 
-void ZPainter::clear(ZColor bg) {
+void ZPainter::clear(ZColor fg, ZColor bg) {
     auto *const pimpl = tuiwidgets_impl();
-    termpaint_surface_clear_rect(pimpl->surface, pimpl->x, pimpl->y, pimpl->width, pimpl->height, toTermPaintColor(bg));
+    termpaint_surface_clear_rect(pimpl->surface,
+                                 pimpl->x, pimpl->y, pimpl->width, pimpl->height,
+                                 toTermPaintColor(fg), toTermPaintColor(bg));
 }
 
 
