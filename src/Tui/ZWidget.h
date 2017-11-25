@@ -43,8 +43,9 @@ public:
     void setEnabled(bool e);
     bool isVisible() const;
     void setVisible(bool v);
+
     void showCursor(QPoint position);
-    ZTerminal *terminal();
+    ZTerminal *terminal() const;
 
     void update();
 
@@ -69,6 +70,8 @@ public:
     bool isAncestorOf(const ZWidget *child) const;
     bool isEnabledTo(const ZWidget *ancestor) const;
     bool isVisibleTo(const ZWidget *ancestor) const;
+    bool focus() const;
+    bool isInFocusPath() const;
 
     ZWidget const* prevFocusable() const;
     ZWidget* prevFocusable();

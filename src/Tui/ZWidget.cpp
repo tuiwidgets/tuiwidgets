@@ -108,7 +108,7 @@ void ZWidget::showCursor(QPoint position) {
     }
 }
 
-ZTerminal *ZWidget::terminal() {
+ZTerminal *ZWidget::terminal() const {
     return tuiwidgets_impl()->findTerminal();
 }
 
@@ -237,6 +237,24 @@ bool ZWidget::isVisibleTo(const ZWidget *ancestor) const {
         }
         if (!w->isVisible()) {
             return false;
+        }
+        w = w->parentWidget();
+    }
+    return false;
+}
+
+bool ZWidget::focus() const {
+    return terminal() ? (terminal()->focusWidget() == this) : false;
+}
+
+bool ZWidget::isInFocusPath() const {
+    if (!terminal()) {
+        return false;
+    }
+    ZWidget *w = terminal()->focusWidget();
+    while (w) {
+        if (w == this) {
+            return true;
         }
         w = w->parentWidget();
     }
