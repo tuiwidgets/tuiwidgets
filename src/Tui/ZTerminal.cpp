@@ -139,6 +139,30 @@ std::unique_ptr<ZKeyEvent> ZTerminal::translateKeyEvent(const ZTerminalNativeEve
             key = Qt::Key_End;
         } else if  (native->atom_or_string == termpaint_input_space()) {
             key = Qt::Key_Space;
+        } else if  (native->atom_or_string == termpaint_input_f1()) {
+            key = Qt::Key_F1;
+        } else if  (native->atom_or_string == termpaint_input_f2()) {
+            key = Qt::Key_F2;
+        } else if  (native->atom_or_string == termpaint_input_f3()) {
+            key = Qt::Key_F3;
+        } else if  (native->atom_or_string == termpaint_input_f4()) {
+            key = Qt::Key_F4;
+        } else if  (native->atom_or_string == termpaint_input_f5()) {
+            key = Qt::Key_F5;
+        } else if  (native->atom_or_string == termpaint_input_f6()) {
+            key = Qt::Key_F6;
+        } else if  (native->atom_or_string == termpaint_input_f7()) {
+            key = Qt::Key_F7;
+        } else if  (native->atom_or_string == termpaint_input_f8()) {
+            key = Qt::Key_F8;
+        } else if  (native->atom_or_string == termpaint_input_f9()) {
+            key = Qt::Key_F9;
+        } else if  (native->atom_or_string == termpaint_input_f10()) {
+            key = Qt::Key_F10;
+        } else if  (native->atom_or_string == termpaint_input_f11()) {
+            key = Qt::Key_F11;
+        } else if  (native->atom_or_string == termpaint_input_f12()) {
+            key = Qt::Key_F12;
         }
         return std::unique_ptr<ZKeyEvent>{ new ZKeyEvent(key, modifiers, QString()) };
     } else if (native->type == TERMPAINT_EV_CHAR) {
