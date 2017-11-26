@@ -26,6 +26,9 @@ public:
     static ZColor defaultColor();
     //static ZColor fromIndexed();
 
+    bool operator==(const ZColor &other) const;
+    bool operator!=(const ZColor &other) const;
+
 private:
     uint32_t val = 0;
 };

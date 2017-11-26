@@ -45,4 +45,12 @@ ZColor ZColor::defaultColor() {
     return col;
 }
 
+bool ZColor::operator==(const ZColor &other) const {
+    return val == other.val;
+}
+
+bool ZColor::operator!=(const ZColor &other) const {
+    return val != other.val;
+}
+
 TUIWIDGETS_NS_END
