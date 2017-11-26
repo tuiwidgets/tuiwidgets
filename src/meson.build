@@ -7,7 +7,7 @@ tuiwidgets_moc_headers = [
   'Tui/ZWidget.h',
 ]
 
-# find Tui -name "*.h" | grep -v "_p" | sed -e "s/\\(.*\\)/  '\1',/" | sort
+# find Tui -name "*.h" | grep -E -v -e "_p" -e "^Tui/[A-Y]" | sed -e "s/\\(.*\\)/  '\1',/" | sort
 tuiwidgets_public_headers = [
   'Tui/ZColor.h',
   'Tui/ZEvent.h',
@@ -20,6 +20,7 @@ tuiwidgets_public_headers = [
 
 #ide:editable-filelist
 tuiwidgets_sources = [
+  'Tui/MarkupParser.cpp',
   'Tui/ZColor.cpp',
   'Tui/ZEvent.cpp',
   'Tui/ZPainter.cpp',
