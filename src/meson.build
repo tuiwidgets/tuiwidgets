@@ -13,6 +13,7 @@ tuiwidgets_public_headers = [
   'Tui/ZEvent.h',
   'Tui/ZPainter.h',
   'Tui/ZPalette.h',
+  'Tui/ZSymbol.h',
   'Tui/ZTerminal.h',
   'Tui/ZWidget.h',
   'Tui/tuiwidgets_internal.h',
@@ -25,6 +26,7 @@ tuiwidgets_sources = [
   'Tui/ZEvent.cpp',
   'Tui/ZPainter.cpp',
   'Tui/ZPalette.cpp',
+  'Tui/ZSymbol.cpp',
   'Tui/ZTerminal.cpp',
   'Tui/ZWidget.cpp',
 ]
