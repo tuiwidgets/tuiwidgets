@@ -3,6 +3,7 @@ qt5_dep = dependency('qt5', modules: 'Core')
 
 #ide:editable-filelist
 tuiwidgets_moc_headers = [
+  'Tui/ZShortcut.h',
   'Tui/ZTerminal.h',
   'Tui/ZWidget.h',
 ]
@@ -13,6 +14,7 @@ tuiwidgets_public_headers = [
   'Tui/ZEvent.h',
   'Tui/ZPainter.h',
   'Tui/ZPalette.h',
+  'Tui/ZShortcut.h',
   'Tui/ZSymbol.h',
   'Tui/ZTerminal.h',
   'Tui/ZWidget.h',
@@ -26,6 +28,8 @@ tuiwidgets_sources = [
   'Tui/ZEvent.cpp',
   'Tui/ZPainter.cpp',
   'Tui/ZPalette.cpp',
+  'Tui/ZShortcut.cpp',
+  'Tui/ZShortcutManager.cpp',
   'Tui/ZSymbol.cpp',
   'Tui/ZTerminal.cpp',
   'Tui/ZWidget.cpp',

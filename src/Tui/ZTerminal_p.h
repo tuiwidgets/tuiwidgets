@@ -13,6 +13,8 @@
 TUIWIDGETS_NS_START
 
 class ZWidgetPrivate;
+class ZShortcutManager;
+class ZSymbol;
 
 class ZTerminalPrivate {
 public:
@@ -22,6 +24,10 @@ public:
 
     void setFocus(ZWidget *w);
     ZWidget *focus();
+
+    ZShortcutManager* ensureShortcutManager();
+
+    void sendOtherChangeEvent(QSet<ZSymbol> unchanged);
 
     bool initTerminal(ZTerminal::Options options);
     void deinitTerminal();
@@ -47,6 +53,7 @@ public:
     std::unique_ptr<ZWidget> mainWidget;
     QPoint cursorPosition = {-1, -1};
     ZWidgetPrivate *focusWidget = nullptr;
+    std::unique_ptr<ZShortcutManager> shortcutManager;
 
     // stuff from integration
     int fd = -1;

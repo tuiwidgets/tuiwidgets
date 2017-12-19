@@ -2,10 +2,12 @@
 #include <Tui/ZTerminal_p.h>
 
 #include <QCoreApplication>
+#include <QVector>
 #include <QPointer>
 
 #include <Tui/ZEvent.h>
 #include <Tui/ZPainter_p.h>
+#include <Tui/ZShortcutManager_p.h>
 #include <Tui/ZWidget.h>
 #include <Tui/ZWidget_p.h>
 
@@ -31,6 +33,14 @@ void ZTerminalPrivate::setFocus(ZWidget *w) {
 ZWidget *ZTerminalPrivate::focus() {
     return focusWidget ? focusWidget->pub() : nullptr;
 }
+
+ZShortcutManager *ZTerminalPrivate::ensureShortcutManager() {
+    if (!shortcutManager) {
+        shortcutManager = std::make_unique<ZShortcutManager>(pub());
+    }
+    return shortcutManager.get();
+}
+
 
 ZTerminal::ZTerminal(QObject *parent)
     : ZTerminal(0, parent)
@@ -72,7 +82,23 @@ void ZTerminal::setMainWidget(ZWidget *w) {
     }
     tuiwidgets_impl()->mainWidget.reset(w);
     ZWidgetPrivate::get(w)->setManagingTerminal(this);
+
+    tuiwidgets_impl()->sendOtherChangeEvent(ZOtherChangeEvent::all().subtract({TUISYM_LITERAL("terminal")}));
+
     update();
+}
+
+void ZTerminalPrivate::sendOtherChangeEvent(QSet<ZSymbol> unchanged) {
+    ZOtherChangeEvent change(unchanged);
+    QVector<QPointer<QObject>> todo;
+    todo.append(mainWidget.get());
+    while (todo.size()) {
+        QObject *o = todo.takeLast();
+        if (!o) continue;
+        for (QObject* x : o->children()) todo.append(x);
+        QCoreApplication::sendEvent(o, &change);
+        change.setAccepted(true);
+    }
 }
 
 ZWidget *ZTerminal::focusWidget() {
@@ -177,20 +203,23 @@ std::unique_ptr<ZKeyEvent> ZTerminal::translateKeyEvent(const ZTerminalNativeEve
 }
 
 bool ZTerminal::event(QEvent *event) {
+    auto *const p = tuiwidgets_impl();
     if (event->type() == ZEventType::rawSequence()) {
         return false;
     }
     if (event->type() == ZEventType::terminalNativeEvent()) {
         std::unique_ptr<ZKeyEvent> translated = translateKeyEvent(*static_cast<Tui::ZTerminalNativeEvent*>(event));
         if (translated) {
-            translated->accept();
-            QPointer<ZWidget> w = tuiwidgets_impl()->focus();
-            while (w) {
-                bool processed = QCoreApplication::sendEvent(w, translated.get());
-                if (processed && translated->isAccepted()) {
-                    break;
+            if (!p->shortcutManager || !p->shortcutManager->process(translated.get())) {
+                translated->accept();
+                QPointer<ZWidget> w = tuiwidgets_impl()->focus();
+                while (w) {
+                    bool processed = QCoreApplication::sendEvent(w, translated.get());
+                    if (processed && translated->isAccepted()) {
+                        break;
+                    }
+                    w = w->parentWidget();
                 }
-                w = w->parentWidget();
             }
             if (!translated->isAccepted()) {
                 if (translated->modifiers() == Qt::ControlModifier
