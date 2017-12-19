@@ -3,6 +3,9 @@
 
 #include <QPoint>
 #include <QSize>
+#include <QSet>
+
+#include <Tui/ZSymbol.h>
 
 TUIWIDGETS_NS_START
 
@@ -31,6 +34,10 @@ QEvent::Type ZEventType::move() {
 }
 
 QEvent::Type ZEventType::resize() {
+    CALL_ONCE_REGISTEREVENTTYPE;
+}
+
+QEvent::Type ZEventType::otherChange() {
     CALL_ONCE_REGISTEREVENTTYPE;
 }
 
@@ -163,13 +170,11 @@ ZResizeEvent::ZResizeEvent(QSize size, QSize oldSize)
 {
 }
 
-QSize ZResizeEvent::size() const
-{
+QSize ZResizeEvent::size() const {
     return tuiwidgets_impl()->size;
 }
 
-QSize ZResizeEvent::oldSize() const
-{
+QSize ZResizeEvent::oldSize() const {
     return tuiwidgets_impl()->oldSize;
 }
 
@@ -183,15 +188,33 @@ ZMoveEvent::ZMoveEvent(QPoint pos, QPoint oldPos)
 {
 }
 
-QPoint ZMoveEvent::pos() const
-{
+QPoint ZMoveEvent::pos() const {
     return tuiwidgets_impl()->pos;
 }
 
-QPoint ZMoveEvent::oldPos() const
-{
+QPoint ZMoveEvent::oldPos() const {
     return tuiwidgets_impl()->oldPos;
 }
+
+ZOtherChangeEvent::ZOtherChangeEvent(QSet<ZSymbol> unchanged)
+    : ZEvent(ZEventType::otherChange(), std::make_unique<ZOtherChangeEventPrivate>(unchanged))
+{
+}
+
+QSet<ZSymbol> ZOtherChangeEvent::all() {
+    static QSet<ZSymbol> a = { TUISYM_LITERAL("terminal") };
+    return a;
+}
+
+QSet<ZSymbol> ZOtherChangeEvent::unchanged() const {
+    return tuiwidgets_impl()->unchanged;
+}
+
+ZOtherChangeEventPrivate::ZOtherChangeEventPrivate(QSet<ZSymbol> unchanged)
+     : unchanged(unchanged)
+{
+}
+
 
 
 TUIWIDGETS_NS_END

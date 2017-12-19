@@ -3,7 +3,10 @@
 
 #include <QPoint>
 #include <QSize>
+#include <QSet>
 #include <QString>
+
+#include <Tui/ZEvent.h>
 
 #include <Tui/tuiwidgets_internal.h>
 
@@ -71,6 +74,13 @@ public:
     QPoint oldPos;
 };
 
+class ZOtherChangeEventPrivate : public ZEventPrivate {
+public:
+    ZOtherChangeEventPrivate(QSet<ZSymbol> unchanged);
+
+public:
+    QSet<ZSymbol> unchanged;
+};
 
 TUIWIDGETS_NS_END
 

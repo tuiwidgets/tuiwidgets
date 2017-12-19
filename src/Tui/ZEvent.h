@@ -13,6 +13,7 @@ class QSize;
 TUIWIDGETS_NS_START
 
 class ZPainter;
+class ZSymbol;
 
 class ZEventPrivate;
 class ZRawSequenceEventPrivate;
@@ -22,6 +23,7 @@ class ZKeyEventPrivate;
 class ZFocusEventPrivate;
 class ZMoveEventPrivate;
 class ZResizeEventPrivate;
+class ZOtherChangeEventPrivate;
 
 namespace ZEventType {
     QEvent::Type paint();
@@ -30,6 +32,7 @@ namespace ZEventType {
     QEvent::Type focusOut();
     QEvent::Type move();
     QEvent::Type resize();
+    QEvent::Type otherChange();
 
     QEvent::Type updateRequest();
     QEvent::Type terminalNativeEvent();
@@ -138,6 +141,18 @@ public:
 
 private:
     TUIWIDGETS_DECLARE_PRIVATE(ZMoveEvent)
+};
+
+class TUIWIDGETS_EXPORT ZOtherChangeEvent : public ZEvent {
+public:
+    ZOtherChangeEvent(QSet<ZSymbol> unchanged);
+    static QSet<ZSymbol> all();
+
+public:
+    QSet<ZSymbol> unchanged() const;
+
+private:
+    TUIWIDGETS_DECLARE_PRIVATE(ZOtherChangeEvent)
 };
 
 TUIWIDGETS_NS_END
