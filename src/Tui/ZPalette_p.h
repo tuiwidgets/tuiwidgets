@@ -14,8 +14,8 @@ class ZPalettePrivate {
 public:
     ZPalettePrivate();
 
-    QHash<QString, ZColor> colorDefinitions;
-    QHash<QString, QString> localAlias;
+    QHash<ZSymbol, ZColor> colorDefinitions;
+    QHash<ZSymbol, ZSymbol> localAlias;
     QList<ZPalette::RuleDef> rules;
 
     ZPalette* pub_ptr;

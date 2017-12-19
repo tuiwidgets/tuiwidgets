@@ -21,7 +21,7 @@ ZPalette::~ZPalette() {
 
 }
 
-ZColor ZPalette::getColor(ZWidget *targetWidget, QString x) const {
+ZColor ZPalette::getColor(ZWidget *targetWidget, ZImplicitSymbol x) const {
     auto *const p = tuiwidgets_impl();
 
     // TODO Most stupid impl., needs optimization
@@ -35,7 +35,7 @@ ZColor ZPalette::getColor(ZWidget *targetWidget, QString x) const {
         }
     }
 
-    QHash<QString, ZColor> defs;
+    QHash<ZSymbol, ZColor> defs;
     QList<const RuleDef*> rules;
 
     for (ZWidget *w : widgets) {
@@ -67,7 +67,7 @@ ZColor ZPalette::getColor(ZWidget *targetWidget, QString x) const {
             }
         }
 
-        for (QString key : pal.colorDefinitions.keys()) {
+        for (ZSymbol key : pal.colorDefinitions.keys()) {
             defs[key] = pal.colorDefinitions[key];
         }
     }

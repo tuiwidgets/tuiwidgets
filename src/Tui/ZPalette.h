@@ -8,6 +8,7 @@
 #include <QStringList>
 
 #include <Tui/ZColor.h>
+#include <Tui/ZSymbol.h>
 
 #include <Tui/tuiwidgets_internal.h>
 
@@ -43,19 +44,19 @@ public:
     };
 
     struct ColorDef {
-        QString name;
+        ZImplicitSymbol name;
         ZColor color;
     };
 
     struct AliasDef {
-        QString name;
-        QString fallback;
+        ZImplicitSymbol name;
+        ZImplicitSymbol fallback;
     };
 
     struct RuleCmd {
         Type type;
-        QString name;
-        QString reference;
+        ZImplicitSymbol name;
+        ZImplicitSymbol reference;
     };
 
     struct RuleDef {
@@ -69,7 +70,7 @@ public:
     virtual ~ZPalette();
 
 public:
-    ZColor getColor(Tui::ZWidget *targetWidget, QString x) const;
+    ZColor getColor(Tui::ZWidget *targetWidget, ZImplicitSymbol x) const;
 
     void setColors(QList<ColorDef> newColors);
     void addLocalAlias(QList<AliasDef> newAliases);
