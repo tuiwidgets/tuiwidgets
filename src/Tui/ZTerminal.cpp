@@ -49,6 +49,9 @@ bool ZTerminalPrivate::initTerminal(ZTerminal::Options options) {
 }
 
 ZTerminal::~ZTerminal() {
+    // widget destructors might depend on our services.
+    // so ensure the widget hierarchie is torn down before the terminal.
+    tuiwidgets_impl()->mainWidget.reset();
 }
 
 ZPainter ZTerminal::painter() {
