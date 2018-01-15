@@ -67,6 +67,8 @@ public:
     void removePaletteClass(QString clazz);
 
     void setFocus(Qt::FocusReason reason = Qt::OtherFocusReason);
+    void grabKeyboard();
+    void releaseKeyboard();
 
     bool isAncestorOf(const ZWidget *child) const;
     bool isEnabledTo(const ZWidget *ancestor) const;

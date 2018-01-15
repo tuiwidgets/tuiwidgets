@@ -34,6 +34,14 @@ ZWidget *ZTerminalPrivate::focus() {
     return focusWidget ? focusWidget->pub() : nullptr;
 }
 
+void ZTerminalPrivate::setKeyboardGrab(ZWidget *w) {
+    keyboardGrabWidget = w;
+}
+
+ZWidget *ZTerminalPrivate::keyboardGrab() {
+    return keyboardGrabWidget;
+}
+
 ZShortcutManager *ZTerminalPrivate::ensureShortcutManager() {
     if (!shortcutManager) {
         shortcutManager = std::make_unique<ZShortcutManager>(pub());
@@ -210,7 +218,9 @@ bool ZTerminal::event(QEvent *event) {
     if (event->type() == ZEventType::terminalNativeEvent()) {
         std::unique_ptr<ZKeyEvent> translated = translateKeyEvent(*static_cast<Tui::ZTerminalNativeEvent*>(event));
         if (translated) {
-            if (!p->shortcutManager || !p->shortcutManager->process(translated.get())) {
+            if (p->keyboardGrabWidget) {
+                QCoreApplication::sendEvent(p->keyboardGrabWidget, translated.get());
+            } else if (!p->shortcutManager || !p->shortcutManager->process(translated.get())) {
                 translated->accept();
                 QPointer<ZWidget> w = tuiwidgets_impl()->focus();
                 while (w) {

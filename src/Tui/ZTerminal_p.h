@@ -2,6 +2,7 @@
 #define TUIWIDGETS_ZTERMINAL_P_INCLUDED
 
 #include <QPoint>
+#include <QPointer>
 
 #include <termpaint.h>
 #include <termpaint_input.h>
@@ -12,6 +13,7 @@
 
 TUIWIDGETS_NS_START
 
+class ZWidget;
 class ZWidgetPrivate;
 class ZShortcutManager;
 class ZSymbol;
@@ -24,6 +26,9 @@ public:
 
     void setFocus(ZWidget *w);
     ZWidget *focus();
+
+    void setKeyboardGrab(ZWidget *w);
+    ZWidget *keyboardGrab();
 
     ZShortcutManager* ensureShortcutManager();
 
@@ -53,6 +58,7 @@ public:
     std::unique_ptr<ZWidget> mainWidget;
     QPoint cursorPosition = {-1, -1};
     ZWidgetPrivate *focusWidget = nullptr;
+    QPointer<ZWidget> keyboardGrabWidget;
     std::unique_ptr<ZShortcutManager> shortcutManager;
 
     // stuff from integration

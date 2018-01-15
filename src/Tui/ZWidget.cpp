@@ -205,6 +205,18 @@ void ZWidget::setFocus(Qt::FocusReason reason) {
     // TODO trigger repaint(qt does this in the specific virtual for the event)
 }
 
+void ZWidget::grabKeyboard() {
+    ZTerminalPrivate *termp = ZTerminalPrivate::get(tuiwidgets_impl()->findTerminal());
+    termp->setKeyboardGrab(this);
+}
+
+void ZWidget::releaseKeyboard() {
+    ZTerminalPrivate *termp = ZTerminalPrivate::get(tuiwidgets_impl()->findTerminal());
+    if (termp->keyboardGrab() == this) {
+        termp->setKeyboardGrab(nullptr);
+    }
+}
+
 bool ZWidget::isAncestorOf(const ZWidget *child) const {
     while (child) {
         if (child == this) {
