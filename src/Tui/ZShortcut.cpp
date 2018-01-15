@@ -29,8 +29,19 @@ ZShortcut::~ZShortcut() {
     }
 }
 
+bool ZShortcut::isEnabled() const {
+    auto *const p = tuiwidgets_impl();
+    return p->enabled;
+}
+
+void ZShortcut::setEnabled(bool enable) {
+    auto *const p = tuiwidgets_impl();
+    p->enabled = enable;
+}
+
 bool ZShortcut::matches(ZWidget *focusWidget, const ZKeyEvent *event) {
     auto *const p = tuiwidgets_impl();
+    if (!p->enabled) return false;
     bool keyMatches = false;
     if (p->key._forMnemonic.size()) {
         if (event->modifiers() == Qt::AltModifier && event->text().toLower() == p->key._forMnemonic.toLower()) {

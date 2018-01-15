@@ -35,6 +35,9 @@ public:
     virtual ~ZShortcut() override;
 
 public:
+    bool isEnabled() const;
+    void setEnabled(bool enable);
+
     bool matches(ZWidget *focusWidget, const ZKeyEvent *event);
 
 Q_SIGNALS:

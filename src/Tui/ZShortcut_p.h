@@ -13,6 +13,7 @@ class ZShortcutPrivate {
 public:
     Qt::ShortcutContext context;
     ZKeySequence key;
+    bool enabled = true;
 
     QPointer<ZTerminal> terminal;
 };
