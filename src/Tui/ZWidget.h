@@ -10,6 +10,7 @@
 
 TUIWIDGETS_NS_START
 
+class ZCommandManager;
 class ZColor;
 class ZImplicitSymbol;
 class ZPalette;
@@ -82,6 +83,10 @@ public:
     ZWidget* nextFocusable();
     const ZWidget *placeFocus(bool last = false) const;
     ZWidget *placeFocus(bool last = false);
+
+    ZCommandManager* commandManager();
+    ZCommandManager* ensureCommandManager();
+    void setCommandManager(ZCommandManager* cmd);
 
     // public virtuals from base class override everything for later ABI compatibility
     bool event(QEvent *event) override;

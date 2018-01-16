@@ -44,6 +44,8 @@ public:
 
     ZTerminal *terminal = nullptr;
 
+    ZCommandManager* commandManager = nullptr;
+
     // back door
     static ZWidgetPrivate* get(ZWidget *widget) { return widget->tuiwidgets_impl(); }
     static const ZWidgetPrivate* get(const ZWidget *widget) { return widget->tuiwidgets_impl(); }

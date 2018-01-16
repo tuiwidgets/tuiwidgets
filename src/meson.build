@@ -3,6 +3,8 @@ qt5_dep = dependency('qt5', modules: 'Core')
 
 #ide:editable-filelist
 tuiwidgets_moc_headers = [
+  'Tui/ZCommandManager.h',
+  'Tui/ZCommandNotifier.h',
   'Tui/ZShortcut.h',
   'Tui/ZTerminal.h',
   'Tui/ZWidget.h',
@@ -11,6 +13,8 @@ tuiwidgets_moc_headers = [
 # find Tui -name "*.h" | grep -E -v -e "_p" -e "^Tui/[A-Y]" | sed -e "s/\\(.*\\)/  '\1',/" | sort
 tuiwidgets_public_headers = [
   'Tui/ZColor.h',
+  'Tui/ZCommandManager.h',
+  'Tui/ZCommandNotifier.h',
   'Tui/ZEvent.h',
   'Tui/ZPainter.h',
   'Tui/ZPalette.h',
@@ -25,6 +29,8 @@ tuiwidgets_public_headers = [
 tuiwidgets_sources = [
   'Tui/MarkupParser.cpp',
   'Tui/ZColor.cpp',
+  'Tui/ZCommandManager.cpp',
+  'Tui/ZCommandNotifier.cpp',
   'Tui/ZEvent.cpp',
   'Tui/ZPainter.cpp',
   'Tui/ZPalette.cpp',

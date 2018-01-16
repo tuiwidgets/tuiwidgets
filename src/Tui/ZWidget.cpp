@@ -6,6 +6,7 @@
 #include <QPointer>
 #include <QCoreApplication>
 
+#include <Tui/ZCommandManager.h>
 #include <Tui/ZPainter.h>
 #include <Tui/ZPalette.h>
 #include <Tui/ZTerminal_p.h>
@@ -783,6 +784,24 @@ void ZWidget::connectNotify(const QMetaMethod &signal) {
 void ZWidget::disconnectNotify(const QMetaMethod &signal) {
     // XXX needs to be thread-safe
     QObject::disconnectNotify(signal);
+}
+
+ZCommandManager *ZWidget::commandManager() {
+    auto *const p = tuiwidgets_impl();
+    return p->commandManager;
+}
+
+ZCommandManager *ZWidget::ensureCommandManager() {
+    auto *const p = tuiwidgets_impl();
+    if (!p->commandManager) {
+        p->commandManager = new ZCommandManager(this);
+    }
+    return p->commandManager;
+}
+
+void ZWidget::setCommandManager(ZCommandManager *cmd) {
+    auto *const p = tuiwidgets_impl();
+    p->commandManager = cmd;
 }
 
 TUIWIDGETS_NS_END
