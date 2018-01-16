@@ -176,6 +176,8 @@ std::unique_ptr<ZKeyEvent> ZTerminal::translateKeyEvent(const ZTerminalNativeEve
             key = Qt::Key_End;
         } else if  (native->atom_or_string == termpaint_input_space()) {
             key = Qt::Key_Space;
+        } else if  (native->atom_or_string == termpaint_input_escape()) {
+            key = Qt::Key_Escape;
         } else if  (native->atom_or_string == termpaint_input_f1()) {
             key = Qt::Key_F1;
         } else if  (native->atom_or_string == termpaint_input_f2()) {
