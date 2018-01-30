@@ -255,7 +255,7 @@ void ZTerminalPrivate::integration_free() {
     }
 }
 
-void ZTerminalPrivate::integration_write(char *data, int length) {
+void ZTerminalPrivate::integration_write_uncached(char *data, int length) {
     int written = 0;
     int ret;
     errno = 0;
@@ -287,8 +287,16 @@ void ZTerminalPrivate::integration_write(char *data, int length) {
     }
 }
 
-void ZTerminalPrivate::integration_flush() {
+void ZTerminalPrivate::integration_write(char *data, int length) {
+    output_buffer.append(data, length);
+    if (output_buffer.size() > 512) {
+        integration_flush();
+    }
+}
 
+void ZTerminalPrivate::integration_flush() {
+    integration_write_uncached(output_buffer.data(), output_buffer.size());
+    output_buffer.clear();
 }
 
 bool ZTerminalPrivate::integration_is_bad() {

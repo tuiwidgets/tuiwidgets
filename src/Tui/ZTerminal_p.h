@@ -3,6 +3,7 @@
 
 #include <QPoint>
 #include <QPointer>
+#include <QByteArray>
 
 #include <termpaint.h>
 #include <termpaint_input.h>
@@ -45,6 +46,7 @@ public:
 
     void integration_free();
     void integration_write(char *data, int length);
+    void integration_write_uncached(char *data, int length);
     void integration_flush();
     bool integration_is_bad();
     void integration_expect_response();
@@ -65,6 +67,7 @@ public:
     int fd = -1;
     bool auto_close = false;
     bool awaiting_response = false;
+    QByteArray output_buffer;
     termios originalTerminalAttributes;
     // ^^
 

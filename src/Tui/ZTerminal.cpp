@@ -252,6 +252,7 @@ bool ZTerminal::event(QEvent *event) {
         if (tuiwidgets_impl()->cursorPosition != QPoint{-1, -1}) {
             termpaint_surface_set_cursor(tuiwidgets_impl()->surface,
                                          tuiwidgets_impl()->cursorPosition.x(), tuiwidgets_impl()->cursorPosition.y());
+            tuiwidgets_impl()->integration_flush();
         }
     }
 
