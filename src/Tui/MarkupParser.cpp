@@ -1016,8 +1016,18 @@ void MarkupParser::nextEvent() {
                 } else if (currentTokenIsTagEnd() && (t.tagName == U"h1" || t.tagName == U"h2"
                           || t.tagName == U"h3" || t.tagName == U"h4" || t.tagName == U"h5"
                           || t.tagName == U"h6")) {
-                    t.errorUnimplemented("TODO h?");
-                    // FIXME
+
+                    if (!hasInScope(t.tagName)) {
+                        t._isError = true;
+                    } else {
+                        generateImpliedEndTags(U"");
+                        if (openElements.last() != t.tagName) {
+                            t._isError = true;
+                        } else {
+                            pendingElementEndEvents.append(openElements.last());
+                            openElements.removeLast();
+                        }
+                    }
                 } else if (currentTokenIsTagBegin() && (t.tagName == U"a")) {
                     t.errorUnimplemented("TODO a");
                     // FIXME
