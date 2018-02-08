@@ -33,6 +33,7 @@ ZWidget::ZWidget(ZWidget *parent) :
 }
 
 ZWidget::~ZWidget() {
+    update();
     if (terminal() && terminal()->focusWidget() == this) {
         ZTerminalPrivate *termp = ZTerminalPrivate::get(terminal());
         termp->setFocus(terminal()->mainWidget());
