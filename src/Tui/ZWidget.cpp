@@ -33,7 +33,10 @@ ZWidget::ZWidget(ZWidget *parent) :
 }
 
 ZWidget::~ZWidget() {
-    // TODO if focused make sure focus is not dangling
+    if (terminal() && terminal()->focusWidget() == this) {
+        ZTerminalPrivate *termp = ZTerminalPrivate::get(terminal());
+        termp->setFocus(terminal()->mainWidget());
+    }
     // ??? any use in deleting children here manually instead of leaving it to QObject?
 }
 
