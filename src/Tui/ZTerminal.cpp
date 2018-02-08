@@ -26,7 +26,11 @@ ZTerminalPrivate *ZTerminalPrivate::get(ZTerminal *terminal) {
 }
 
 void ZTerminalPrivate::setFocus(ZWidget *w) {
-    focusWidget = ZWidgetPrivate::get(w);
+    if (!w) {
+        focusWidget = nullptr;
+    } else {
+        focusWidget = ZWidgetPrivate::get(w);
+    }
     cursorPosition = QPoint{-1, -1};
 }
 
