@@ -96,7 +96,7 @@ void ZWidget::setVisible(bool v) {
     // TODO care about focus
     // TODO cache effect in hierarchy
     // TODO send events (QShowEvent  QHideEvent? QEvent::HideToParent? QEvent::ShowToParent?)
-    // TODO trigger repaint (Qt does not use events here)
+    update();
 }
 
 void ZWidget::showCursor(QPoint position) {
