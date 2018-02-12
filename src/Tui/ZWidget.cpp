@@ -96,6 +96,12 @@ void ZWidget::setVisible(bool v) {
     // TODO care about focus
     // TODO cache effect in hierarchy
     // TODO send events (QShowEvent  QHideEvent? QEvent::HideToParent? QEvent::ShowToParent?)
+    ZTerminal *term = terminal();
+    if (term) {
+        if (isAncestorOf(term->focusWidget())) {
+            ZTerminalPrivate::get(term)->cursorPosition = QPoint{-1, -1};
+        }
+    }
     update();
 }
 
