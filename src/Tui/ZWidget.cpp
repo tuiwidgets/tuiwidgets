@@ -38,7 +38,11 @@ ZWidget::~ZWidget() {
         ZTerminalPrivate *termp = ZTerminalPrivate::get(terminal());
         termp->setFocus(terminal()->mainWidget());
     }
-    // ??? any use in deleting children here manually instead of leaving it to QObject?
+    // Delete children here manually, instead of leaving it to QObject,
+    // to avoid children observing already destructed parent.
+    for (QObject *child : children()) {
+        delete child;
+    }
 }
 
 void ZWidget::setParent(ZWidget *parent) {
