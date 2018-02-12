@@ -724,6 +724,9 @@ void ZWidgetPrivate::updateRequestEvent(ZPaintEvent *event)
         if (!child) {
             continue;
         }
+        if (!child->isVisible()) {
+            continue;
+        }
         const QRect &childRect = child->tuiwidgets_impl()->rect;
         ZPainter transformedPainter = painter->translateAndClip(childRect);
         Tui::ZPaintEvent nestedEvent(ZPaintEvent::update, &transformedPainter);
