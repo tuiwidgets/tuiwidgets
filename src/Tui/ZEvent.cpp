@@ -21,6 +21,10 @@ TUIWIDGETS_EXPORT QEvent::Type ZEventType::key() {
     CALL_ONCE_REGISTEREVENTTYPE;
 }
 
+TUIWIDGETS_EXPORT QEvent::Type ZEventType::queryAcceptsEnter() {
+    CALL_ONCE_REGISTEREVENTTYPE;
+}
+
 TUIWIDGETS_EXPORT QEvent::Type ZEventType::focusIn() {
     CALL_ONCE_REGISTEREVENTTYPE;
 }

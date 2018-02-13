@@ -28,6 +28,7 @@ class ZOtherChangeEventPrivate;
 namespace ZEventType {
     QEvent::Type paint();
     QEvent::Type key();
+    QEvent::Type queryAcceptsEnter();
     QEvent::Type focusIn();
     QEvent::Type focusOut();
     QEvent::Type move();
