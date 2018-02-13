@@ -239,7 +239,7 @@ bool ZWidget::isAncestorOf(const ZWidget *child) const {
         }
         child = child->parentWidget();
     }
-    return true;
+    return false;
 }
 
 bool ZWidget::isEnabledTo(const ZWidget *ancestor) const {
