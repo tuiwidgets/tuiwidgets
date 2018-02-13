@@ -88,6 +88,21 @@ public:
     ZCommandManager* ensureCommandManager();
     void setCommandManager(ZCommandManager* cmd);
 
+    template<typename T>
+    T* findFacet() {
+        ZWidget *w = this;
+        while (w) {
+            T* t = static_cast<T*>(w->facet(T::staticMetaObject));
+            if (t) {
+                return t;
+            }
+            w = w->parentWidget();
+        }
+        return nullptr;
+    }
+
+    virtual QObject *facet(const QMetaObject metaObject);
+
     // public virtuals from base class override everything for later ABI compatibility
     bool event(QEvent *event) override;
     bool eventFilter(QObject *watched, QEvent *event) override;

@@ -821,5 +821,10 @@ void ZWidget::setCommandManager(ZCommandManager *cmd) {
     p->commandManager = cmd;
 }
 
+QObject *ZWidget::facet(const QMetaObject metaObject) {
+    Q_UNUSED(metaObject);
+    return nullptr;
+}
+
 TUIWIDGETS_NS_END
 
