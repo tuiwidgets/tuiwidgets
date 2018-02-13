@@ -29,15 +29,15 @@ TUIWIDGETS_EXPORT QEvent::Type ZEventType::focusOut() {
     CALL_ONCE_REGISTEREVENTTYPE;
 }
 
-QEvent::Type ZEventType::move() {
+TUIWIDGETS_EXPORT QEvent::Type ZEventType::move() {
     CALL_ONCE_REGISTEREVENTTYPE;
 }
 
-QEvent::Type ZEventType::resize() {
+TUIWIDGETS_EXPORT QEvent::Type ZEventType::resize() {
     CALL_ONCE_REGISTEREVENTTYPE;
 }
 
-QEvent::Type ZEventType::otherChange() {
+TUIWIDGETS_EXPORT QEvent::Type ZEventType::otherChange() {
     CALL_ONCE_REGISTEREVENTTYPE;
 }
 
@@ -214,7 +214,5 @@ ZOtherChangeEventPrivate::ZOtherChangeEventPrivate(QSet<ZSymbol> unchanged)
      : unchanged(unchanged)
 {
 }
-
-
 
 TUIWIDGETS_NS_END
