@@ -158,6 +158,10 @@ std::unique_ptr<ZKeyEvent> ZTerminal::translateKeyEvent(const ZTerminalNativeEve
         int key = Qt::Key_unknown;
         if (native->atom_or_string == termpaint_input_i_resync()) {
             return nullptr;
+        } else if (native->atom_or_string == termpaint_input_page_up()) {
+            key = Qt::Key_PageUp;
+        } else if (native->atom_or_string == termpaint_input_page_down()) {
+            key = Qt::Key_PageDown;
         } else if (native->atom_or_string == termpaint_input_arrow_right()) {
             key = Qt::Key_Right;
         } else if (native->atom_or_string == termpaint_input_arrow_left()) {
