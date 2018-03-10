@@ -96,6 +96,9 @@ void ZTerminal::setMainWidget(ZWidget *w) {
     ZWidgetPrivate::get(w)->setManagingTerminal(this);
 
     tuiwidgets_impl()->sendOtherChangeEvent(ZOtherChangeEvent::all().subtract({TUISYM_LITERAL("terminal")}));
+    // TODO respect minimal widget size and add system managed scrolling if terminal is too small
+    auto *surface = tuiwidgets_impl()->surface;
+    w->setGeometry({0, 0, termpaint_surface_width(surface), termpaint_surface_height(surface)});
 
     update();
 }
