@@ -144,6 +144,15 @@ void ZTerminal::forceRepaint()
     p.flush();
 }
 
+void ZTerminal::resize(int width, int height) {
+    auto *const p = tuiwidgets_impl();
+    termpaint_surface_resize(p->surface, width, height);
+    if (p->mainWidget) {
+        p->mainWidget->setGeometry({0, 0, termpaint_surface_width(p->surface), termpaint_surface_height(p->surface)});
+    }
+    forceRepaint();
+}
+
 std::unique_ptr<ZKeyEvent> ZTerminal::translateKeyEvent(const ZTerminalNativeEvent &nativeEvent) {
     termpaint_input_event* native = static_cast<termpaint_input_event*>(nativeEvent.nativeEventPointer());
 

@@ -17,13 +17,12 @@
 #include <QSocketNotifier>
 #include <QCoreApplication>
 #include <QPointer>
+#include <QRect>
 
 #include <PosixSignalManager.h>
 
 #include <Tui/ZEvent.h>
-
-// TODO remove or rework
-TUIWIDGETS_EXPORT std::string peek_buffer;
+#include <Tui/ZWidget.h>
 
 TUIWIDGETS_NS_START
 
@@ -39,6 +38,7 @@ static termios systemOriginalTerminalAttributes;
 static const char *systemRestoreEscape = nullptr;
 static termios systemPresuspendTerminalAttributes;
 static std::unique_ptr<PosixSignalNotifier> systemTerminalResumeNotifier;
+static std::unique_ptr<PosixSignalNotifier> systemTerminalSizeChangeNotifier;
 static QPointer<ZTerminal> systemTerminal;
 
 static void restoreSystemHandler(const siginfo_t *info, void *context) {
@@ -197,6 +197,21 @@ bool ZTerminalPrivate::commonStuff(ZTerminal::Options options) {
                 systemTerminal->forceRepaint();
             }
         });
+
+        systemTerminalSizeChangeNotifier = std::unique_ptr<PosixSignalNotifier>(new PosixSignalNotifier(SIGWINCH));
+        QObject::connect(systemTerminalSizeChangeNotifier.get(), &PosixSignalNotifier::activated, [] {
+            if (systemTerminal) {
+                auto *const p = systemTerminal->tuiwidgets_impl();
+                if (p->options.testFlag(ZTerminal::DisableAutoResize)) {
+                    return;
+                }
+                struct winsize s;
+                if (isatty(p->fd) && ioctl(p->fd, TIOCGWINSZ, &s) >= 0) {
+                    systemTerminal->resize(s.ws_col, s.ws_row);
+                }
+            }
+        });
+
         systemTerminal = pub();
     }
 

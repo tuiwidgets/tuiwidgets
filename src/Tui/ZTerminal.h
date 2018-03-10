@@ -23,7 +23,8 @@ public:
     enum Option {
         AllowInterrupt = 1 << 0,
         AllowSuspend = 1 << 1,
-        AllowQuit = 1 << 2
+        AllowQuit = 1 << 2,
+        DisableAutoResize = 1 << 3,
     };
     Q_DECLARE_FLAGS(Options, Option)
 
@@ -41,6 +42,8 @@ public:
 
     void update();
     void forceRepaint();
+
+    void resize(int width, int height);
 
 protected:
     std::unique_ptr<ZKeyEvent> translateKeyEvent(const ZTerminalNativeEvent &nativeEvent);
