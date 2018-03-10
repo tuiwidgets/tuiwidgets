@@ -13,7 +13,9 @@
 
 TUIWIDGETS_NS_START
 
-ZTerminalPrivate::ZTerminalPrivate(ZTerminal *pub) {
+ZTerminalPrivate::ZTerminalPrivate(ZTerminal *pub, ZTerminal::Options options)
+    : options(options)
+{
     pub_ptr = pub;
 }
 
@@ -60,7 +62,7 @@ ZTerminal::ZTerminal(QObject *parent)
 }
 
 ZTerminal::ZTerminal(Options options, QObject *parent)
-    : QObject(parent), tuiwidgets_pimpl_ptr(std::make_unique<ZTerminalPrivate>(this))
+    : QObject(parent), tuiwidgets_pimpl_ptr(std::make_unique<ZTerminalPrivate>(this, options))
 {
     tuiwidgets_impl()->initTerminal(options);
 }

@@ -21,7 +21,7 @@ class ZSymbol;
 
 class ZTerminalPrivate {
 public:
-    ZTerminalPrivate(ZTerminal *pub);
+    ZTerminalPrivate(ZTerminal *pub, ZTerminal::Options options);
     virtual ~ZTerminalPrivate();
     static ZTerminalPrivate *get(ZTerminal *terminal);
 
@@ -62,6 +62,7 @@ public:
     ZWidgetPrivate *focusWidget = nullptr;
     QPointer<ZWidget> keyboardGrabWidget;
     std::unique_ptr<ZShortcutManager> shortcutManager;
+    ZTerminal::Options options;
 
     // stuff from integration
     int fd = -1;
