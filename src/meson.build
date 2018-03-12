@@ -5,6 +5,7 @@ qt5_dep = dependency('qt5', modules: 'Core')
 tuiwidgets_moc_headers = [
   'Tui/ZCommandManager.h',
   'Tui/ZCommandNotifier.h',
+  'Tui/ZLayout.h',
   'Tui/ZShortcut.h',
   'Tui/ZTerminal.h',
   'Tui/ZWidget.h',
@@ -16,6 +17,7 @@ tuiwidgets_public_headers = [
   'Tui/ZCommandManager.h',
   'Tui/ZCommandNotifier.h',
   'Tui/ZEvent.h',
+  'Tui/ZLayout.h',
   'Tui/ZPainter.h',
   'Tui/ZPalette.h',
   'Tui/ZShortcut.h',
@@ -32,6 +34,7 @@ tuiwidgets_sources = [
   'Tui/ZCommandManager.cpp',
   'Tui/ZCommandNotifier.cpp',
   'Tui/ZEvent.cpp',
+  'Tui/ZLayout.cpp',
   'Tui/ZPainter.cpp',
   'Tui/ZPalette.cpp',
   'Tui/ZShortcut.cpp',

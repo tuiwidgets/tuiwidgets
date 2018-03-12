@@ -13,6 +13,7 @@ TUIWIDGETS_NS_START
 class ZCommandManager;
 class ZColor;
 class ZImplicitSymbol;
+class ZLayout;
 class ZPalette;
 class ZTerminal;
 
@@ -45,6 +46,15 @@ public:
     void setEnabled(bool e);
     bool isVisible() const;
     void setVisible(bool v);
+
+    QSize minimumSize() const;
+    void setMinimumSize(int w, int h);
+    QSize maximumSize() const;
+    void setMaximumSize(int w, int h);
+    void setFixedSize(int w, int h);
+    virtual QSize sizeHint() const;
+    ZLayout *layout() const;
+    void setLayout(ZLayout *l);
 
     void showCursor(QPoint position);
     ZTerminal *terminal() const;

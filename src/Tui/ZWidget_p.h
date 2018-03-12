@@ -20,7 +20,6 @@ public:
     ZWidgetPrivate(ZWidget *pub);
     virtual ~ZWidgetPrivate();
 
-
     void updateRequestEvent(ZPaintEvent *event);
 
     ZTerminal *findTerminal() const;
@@ -38,6 +37,10 @@ public:
 
     bool enabled = true;
     bool visible = true;
+
+    QSize minimumSize;
+    QSize maximumSize;
+    ZLayout *layout = nullptr;
 
     ZPalette palette;
     QStringList paletteClass;

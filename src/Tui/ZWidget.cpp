@@ -7,6 +7,7 @@
 #include <QCoreApplication>
 
 #include <Tui/ZCommandManager.h>
+#include <Tui/ZLayout.h>
 #include <Tui/ZPainter.h>
 #include <Tui/ZPalette.h>
 #include <Tui/ZTerminal_p.h>
@@ -33,6 +34,7 @@ ZWidget::ZWidget(ZWidget *parent) :
 }
 
 ZWidget::~ZWidget() {
+    auto *const p = tuiwidgets_impl();
     update();
     if (terminal() && terminal()->focusWidget() == this) {
         ZTerminalPrivate *termp = ZTerminalPrivate::get(terminal());
@@ -41,6 +43,9 @@ ZWidget::~ZWidget() {
     // Delete children here manually, instead of leaving it to QObject,
     // to avoid children observing already destructed parent.
     for (QObject *child : children()) {
+        if (p->layout == child) {
+            p->layout = nullptr;
+        }
         delete child;
     }
 }
@@ -103,6 +108,48 @@ void ZWidget::setVisible(bool v) {
         }
     }
     update();
+}
+
+QSize ZWidget::minimumSize() const {
+    auto *const p = tuiwidgets_impl();
+    return p->minimumSize;
+}
+
+void ZWidget::setMinimumSize(int w, int h) {
+    auto *const p = tuiwidgets_impl();
+    p->minimumSize = {w, h};
+}
+
+QSize ZWidget::maximumSize() const {
+    auto *const p = tuiwidgets_impl();
+    return p->maximumSize;
+}
+
+void ZWidget::setMaximumSize(int w, int h) {
+    auto *const p = tuiwidgets_impl();
+    p->maximumSize = {w, h};
+}
+
+void ZWidget::setFixedSize(int w, int h) {
+    auto *const p = tuiwidgets_impl();
+    setMinimumSize(w, h);
+    setMaximumSize(w, h);
+}
+
+QSize ZWidget::sizeHint() const {
+    //auto *const p = tuiwidgets_impl();
+    return {};
+}
+
+ZLayout *ZWidget::layout() const {
+    auto *const p = tuiwidgets_impl();
+    return p->layout;
+}
+
+void ZWidget::setLayout(ZLayout *l) {
+    auto *const p = tuiwidgets_impl();
+    l->setParent(this);
+    p->layout = l;
 }
 
 void ZWidget::showCursor(QPoint position) {
@@ -681,6 +728,9 @@ ZWidget *ZWidget::nextFocusable(bool outside) {
 }*/
 
 bool ZWidget::event(QEvent *event) {
+    if (layout()) {
+        layout()->widgetEvent(event);
+    }
     if (event->type() == ZEventType::paint()) {
         paintEvent(static_cast<ZPaintEvent*>(event));
         return true;
