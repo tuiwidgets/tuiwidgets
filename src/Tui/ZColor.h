@@ -33,6 +33,26 @@ private:
     uint32_t val = 0;
 };
 
+namespace Colors {
+    // TODO:
+    extern Tui::ZColor black;
+    extern Tui::ZColor darkGray;
+    extern Tui::ZColor lightGray;
+    extern Tui::ZColor brightWhite;
+    extern Tui::ZColor blue;
+    extern Tui::ZColor green;
+    extern Tui::ZColor cyan;
+    extern Tui::ZColor red;
+    extern Tui::ZColor magenta;
+    extern Tui::ZColor brown;
+    extern Tui::ZColor brightBlue;
+    extern Tui::ZColor brightGreen;
+    extern Tui::ZColor brightCyan;
+    extern Tui::ZColor brightRed;
+    extern Tui::ZColor brightMagenta;
+    extern Tui::ZColor brightYellow;
+}
+
 TUIWIDGETS_NS_END
 
 #endif // TUIWIDGETS_ZCOLOR_INCLUDED
