@@ -39,7 +39,7 @@ public:
     bool visible = true;
 
     QSize minimumSize;
-    QSize maximumSize;
+    QSize maximumSize = {tuiMaxSize, tuiMaxSize};
     SizePolicy sizePolicyH = SizePolicy::Preferred;
     SizePolicy sizePolicyV = SizePolicy::Preferred;
     ZLayout *layout = nullptr;

@@ -32,6 +32,8 @@ enum class SizePolicy {
     Expanding,
 };
 
+constexpr int tuiMaxSize = 0xffffff;
+
 class ZWidgetPrivate;
 
 class TUIWIDGETS_EXPORT ZWidget : public QObject {
