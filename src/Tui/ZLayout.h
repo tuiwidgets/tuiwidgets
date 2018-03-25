@@ -21,6 +21,8 @@ public:
 public:
     virtual void widgetEvent(QEvent *event);
 
+    ZWidget* widget();
+
 public:
     // public virtuals from base class override everything for later ABI compatibility
     bool event(QEvent *event) override;

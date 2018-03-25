@@ -6,7 +6,6 @@
 TUIWIDGETS_NS_START
 
 class ZLayoutPrivate {
-
 };
 
 TUIWIDGETS_NS_END

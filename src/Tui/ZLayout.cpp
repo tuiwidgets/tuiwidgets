@@ -3,11 +3,12 @@
 
 #include <QEvent>
 
+#include <Tui/ZWidget.h>
+
 TUIWIDGETS_NS_START
 
 ZLayout::ZLayout(QObject *parent) : QObject(parent)
 {
-
 }
 
 ZLayout::~ZLayout() {
@@ -17,6 +18,16 @@ void ZLayout::widgetEvent(QEvent *event) {
     /*if (event->type() == ZEventType::resize()) {
         resizeEvent(static_cast<ZResizeEvent*>(event));
     }*/
+}
+
+ZWidget *ZLayout::widget() {
+    QObject *p = parent();
+    while (p) {
+        ZWidget *w = qobject_cast<ZWidget*>(p);
+        if (w) return w;
+        p = p->parent();
+    }
+    return nullptr;
 }
 
 bool ZLayout::event(QEvent *event) {
