@@ -146,6 +146,26 @@ void ZWidget::setFixedSize(int w, int h) {
     setMaximumSize(w, h);
 }
 
+SizePolicy ZWidget::sizePolicyH() const {
+    auto *const p = tuiwidgets_impl();
+    return p->sizePolicyH;
+}
+
+void ZWidget::setSizePolicyH(SizePolicy policy) {
+    auto *const p = tuiwidgets_impl();
+    p->sizePolicyH = policy;
+}
+
+SizePolicy ZWidget::sizePolicyV() const {
+    auto *const p = tuiwidgets_impl();
+    return p->sizePolicyV;
+}
+
+void ZWidget::setSizePolicyV(SizePolicy policy) {
+    auto *const p = tuiwidgets_impl();
+    p->sizePolicyV = policy;
+}
+
 QSize ZWidget::sizeHint() const {
     //auto *const p = tuiwidgets_impl();
     return {};

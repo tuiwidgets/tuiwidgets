@@ -24,6 +24,14 @@ enum class FocusContainerMode {
     Cycle
 };
 
+enum class SizePolicy {
+    Fixed,
+    Minimum,
+    Maximum,
+    Preferred,
+    Expanding,
+};
+
 class ZWidgetPrivate;
 
 class TUIWIDGETS_EXPORT ZWidget : public QObject {
@@ -55,6 +63,10 @@ public:
     QSize maximumSize() const;
     void setMaximumSize(int w, int h);
     void setFixedSize(int w, int h);
+    SizePolicy sizePolicyH() const;
+    void setSizePolicyH(SizePolicy policy);
+    SizePolicy sizePolicyV() const;
+    void setSizePolicyV(SizePolicy policy);
     virtual QSize sizeHint() const;
     ZLayout *layout() const;
     void setLayout(ZLayout *l);

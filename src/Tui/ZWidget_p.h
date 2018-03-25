@@ -40,6 +40,8 @@ public:
 
     QSize minimumSize;
     QSize maximumSize;
+    SizePolicy sizePolicyH = SizePolicy::Preferred;
+    SizePolicy sizePolicyV = SizePolicy::Preferred;
     ZLayout *layout = nullptr;
 
     QMargins contentsMargins;
