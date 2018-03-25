@@ -4,6 +4,7 @@
 #include <memory>
 
 #include <QObject>
+#include <QMargins>
 
 #include <Tui/ZEvent.h>
 #include <Tui/tuiwidgets_internal.h>
@@ -42,6 +43,8 @@ public:
     void setParent(ZWidget *parent);
     QRect geometry() const;
     void setGeometry(const QRect &geometry);
+    QRect rect() const;
+    QRect contentsRect() const;
     bool isEnabled() const;
     void setEnabled(bool e);
     bool isVisible() const;
@@ -67,6 +70,9 @@ public:
     FocusContainerMode focusMode() const;
     void setFocusOrder(int order);
     int focusOrder() const;
+
+    QMargins contentsMargins() const;
+    void setContentsMargins(QMargins m);
 
     const ZPalette &palette() const;
     void setPalette(const ZPalette &pal);

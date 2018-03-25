@@ -77,6 +77,16 @@ void ZWidget::setGeometry(const QRect &rect) {
     update();
 }
 
+QRect ZWidget::rect() const {
+    auto *const p = tuiwidgets_impl();
+    return QRect(0, 0, p->geometry.width(), p->geometry.height());
+}
+
+QRect ZWidget::contentsRect() const {
+    auto *const p = tuiwidgets_impl();
+    return rect() - p->contentsMargins;
+}
+
 bool ZWidget::isEnabled() const {
     return tuiwidgets_impl()->enabled;
 }
@@ -207,6 +217,16 @@ void ZWidget::setFocusOrder(int order) {
 int ZWidget::focusOrder() const {
     auto *const p = tuiwidgets_impl();
     return p->focusOrder;
+}
+
+QMargins ZWidget::contentsMargins() const {
+    auto *const p = tuiwidgets_impl();
+    return p->contentsMargins;
+}
+
+void ZWidget::setContentsMargins(QMargins m) {
+    auto *const p = tuiwidgets_impl();
+    p->contentsMargins = m;
 }
 
 const ZPalette &ZWidget::palette() const {

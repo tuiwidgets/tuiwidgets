@@ -42,6 +42,8 @@ public:
     QSize maximumSize;
     ZLayout *layout = nullptr;
 
+    QMargins contentsMargins;
+
     ZPalette palette;
     QStringList paletteClass;
 
