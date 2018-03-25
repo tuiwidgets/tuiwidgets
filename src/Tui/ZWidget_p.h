@@ -30,7 +30,7 @@ public:
     bool isFocusable() const { return enabled && focusPolicy != Qt::FocusPolicy::NoFocus; }
 
     // variables
-    QRect rect;
+    QRect geometry;
     Qt::FocusPolicy focusPolicy = Qt::NoFocus;
     FocusContainerMode focusMode = FocusContainerMode::None;
     int focusOrder = 0;

@@ -59,19 +59,19 @@ void ZWidget::setParent(ZWidget *parent) {
 }
 
 QRect ZWidget::geometry() const {
-    return tuiwidgets_impl()->rect;
+    return tuiwidgets_impl()->geometry;
 }
 
 void ZWidget::setGeometry(const QRect &rect) {
     auto *const p = tuiwidgets_impl();
-    QRect oldRect = p->rect;
-    p->rect = rect;
-    if (oldRect.topLeft() != rect.topLeft()) {
-        ZMoveEvent e {rect.topLeft(), oldRect.topLeft()};
+    QRect oldGeometry = p->geometry;
+    p->geometry = rect;
+    if (oldGeometry.topLeft() != rect.topLeft()) {
+        ZMoveEvent e {rect.topLeft(), oldGeometry.topLeft()};
         QCoreApplication::sendEvent(this, &e);
     }
-    if (oldRect.size() != rect.size()) {
-        ZResizeEvent e {rect.size(), oldRect.size()};
+    if (oldGeometry.size() != rect.size()) {
+        ZResizeEvent e {rect.size(), oldGeometry.size()};
         QCoreApplication::sendEvent(this, &e);
     }
     update();
@@ -777,7 +777,7 @@ void ZWidgetPrivate::updateRequestEvent(ZPaintEvent *event)
         if (!child->isVisible()) {
             continue;
         }
-        const QRect &childRect = child->tuiwidgets_impl()->rect;
+        const QRect &childRect = child->tuiwidgets_impl()->geometry;
         ZPainter transformedPainter = painter->translateAndClip(childRect);
         Tui::ZPaintEvent nestedEvent(ZPaintEvent::update, &transformedPainter);
         QCoreApplication::instance()->sendEvent(child, &nestedEvent);
