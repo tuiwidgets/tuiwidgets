@@ -1,6 +1,8 @@
 #ifndef TUIWIDGETS_INTERNAL_H
 #define TUIWIDGETS_INTERNAL_H
 
+#include <QtGlobal>
+
 // Don't use anything from here in your code. This is part of the private implementation
 
 // Uses reinterpret_cast instead of static_cast, because it needs to work with incomplete types.

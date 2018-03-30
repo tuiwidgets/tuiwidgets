@@ -5,6 +5,9 @@
 
 #include <QObject>
 
+#include <Tui/ZWidget.h>
+#include <Tui/ZLayoutItem.h>
+
 #include <Tui/tuiwidgets_internal.h>
 
 TUIWIDGETS_NS_START
@@ -12,7 +15,7 @@ TUIWIDGETS_NS_START
 class ZWidget;
 
 class ZLayoutPrivate;
-class TUIWIDGETS_EXPORT ZLayout : public QObject {
+class TUIWIDGETS_EXPORT ZLayout : public QObject, public ZLayoutItem {
     Q_OBJECT
 public:
     explicit ZLayout(QObject *parent = nullptr);
@@ -22,6 +25,11 @@ public:
     virtual void widgetEvent(QEvent *event);
 
     ZWidget* widget();
+
+    void setGeometry(QRect r) override = 0;
+    QSize sizeHint() const  override;
+    SizePolicy sizePolicyH() const  override;
+    SizePolicy sizePolicyV() const  override;
 
 public:
     // public virtuals from base class override everything for later ABI compatibility

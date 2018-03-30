@@ -2,12 +2,15 @@
 #include "ZLayout_p.h"
 
 #include <QEvent>
+#include <QPoint>
+#include <QRect>
+#include <QSize>
 
 #include <Tui/ZWidget.h>
 
 TUIWIDGETS_NS_START
 
-ZLayout::ZLayout(QObject *parent) : QObject(parent)
+ZLayout::ZLayout(QObject *parent) : QObject(parent), tuiwidgets_pimpl_ptr(std::make_unique<ZLayoutPrivate>())
 {
 }
 
@@ -15,9 +18,9 @@ ZLayout::~ZLayout() {
 }
 
 void ZLayout::widgetEvent(QEvent *event) {
-    /*if (event->type() == ZEventType::resize()) {
-        resizeEvent(static_cast<ZResizeEvent*>(event));
-    }*/
+    if (event->type() == ZEventType::resize()) {
+        setGeometry({ QPoint(0, 0), static_cast<ZResizeEvent*>(event)->size() });
+    }
 }
 
 ZWidget *ZLayout::widget() {
@@ -28,6 +31,18 @@ ZWidget *ZLayout::widget() {
         p = p->parent();
     }
     return nullptr;
+}
+
+QSize ZLayout::sizeHint() const {
+    return QSize();
+}
+
+SizePolicy ZLayout::sizePolicyH() const {
+    return SizePolicy::Preferred;
+}
+
+SizePolicy ZLayout::sizePolicyV() const {
+    return SizePolicy::Preferred;
 }
 
 bool ZLayout::event(QEvent *event) {
