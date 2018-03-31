@@ -285,6 +285,9 @@ void ZRoot::keyEvent(ZKeyEvent *event) {
             if (!w->paletteClass().contains(QStringLiteral("window"))) {
                 it.remove();
             }
+            if (!w->isVisible()) {
+                it.remove();
+            }
         }
         if (event->modifiers() == Qt::Modifier::SHIFT) {
             std::reverse(childWindows.begin(), childWindows.end());
