@@ -19,7 +19,7 @@ ZLayout::~ZLayout() {
 
 void ZLayout::widgetEvent(QEvent *event) {
     if (event->type() == ZEventType::resize()) {
-        setGeometry({ QPoint(0, 0), static_cast<ZResizeEvent*>(event)->size() });
+        setGeometry(widget()->layoutArea());
     }
 }
 

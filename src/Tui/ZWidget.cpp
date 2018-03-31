@@ -3,8 +3,9 @@
 
 #include <limits>
 
-#include <QPointer>
 #include <QCoreApplication>
+#include <QPointer>
+#include <QRect>
 
 #include <Tui/ZCommandManager.h>
 #include <Tui/ZLayout.h>
@@ -169,6 +170,10 @@ void ZWidget::setSizePolicyV(SizePolicy policy) {
 QSize ZWidget::sizeHint() const {
     //auto *const p = tuiwidgets_impl();
     return {};
+}
+
+QRect ZWidget::layoutArea() const {
+    return { QPoint(0, 0), geometry().marginsRemoved(contentsMargins()).size() };
 }
 
 ZLayout *ZWidget::layout() const {
