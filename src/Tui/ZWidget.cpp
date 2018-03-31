@@ -168,7 +168,13 @@ void ZWidget::setSizePolicyV(SizePolicy policy) {
 }
 
 QSize ZWidget::sizeHint() const {
-    //auto *const p = tuiwidgets_impl();
+    if (layout()) {
+        QSize s = layout()->sizeHint();
+        QMargins cm = contentsMargins();
+        s.rwidth() += cm.left() + cm.right();
+        s.rheight() += cm.top() + cm.bottom();
+        return s.expandedTo(minimumSize()).boundedTo(maximumSize());
+    }
     return {};
 }
 
