@@ -3,7 +3,14 @@
 
 TUIWIDGETS_NS_START
 
+ZLayoutItem::ZLayoutItem() {
+}
+
 ZLayoutItem::~ZLayoutItem() {
+}
+
+bool ZLayoutItem::isSpacer() const {
+    return false;
 }
 
 std::unique_ptr<ZLayoutItem> ZLayoutItem::wrapWidget(ZWidget *widget) {
