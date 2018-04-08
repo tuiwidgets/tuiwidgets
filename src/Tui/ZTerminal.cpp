@@ -21,6 +21,9 @@ ZTerminalPrivate::ZTerminalPrivate(ZTerminal *pub, ZTerminal::Options options)
 
 ZTerminalPrivate::~ZTerminalPrivate() {
     deinitTerminal();
+    delete inputNotifier;
+    termpaint_surface_free(surface);
+    termpaint_input_free(input);
 }
 
 ZTerminalPrivate *ZTerminalPrivate::get(ZTerminal *terminal) {

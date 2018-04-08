@@ -1,9 +1,10 @@
 #ifndef TUIWIDGETS_ZTERMINAL_P_INCLUDED
 #define TUIWIDGETS_ZTERMINAL_P_INCLUDED
 
+#include <QByteArray>
 #include <QPoint>
 #include <QPointer>
-#include <QByteArray>
+#include <QSocketNotifier>
 
 #include <termpaint.h>
 #include <termpaint_input.h>
@@ -53,6 +54,7 @@ public:
 
     termpaint_surface *surface = nullptr; // TODO use ref counted ptr of some kind
     termpaint_integration integration;
+    QSocketNotifier *inputNotifier = nullptr;
     termpaint_input *input = nullptr;
 
     bool updateRequested = false;

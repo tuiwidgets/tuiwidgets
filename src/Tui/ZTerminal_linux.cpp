@@ -243,8 +243,8 @@ bool ZTerminalPrivate::commonStuff(ZTerminal::Options options) {
     termpaint_input_set_raw_filter_cb(input, raw_filter, pub());
     termpaint_input_set_event_cb(input, event_handler, pub());
 
-    auto notifier = new QSocketNotifier(fd, QSocketNotifier::Read); // TODO don't leak
-    QObject::connect(notifier, &QSocketNotifier::activated, [input=this->input, that=pub()] (int socket) -> void {
+    inputNotifier = new QSocketNotifier(fd, QSocketNotifier::Read);
+    QObject::connect(inputNotifier, &QSocketNotifier::activated, [input=this->input, that=pub()] (int socket) -> void {
         char buff[100];
         int amount = read (socket, buff, 99);
         termpaint_input_add_data(input, buff, amount);
