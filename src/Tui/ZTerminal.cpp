@@ -137,11 +137,10 @@ void ZTerminal::update() {
 
 void ZTerminal::forceRepaint()
 {
-    // XXX disable delta drawing algorithm here when implemented later.
     ZPainter p = painter();
     ZPaintEvent event(ZPaintEvent::update, &p);
     QCoreApplication::sendEvent(tuiwidgets_impl()->mainWidget.get(), &event);
-    p.flush();
+    p.flushForceFullRepaint();
 }
 
 void ZTerminal::resize(int width, int height) {

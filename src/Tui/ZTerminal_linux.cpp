@@ -166,7 +166,7 @@ bool ZTerminalPrivate::commonStuff(ZTerminal::Options options) {
     }
     //termpaint_surface_clear(surface, 0x1000000);
     termpaint_surface_clear(surface, 0xffffff, 0xff0000);
-    termpaint_surface_flush(surface);
+    termpaint_surface_flush(surface, false);
 
     struct termios tattr;
 
