@@ -786,8 +786,12 @@ bool ZWidget::event(QEvent *event) {
         paintEvent(static_cast<ZPaintEvent*>(event));
         return true;
     } else if (event->type() == ZEventType::key()) {
-        keyEvent(static_cast<ZKeyEvent*>(event));
-        return true;
+        if (isEnabled()) {
+            keyEvent(static_cast<ZKeyEvent*>(event));
+            return true;
+        } else {
+            return false;
+        }
     } else if (event->type() == ZEventType::updateRequest()) {
         tuiwidgets_impl()->updateRequestEvent(static_cast<ZPaintEvent*>(event));
         return true;
