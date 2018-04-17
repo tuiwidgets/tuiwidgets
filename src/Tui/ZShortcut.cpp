@@ -31,6 +31,10 @@ ZShortcut::~ZShortcut() {
 
 bool ZShortcut::isEnabled() const {
     auto *const p = tuiwidgets_impl();
+    if (qobject_cast<ZWidget*>(parent())
+            && !qobject_cast<ZWidget*>(parent())->isEnabled()) {
+        return false;
+    }
     return p->enabled;
 }
 
@@ -41,7 +45,7 @@ void ZShortcut::setEnabled(bool enable) {
 
 bool ZShortcut::matches(ZWidget *focusWidget, const ZKeyEvent *event) {
     auto *const p = tuiwidgets_impl();
-    if (!p->enabled) return false;
+    if (!isEnabled()) return false;
     bool keyMatches = false;
     if (p->key._forMnemonic.size()) {
         if (event->modifiers() == Qt::AltModifier && event->text().toLower() == p->key._forMnemonic.toLower()) {
