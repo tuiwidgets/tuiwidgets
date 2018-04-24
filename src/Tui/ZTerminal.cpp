@@ -4,6 +4,7 @@
 #include <QCoreApplication>
 #include <QVector>
 #include <QPointer>
+#include <QTimer>
 
 #include <Tui/ZEvent.h>
 #include <Tui/ZPainter_p.h>
@@ -133,7 +134,7 @@ void ZTerminal::update() {
     if (tuiwidgets_impl()->updateRequested) {
         return;
     }
-
+    tuiwidgets_impl()->updateRequested = true;
     // XXX ZTerminal uses updateRequest with null painter internally
     QCoreApplication::postEvent(this, new ZPaintEvent(ZPaintEvent::update, nullptr), Qt::LowEventPriority);
 }
