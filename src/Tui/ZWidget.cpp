@@ -316,6 +316,11 @@ void ZWidget::removePaletteClass(QString clazz) {
 }
 
 void ZWidget::setFocus(Qt::FocusReason reason) {
+    auto *const term = terminal();
+    if (!term) {
+        qDebug("ZWidget::setFocus called without terminal");
+        return;
+    }
     ZTerminalPrivate *termp = ZTerminalPrivate::get(tuiwidgets_impl()->findTerminal());
     QPointer<ZWidget> previousFocus = termp->focus();
     if (this == previousFocus) {
