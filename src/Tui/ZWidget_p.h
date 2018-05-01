@@ -6,6 +6,7 @@
 #include <Tui/tuiwidgets_internal.h>
 
 #include <Tui/ZPalette.h>
+#include <Tui/ListNode_p.h>
 
 #include <Tui/ZWidget.h>
 
@@ -50,6 +51,7 @@ public:
     QStringList paletteClass;
 
     ZTerminal *terminal = nullptr;
+    ListNode<ZWidgetPrivate> focusHistory;
 
     ZCommandManager* commandManager = nullptr;
 

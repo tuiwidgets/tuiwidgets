@@ -32,6 +32,7 @@ tuiwidgets_public_headers = [
 
 #ide:editable-filelist
 tuiwidgets_sources = [
+  'Tui/ListNode.cpp',
   'Tui/MarkupParser.cpp',
   'Tui/ZColor.cpp',
   'Tui/ZCommandManager.cpp',

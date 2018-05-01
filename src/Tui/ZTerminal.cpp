@@ -15,7 +15,7 @@
 TUIWIDGETS_NS_START
 
 ZTerminalPrivate::ZTerminalPrivate(ZTerminal *pub, ZTerminal::Options options)
-    : options(options)
+    : options(options), focusHistory(&ZWidgetPrivate::focusHistory)
 {
     pub_ptr = pub;
 }
@@ -36,6 +36,7 @@ void ZTerminalPrivate::setFocus(ZWidget *w) {
         focusWidget = nullptr;
     } else {
         focusWidget = ZWidgetPrivate::get(w);
+        focusHistory.appendOrMoveToLast(focusWidget);
     }
     cursorPosition = QPoint{-1, -1};
 }

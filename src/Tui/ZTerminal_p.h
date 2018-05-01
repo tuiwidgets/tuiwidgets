@@ -9,6 +9,7 @@
 #include <termpaint.h>
 #include <termpaint_input.h>
 
+#include <Tui/ListNode_p.h>
 #include <Tui/ZTerminal.h>
 
 #include <Tui/tuiwidgets_internal.h>
@@ -62,6 +63,7 @@ public:
     std::unique_ptr<ZWidget> mainWidget;
     QPoint cursorPosition = {-1, -1};
     ZWidgetPrivate *focusWidget = nullptr;
+    ListHead<ZWidgetPrivate> focusHistory;
     QPointer<ZWidget> keyboardGrabWidget;
     std::unique_ptr<ZShortcutManager> shortcutManager;
     ZTerminal::Options options;
