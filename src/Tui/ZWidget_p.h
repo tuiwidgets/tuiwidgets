@@ -16,6 +16,8 @@ TUIWIDGETS_NS_START
 
 class ZTerminal;
 
+struct FocusHistoryTag;
+
 class ZWidgetPrivate {
 public:
     ZWidgetPrivate(ZWidget *pub);
@@ -63,6 +65,11 @@ public:
     const unsigned int tui_magic = tui_magic_v0;
     ZWidget* pub_ptr;
     TUIWIDGETS_DECLARE_PUBLIC(ZWidget)
+};
+
+template<>
+struct ListTrait<FocusHistoryTag> {
+    static constexpr auto offset = &ZWidgetPrivate::focusHistory;
 };
 
 TUIWIDGETS_NS_END

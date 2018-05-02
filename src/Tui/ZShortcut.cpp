@@ -1,6 +1,7 @@
 #include "ZShortcut.h"
 #include <Tui/ZShortcut_p.h>
 
+#include <Tui/ZWidget_p.h>
 #include <Tui/ZWidget.h>
 
 #include <Tui/ZTerminal_p.h>

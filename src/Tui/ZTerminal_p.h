@@ -21,6 +21,8 @@ class ZWidgetPrivate;
 class ZShortcutManager;
 class ZSymbol;
 
+struct FocusHistoryTag;
+
 class ZTerminalPrivate {
 public:
     ZTerminalPrivate(ZTerminal *pub, ZTerminal::Options options);
@@ -63,7 +65,7 @@ public:
     std::unique_ptr<ZWidget> mainWidget;
     QPoint cursorPosition = {-1, -1};
     ZWidgetPrivate *focusWidget = nullptr;
-    ListHead<ZWidgetPrivate> focusHistory;
+    ListHead<ZWidgetPrivate, FocusHistoryTag> focusHistory;
     QPointer<ZWidget> keyboardGrabWidget;
     std::unique_ptr<ZShortcutManager> shortcutManager;
     ZTerminal::Options options;

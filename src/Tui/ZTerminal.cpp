@@ -15,7 +15,7 @@
 TUIWIDGETS_NS_START
 
 ZTerminalPrivate::ZTerminalPrivate(ZTerminal *pub, ZTerminal::Options options)
-    : options(options), focusHistory(&ZWidgetPrivate::focusHistory)
+    : options(options)
 {
     pub_ptr = pub;
 }

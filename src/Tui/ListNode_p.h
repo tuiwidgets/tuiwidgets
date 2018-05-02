@@ -6,13 +6,16 @@
 
 TUIWIDGETS_NS_START
 
+template <typename Tag>
+struct ListTrait;
+
 template <typename T>
 class ListNode;
 
-template <typename T>
+template <typename T, typename Tag>
 class ListHead {
 public:
-    ListHead(ListNode<T> T::* node) : nodeOffset(node) {}
+    ListHead(){}
 
     ~ListHead() {
         while (first) {
@@ -21,6 +24,7 @@ public:
     }
 
     void appendOrMoveToLast(T* e) {
+        constexpr auto nodeOffset = ListTrait<Tag>::offset;
         auto& node = e->*nodeOffset;
         if (last == e) {
             return;
@@ -40,6 +44,7 @@ public:
     }
 
     void remove(T* e) {
+        constexpr auto nodeOffset = ListTrait<Tag>::offset;
         auto& node = e->*nodeOffset;
         if (e == first) {
             first = node.next;
@@ -59,7 +64,6 @@ public:
 
     T* first = nullptr;
     T* last = nullptr;
-    ListNode<T> T::* nodeOffset;
 };
 
 

@@ -22,6 +22,7 @@
 #include <PosixSignalManager.h>
 
 #include <Tui/ZEvent.h>
+#include <Tui/ZWidget_p.h>
 #include <Tui/ZWidget.h>
 
 TUIWIDGETS_NS_START
