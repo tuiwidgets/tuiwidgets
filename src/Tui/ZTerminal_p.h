@@ -7,7 +7,6 @@
 #include <QSocketNotifier>
 
 #include <termpaint.h>
-#include <termpaint_input.h>
 
 #include <Tui/ListNode_p.h>
 #include <Tui/ZTerminal.h>

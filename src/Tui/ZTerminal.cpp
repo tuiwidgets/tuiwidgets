@@ -165,7 +165,7 @@ void ZTerminal::updateOutputForceFullRepaint() {
 }
 
 std::unique_ptr<ZKeyEvent> ZTerminal::translateKeyEvent(const ZTerminalNativeEvent &nativeEvent) {
-    termpaint_input_event* native = static_cast<termpaint_input_event*>(nativeEvent.nativeEventPointer());
+    termpaint_event* native = static_cast<termpaint_event*>(nativeEvent.nativeEventPointer());
 
     Qt::KeyboardModifiers modifiers = 0;
 

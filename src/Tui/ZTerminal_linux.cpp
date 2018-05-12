@@ -146,7 +146,7 @@ static _Bool raw_filter(void *user_data, const char *data, unsigned length, _Boo
     return QCoreApplication::sendEvent(that, &event);
 }
 
-static void event_handler(void *user_data, termpaint_input_event *event) {
+static void event_handler(void *user_data, termpaint_event *event) {
     ZTerminal* that = static_cast<ZTerminal*>(user_data);
     ZTerminalNativeEvent tuiEvent{event};
     QCoreApplication::sendEvent(that, &tuiEvent);
