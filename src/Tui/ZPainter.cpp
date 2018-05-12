@@ -102,13 +102,4 @@ void ZPainter::clearRect(int x, int y, int width, int height, ZColor fg, ZColor 
 }
 
 
-void ZPainter::flush() {
-    termpaint_surface_flush(tuiwidgets_impl()->surface, false);
-}
-
-void ZPainter::flushForceFullRepaint() {
-    termpaint_surface_flush(tuiwidgets_impl()->surface, true);
-}
-
-
 TUIWIDGETS_NS_END

@@ -45,6 +45,9 @@ public:
 
     void resize(int width, int height);
 
+    void updateOutput();
+    void updateOutputForceFullRepaint();
+
 protected:
     std::unique_ptr<ZKeyEvent> translateKeyEvent(const ZTerminalNativeEvent &nativeEvent);
 

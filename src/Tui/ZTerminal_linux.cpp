@@ -119,7 +119,7 @@ bool ZTerminalPrivate::setup(ZTerminal::Options options) {
 
 void ZTerminalPrivate::deinitTerminal() {
     tcsetattr (STDIN_FILENO, TCSAFLUSH, &originalTerminalAttributes);
-    termpaint_surface_reset_attributes(surface);
+    termpaint_terminal_reset_attributes(terminal);
 }
 
 bool ZTerminalPrivate::setupFromControllingTerminal(ZTerminal::Options options) {
@@ -156,8 +156,9 @@ bool ZTerminalPrivate::commonStuff(ZTerminal::Options options) {
     // TODO zero out integration
     init_fns();
     awaiting_response = false;
-    surface = termpaint_surface_new(&integration);
-    termpaint_auto_detect(surface);
+    terminal = termpaint_terminal_new(&integration);
+    surface = termpaint_terminal_get_surface(terminal);
+    //termpaint_terminal_auto_detect(terminal);
 
     struct winsize s;
     if (isatty(fd) && ioctl(fd, TIOCGWINSZ, &s) >= 0) {
@@ -167,9 +168,8 @@ bool ZTerminalPrivate::commonStuff(ZTerminal::Options options) {
     }
     //termpaint_surface_clear(surface, 0x1000000);
     termpaint_surface_clear(surface, 0xffffff, 0xff0000);
-    termpaint_surface_flush(surface, false);
+    termpaint_terminal_flush(terminal, false);
 
-    struct termios tattr;
 
     tcgetattr(STDIN_FILENO, &originalTerminalAttributes);
 
@@ -216,6 +216,7 @@ bool ZTerminalPrivate::commonStuff(ZTerminal::Options options) {
         systemTerminal = pub();
     }
 
+    struct termios tattr;
     tcgetattr (STDIN_FILENO, &tattr);
     tattr.c_iflag |= IGNBRK|IGNPAR;
     tattr.c_iflag &= ~(BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL | IXON | IXOFF);
@@ -240,23 +241,18 @@ bool ZTerminalPrivate::commonStuff(ZTerminal::Options options) {
 
     tcsetattr (STDIN_FILENO, TCSAFLUSH, &tattr);
 
-    input = termpaint_input_new();
-    termpaint_input_set_raw_filter_cb(input, raw_filter, pub());
-    termpaint_input_set_event_cb(input, event_handler, pub());
+    termpaint_terminal_set_raw_input_filter_cb(terminal, raw_filter, pub());
+    termpaint_terminal_set_event_cb(terminal, event_handler, pub());
 
     inputNotifier = new QSocketNotifier(fd, QSocketNotifier::Read);
-    QObject::connect(inputNotifier, &QSocketNotifier::activated, [input=this->input, that=pub()] (int socket) -> void {
+    QObject::connect(inputNotifier, &QSocketNotifier::activated, [terminal=terminal, that=pub()] (int socket) -> void {
         char buff[100];
         int amount = read (socket, buff, 99);
-        termpaint_input_add_data(input, buff, amount);
-        QString peek = QString::fromUtf8(termpaint_input_peek_buffer(input), termpaint_input_peek_buffer_length(input));
+        termpaint_terminal_add_input_data(terminal, buff, amount);
+        QString peek = QString::fromUtf8(termpaint_terminal_peek_input_buffer(terminal), termpaint_terminal_peek_input_buffer_length(terminal));
         if (peek.length()) {
             ZRawSequenceEvent event(ZRawSequenceEvent::pending, peek);
             bool ret = QCoreApplication::sendEvent(that, &event);
-            //if (!ret) {
-                // FIXME
-                write(0, "\e[5n", 4);
-            //}
         }
     });
 
@@ -325,6 +321,7 @@ void ZTerminalPrivate::integration_expect_response() {
 
 
 void ZTerminalPrivate::init_fns() {
+    memset(&integration, 0, sizeof(integration));
     integration.free = [] (termpaint_integration* ptr) {
         container_of(ptr, ZTerminalPrivate, integration)->integration_free();
     };
@@ -337,9 +334,9 @@ void ZTerminalPrivate::init_fns() {
     integration.is_bad = [] (termpaint_integration* ptr) {
         return container_of(ptr, ZTerminalPrivate, integration)->integration_is_bad();
     };
-    integration.expect_response = [] (termpaint_integration* ptr) {
+    /*integration.expect_response = [] (termpaint_integration* ptr) {
         container_of(ptr, ZTerminalPrivate, integration)->integration_expect_response();
-    };
+    };*/
 }
 
 TUIWIDGETS_NS_END

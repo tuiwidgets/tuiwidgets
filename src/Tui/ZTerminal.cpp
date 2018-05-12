@@ -23,8 +23,7 @@ ZTerminalPrivate::ZTerminalPrivate(ZTerminal *pub, ZTerminal::Options options)
 ZTerminalPrivate::~ZTerminalPrivate() {
     deinitTerminal();
     delete inputNotifier;
-    termpaint_surface_free(surface);
-    termpaint_input_free(input);
+    termpaint_terminal_free(terminal);
 }
 
 ZTerminalPrivate *ZTerminalPrivate::get(ZTerminal *terminal) {
@@ -145,7 +144,7 @@ void ZTerminal::forceRepaint()
     ZPainter p = painter();
     ZPaintEvent event(ZPaintEvent::update, &p);
     QCoreApplication::sendEvent(tuiwidgets_impl()->mainWidget.get(), &event);
-    p.flushForceFullRepaint();
+    updateOutputForceFullRepaint();
 }
 
 void ZTerminal::resize(int width, int height) {
@@ -155,6 +154,14 @@ void ZTerminal::resize(int width, int height) {
         p->mainWidget->setGeometry({0, 0, termpaint_surface_width(p->surface), termpaint_surface_height(p->surface)});
     }
     forceRepaint();
+}
+
+void ZTerminal::updateOutput() {
+    termpaint_terminal_flush(tuiwidgets_impl()->terminal, false);
+}
+
+void ZTerminal::updateOutputForceFullRepaint() {
+    termpaint_terminal_flush(tuiwidgets_impl()->terminal, true);
 }
 
 std::unique_ptr<ZKeyEvent> ZTerminal::translateKeyEvent(const ZTerminalNativeEvent &nativeEvent) {
@@ -326,9 +333,9 @@ bool ZTerminal::event(QEvent *event) {
         ZPainter p = painter();
         ZPaintEvent event(ZPaintEvent::update, &p);
         QCoreApplication::sendEvent(tuiwidgets_impl()->mainWidget.get(), &event);
-        p.flush();
+        updateOutput();
         if (tuiwidgets_impl()->cursorPosition != QPoint{-1, -1}) {
-            termpaint_surface_set_cursor(tuiwidgets_impl()->surface,
+            termpaint_terminal_set_cursor(tuiwidgets_impl()->terminal,
                                          tuiwidgets_impl()->cursorPosition.x(), tuiwidgets_impl()->cursorPosition.y());
             tuiwidgets_impl()->integration_flush();
         }

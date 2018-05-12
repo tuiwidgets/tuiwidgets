@@ -26,8 +26,6 @@ public:
     void writeWithColors(int x, int y, QString string, ZColor fg, ZColor bg);
     void clear(ZColor fg, ZColor bg);
     void clearRect(int x, int y, int width, int height, ZColor fg, ZColor bg);
-    void flush();
-    void flushForceFullRepaint();
 
 private:
     friend class ZTerminal;

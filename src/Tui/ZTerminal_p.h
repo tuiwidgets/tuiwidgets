@@ -56,9 +56,9 @@ public:
     void integration_expect_response();
 
     termpaint_surface *surface = nullptr; // TODO use ref counted ptr of some kind
+    termpaint_terminal *terminal = nullptr;
     termpaint_integration integration;
     QSocketNotifier *inputNotifier = nullptr;
-    termpaint_input *input = nullptr;
 
     bool updateRequested = false;
 
