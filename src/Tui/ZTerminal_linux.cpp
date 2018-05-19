@@ -118,8 +118,8 @@ bool ZTerminalPrivate::setup(ZTerminal::Options options) {
 }
 
 void ZTerminalPrivate::deinitTerminal() {
-    tcsetattr (STDIN_FILENO, TCSAFLUSH, &originalTerminalAttributes);
     termpaint_terminal_reset_attributes(terminal);
+    tcsetattr (fd, TCSAFLUSH, &originalTerminalAttributes);
 }
 
 bool ZTerminalPrivate::setupFromControllingTerminal(ZTerminal::Options options) {
@@ -171,7 +171,7 @@ bool ZTerminalPrivate::commonStuff(ZTerminal::Options options) {
     termpaint_terminal_flush(terminal, false);
 
 
-    tcgetattr(STDIN_FILENO, &originalTerminalAttributes);
+    tcgetattr(fd, &originalTerminalAttributes);
 
     if (!systemRestoreInited) {
         // TODO this only really works well for the first terminal in an process.
@@ -217,7 +217,7 @@ bool ZTerminalPrivate::commonStuff(ZTerminal::Options options) {
     }
 
     struct termios tattr;
-    tcgetattr (STDIN_FILENO, &tattr);
+    tcgetattr (fd, &tattr);
     tattr.c_iflag |= IGNBRK|IGNPAR;
     tattr.c_iflag &= ~(BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL | IXON | IXOFF);
     tattr.c_oflag &= ~(OPOST|ONLCR|OCRNL|ONOCR|ONLRET);
@@ -239,7 +239,7 @@ bool ZTerminalPrivate::commonStuff(ZTerminal::Options options) {
         }
     }
 
-    tcsetattr (STDIN_FILENO, TCSAFLUSH, &tattr);
+    tcsetattr (fd, TCSAFLUSH, &tattr);
 
     termpaint_terminal_set_raw_input_filter_cb(terminal, raw_filter, pub());
     termpaint_terminal_set_event_cb(terminal, event_handler, pub());
