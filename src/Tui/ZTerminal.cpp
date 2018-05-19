@@ -309,25 +309,28 @@ bool ZTerminal::event(QEvent *event) {
         return false;
     }
     if (event->type() == ZEventType::terminalNativeEvent()) {
-        std::unique_ptr<ZKeyEvent> translated = translateKeyEvent(*static_cast<Tui::ZTerminalNativeEvent*>(event));
-        if (translated) {
-            if (p->keyboardGrabWidget) {
-                QCoreApplication::sendEvent(p->keyboardGrabWidget, translated.get());
-            } else if (!p->shortcutManager || !p->shortcutManager->process(translated.get())) {
-                translated->accept();
-                QPointer<ZWidget> w = tuiwidgets_impl()->focus();
-                while (w) {
-                    bool processed = QCoreApplication::sendEvent(w, translated.get());
-                    if (processed && translated->isAccepted()) {
-                        break;
+        termpaint_event* native = static_cast<termpaint_event*>(static_cast<Tui::ZTerminalNativeEvent*>(event)->nativeEventPointer());
+        if (native->type == TERMPAINT_EV_CHAR || native->type == TERMPAINT_EV_KEY) {
+            std::unique_ptr<ZKeyEvent> translated = translateKeyEvent(*static_cast<Tui::ZTerminalNativeEvent*>(event));
+            if (translated) {
+                if (p->keyboardGrabWidget) {
+                    QCoreApplication::sendEvent(p->keyboardGrabWidget, translated.get());
+                } else if (!p->shortcutManager || !p->shortcutManager->process(translated.get())) {
+                    translated->accept();
+                    QPointer<ZWidget> w = tuiwidgets_impl()->focus();
+                    while (w) {
+                        bool processed = QCoreApplication::sendEvent(w, translated.get());
+                        if (processed && translated->isAccepted()) {
+                            break;
+                        }
+                        w = w->parentWidget();
                     }
-                    w = w->parentWidget();
                 }
-            }
-            if (!translated->isAccepted()) {
-                if (translated->modifiers() == Qt::ControlModifier
-                    && translated->text() == QStringLiteral("l")) {
-                    forceRepaint();
+                if (!translated->isAccepted()) {
+                    if (translated->modifiers() == Qt::ControlModifier
+                        && translated->text() == QStringLiteral("l")) {
+                        forceRepaint();
+                    }
                 }
             }
         }
