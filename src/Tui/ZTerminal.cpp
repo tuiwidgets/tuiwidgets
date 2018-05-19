@@ -351,6 +351,9 @@ bool ZTerminal::event(QEvent *event) {
             if ((p->options & (ZTerminal::AllowInterrupt | ZTerminal::AllowQuit | ZTerminal::AllowSuspend)) == 0) {
                 nativeOptions.append(" +kbdsig ");
             }
+            if (p->options & DisableAlternativeScreen) {
+                nativeOptions.append(" -altscreen ");
+            }
             termpaint_terminal_setup_fullscreen(p->terminal,
                                                 termpaint_surface_width(p->surface),
                                                 termpaint_surface_height(p->surface),

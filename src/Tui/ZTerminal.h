@@ -25,6 +25,7 @@ public:
         AllowSuspend = 1 << 1,
         AllowQuit = 1 << 2,
         DisableAutoResize = 1 << 3,
+        DisableAlternativeScreen = 1 << 4,
     };
     Q_DECLARE_FLAGS(Options, Option)
 
