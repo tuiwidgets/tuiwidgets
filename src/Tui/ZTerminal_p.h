@@ -39,6 +39,7 @@ public:
     void sendOtherChangeEvent(QSet<ZSymbol> unchanged);
 
     bool initTerminal(ZTerminal::Options options);
+    void maybeSystemTerminalSetup();
     void deinitTerminal();
 
     void init_fns();
@@ -69,6 +70,11 @@ public:
     std::unique_ptr<ZShortcutManager> shortcutManager;
     ZTerminal::Options options;
 
+    enum class InitState {
+        InInitWithoutPendingPaintRequest,
+        InInitWithPendingPaintRequest,
+        Ready
+    } initState = InitState::InInitWithoutPendingPaintRequest;
     // stuff from integration
     int fd = -1;
     bool auto_close = false;

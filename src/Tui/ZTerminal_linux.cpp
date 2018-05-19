@@ -119,7 +119,18 @@ bool ZTerminalPrivate::setup(ZTerminal::Options options) {
 
 void ZTerminalPrivate::deinitTerminal() {
     termpaint_terminal_reset_attributes(terminal);
+    termpaint_terminal_free_with_restore(terminal);
+    if (fd == systemRestoreFd) {
+        systemRestoreEscape = "";
+    }
+    terminal = nullptr;
     tcsetattr (fd, TCSAFLUSH, &originalTerminalAttributes);
+}
+
+void ZTerminalPrivate::maybeSystemTerminalSetup() {
+    if (fd == systemRestoreFd) {
+        systemRestoreEscape = termpaint_terminal_restore_sequence(terminal);
+    }
 }
 
 bool ZTerminalPrivate::setupFromControllingTerminal(ZTerminal::Options options) {
@@ -153,12 +164,10 @@ static void event_handler(void *user_data, termpaint_event *event) {
 }
 
 bool ZTerminalPrivate::commonStuff(ZTerminal::Options options) {
-    // TODO zero out integration
     init_fns();
     awaiting_response = false;
     terminal = termpaint_terminal_new(&integration);
     surface = termpaint_terminal_get_surface(terminal);
-    //termpaint_terminal_auto_detect(terminal);
 
     struct winsize s;
     if (isatty(fd) && ioctl(fd, TIOCGWINSZ, &s) >= 0) {
@@ -166,10 +175,6 @@ bool ZTerminalPrivate::commonStuff(ZTerminal::Options options) {
     } else {
         termpaint_surface_resize(surface, 80, 24);
     }
-    //termpaint_surface_clear(surface, 0x1000000);
-    termpaint_surface_clear(surface, 0xffffff, 0xff0000);
-    termpaint_terminal_flush(terminal, false);
-
 
     tcgetattr(fd, &originalTerminalAttributes);
 
@@ -243,6 +248,8 @@ bool ZTerminalPrivate::commonStuff(ZTerminal::Options options) {
 
     termpaint_terminal_set_raw_input_filter_cb(terminal, raw_filter, pub());
     termpaint_terminal_set_event_cb(terminal, event_handler, pub());
+
+    termpaint_terminal_auto_detect(terminal);
 
     inputNotifier = new QSocketNotifier(fd, QSocketNotifier::Read);
     QObject::connect(inputNotifier, &QSocketNotifier::activated, [terminal=terminal, that=pub()] (int socket) -> void {

@@ -23,7 +23,6 @@ ZTerminalPrivate::ZTerminalPrivate(ZTerminal *pub, ZTerminal::Options options)
 ZTerminalPrivate::~ZTerminalPrivate() {
     deinitTerminal();
     delete inputNotifier;
-    termpaint_terminal_free(terminal);
 }
 
 ZTerminalPrivate *ZTerminalPrivate::get(ZTerminal *terminal) {
@@ -157,11 +156,25 @@ void ZTerminal::resize(int width, int height) {
 }
 
 void ZTerminal::updateOutput() {
-    termpaint_terminal_flush(tuiwidgets_impl()->terminal, false);
+    auto *const p = tuiwidgets_impl();
+    if (p->initState == ZTerminalPrivate::InitState::InInitWithoutPendingPaintRequest) {
+        p->initState = ZTerminalPrivate::InitState::InInitWithPendingPaintRequest;
+    } else if (p->initState == ZTerminalPrivate::InitState::InInitWithPendingPaintRequest) {
+        // already requested
+    } else {
+        termpaint_terminal_flush(p->terminal, false);
+    }
 }
 
 void ZTerminal::updateOutputForceFullRepaint() {
-    termpaint_terminal_flush(tuiwidgets_impl()->terminal, true);
+    auto *const p = tuiwidgets_impl();
+    if (p->initState == ZTerminalPrivate::InitState::InInitWithoutPendingPaintRequest) {
+        p->initState = ZTerminalPrivate::InitState::InInitWithPendingPaintRequest;
+    } else if (p->initState == ZTerminalPrivate::InitState::InInitWithPendingPaintRequest) {
+        // already requested
+    } else {
+        termpaint_terminal_flush(tuiwidgets_impl()->terminal, true);
+    }
 }
 
 std::unique_ptr<ZKeyEvent> ZTerminal::translateKeyEvent(const ZTerminalNativeEvent &nativeEvent) {
@@ -333,20 +346,38 @@ bool ZTerminal::event(QEvent *event) {
                     }
                 }
             }
+        } else if (native->type == TERMPAINT_EV_AUTO_DETECT_FINISHED) {
+            QByteArray nativeOptions;
+            if ((p->options & (ZTerminal::AllowInterrupt | ZTerminal::AllowQuit | ZTerminal::AllowSuspend)) == 0) {
+                nativeOptions.append(" +kbdsig ");
+            }
+            termpaint_terminal_setup_fullscreen(p->terminal,
+                                                termpaint_surface_width(p->surface),
+                                                termpaint_surface_height(p->surface),
+                                                nativeOptions.data());
+
+            p->maybeSystemTerminalSetup();
+            if (p->initState == ZTerminalPrivate::InitState::InInitWithPendingPaintRequest) {
+                update();
+            }
+            p->initState = ZTerminalPrivate::InitState::Ready;
         }
+
         return true; // ???
     }
     if (event->type() == ZEventType::updateRequest()) {
         // XXX ZTerminal uses updateRequest with null painter internally
         tuiwidgets_impl()->updateRequested = false;
-        ZPainter p = painter();
-        ZPaintEvent event(ZPaintEvent::update, &p);
+        ZPainter paint = painter();
+        ZPaintEvent event(ZPaintEvent::update, &paint);
         QCoreApplication::sendEvent(tuiwidgets_impl()->mainWidget.get(), &event);
         updateOutput();
         if (tuiwidgets_impl()->cursorPosition != QPoint{-1, -1}) {
-            termpaint_terminal_set_cursor(tuiwidgets_impl()->terminal,
-                                         tuiwidgets_impl()->cursorPosition.x(), tuiwidgets_impl()->cursorPosition.y());
-            tuiwidgets_impl()->integration_flush();
+            if (p->initState == ZTerminalPrivate::InitState::Ready) {
+                termpaint_terminal_set_cursor(tuiwidgets_impl()->terminal,
+                                             tuiwidgets_impl()->cursorPosition.x(), tuiwidgets_impl()->cursorPosition.y());
+                tuiwidgets_impl()->integration_flush();
+            }
         }
     }
 
