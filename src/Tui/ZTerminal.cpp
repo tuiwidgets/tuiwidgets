@@ -371,15 +371,17 @@ bool ZTerminal::event(QEvent *event) {
     if (event->type() == ZEventType::updateRequest()) {
         // XXX ZTerminal uses updateRequest with null painter internally
         tuiwidgets_impl()->updateRequested = false;
-        ZPainter paint = painter();
-        ZPaintEvent event(ZPaintEvent::update, &paint);
-        QCoreApplication::sendEvent(tuiwidgets_impl()->mainWidget.get(), &event);
-        updateOutput();
-        if (tuiwidgets_impl()->cursorPosition != QPoint{-1, -1}) {
-            if (p->initState == ZTerminalPrivate::InitState::Ready) {
-                termpaint_terminal_set_cursor(tuiwidgets_impl()->terminal,
-                                             tuiwidgets_impl()->cursorPosition.x(), tuiwidgets_impl()->cursorPosition.y());
-                tuiwidgets_impl()->integration_flush();
+        if (tuiwidgets_impl()->mainWidget.get()) {
+            ZPainter paint = painter();
+            ZPaintEvent event(ZPaintEvent::update, &paint);
+            QCoreApplication::sendEvent(tuiwidgets_impl()->mainWidget.get(), &event);
+            updateOutput();
+            if (tuiwidgets_impl()->cursorPosition != QPoint{-1, -1}) {
+                if (p->initState == ZTerminalPrivate::InitState::Ready) {
+                    termpaint_terminal_set_cursor(tuiwidgets_impl()->terminal,
+                                                 tuiwidgets_impl()->cursorPosition.x(), tuiwidgets_impl()->cursorPosition.y());
+                    tuiwidgets_impl()->integration_flush();
+                }
             }
         }
     }
