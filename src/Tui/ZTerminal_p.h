@@ -38,6 +38,8 @@ public:
 
     void sendOtherChangeEvent(QSet<ZSymbol> unchanged);
 
+    void processPaintingAndUpdateOutput(bool fullRepaint);
+
     bool initTerminal(ZTerminal::Options options);
     void maybeSystemTerminalSetup();
     void deinitTerminal();

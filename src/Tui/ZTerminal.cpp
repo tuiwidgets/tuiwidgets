@@ -58,6 +58,26 @@ ZShortcutManager *ZTerminalPrivate::ensureShortcutManager() {
     return shortcutManager.get();
 }
 
+void ZTerminalPrivate::processPaintingAndUpdateOutput(bool fullRepaint) {
+    if (mainWidget.get()) {
+        ZPainter paint = pub()->painter();
+        ZPaintEvent event(ZPaintEvent::update, &paint);
+        QCoreApplication::sendEvent(mainWidget.get(), &event);
+        if (fullRepaint) {
+            pub()->updateOutputForceFullRepaint();
+        } else {
+            pub()->updateOutput();
+        }
+        if (cursorPosition != QPoint{-1, -1}) {
+            if (initState == ZTerminalPrivate::InitState::Ready) {
+                termpaint_terminal_set_cursor(terminal,
+                                             cursorPosition.x(), cursorPosition.y());
+                integration_flush();
+            }
+        }
+    }
+}
+
 
 ZTerminal::ZTerminal(QObject *parent)
     : ZTerminal(0, parent)
@@ -138,12 +158,9 @@ void ZTerminal::update() {
     QCoreApplication::postEvent(this, new ZPaintEvent(ZPaintEvent::update, nullptr), Qt::LowEventPriority);
 }
 
-void ZTerminal::forceRepaint()
-{
-    ZPainter p = painter();
-    ZPaintEvent event(ZPaintEvent::update, &p);
-    QCoreApplication::sendEvent(tuiwidgets_impl()->mainWidget.get(), &event);
-    updateOutputForceFullRepaint();
+void ZTerminal::forceRepaint() {
+    auto *const p = tuiwidgets_impl();
+    p->processPaintingAndUpdateOutput(true);
 }
 
 void ZTerminal::resize(int width, int height) {
@@ -370,20 +387,8 @@ bool ZTerminal::event(QEvent *event) {
     }
     if (event->type() == ZEventType::updateRequest()) {
         // XXX ZTerminal uses updateRequest with null painter internally
-        tuiwidgets_impl()->updateRequested = false;
-        if (tuiwidgets_impl()->mainWidget.get()) {
-            ZPainter paint = painter();
-            ZPaintEvent event(ZPaintEvent::update, &paint);
-            QCoreApplication::sendEvent(tuiwidgets_impl()->mainWidget.get(), &event);
-            updateOutput();
-            if (tuiwidgets_impl()->cursorPosition != QPoint{-1, -1}) {
-                if (p->initState == ZTerminalPrivate::InitState::Ready) {
-                    termpaint_terminal_set_cursor(tuiwidgets_impl()->terminal,
-                                                 tuiwidgets_impl()->cursorPosition.x(), tuiwidgets_impl()->cursorPosition.y());
-                    tuiwidgets_impl()->integration_flush();
-                }
-            }
-        }
+        p->updateRequested = false;
+        p->processPaintingAndUpdateOutput(false);
     }
 
     return QObject::event(event);
