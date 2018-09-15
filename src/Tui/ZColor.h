@@ -8,10 +8,26 @@
 
 TUIWIDGETS_NS_START
 
+class TUIWIDGETS_EXPORT ZColor;
+
+namespace Private {
+    class GlobalColorRGB {
+    public:
+        constexpr GlobalColorRGB(uint8_t r, uint8_t g, uint8_t b) : r(r), g(g), b(b) {}
+    private:
+        friend class ::TUIWIDGETS_NS_FULL::ZColor;
+
+        uint8_t r;
+        uint8_t g;
+        uint8_t b;
+    };
+}
+
 class TUIWIDGETS_EXPORT ZColor {
 public:
     ZColor() = default;
     ZColor(int r, int g, int b);
+    ZColor(Private::GlobalColorRGB globalColor);
 
     int red() const;
     void setRed(int blue);
@@ -34,24 +50,23 @@ private:
 };
 
 namespace Colors {
-    // TODO:
-    extern Tui::ZColor black;
-    extern Tui::ZColor darkGray;
-    extern Tui::ZColor lightGray;
-    extern Tui::ZColor brightWhite;
-    extern Tui::ZColor blue;
-    extern Tui::ZColor green;
-    extern Tui::ZColor cyan;
-    extern Tui::ZColor red;
-    extern Tui::ZColor magenta;
-    extern Tui::ZColor brown;
-    extern Tui::ZColor brightBlue;
-    extern Tui::ZColor brightGreen;
-    extern Tui::ZColor brightCyan;
-    extern Tui::ZColor brightRed;
-    extern Tui::ZColor brightMagenta;
-    extern Tui::ZColor brightYellow;
-}
+    static constexpr Private::GlobalColorRGB black = {0, 0, 0};
+    static constexpr Private::GlobalColorRGB darkGray = {0x55, 0x55, 0x55};
+    static constexpr Private::GlobalColorRGB lightGray = {0xaa, 0xaa, 0xaa};
+    static constexpr Private::GlobalColorRGB brightWhite = {0xff, 0xff, 0xff};
+    static constexpr Private::GlobalColorRGB blue = {0, 0, 0xaa};
+    static constexpr Private::GlobalColorRGB green = {0, 0xaa, 0};
+    static constexpr Private::GlobalColorRGB cyan = {0, 0xaa, 0xaa};
+    static constexpr Private::GlobalColorRGB red = {0xaa, 0, 0};
+    static constexpr Private::GlobalColorRGB magenta = {0xaa, 0, 0xaa};
+    static constexpr Private::GlobalColorRGB brown = {0xaa, 0x55, 0};
+    static constexpr Private::GlobalColorRGB brightBlue = {0x55, 0x55, 0xff};
+    static constexpr Private::GlobalColorRGB brightGreen = {0x55, 0xff, 0x55};
+    static constexpr Private::GlobalColorRGB brightCyan = {0x55, 0xff, 0xff};
+    static constexpr Private::GlobalColorRGB brightRed = {0xff, 0x55, 0x55};
+    static constexpr Private::GlobalColorRGB brightMagenta = {0xff, 0x55, 0xff};
+    static constexpr Private::GlobalColorRGB brightYellow = {0xff, 0xff, 0x55};
+};
 
 TUIWIDGETS_NS_END
 

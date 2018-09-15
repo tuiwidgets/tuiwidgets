@@ -16,7 +16,9 @@
     inline const Class* pub() const { return static_cast<const Class *>(pub_ptr); } \
     friend class Class;
 
-#define TUIWIDGETS_NS_START namespace Tui { inline namespace v0 {
+#define TUIWIDGETS_NS_INLINE v0
+#define TUIWIDGETS_NS_FULL Tui::TUIWIDGETS_NS_INLINE
+#define TUIWIDGETS_NS_START namespace Tui { inline namespace TUIWIDGETS_NS_INLINE {
 #define TUIWIDGETS_NS_END }}
 
 #ifndef TUIWIDGETS_EXPORT
