@@ -9,6 +9,8 @@
 #include <Tui/ZEvent.h>
 #include <Tui/ZPainter_p.h>
 #include <Tui/ZShortcutManager_p.h>
+#include <Tui/ZTextMetrics.h>
+#include <Tui/ZTextMetrics_p.h>
 #include <Tui/ZWidget.h>
 #include <Tui/ZWidget_p.h>
 
@@ -106,6 +108,11 @@ ZPainter ZTerminal::painter() {
     return ZPainter(std::make_unique<ZPainterPrivate>(tuiwidgets_impl(), surface,
                                                       termpaint_surface_width(surface),
                                                       termpaint_surface_height(surface)));
+}
+
+ZTextMetrics ZTerminal::textMetrics() {
+    auto *surface = tuiwidgets_impl()->surface;
+    return ZTextMetrics(std::make_shared<ZTextMetricsPrivate>(surface));
 }
 
 ZWidget *ZTerminal::mainWidget() {

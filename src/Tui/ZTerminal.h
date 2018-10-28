@@ -10,10 +10,11 @@
 
 TUIWIDGETS_NS_START
 
-class ZWidget;
-class ZTerminalNativeEvent;
-class ZPainter;
 class ZKeyEvent;
+class ZPainter;
+class ZTerminalNativeEvent;
+class ZTextMetrics;
+class ZWidget;
 
 class ZTerminalPrivate;
 
@@ -36,6 +37,7 @@ public:
 
 public:
     ZPainter painter();
+    ZTextMetrics textMetrics();
     ZWidget* mainWidget();
     void setMainWidget(ZWidget* w);
 

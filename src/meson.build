@@ -47,6 +47,7 @@ tuiwidgets_sources = [
   'Tui/ZShortcutManager.cpp',
   'Tui/ZSymbol.cpp',
   'Tui/ZTerminal.cpp',
+  'Tui/ZTextMetrics.cpp',
   'Tui/ZWidget.cpp',
 ]
 
