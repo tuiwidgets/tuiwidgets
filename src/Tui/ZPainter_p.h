@@ -9,10 +9,14 @@
 
 TUIWIDGETS_NS_START
 
+class ZTerminalPrivate;
+
 class ZPainterPrivate {
 public:
-    ZPainterPrivate(termpaint_surface *surface, int width, int height);
+    ZPainterPrivate(ZTerminalPrivate *terminal, termpaint_surface *surface, int width, int height);
     virtual ~ZPainterPrivate();
+
+    ZTerminalPrivate *terminal;
 
     termpaint_surface *surface;
     int x, y, width, height;

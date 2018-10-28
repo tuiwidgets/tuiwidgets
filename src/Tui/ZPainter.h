@@ -27,6 +27,8 @@ public:
     void clear(ZColor fg, ZColor bg);
     void clearRect(int x, int y, int width, int height, ZColor fg, ZColor bg);
 
+    void setCursor(int x, int y);
+
 private:
     friend class ZTerminal;
     ZPainter(std::unique_ptr<ZPainterPrivate> impl);

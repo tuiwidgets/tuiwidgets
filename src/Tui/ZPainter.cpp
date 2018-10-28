@@ -4,6 +4,7 @@
 #include <QRect>
 
 #include <Tui/ZColor.h>
+#include <Tui/ZTerminal_p.h>
 
 TUIWIDGETS_NS_START
 
@@ -13,8 +14,8 @@ namespace {
     }
 }
 
-ZPainterPrivate::ZPainterPrivate(termpaint_surface *surface, int width, int height)
-    : surface(surface), x(0), y(0), width(width), height(height)
+ZPainterPrivate::ZPainterPrivate(ZTerminalPrivate *terminal, termpaint_surface *surface, int width, int height)
+    : terminal(terminal), surface(surface), x(0), y(0), width(width), height(height)
 {
 
 }
@@ -99,6 +100,14 @@ void ZPainter::clearRect(int x, int y, int width, int height, ZColor fg, ZColor 
     termpaint_surface_clear_rect(pimpl->surface,
                                  x, y, width, height,
                                  toTermPaintColor(fg), toTermPaintColor(bg));
+}
+
+void ZPainter::setCursor(int x, int y) {
+    auto *const pimpl = tuiwidgets_impl();
+
+    if (x >= 0 && x <= pimpl->width && y >= 0 && y <= pimpl->height) {
+        pimpl->terminal->cursorPosition = {pimpl->x + x, pimpl->y + y};
+    }
 }
 
 
