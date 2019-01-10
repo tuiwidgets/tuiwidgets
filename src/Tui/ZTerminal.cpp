@@ -357,7 +357,7 @@ bool ZTerminal::event(QEvent *event) {
                     QPointer<ZWidget> w = tuiwidgets_impl()->focus();
                     while (w) {
                         bool processed = QCoreApplication::sendEvent(w, translated.get());
-                        if (processed && translated->isAccepted()) {
+                        if ((processed && translated->isAccepted()) || !w) {
                             break;
                         }
                         w = w->parentWidget();
