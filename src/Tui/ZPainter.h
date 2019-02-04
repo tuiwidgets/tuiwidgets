@@ -16,6 +16,20 @@ class ZPainterPrivate;
 
 class TUIWIDGETS_EXPORT ZPainter {
 public:
+    enum Attribute {
+        Bold = (1<<0),
+        Italic = (1<<1),
+        Blink = (1<<4),
+        Overline = (1<<5),
+        Inverse = (1<<6),
+        Strike = (1<<7),
+        Underline = (1<<16),
+        UnderlineDouble = (1<<17),
+        UnderlineCurly = (1<<18)
+    };
+    Q_DECLARE_FLAGS(Attributes, Attribute)
+
+public:
     ZPainter(const ZPainter &other);
     virtual ~ZPainter();
 
@@ -39,6 +53,7 @@ protected:
 private:
     TUIWIDGETS_DECLARE_PRIVATE(ZPainter)
 };
+Q_DECLARE_OPERATORS_FOR_FLAGS(ZPainter::Attributes)
 
 TUIWIDGETS_NS_END
 
