@@ -39,8 +39,8 @@ public:
 
     void writeWithColors(int x, int y, QString string, ZColor fg, ZColor bg);
     void writeWithAttributes(int x, int y, QString string, ZColor fg, ZColor bg, Attributes attr);
-    void clear(ZColor fg, ZColor bg);
-    void clearRect(int x, int y, int width, int height, ZColor fg, ZColor bg);
+    void clear(ZColor fg, ZColor bg, Attributes attr = 0);
+    void clearRect(int x, int y, int width, int height, ZColor fg, ZColor bg, Attributes attr = 0);
 
     void setCursor(int x, int y);
 
