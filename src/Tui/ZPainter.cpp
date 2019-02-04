@@ -72,6 +72,20 @@ void ZPainter::writeWithColors(int x, int y, QString string, ZColor fg, ZColor b
                                              pimpl->x, pimpl->x + pimpl->width - 1);
 }
 
+void ZPainter::writeWithAttributes(int x, int y, QString string, ZColor fg, ZColor bg, Attributes attr) {
+    auto *const pimpl = tuiwidgets_impl();
+    if (y >= pimpl->height) return;
+
+    termpaint_attr *termpaintAttr = termpaint_attr_new(toTermPaintColor(fg), toTermPaintColor(bg));
+    termpaint_attr_set_style(termpaintAttr, attr);
+    termpaint_surface_write_with_attr_clipped(pimpl->surface,
+                                             x + pimpl->x, y + pimpl->y,
+                                             string.toUtf8().data(),
+                                             termpaintAttr,
+                                             pimpl->x, pimpl->x + pimpl->width - 1);
+    termpaint_attr_free(termpaintAttr);
+}
+
 void ZPainter::clear(ZColor fg, ZColor bg) {
     auto *const pimpl = tuiwidgets_impl();
     termpaint_surface_clear_rect(pimpl->surface,
