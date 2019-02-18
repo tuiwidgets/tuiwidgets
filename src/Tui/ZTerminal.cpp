@@ -5,6 +5,8 @@
 #include <QVector>
 #include <QPointer>
 #include <QTimer>
+#include <QThread>
+#include <QAbstractEventDispatcher>
 
 #include <Tui/ZEvent.h>
 #include <Tui/ZPainter_p.h>
@@ -20,6 +22,8 @@ ZTerminalPrivate::ZTerminalPrivate(ZTerminal *pub, ZTerminal::Options options)
     : options(options)
 {
     pub_ptr = pub;
+    QObject::connect(QThread::currentThread()->eventDispatcher(), &QAbstractEventDispatcher::aboutToBlock,
+                     pub, &ZTerminal::dispatcherIsAboutToBlock);
 }
 
 ZTerminalPrivate::~ZTerminalPrivate() {
@@ -80,6 +84,24 @@ void ZTerminalPrivate::processPaintingAndUpdateOutput(bool fullRepaint) {
     }
 }
 
+void ZTerminal::dispatcherIsAboutToBlock() {
+    auto *const p = tuiwidgets_impl();
+    if (!p->focusWidget || !p->focusWidget->enabled || !p->focusWidget->pub()->isVisibleTo(p->mainWidget.get())) {
+        bool focusWasSet = false;
+        ZWidgetPrivate *w = p->focusHistory.last;
+        while (w) {
+            if (w->enabled && w->pub()->isVisibleTo(p->mainWidget.get())) {
+                w->pub()->setFocus();
+                focusWasSet = true;
+                break;
+            }
+            w = w->focusHistory.prev;
+        }
+        if (!focusWasSet) {
+            p->setFocus(p->mainWidget.get());
+        }
+    }
+}
 
 ZTerminal::ZTerminal(QObject *parent)
     : ZTerminal(0, parent)

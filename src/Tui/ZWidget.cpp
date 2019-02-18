@@ -42,17 +42,8 @@ ZWidget::~ZWidget() {
         auto *const terminal_priv = ZTerminalPrivate::get(term);
         terminal_priv->focusHistory.remove(p);
 
-        ZWidgetPrivate *w = terminal_priv->focusHistory.last;
-        while (w) {
-            if (w->enabled && w->visible) {
-                w->pub()->setFocus();
-                break;
-            }
-            w = w->focusHistory.prev;
-        }
-
         if (term->focusWidget() == this) {
-            terminal_priv->setFocus(term->mainWidget());
+            terminal_priv->setFocus(nullptr);
         }
     }
 

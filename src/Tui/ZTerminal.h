@@ -73,6 +73,9 @@ protected:
     void disconnectNotify(const QMetaMethod &signal) override;
 
 private:
+    void dispatcherIsAboutToBlock();
+
+private:
     Q_DISABLE_COPY(ZTerminal)
     TUIWIDGETS_DECLARE_PRIVATE(ZTerminal)
 
