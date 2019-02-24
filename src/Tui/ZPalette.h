@@ -69,6 +69,9 @@ public:
     ZPalette(const ZPalette &other);
     virtual ~ZPalette();
 
+    static ZPalette classic();
+    static ZPalette black();
+
 public:
     ZColor getColor(Tui::ZWidget *targetWidget, ZImplicitSymbol x) const;
 
@@ -80,6 +83,9 @@ public:
 
 protected:
     ZValuePtr<ZPalettePrivate> tuiwidgets_pimpl_ptr;
+
+private:
+    static void setDefaultRules(ZPalette &p);
 
 private:
     TUIWIDGETS_DECLARE_PRIVATE(ZPalette)
