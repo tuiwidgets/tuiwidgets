@@ -18,11 +18,14 @@ public:
     ZKeySequence();
     static ZKeySequence forMnemonic(const QString &c);
     static ZKeySequence forKey(int key);
+    static ZKeySequence forShortcut(const QString &c, Qt::KeyboardModifiers modifiers = Qt::ControlModifier);
 
 private:
     // FIXME pimpl
     friend class ZShortcut;
     QString _forMnemonic;
+    QString _forShortcut;
+    Qt::KeyboardModifiers _modifiers = 0;
     int _forKey = 0;
 };
 

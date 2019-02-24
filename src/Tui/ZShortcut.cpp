@@ -56,6 +56,10 @@ bool ZShortcut::matches(ZWidget *focusWidget, const ZKeyEvent *event) {
         if (event->modifiers() == 0 && event->key() == p->key._forKey) {
             keyMatches = true;
         }
+    } else if (p->key._forShortcut.size()) {
+        if (event->modifiers() == p->key._modifiers && event->text() == p->key._forShortcut) {
+            keyMatches = true;
+        }
     }
     if (!keyMatches) {
         return false;
@@ -154,6 +158,13 @@ ZKeySequence ZKeySequence::forMnemonic(const QString &c) {
 ZKeySequence ZKeySequence::forKey(int key) {
     ZKeySequence s;
     s._forKey = key;
+    return s;
+}
+
+ZKeySequence ZKeySequence::forShortcut(const QString &c, Qt::KeyboardModifiers modifiers) {
+    ZKeySequence s;
+    s._forShortcut = c;
+    s._modifiers = modifiers;
     return s;
 }
 
