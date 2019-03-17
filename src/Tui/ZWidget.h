@@ -6,6 +6,8 @@
 #include <QObject>
 #include <QMargins>
 
+#include <Tui/ZCommon.h>
+
 #include <Tui/ZEvent.h>
 #include <Tui/tuiwidgets_internal.h>
 
@@ -97,6 +99,9 @@ public:
     void setPaletteClass(QStringList classes);
     void addPaletteClass(QString clazz);
     void removePaletteClass(QString clazz);
+
+    CursorStyle cursorStyle();
+    void setCursorStyle(CursorStyle style);
 
     void setFocus(Qt::FocusReason reason = Qt::OtherFocusReason);
     void grabKeyboard();

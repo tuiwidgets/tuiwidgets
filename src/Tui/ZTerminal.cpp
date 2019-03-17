@@ -69,17 +69,37 @@ void ZTerminalPrivate::processPaintingAndUpdateOutput(bool fullRepaint) {
         ZPainter paint = pub()->painter();
         ZPaintEvent event(ZPaintEvent::update, &paint);
         QCoreApplication::sendEvent(mainWidget.get(), &event);
+        if (initState == ZTerminalPrivate::InitState::Ready) {
+            termpaint_terminal_set_cursor_position(terminal,
+                                                   cursorPosition.x(), cursorPosition.y());
+            bool cursorVisible = cursorPosition != QPoint{-1, -1};
+            termpaint_terminal_set_cursor_visible(terminal, cursorVisible);
+
+            if (cursorVisible) {
+                CursorStyle style = CursorStyle::Unset;
+                if (focusWidget) {
+                    style = focusWidget->cursorStyle;
+                }
+                switch (style) {
+                    case CursorStyle::Unset:
+                        termpaint_terminal_set_cursor_style(terminal, TERMPAINT_CURSOR_STYLE_TERM_DEFAULT, true);
+                        break;
+                    case CursorStyle::Bar:
+                        termpaint_terminal_set_cursor_style(terminal, TERMPAINT_CURSOR_STYLE_BAR, true);
+                        break;
+                    case CursorStyle::Block:
+                        termpaint_terminal_set_cursor_style(terminal, TERMPAINT_CURSOR_STYLE_BLOCK, true);
+                        break;
+                    case CursorStyle::Underline:
+                        termpaint_terminal_set_cursor_style(terminal, TERMPAINT_CURSOR_STYLE_UNDERLINE, true);
+                        break;
+                }
+            }
+        }
         if (fullRepaint) {
             pub()->updateOutputForceFullRepaint();
         } else {
             pub()->updateOutput();
-        }
-        if (cursorPosition != QPoint{-1, -1}) {
-            if (initState == ZTerminalPrivate::InitState::Ready) {
-                termpaint_terminal_set_cursor(terminal,
-                                             cursorPosition.x(), cursorPosition.y());
-                integration_flush();
-            }
         }
     }
 }

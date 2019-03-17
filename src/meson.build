@@ -38,6 +38,7 @@ tuiwidgets_sources = [
   'Tui/ZColor.cpp',
   'Tui/ZCommandManager.cpp',
   'Tui/ZCommandNotifier.cpp',
+  'Tui/ZCommon.cpp',
   'Tui/ZEvent.cpp',
   'Tui/ZLayout.cpp',
   'Tui/ZLayoutItem.cpp',

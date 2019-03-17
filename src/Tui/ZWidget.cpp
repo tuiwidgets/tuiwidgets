@@ -306,6 +306,16 @@ void ZWidget::removePaletteClass(QString clazz) {
     setPaletteClass(cls);
 }
 
+CursorStyle ZWidget::cursorStyle() {
+    auto *const p = tuiwidgets_impl();
+    return p->cursorStyle;
+}
+
+void ZWidget::setCursorStyle(CursorStyle style) {
+    auto *const p = tuiwidgets_impl();
+    p->cursorStyle = style;
+}
+
 void ZWidget::setFocus(Qt::FocusReason reason) {
     auto *const term = terminal();
     if (!term) {

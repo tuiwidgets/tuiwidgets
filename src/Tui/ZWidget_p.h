@@ -52,6 +52,8 @@ public:
     ZPalette palette;
     QStringList paletteClass;
 
+    CursorStyle cursorStyle = CursorStyle::Unset;
+
     ZTerminal *terminal = nullptr;
     ListNode<ZWidgetPrivate> focusHistory;
 
