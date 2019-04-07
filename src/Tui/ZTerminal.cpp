@@ -13,6 +13,7 @@
 #include <Tui/ZShortcutManager_p.h>
 #include <Tui/ZTextMetrics.h>
 #include <Tui/ZTextMetrics_p.h>
+#include <Tui/ZImage_p.h>
 #include <Tui/ZWidget.h>
 #include <Tui/ZWidget_p.h>
 
@@ -214,6 +215,15 @@ void ZTerminal::update() {
 void ZTerminal::forceRepaint() {
     auto *const p = tuiwidgets_impl();
     p->processPaintingAndUpdateOutput(true);
+}
+
+ZImage ZTerminal::grabCurrentImage() const {
+    auto * const surface = tuiwidgets_impl()->surface;
+    ZImage img = ZImage(this, width(), height());
+    termpaint_surface_copy_rect(surface, 0, 0, width(), height(),
+                                ZImageData::get(&img)->surface, 0, 0,
+                                TERMPAINT_COPY_NO_TILE, TERMPAINT_COPY_NO_TILE);
+    return img;
 }
 
 int ZTerminal::width() const {

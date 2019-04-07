@@ -14,6 +14,7 @@ class ZKeyEvent;
 class ZPainter;
 class ZTerminalNativeEvent;
 class ZTextMetrics;
+class ZImage;
 class ZWidget;
 
 class ZTerminalPrivate;
@@ -45,6 +46,8 @@ public:
 
     void update();
     void forceRepaint();
+
+    ZImage grabCurrentImage() const;
 
     int width() const;
     int height() const;
