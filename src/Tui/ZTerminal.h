@@ -62,6 +62,9 @@ protected:
 
 public Q_SLOTS:
 
+Q_SIGNALS:
+    void afterRendering();
+
 protected:
     std::unique_ptr<ZTerminalPrivate> tuiwidgets_pimpl_ptr;
 

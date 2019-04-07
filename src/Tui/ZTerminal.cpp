@@ -101,6 +101,7 @@ void ZTerminalPrivate::processPaintingAndUpdateOutput(bool fullRepaint) {
                 }
             }
         }
+        Q_EMIT pub()->afterRendering();
         if (fullRepaint) {
             pub()->updateOutputForceFullRepaint();
         } else {
