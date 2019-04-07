@@ -311,9 +311,23 @@ CursorStyle ZWidget::cursorStyle() {
     return p->cursorStyle;
 }
 
+
+
 void ZWidget::setCursorStyle(CursorStyle style) {
     auto *const p = tuiwidgets_impl();
     p->cursorStyle = style;
+}
+
+void ZWidget::resetCursorColor() {
+    auto *const p = tuiwidgets_impl();
+    p->cursorColorR = p->cursorColorG = p->cursorColorB = -1;
+}
+
+void ZWidget::setCursorColor(int r, int b, int g) {
+    auto *const p = tuiwidgets_impl();
+    p->cursorColorR = r;
+    p->cursorColorG = g;
+    p->cursorColorB = b;
 }
 
 void ZWidget::setFocus(Qt::FocusReason reason) {

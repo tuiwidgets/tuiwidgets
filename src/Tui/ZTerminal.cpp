@@ -84,6 +84,14 @@ void ZTerminalPrivate::processPaintingAndUpdateOutput(bool fullRepaint) {
                 CursorStyle style = CursorStyle::Unset;
                 if (focusWidget) {
                     style = focusWidget->cursorStyle;
+                    if (focusWidget->cursorColorR != -1) {
+                        termpaint_terminal_set_color(terminal, TERMPAINT_COLOR_SLOT_CURSOR,
+                                                     focusWidget->cursorColorR,
+                                                     focusWidget->cursorColorG,
+                                                     focusWidget->cursorColorB);
+                    } else {
+                        termpaint_terminal_reset_color(terminal, TERMPAINT_COLOR_SLOT_CURSOR);
+                    }
                 }
                 switch (style) {
                     case CursorStyle::Unset:
@@ -438,6 +446,8 @@ bool ZTerminal::event(QEvent *event) {
                     }
                 }
             }
+        } else if (native->type == TERMPAINT_EV_REPAINT_REQUESTED) {
+            update();
         } else if (native->type == TERMPAINT_EV_AUTO_DETECT_FINISHED) {
             QByteArray nativeOptions;
             if ((p->options & (ZTerminal::AllowInterrupt | ZTerminal::AllowQuit | ZTerminal::AllowSuspend)) == 0) {

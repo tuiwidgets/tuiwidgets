@@ -53,6 +53,7 @@ public:
     QStringList paletteClass;
 
     CursorStyle cursorStyle = CursorStyle::Unset;
+    int cursorColorR = -1, cursorColorG = -1, cursorColorB = -1;
 
     ZTerminal *terminal = nullptr;
     ListNode<ZWidgetPrivate> focusHistory;

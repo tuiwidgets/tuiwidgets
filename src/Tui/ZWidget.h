@@ -102,6 +102,8 @@ public:
 
     CursorStyle cursorStyle();
     void setCursorStyle(CursorStyle style);
+    void resetCursorColor();
+    void setCursorColor(int r, int b, int g);
 
     void setFocus(Qt::FocusReason reason = Qt::OtherFocusReason);
     void grabKeyboard();
