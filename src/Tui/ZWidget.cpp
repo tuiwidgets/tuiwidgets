@@ -407,6 +407,32 @@ bool ZWidget::isInFocusPath() const {
     return false;
 }
 
+QPoint ZWidget::mapFromTerminal(const QPoint &pos) {
+    QPoint position = pos;
+    ZTerminal *term = terminal();
+    if (term) {
+        ZWidget *w = this;
+        while (w) {
+            position -= w->geometry().topLeft();
+            w = w->parentWidget();
+        }
+    }
+    return position;
+}
+
+QPoint ZWidget::mapToTerminal(const QPoint &pos) {
+    QPoint position = pos;
+    ZTerminal *term = terminal();
+    if (term) {
+        ZWidget *w = this;
+        while (w) {
+            position += w->geometry().topLeft();
+            w = w->parentWidget();
+        }
+    }
+    return position;
+}
+
 /*
     class FocusSearchIterator {
     public:
