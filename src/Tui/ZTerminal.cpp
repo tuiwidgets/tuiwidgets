@@ -152,7 +152,7 @@ ZPainter ZTerminal::painter() {
                                                       termpaint_surface_height(surface)));
 }
 
-ZTextMetrics ZTerminal::textMetrics() {
+ZTextMetrics ZTerminal::textMetrics() const {
     auto *surface = tuiwidgets_impl()->surface;
     return ZTextMetrics(std::make_shared<ZTextMetricsPrivate>(surface));
 }

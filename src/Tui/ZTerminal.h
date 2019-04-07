@@ -37,7 +37,7 @@ public:
 
 public:
     ZPainter painter();
-    ZTextMetrics textMetrics();
+    ZTextMetrics textMetrics() const;
     ZWidget* mainWidget();
     void setMainWidget(ZWidget* w);
 
