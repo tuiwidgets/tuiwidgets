@@ -15,5 +15,6 @@ add_project_arguments('-Wall', '-Wextra', language: 'cpp')
 add_project_arguments('-Werror=return-type', '-Werror=implicit-function-declaration', language: 'cpp')
 
 termpaint_dep = dependency('termpaint')
+termpaint_image_dep = dependency('termpaint_image')
 
 subdir('src')

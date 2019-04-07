@@ -35,6 +35,10 @@ ZTerminalPrivate *ZTerminalPrivate::get(ZTerminal *terminal) {
     return terminal->tuiwidgets_impl();
 }
 
+const ZTerminalPrivate *ZTerminalPrivate::get(const ZTerminal *terminal) {
+    return terminal->tuiwidgets_impl();
+}
+
 void ZTerminalPrivate::setFocus(ZWidget *w) {
     if (!w) {
         focusWidget = nullptr;

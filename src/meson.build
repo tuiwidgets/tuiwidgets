@@ -18,6 +18,7 @@ tuiwidgets_public_headers = [
   'Tui/ZCommandManager.h',
   'Tui/ZCommandNotifier.h',
   'Tui/ZEvent.h',
+  'Tui/ZImage.h',
   'Tui/ZLayout.h',
   'Tui/ZLayoutItem.h',
   'Tui/ZPainter.h',
@@ -40,6 +41,7 @@ tuiwidgets_sources = [
   'Tui/ZCommandNotifier.cpp',
   'Tui/ZCommon.cpp',
   'Tui/ZEvent.cpp',
+  'Tui/ZImage.cpp',
   'Tui/ZLayout.cpp',
   'Tui/ZLayoutItem.cpp',
   'Tui/ZPainter.cpp',
@@ -71,7 +73,7 @@ tui_cpp_args = [
 tuiwidgets_generated = qt5.preprocess(moc_headers: tuiwidgets_moc_headers, include_directories: '../src')
 
 tuiwidgets = library('tuiwidgets', tuiwidgets_sources, tuiwidgets_generated,
-  dependencies : [qt5_dep, termpaint_dep, posixsignalmanager_dep],
+  dependencies : [qt5_dep, termpaint_dep, termpaint_image_dep, posixsignalmanager_dep],
   cpp_args: tui_cpp_args,
   install: true
 )

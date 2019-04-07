@@ -27,6 +27,7 @@ public:
     ZTerminalPrivate(ZTerminal *pub, ZTerminal::Options options);
     virtual ~ZTerminalPrivate();
     static ZTerminalPrivate *get(ZTerminal *terminal);
+    static const ZTerminalPrivate *get(const ZTerminal *terminal);
 
     void setFocus(ZWidget *w);
     ZWidget *focus();
