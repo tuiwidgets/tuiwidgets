@@ -151,7 +151,7 @@ ZTerminal::~ZTerminal() {
 
 ZPainter ZTerminal::painter() {
     auto *surface = tuiwidgets_impl()->surface;
-    return ZPainter(std::make_unique<ZPainterPrivate>(tuiwidgets_impl(), surface,
+    return ZPainter(std::make_unique<ZPainterPrivate>(surface,
                                                       termpaint_surface_width(surface),
                                                       termpaint_surface_height(surface)));
 }

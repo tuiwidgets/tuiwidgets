@@ -17,11 +17,10 @@ class ZTerminalPrivate;
 
 class ZPainterPrivate {
 public:
-    ZPainterPrivate(ZTerminalPrivate *terminal, termpaint_surface *surface, int width, int height);
+    ZPainterPrivate(termpaint_surface *surface, int width, int height, std::shared_ptr<char> token = nullptr);
     virtual ~ZPainterPrivate();
 
-    ZTerminalPrivate *terminal;
-
+    std::shared_ptr<char> token;
     termpaint_surface *surface;
     int x, y, width, height;
 

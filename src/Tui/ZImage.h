@@ -34,6 +34,8 @@ public:
 
     bool save(const QString &fileName) const;
 
+    ZPainter painter();
+
 private:
     friend class ZImageData;
     QSharedDataPointer<ZImageData> tuiwidgets_pimpl_ptr;

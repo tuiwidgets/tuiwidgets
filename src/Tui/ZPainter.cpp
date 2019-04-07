@@ -15,8 +15,8 @@ namespace {
     }
 }
 
-ZPainterPrivate::ZPainterPrivate(ZTerminalPrivate *terminal, termpaint_surface *surface, int width, int height)
-    : terminal(terminal), surface(surface), x(0), y(0), width(width), height(height)
+ZPainterPrivate::ZPainterPrivate(termpaint_surface *surface, int width, int height, std::shared_ptr<char> token)
+    : token(token), surface(surface), x(0), y(0), width(width), height(height)
 {
 
 }

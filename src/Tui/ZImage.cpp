@@ -75,6 +75,18 @@ bool ZImage::save(const QString &fileName) const {
     return true;
 }
 
+ZPainter ZImage::painter() {
+    auto *const p = tuiwidgets_pimpl_ptr.data();
+    std::shared_ptr<char> token = p->hasPainter.lock();
+    if (!token) {
+        token = std::make_shared<char>();
+    }
+    return ZPainter(std::make_unique<ZPainterPrivate>(p->surface,
+                                                      termpaint_surface_width(p->surface),
+                                                      termpaint_surface_height(p->surface),
+                                                      token));
+}
+
 ZImageData::ZImageData(termpaint_terminal *terminal, int width, int height) {
     terminal = terminal;
     surface = termpaint_terminal_new_surface(terminal,
