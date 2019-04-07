@@ -13,6 +13,7 @@ class QRect;
 TUIWIDGETS_NS_START
 
 class ZPainterPrivate;
+class ZImage;
 class ZWidget;
 
 class TUIWIDGETS_EXPORT ZPainter {
@@ -42,6 +43,8 @@ public:
     void writeWithAttributes(int x, int y, QString string, ZColor fg, ZColor bg, Attributes attr);
     void clear(ZColor fg, ZColor bg, Attributes attr = 0);
     void clearRect(int x, int y, int width, int height, ZColor fg, ZColor bg, Attributes attr = 0);
+
+    void drawImage(int x, int y, const ZImage& image, int sx=0, int sy = 0, int width = -1, int height = -1);
 
     void setCursor(int x, int y);
 

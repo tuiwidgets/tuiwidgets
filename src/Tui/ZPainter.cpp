@@ -4,6 +4,7 @@
 #include <QRect>
 
 #include <Tui/ZColor.h>
+#include <Tui/ZImage_p.h>
 #include <Tui/ZTerminal_p.h>
 #include <Tui/ZWidget.h>
 
@@ -122,6 +123,39 @@ void ZPainter::clearRect(int x, int y, int width, int height, ZColor fg, ZColor 
                                  x, y, width, height,
                                  termpaintAttr);
     termpaint_attr_free(termpaintAttr);
+}
+
+void ZPainter::drawImage(int x, int y, const ZImage &image, int sx, int sy, int width, int height) {
+    auto *const pimpl = tuiwidgets_impl();
+
+    if (width == -1) {
+        width = image.width();
+    }
+    if (height == -1) {
+        height = image.height();
+    }
+
+    if (x < 0) {
+        width += x;
+        sx -= x;
+        x = 0;
+    }
+    if (y < 0) {
+        height += y;
+        sy -= y;
+        y = 0;
+    }
+
+    width = std::min(pimpl->width - x, width);
+    height = std::min(pimpl->height - y, height);
+
+    if (width < 0 || height < 0) {
+        return;
+    }
+
+    termpaint_surface_copy_rect(ZImageData::get(&image)->surface, sx, sy, width, height,
+                                pimpl->surface, pimpl->x + x, pimpl->y + y,
+                                TERMPAINT_COPY_NO_TILE, TERMPAINT_COPY_NO_TILE);
 }
 
 void ZPainter::setCursor(int x, int y) {
