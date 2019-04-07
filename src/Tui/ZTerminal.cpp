@@ -212,6 +212,17 @@ void ZTerminal::forceRepaint() {
     p->processPaintingAndUpdateOutput(true);
 }
 
+int ZTerminal::width() const {
+    const auto * const surface = tuiwidgets_impl()->surface;
+    return termpaint_surface_width(surface);
+
+}
+
+int ZTerminal::height() const {
+    const auto * const surface = tuiwidgets_impl()->surface;
+    return termpaint_surface_height(surface);
+}
+
 void ZTerminal::resize(int width, int height) {
     auto *const p = tuiwidgets_impl();
     termpaint_surface_resize(p->surface, width, height);

@@ -46,6 +46,8 @@ public:
     void update();
     void forceRepaint();
 
+    int width() const;
+    int height() const;
     void resize(int width, int height);
 
     void updateOutput();
