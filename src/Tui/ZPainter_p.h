@@ -1,6 +1,8 @@
 #ifndef TUIWIDGETS_ZPAINTER_P_INCLUDED
 #define TUIWIDGETS_ZPAINTER_P_INCLUDED
 
+#include <QPointer>
+
 #include <termpaint.h>
 
 #include <Tui/ZPainter.h>
@@ -8,6 +10,8 @@
 #include <Tui/tuiwidgets_internal.h>
 
 TUIWIDGETS_NS_START
+
+class ZWidget;
 
 class ZTerminalPrivate;
 
@@ -20,6 +24,8 @@ public:
 
     termpaint_surface *surface;
     int x, y, width, height;
+
+    QPointer<ZWidget> widget;
 
     ZPainter* pub_ptr;
     TUIWIDGETS_DECLARE_PUBLIC(ZPainter)

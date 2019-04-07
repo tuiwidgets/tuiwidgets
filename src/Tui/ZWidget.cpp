@@ -881,6 +881,7 @@ void ZWidgetPrivate::updateRequestEvent(ZPaintEvent *event)
         }
         const QRect &childRect = child->tuiwidgets_impl()->geometry;
         ZPainter transformedPainter = painter->translateAndClip(childRect);
+        transformedPainter.setWidget(child);
         Tui::ZPaintEvent nestedEvent(ZPaintEvent::update, &transformedPainter);
         QCoreApplication::instance()->sendEvent(child, &nestedEvent);
     }

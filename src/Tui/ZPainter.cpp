@@ -5,6 +5,7 @@
 
 #include <Tui/ZColor.h>
 #include <Tui/ZTerminal_p.h>
+#include <Tui/ZWidget.h>
 
 TUIWIDGETS_NS_START
 
@@ -126,9 +127,17 @@ void ZPainter::clearRect(int x, int y, int width, int height, ZColor fg, ZColor 
 void ZPainter::setCursor(int x, int y) {
     auto *const pimpl = tuiwidgets_impl();
 
-    if (x >= 0 && x <= pimpl->width && y >= 0 && y <= pimpl->height) {
-        pimpl->terminal->cursorPosition = {pimpl->x + x, pimpl->y + y};
+    if (pimpl->widget) {
+        if (x >= 0 && x <= pimpl->width && y >= 0 && y <= pimpl->height) {
+            QPoint widgetRelative = pimpl->widget->mapFromTerminal({pimpl->x + x, pimpl->y + y});
+            pimpl->widget->showCursor(widgetRelative);
+        }
     }
+}
+
+void ZPainter::setWidget(ZWidget *widget) {
+    auto *const pimpl = tuiwidgets_impl();
+    pimpl->widget = widget;
 }
 
 

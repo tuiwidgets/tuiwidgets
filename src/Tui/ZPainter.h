@@ -13,6 +13,7 @@ class QRect;
 TUIWIDGETS_NS_START
 
 class ZPainterPrivate;
+class ZWidget;
 
 class TUIWIDGETS_EXPORT ZPainter {
 public:
@@ -43,6 +44,8 @@ public:
     void clearRect(int x, int y, int width, int height, ZColor fg, ZColor bg, Attributes attr = 0);
 
     void setCursor(int x, int y);
+
+    void setWidget(ZWidget *widget);
 
 private:
     friend class ZTerminal;
