@@ -109,7 +109,7 @@ void ZPainter::clearRect(int x, int y, int width, int height, ZColor fg, ZColor 
         y = 0;
     }
     width = std::min(pimpl->width - x, width);
-    height = std::min(pimpl->height, height);
+    height = std::min(pimpl->height - y, height);
     if (width < 0 || height < 0) {
         return;
     }
