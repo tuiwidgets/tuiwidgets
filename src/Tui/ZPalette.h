@@ -22,7 +22,8 @@ template <typename T>
 class TUIWIDGETS_EXPORT ZValuePtr : public std::unique_ptr<T> {
 public:
     using std::unique_ptr<T>::unique_ptr;
-    ZValuePtr(const ZValuePtr &other) {
+    ZValuePtr(const ZValuePtr &other) : std::unique_ptr<T>()
+    {
         if (other) {
             this->reset(new T(*other.get()));
         }
