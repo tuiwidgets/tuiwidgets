@@ -53,7 +53,7 @@ public:
     bool commonStuff(ZTerminal::Options options);
 
     void integration_free();
-    void integration_write(char *data, int length);
+    void integration_write(const char *data, int length);
     void integration_write_uncached(char *data, int length);
     void integration_flush();
     bool integration_is_bad();

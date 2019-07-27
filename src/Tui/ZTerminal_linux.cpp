@@ -316,7 +316,7 @@ void ZTerminalPrivate::integration_write_uncached(char *data, int length) {
     }
 }
 
-void ZTerminalPrivate::integration_write(char *data, int length) {
+void ZTerminalPrivate::integration_write(const char *data, int length) {
     output_buffer.append(data, length);
     if (output_buffer.size() > 512) {
         integration_flush();
@@ -342,7 +342,7 @@ void ZTerminalPrivate::init_fns() {
     integration.free = [] (termpaint_integration* ptr) {
         container_of(ptr, ZTerminalPrivate, integration)->integration_free();
     };
-    integration.write = [] (termpaint_integration* ptr, char *data, int length) {
+    integration.write = [] (termpaint_integration* ptr, const char *data, int length) {
         container_of(ptr, ZTerminalPrivate, integration)->integration_write(data, length);
     };
     integration.flush = [] (termpaint_integration* ptr) {
