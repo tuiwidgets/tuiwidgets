@@ -28,6 +28,7 @@ public:
         AllowQuit = 1 << 2,
         DisableAutoResize = 1 << 3,
         DisableAlternativeScreen = 1 << 4,
+        DisableAutoDetectTimeoutMessage = 1 << 5,
     };
     Q_DECLARE_FLAGS(Options, Option)
 
@@ -55,6 +56,9 @@ public:
 
     void updateOutput();
     void updateOutputForceFullRepaint();
+
+    void setAutoDetectTimeoutMessage(const QString& message);
+    QString autoDetectTimeoutMessage() const;
 
 protected:
     std::unique_ptr<ZKeyEvent> translateKeyEvent(const ZTerminalNativeEvent &nativeEvent);

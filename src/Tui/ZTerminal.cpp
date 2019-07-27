@@ -277,6 +277,16 @@ void ZTerminal::updateOutputForceFullRepaint() {
     }
 }
 
+void ZTerminal::setAutoDetectTimeoutMessage(const QString &message) {
+    auto *const p = tuiwidgets_impl();
+    p->autoDetectTimeoutMessage = message;
+}
+
+QString ZTerminal::autoDetectTimeoutMessage() const {
+    auto *const p = tuiwidgets_impl();
+    return p->autoDetectTimeoutMessage;
+}
+
 std::unique_ptr<ZKeyEvent> ZTerminal::translateKeyEvent(const ZTerminalNativeEvent &nativeEvent) {
     termpaint_event* native = static_cast<termpaint_event*>(nativeEvent.nativeEventPointer());
 
@@ -449,6 +459,7 @@ bool ZTerminal::event(QEvent *event) {
         } else if (native->type == TERMPAINT_EV_REPAINT_REQUESTED) {
             update();
         } else if (native->type == TERMPAINT_EV_AUTO_DETECT_FINISHED) {
+            p->autoDetectTimeoutTimer = nullptr;
             QByteArray nativeOptions;
             if ((p->options & (ZTerminal::AllowInterrupt | ZTerminal::AllowQuit | ZTerminal::AllowSuspend)) == 0) {
                 nativeOptions.append(" +kbdsig ");

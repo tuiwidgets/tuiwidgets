@@ -249,6 +249,16 @@ bool ZTerminalPrivate::commonStuff(ZTerminal::Options options) {
     termpaint_terminal_set_raw_input_filter_cb(terminal, raw_filter, pub());
     termpaint_terminal_set_event_cb(terminal, event_handler, pub());
 
+    if (!options.testFlag(ZTerminal::DisableAutoDetectTimeoutMessage)) {
+        autoDetectTimeoutTimer.reset(new QTimer(pub()));
+        autoDetectTimeoutTimer->setSingleShot(true);
+        autoDetectTimeoutTimer->start(10000);
+        QObject::connect(autoDetectTimeoutTimer.get(), &QTimer::timeout, pub(), [this] {
+            QByteArray utf8 = autoDetectTimeoutMessage.toUtf8();
+            integration_write(utf8.data(), utf8.size());
+            integration_flush();
+        });
+    }
     termpaint_terminal_auto_detect(terminal);
 
     inputNotifier = new QSocketNotifier(fd, QSocketNotifier::Read);

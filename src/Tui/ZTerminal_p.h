@@ -5,6 +5,7 @@
 #include <QPoint>
 #include <QPointer>
 #include <QSocketNotifier>
+#include <QTimer>
 
 #include <termpaint.h>
 
@@ -85,6 +86,9 @@ public:
     QByteArray output_buffer;
     termios originalTerminalAttributes;
     // ^^
+
+    QString autoDetectTimeoutMessage = QStringLiteral("Terminal auto detection is taking unusually long, press space to abort.");
+    std::unique_ptr<QTimer> autoDetectTimeoutTimer;
 
     ZTerminal* pub_ptr;
 
