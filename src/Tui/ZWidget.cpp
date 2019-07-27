@@ -118,12 +118,6 @@ void ZWidget::setVisible(bool v) {
     // TODO care about focus
     // TODO cache effect in hierarchy
     // TODO send events (QShowEvent  QHideEvent? QEvent::HideToParent? QEvent::ShowToParent?)
-    ZTerminal *term = terminal();
-    if (term) {
-        if (isAncestorOf(term->focusWidget())) {
-            ZTerminalPrivate::get(term)->cursorPosition = QPoint{-1, -1};
-        }
-    }
     update();
 }
 
@@ -201,18 +195,16 @@ void ZWidget::setLayout(ZLayout *l) {
 
 void ZWidget::showCursor(QPoint position) {
     ZTerminal *term = terminal();
-    if (term && term->focusWidget() == this) {
-        ZTerminalPrivate *termp = ZTerminalPrivate::get(term);
-        if (position.x() >= 0 && position.x() < geometry().width()
-         && position.y() >= 0 && position.y() < geometry().height()) {
-            ZWidget *w = this;
-            while (w) {
-                position += w->geometry().topLeft();
-                w = w->parentWidget();
+    if (term) {
+        ZWidget *grabber = ZTerminalPrivate::get(term)->keyboardGrab();
+        if (term->focusWidget() == this && (!grabber || grabber == this)) {
+            ZTerminalPrivate *termp = ZTerminalPrivate::get(term);
+            if (position.x() >= 0 && position.x() < geometry().width()
+             && position.y() >= 0 && position.y() < geometry().height()) {
+                termp->cursorPosition = mapToTerminal(position);
+            } else {
+                termp->cursorPosition = QPoint{-1, -1};
             }
-            termp->cursorPosition = position;
-        } else {
-            termp->cursorPosition = QPoint{-1, -1};
         }
     }
 }

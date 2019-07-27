@@ -47,7 +47,6 @@ void ZTerminalPrivate::setFocus(ZWidget *w) {
         focusWidget = ZWidgetPrivate::get(w);
         focusHistory.appendOrMoveToLast(focusWidget);
     }
-    cursorPosition = QPoint{-1, -1};
 }
 
 ZWidget *ZTerminalPrivate::focus() {
@@ -71,6 +70,7 @@ ZShortcutManager *ZTerminalPrivate::ensureShortcutManager() {
 
 void ZTerminalPrivate::processPaintingAndUpdateOutput(bool fullRepaint) {
     if (mainWidget.get()) {
+        cursorPosition = QPoint{-1, -1};
         ZPainter paint = pub()->painter();
         ZPaintEvent event(ZPaintEvent::update, &paint);
         QCoreApplication::sendEvent(mainWidget.get(), &event);
