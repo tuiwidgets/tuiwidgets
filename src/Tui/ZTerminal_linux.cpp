@@ -262,19 +262,21 @@ bool ZTerminalPrivate::commonStuff(ZTerminal::Options options) {
     termpaint_terminal_auto_detect(terminal);
 
     inputNotifier = new QSocketNotifier(fd, QSocketNotifier::Read);
-    QObject::connect(inputNotifier, &QSocketNotifier::activated, [terminal=terminal, that=pub()] (int socket) -> void {
-        char buff[100];
-        int amount = read (socket, buff, 99);
-        termpaint_terminal_add_input_data(terminal, buff, amount);
-        QString peek = QString::fromUtf8(termpaint_terminal_peek_input_buffer(terminal), termpaint_terminal_peek_input_buffer_length(terminal));
-        if (peek.length()) {
-            ZRawSequenceEvent event(ZRawSequenceEvent::pending, peek);
-            bool ret = QCoreApplication::sendEvent(that, &event);
-        }
-    });
-
+    QObject::connect(inputNotifier, &QSocketNotifier::activated,
+                     pub(), [this] (int socket) -> void { terminalFdHasData(socket); });
 
     return true;
+}
+
+void ZTerminalPrivate::terminalFdHasData(int socket) {
+    char buff[100];
+    int amount = read (socket, buff, 99);
+    termpaint_terminal_add_input_data(terminal, buff, amount);
+    QString peek = QString::fromUtf8(termpaint_terminal_peek_input_buffer(terminal), termpaint_terminal_peek_input_buffer_length(terminal));
+    if (peek.length()) {
+        ZRawSequenceEvent event(ZRawSequenceEvent::pending, peek);
+        QCoreApplication::sendEvent(pub(), &event);
+    }
 }
 
 void ZTerminalPrivate::integration_free() {

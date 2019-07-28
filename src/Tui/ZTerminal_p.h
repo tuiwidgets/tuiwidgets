@@ -85,6 +85,8 @@ public:
     bool awaiting_response = false;
     QByteArray output_buffer;
     termios originalTerminalAttributes;
+
+    void terminalFdHasData(int socket);
     // ^^
 
     QString autoDetectTimeoutMessage = QStringLiteral("Terminal auto detection is taking unusually long, press space to abort.");
