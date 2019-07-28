@@ -30,7 +30,7 @@ TUIWIDGETS_NS_START
 #ifdef Q_CC_GNU
 #pragma GCC diagnostic ignored "-Winvalid-offsetof"
 #endif
-#define container_of(ptr, type, member) ((type *)((char *)ptr - offsetof(type, member)))
+#define container_of(ptr, type, member) (reinterpret_cast<type *>(reinterpret_cast<char *>(ptr) - offsetof(type, member)))
 
 // signal based terminal restore...
 static bool systemRestoreInited = false;
