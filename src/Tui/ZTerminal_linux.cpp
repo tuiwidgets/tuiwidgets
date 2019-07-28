@@ -4,6 +4,7 @@
 #include <signal.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <poll.h>
 #include <fcntl.h>
 #include <malloc.h>
 #include <errno.h>
@@ -14,6 +15,7 @@
 #include <termios.h>
 #include <sys/ioctl.h>
 
+#include <QElapsedTimer>
 #include <QSocketNotifier>
 #include <QCoreApplication>
 #include <QPointer>
@@ -118,12 +120,35 @@ bool ZTerminalPrivate::setup(ZTerminal::Options options) {
 }
 
 void ZTerminalPrivate::deinitTerminal() {
+    inputNotifier = nullptr; // ensure no more notifications from this point
     termpaint_terminal_reset_attributes(terminal);
     termpaint_terminal_free_with_restore(terminal);
     if (fd == systemRestoreFd) {
         systemRestoreEscape = "";
     }
     terminal = nullptr;
+    if (awaitingResponse) {
+        // If terminal auto detection or another operation with response is cut short
+        // the reponse will leak out into the next application.
+        // We can't reliably prevent that here, but this kludge can reduce the likelyhood
+        // by just discarding input for a short amount of time.
+        QElapsedTimer timer;
+        timer.start();
+        while (!timer.hasExpired(100)) {
+            int ret;
+            struct pollfd info;
+            info.fd = fd;
+            info.events = POLLIN;
+            ret = poll(&info, 1, 100 - timer.elapsed());
+            if (ret == 1) {
+                char buff[1000];
+                int amount = (int)read(fd, buff, 999);
+                if (amount < 0) {
+                    break;
+                }
+            }
+        }
+    }
     tcsetattr (fd, TCSAFLUSH, &originalTerminalAttributes);
 }
 
@@ -266,8 +291,8 @@ bool ZTerminalPrivate::commonStuff(ZTerminal::Options options) {
         termpaint_terminal_callback(terminal);
     });
 
-    inputNotifier = new QSocketNotifier(fd, QSocketNotifier::Read);
-    QObject::connect(inputNotifier, &QSocketNotifier::activated,
+    inputNotifier.reset(new QSocketNotifier(fd, QSocketNotifier::Read));
+    QObject::connect(inputNotifier.get(), &QSocketNotifier::activated,
                      pub(), [this] (int socket) -> void { integration_terminalFdHasData(socket); });
 
     return true;
@@ -276,6 +301,7 @@ bool ZTerminalPrivate::commonStuff(ZTerminal::Options options) {
 void ZTerminalPrivate::integration_terminalFdHasData(int socket) {
     callbackTimer.stop();
     callbackRequested = false;
+    awaitingResponse = false;
     char buff[100];
     int amount = read (socket, buff, 99);
     termpaint_terminal_add_input_data(terminal, buff, amount);
@@ -348,6 +374,9 @@ void ZTerminalPrivate::integration_request_callback() {
     callbackRequested = true;
 }
 
+void ZTerminalPrivate::integration_awaiting_response() {
+    awaitingResponse = true;
+}
 
 void ZTerminalPrivate::init_fns() {
     memset(&integration, 0, sizeof(integration));
@@ -365,6 +394,9 @@ void ZTerminalPrivate::init_fns() {
     };
     integration.request_callback = [] (termpaint_integration* ptr) {
         container_of(ptr, ZTerminalPrivate, integration)->integration_request_callback();
+    };
+    integration.awaiting_response = [] (termpaint_integration* ptr) {
+        container_of(ptr, ZTerminalPrivate, integration)->integration_awaiting_response();
     };
 }
 

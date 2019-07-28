@@ -58,12 +58,13 @@ public:
     void integration_flush();
     bool integration_is_bad();
     void integration_request_callback();
+    void integration_awaiting_response();
     void integration_terminalFdHasData(int socket);
 
     termpaint_surface *surface = nullptr; // TODO use ref counted ptr of some kind
     termpaint_terminal *terminal = nullptr;
     termpaint_integration integration;
-    QSocketNotifier *inputNotifier = nullptr;
+    std::unique_ptr<QSocketNotifier> inputNotifier;
 
     bool updateRequested = false;
 
@@ -84,6 +85,7 @@ public:
     int fd = -1;
     bool auto_close = false;
     bool callbackRequested = false;
+    bool awaitingResponse = false;
     QByteArray output_buffer;
     termios originalTerminalAttributes;
     QTimer callbackTimer;
