@@ -57,7 +57,8 @@ public:
     void integration_write_uncached(char *data, int length);
     void integration_flush();
     bool integration_is_bad();
-    void integration_expect_response();
+    void integration_request_callback();
+    void integration_terminalFdHasData(int socket);
 
     termpaint_surface *surface = nullptr; // TODO use ref counted ptr of some kind
     termpaint_terminal *terminal = nullptr;
@@ -82,11 +83,10 @@ public:
     // stuff from integration
     int fd = -1;
     bool auto_close = false;
-    bool awaiting_response = false;
+    bool callbackRequested = false;
     QByteArray output_buffer;
     termios originalTerminalAttributes;
-
-    void terminalFdHasData(int socket);
+    QTimer callbackTimer;
     // ^^
 
     QString autoDetectTimeoutMessage = QStringLiteral("Terminal auto detection is taking unusually long, press space to abort.");

@@ -165,7 +165,7 @@ static void event_handler(void *user_data, termpaint_event *event) {
 
 bool ZTerminalPrivate::commonStuff(ZTerminal::Options options) {
     init_fns();
-    awaiting_response = false;
+    callbackRequested = false;
     terminal = termpaint_terminal_new(&integration);
     surface = termpaint_terminal_get_surface(terminal);
 
@@ -261,14 +261,21 @@ bool ZTerminalPrivate::commonStuff(ZTerminal::Options options) {
     }
     termpaint_terminal_auto_detect(terminal);
 
+    callbackTimer.setSingleShot(true);
+    QObject::connect(&callbackTimer, &QTimer::timeout, pub(), [terminal=terminal] {
+        termpaint_terminal_callback(terminal);
+    });
+
     inputNotifier = new QSocketNotifier(fd, QSocketNotifier::Read);
     QObject::connect(inputNotifier, &QSocketNotifier::activated,
-                     pub(), [this] (int socket) -> void { terminalFdHasData(socket); });
+                     pub(), [this] (int socket) -> void { integration_terminalFdHasData(socket); });
 
     return true;
 }
 
-void ZTerminalPrivate::terminalFdHasData(int socket) {
+void ZTerminalPrivate::integration_terminalFdHasData(int socket) {
+    callbackTimer.stop();
+    callbackRequested = false;
     char buff[100];
     int amount = read (socket, buff, 99);
     termpaint_terminal_add_input_data(terminal, buff, amount);
@@ -276,6 +283,9 @@ void ZTerminalPrivate::terminalFdHasData(int socket) {
     if (peek.length()) {
         ZRawSequenceEvent event(ZRawSequenceEvent::pending, peek);
         QCoreApplication::sendEvent(pub(), &event);
+    }
+    if (callbackRequested) {
+        callbackTimer.start(100);
     }
 }
 
@@ -334,8 +344,8 @@ bool ZTerminalPrivate::integration_is_bad() {
     return fd == -1;
 }
 
-void ZTerminalPrivate::integration_expect_response() {
-    awaiting_response = true;
+void ZTerminalPrivate::integration_request_callback() {
+    callbackRequested = true;
 }
 
 
@@ -353,9 +363,9 @@ void ZTerminalPrivate::init_fns() {
     integration.is_bad = [] (termpaint_integration* ptr) {
         return container_of(ptr, ZTerminalPrivate, integration)->integration_is_bad();
     };
-    /*integration.expect_response = [] (termpaint_integration* ptr) {
-        container_of(ptr, ZTerminalPrivate, integration)->integration_expect_response();
-    };*/
+    integration.request_callback = [] (termpaint_integration* ptr) {
+        container_of(ptr, ZTerminalPrivate, integration)->integration_request_callback();
+    };
 }
 
 TUIWIDGETS_NS_END
