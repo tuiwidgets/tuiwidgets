@@ -60,6 +60,10 @@ public:
     void setAutoDetectTimeoutMessage(const QString& message);
     QString autoDetectTimeoutMessage() const;
 
+    void pauseOperation();
+    void unpauseOperation();
+    bool isPaused();
+
 protected:
     std::unique_ptr<ZKeyEvent> translateKeyEvent(const ZTerminalNativeEvent &nativeEvent);
 

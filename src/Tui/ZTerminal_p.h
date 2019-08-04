@@ -45,6 +45,8 @@ public:
     bool initTerminal(ZTerminal::Options options);
     void maybeSystemTerminalSetup();
     void deinitTerminal();
+    void pauseTerminal();
+    void unpauseTerminal();
 
     void init_fns();
     bool terminalAvailable();
@@ -79,7 +81,8 @@ public:
     enum class InitState {
         InInitWithoutPendingPaintRequest,
         InInitWithPendingPaintRequest,
-        Ready
+        Ready,
+        Paused
     } initState = InitState::InInitWithoutPendingPaintRequest;
     // stuff from integration
     int fd = -1;
@@ -88,6 +91,7 @@ public:
     bool awaitingResponse = false;
     QByteArray output_buffer;
     termios originalTerminalAttributes;
+    termios prepauseTerminalAttributes;
     QTimer callbackTimer;
     // ^^
 

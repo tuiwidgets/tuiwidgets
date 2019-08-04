@@ -260,7 +260,7 @@ void ZTerminal::updateOutput() {
         p->initState = ZTerminalPrivate::InitState::InInitWithPendingPaintRequest;
     } else if (p->initState == ZTerminalPrivate::InitState::InInitWithPendingPaintRequest) {
         // already requested
-    } else {
+    } else if (p->initState == ZTerminalPrivate::InitState::Ready) {
         termpaint_terminal_flush(p->terminal, false);
     }
 }
@@ -271,7 +271,7 @@ void ZTerminal::updateOutputForceFullRepaint() {
         p->initState = ZTerminalPrivate::InitState::InInitWithPendingPaintRequest;
     } else if (p->initState == ZTerminalPrivate::InitState::InInitWithPendingPaintRequest) {
         // already requested
-    } else {
+    } else if (p->initState == ZTerminalPrivate::InitState::Ready) {
         termpaint_terminal_flush(tuiwidgets_impl()->terminal, true);
     }
 }
@@ -284,6 +284,26 @@ void ZTerminal::setAutoDetectTimeoutMessage(const QString &message) {
 QString ZTerminal::autoDetectTimeoutMessage() const {
     auto *const p = tuiwidgets_impl();
     return p->autoDetectTimeoutMessage;
+}
+
+void ZTerminal::pauseOperation() {
+    auto *const p = tuiwidgets_impl();
+    if (p->initState != ZTerminalPrivate::InitState::Ready) return;
+    p->pauseTerminal();
+    p->initState = ZTerminalPrivate::InitState::Paused;
+}
+
+void ZTerminal::unpauseOperation() {
+    auto *const p = tuiwidgets_impl();
+    if (p->initState != ZTerminalPrivate::InitState::Paused) return;
+    p->unpauseTerminal();
+    p->initState = ZTerminalPrivate::InitState::Ready;
+    updateOutputForceFullRepaint();
+}
+
+bool ZTerminal::isPaused() {
+    auto *const p = tuiwidgets_impl();
+    return p->initState == ZTerminalPrivate::InitState::Paused;
 }
 
 std::unique_ptr<ZKeyEvent> ZTerminal::translateKeyEvent(const ZTerminalNativeEvent &nativeEvent) {

@@ -39,6 +39,7 @@ static bool systemRestoreInited = false;
 static int systemRestoreFd = -1;
 static termios systemOriginalTerminalAttributes;
 static const char *systemRestoreEscape = nullptr;
+static bool systemTerminalPaused = false;
 static termios systemPresuspendTerminalAttributes;
 static std::unique_ptr<PosixSignalNotifier> systemTerminalResumeNotifier;
 static std::unique_ptr<PosixSignalNotifier> systemTerminalSizeChangeNotifier;
@@ -48,6 +49,8 @@ static void restoreSystemHandler(const siginfo_t *info, void *context) {
     // !!! signal handler code, only use async-safe calls (see signal-safety(7)) , no Qt at all.
     Q_UNUSED(info);
     Q_UNUSED(context);
+
+    if (systemTerminalPaused) return;
 
     tcsetattr(systemRestoreFd, TCSAFLUSH, &systemOriginalTerminalAttributes);
     if (systemRestoreEscape) {
@@ -60,11 +63,13 @@ static void suspendHandler(PosixSignalFlags &flags, const siginfo_t *info, void 
     Q_UNUSED(info);
     Q_UNUSED(context);
 
-    tcgetattr(systemRestoreFd, &systemPresuspendTerminalAttributes);
+    if (!systemTerminalPaused) {
+        tcgetattr(systemRestoreFd, &systemPresuspendTerminalAttributes);
 
-    tcsetattr(systemRestoreFd, TCSAFLUSH, &systemOriginalTerminalAttributes);
-    if (systemRestoreEscape) {
-        write(systemRestoreFd, systemRestoreEscape, strlen(systemRestoreEscape));
+        tcsetattr(systemRestoreFd, TCSAFLUSH, &systemOriginalTerminalAttributes);
+        if (systemRestoreEscape) {
+            write(systemRestoreFd, systemRestoreEscape, strlen(systemRestoreEscape));
+        }
     }
 
     flags.reraise();
@@ -74,6 +79,8 @@ static void resumeHandler(PosixSignalFlags &flags, const siginfo_t *info, void *
     // !!! signal handler code, only use async-safe calls (see signal-safety(7)) , no Qt at all.
     Q_UNUSED(info);
     Q_UNUSED(context);
+
+    if (systemTerminalPaused) return;
 
     tcsetattr(systemRestoreFd, TCSAFLUSH, &systemPresuspendTerminalAttributes);
 }
@@ -296,6 +303,26 @@ bool ZTerminalPrivate::commonStuff(ZTerminal::Options options) {
                      pub(), [this] (int socket) -> void { integration_terminalFdHasData(socket); });
 
     return true;
+}
+
+void ZTerminalPrivate::pauseTerminal() {
+    tcgetattr(fd, &prepauseTerminalAttributes);
+
+    inputNotifier->setEnabled(false);
+    termpaint_terminal_pause(terminal);
+    tcsetattr(fd, TCSAFLUSH, &originalTerminalAttributes);
+    if (fd == systemRestoreFd) {
+        systemTerminalPaused = true;
+    }
+}
+
+void ZTerminalPrivate::unpauseTerminal() {
+    if (fd == systemRestoreFd) {
+        systemTerminalPaused = false;
+    }
+    tcsetattr(fd, TCSAFLUSH, &prepauseTerminalAttributes);
+    inputNotifier->setEnabled(true);
+    termpaint_terminal_unpause(terminal);
 }
 
 void ZTerminalPrivate::integration_terminalFdHasData(int socket) {
