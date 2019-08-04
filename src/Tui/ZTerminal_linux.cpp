@@ -131,7 +131,10 @@ void ZTerminalPrivate::deinitTerminal() {
     termpaint_terminal_reset_attributes(terminal);
     termpaint_terminal_free_with_restore(terminal);
     if (fd == systemRestoreFd) {
-        systemRestoreEscape = "";
+        const char *old = systemRestoreEscape;
+        systemRestoreEscape = nullptr;
+        PosixSignalManager::instance()->barrier();
+        delete old;
     }
     terminal = nullptr;
     if (awaitingResponse) {
@@ -157,12 +160,6 @@ void ZTerminalPrivate::deinitTerminal() {
         }
     }
     tcsetattr (fd, TCSAFLUSH, &originalTerminalAttributes);
-}
-
-void ZTerminalPrivate::maybeSystemTerminalSetup() {
-    if (fd == systemRestoreFd) {
-        systemRestoreEscape = termpaint_terminal_restore_sequence(terminal);
-    }
 }
 
 bool ZTerminalPrivate::setupFromControllingTerminal(ZTerminal::Options options) {
@@ -220,7 +217,10 @@ bool ZTerminalPrivate::commonStuff(ZTerminal::Options options) {
         if (!PosixSignalManager::isCreated()) {
             PosixSignalManager::create();
         }
-        systemRestoreEscape = "\e[0m\r\n"; // TODO this should come from termpaint
+        // The initial restore sequence update was in termpaint_terminal_new, we missed that
+        // because systemRestoreFd was not set yet, trigger update again
+        const char* tmp = termpaint_terminal_restore_sequence(terminal);
+        integration_restore_sequence_updated(tmp, static_cast<int>(strlen(tmp)));
         PosixSignalManager::instance()->addSyncTerminationHandler(restoreSystemHandler);
         PosixSignalManager::instance()->addSyncCrashHandler(restoreSystemHandler);
         PosixSignalManager::instance()->addSyncSignalHandler(SIGTSTP, suspendHandler);
@@ -405,6 +405,19 @@ void ZTerminalPrivate::integration_awaiting_response() {
     awaitingResponse = true;
 }
 
+void ZTerminalPrivate::integration_restore_sequence_updated(const char *data, int len) {
+    if (fd == systemRestoreFd) {
+        unsigned length = static_cast<unsigned>(len);
+        const char *old = systemRestoreEscape;
+        char *update = new char[length + 1];
+        memcpy(update, data, length);
+        update[length] = 0;
+        systemRestoreEscape = update;
+        PosixSignalManager::instance()->barrier();
+        delete old;
+    }
+}
+
 void ZTerminalPrivate::init_fns() {
     memset(&integration, 0, sizeof(integration));
     integration.free = [] (termpaint_integration* ptr) {
@@ -424,6 +437,9 @@ void ZTerminalPrivate::init_fns() {
     };
     integration.awaiting_response = [] (termpaint_integration* ptr) {
         container_of(ptr, ZTerminalPrivate, integration)->integration_awaiting_response();
+    };
+    integration.restore_sequence_updated = [] (termpaint_integration* ptr, const char *data, int length) {
+        container_of(ptr, ZTerminalPrivate, integration)->integration_restore_sequence_updated(data, length);
     };
 }
 

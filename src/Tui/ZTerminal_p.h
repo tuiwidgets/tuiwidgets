@@ -43,7 +43,6 @@ public:
     void processPaintingAndUpdateOutput(bool fullRepaint);
 
     bool initTerminal(ZTerminal::Options options);
-    void maybeSystemTerminalSetup();
     void deinitTerminal();
     void pauseTerminal();
     void unpauseTerminal();
@@ -61,6 +60,7 @@ public:
     bool integration_is_bad();
     void integration_request_callback();
     void integration_awaiting_response();
+    void integration_restore_sequence_updated(const char *data, int len);
     void integration_terminalFdHasData(int socket);
 
     termpaint_surface *surface = nullptr; // TODO use ref counted ptr of some kind

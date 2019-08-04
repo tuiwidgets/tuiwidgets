@@ -491,7 +491,6 @@ bool ZTerminal::event(QEvent *event) {
                                                 termpaint_surface_height(p->surface),
                                                 nativeOptions.data());
 
-            p->maybeSystemTerminalSetup();
             if (p->initState == ZTerminalPrivate::InitState::InInitWithPendingPaintRequest) {
                 update();
             }
