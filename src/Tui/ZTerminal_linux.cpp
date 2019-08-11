@@ -34,13 +34,22 @@ TUIWIDGETS_NS_START
 #endif
 #define container_of(ptr, type, member) (reinterpret_cast<type *>(reinterpret_cast<char *>(ptr) - offsetof(type, member)))
 
+#ifdef __cpp_lib_atomic_is_always_lock_free
+#define STATIC_ASSERT_ALWAYS_LOCKFREE(type) static_assert (type::is_always_lock_free)
+#else
+#define STATIC_ASSERT_ALWAYS_LOCKFREE(type) /* not supported */
+#endif
+
 // signal based terminal restore...
 static bool systemRestoreInited = false;
-static int systemRestoreFd = -1;
-static std::atomic<int> systemPausedFd { -1 };
+STATIC_ASSERT_ALWAYS_LOCKFREE(std::atomic<int>);
+static std::atomic<int> systemRestoreFd { -1 }; // only written by non signal handling code
+static std::atomic<int> systemPausedFd { -1 }; // written by signal handling and non signal handling code
 static termios systemOriginalTerminalAttributes;
-static const char *systemRestoreEscape = nullptr;
-static bool systemTerminalPaused = false;
+STATIC_ASSERT_ALWAYS_LOCKFREE(std::atomic<const char *>);
+static std::atomic<const char *> systemRestoreEscape { nullptr }; // only written by non signal handling code
+STATIC_ASSERT_ALWAYS_LOCKFREE(std::atomic<bool>);
+static std::atomic<bool> systemTerminalPaused { false }; // only written by non signal handling code
 static termios systemPresuspendTerminalAttributes;
 static std::unique_ptr<PosixSignalNotifier> systemTerminalResumeNotifier;
 static std::unique_ptr<PosixSignalNotifier> systemTerminalSizeChangeNotifier;
@@ -51,64 +60,72 @@ static void restoreSystemHandler(const siginfo_t *info, void *context) {
     Q_UNUSED(info);
     Q_UNUSED(context);
 
-    if (systemTerminalPaused) return;
+    if (systemTerminalPaused.load()) return;
 
-    tcsetattr(systemRestoreFd, TCSAFLUSH, &systemOriginalTerminalAttributes);
-    if (systemRestoreEscape) {
-        write(systemRestoreFd, systemRestoreEscape, strlen(systemRestoreEscape));
+    int restoreFd = systemRestoreFd.load();
+    tcsetattr(restoreFd, TCSAFLUSH, &systemOriginalTerminalAttributes);
+    const char *restoreEscape = systemRestoreEscape.load();
+    if (restoreEscape) {
+        write(restoreFd, restoreEscape, strlen(restoreEscape));
     }
 }
 
 static void suspendHelper(bool tcattr) {
     // !!! signal handler code, only use async-safe calls (see signal-safety(7)) , no Qt at all.
-    int duppedFd = fcntl(systemRestoreFd, F_DUPFD_CLOEXEC, 0);
+    int restoreFd = systemRestoreFd.load();
+    int duppedFd = fcntl(restoreFd, F_DUPFD_CLOEXEC, 0);
     if (duppedFd == -1) {
         // There's not much we can do if basics like this fail,
         // stuff will be broken after this. But likely the user just needs to regain control.
-        if (tcattr && tcgetpgrp(systemRestoreFd) == getpgrp()) {
-            tcsetattr(systemRestoreFd, TCSAFLUSH, &systemOriginalTerminalAttributes);
+        if (tcattr && tcgetpgrp(restoreFd) == getpgrp()) {
+            tcsetattr(restoreFd, TCSAFLUSH, &systemOriginalTerminalAttributes);
         }
-        if (systemRestoreEscape) {
-            write(systemRestoreFd, systemRestoreEscape, strlen(systemRestoreEscape));
+
+        const char *restoreEscape = systemRestoreEscape.load();
+        if (restoreEscape) {
+            write(restoreFd, restoreEscape, strlen(restoreEscape));
         }
-        write(systemRestoreFd, "F_DUPFD_CLOEXEC failed, resume might be unreliable\r\n", strlen("F_DUPFD_CLOEXEC failed, resume might be unreliable\r\n"));
+        write(restoreFd, "F_DUPFD_CLOEXEC failed, resume might be unreliable\r\n", strlen("F_DUPFD_CLOEXEC failed, resume might be unreliable\r\n"));
         return;
     }
     int fd = -1;
     if (systemPausedFd.compare_exchange_strong(fd, duppedFd)) { // 'signal paused' state was not yet entered
-        if (tcattr && tcgetpgrp(systemRestoreFd) == getpgrp()) {
+        if (tcattr && tcgetpgrp(duppedFd) == getpgrp()) {
             // resave if this process is still in the foreground process group
-            tcgetattr(systemPausedFd, &systemPresuspendTerminalAttributes);
+            tcgetattr(duppedFd, &systemPresuspendTerminalAttributes);
         }
 
         // make sure nothing is output to the teminal until it's properly restored
         int nullfd = open("/dev/null", O_RDWR | O_CLOEXEC);
         if (nullfd == -1) {
-            systemPausedFd = -1;
+            systemPausedFd.store(-1);
             close(duppedFd);
             // There's not much we can do if basics like this fail,
             // stuff will be broken after this. But likely the user just needs to regain control.
-            if (tcattr && tcgetpgrp(systemRestoreFd) == getpgrp()) {
-                tcsetattr(systemRestoreFd, TCSAFLUSH, &systemOriginalTerminalAttributes);
+            if (tcattr && tcgetpgrp(restoreFd) == getpgrp()) {
+                tcsetattr(restoreFd, TCSAFLUSH, &systemOriginalTerminalAttributes);
             }
-            if (systemRestoreEscape) {
-                write(systemRestoreFd, systemRestoreEscape, strlen(systemRestoreEscape));
+
+            const char *restoreEscape = systemRestoreEscape.load();
+            if (restoreEscape) {
+                write(restoreFd, restoreEscape, strlen(restoreEscape));
             }
-            write(systemRestoreFd, "opening of /dev/null failed, resume might be unreliable\r\n", strlen("opening of /dev/null failed, resume might be unreliable\r\n"));
+            write(restoreFd, "opening of /dev/null failed, resume might be unreliable\r\n", strlen("opening of /dev/null failed, resume might be unreliable\r\n"));
             return;
         } else {
             int tmp;
             do {
-                tmp = dup3(nullfd, systemRestoreFd, O_CLOEXEC);
+                tmp = dup3(nullfd, restoreFd, O_CLOEXEC);
             } while (tmp == -1 && errno == EINTR);
             close(nullfd);
 
-            if (systemRestoreEscape) {
-                write(systemPausedFd, systemRestoreEscape, strlen(systemRestoreEscape));
+            const char *restoreEscape = systemRestoreEscape.load();
+            if (restoreEscape) {
+                write(duppedFd, restoreEscape, strlen(restoreEscape));
             }
 
-            if (tcattr && tcgetpgrp(systemPausedFd) == getpgrp()) {
-                tcsetattr(systemPausedFd, TCSAFLUSH, &systemOriginalTerminalAttributes);
+            if (tcattr && tcgetpgrp(duppedFd) == getpgrp()) {
+                tcsetattr(duppedFd, TCSAFLUSH, &systemOriginalTerminalAttributes);
             }
         }
     } else {
@@ -137,7 +154,7 @@ static void suspendHandler(PosixSignalFlags &flags, const siginfo_t *info, void 
     Q_UNUSED(info);
     Q_UNUSED(context);
 
-    if (!systemTerminalPaused && systemRestoreFd != -1) {
+    if (!systemTerminalPaused.load() && systemRestoreFd.load() != -1) {
         suspendHelper(true);
     }
 
@@ -155,9 +172,11 @@ static void resumeHandler(PosixSignalFlags &flags, const siginfo_t *info, void *
     // c) whenever someone sends a CONT signal in other cases. This is just like b) but with less
     //    likelyhood that someone changed the terminal settings inbetween.
 
-    if (systemTerminalPaused || systemRestoreFd == -1) return;
+    int restoreFd = systemRestoreFd.load();
+    if (systemTerminalPaused.load() || restoreFd == -1) return;
 
-    int fd = (systemPausedFd.load() != -1) ? systemPausedFd.load() : systemRestoreFd;
+    int pausedFd = systemPausedFd.load();
+    int fd = (pausedFd != -1) ? pausedFd : restoreFd;
     if (tcgetpgrp(fd) != getpgrp()) {
         // spurious wakeup, this process is still not in the foreground process group,
         // restoring the terminal state will just halt again anyway.
@@ -168,10 +187,11 @@ static void resumeHandler(PosixSignalFlags &flags, const siginfo_t *info, void *
     // move into 'signal paused' state if not already.
     suspendHelper(false);
 
-    if (systemPausedFd != -1) {
-        tcsetattr(systemPausedFd, TCSAFLUSH, &systemPresuspendTerminalAttributes);
+    pausedFd = systemPausedFd.load(); // reload, suspendHelper will have changed this
+    if (pausedFd != -1) {
+        tcsetattr(pausedFd, TCSAFLUSH, &systemPresuspendTerminalAttributes);
     } else {
-        tcsetattr(systemRestoreFd, TCSAFLUSH, &systemPresuspendTerminalAttributes);
+        tcsetattr(restoreFd, TCSAFLUSH, &systemPresuspendTerminalAttributes);
     }
 }
 // end of signal handling part
@@ -220,9 +240,9 @@ void ZTerminalPrivate::deinitTerminal() {
     inputNotifier = nullptr; // ensure no more notifications from this point
     termpaint_terminal_reset_attributes(terminal);
     termpaint_terminal_free_with_restore(terminal);
-    if (fd == systemRestoreFd) {
-        const char *old = systemRestoreEscape;
-        systemRestoreEscape = nullptr;
+    if (fd == systemRestoreFd.load()) {
+        const char *old = systemRestoreEscape.load();
+        systemRestoreEscape.store(nullptr);
         PosixSignalManager::instance()->barrier();
         delete old;
     }
@@ -306,7 +326,7 @@ bool ZTerminalPrivate::commonStuff(ZTerminal::Options options) {
         // connect to a newly created instance.
         systemOriginalTerminalAttributes = originalTerminalAttributes;
         systemRestoreInited = true;
-        systemRestoreFd = fd;
+        systemRestoreFd.store(fd);
         if (!PosixSignalManager::isCreated()) {
             PosixSignalManager::create();
         }
@@ -329,10 +349,10 @@ bool ZTerminalPrivate::commonStuff(ZTerminal::Options options) {
             // b) resume from STOP. As stop is uncatchable, the state is normal steady application state
             // c) whenever someone sends a CONT signal in other cases. This is just like b)
 
-            int pausedFd = systemPausedFd;
+            int pausedFd = systemPausedFd.load();
             if (pausedFd != -1 && systemPausedFd.compare_exchange_strong(pausedFd, -1)) {
                 // TSTP ran at least once since init or the last invocation of this handler
-                dup2(pausedFd, systemRestoreFd);
+                dup2(pausedFd, systemRestoreFd.load());
                 close(pausedFd);
                 if (systemTerminal) {
                     termpaint_terminal_unpause(ZTerminalPrivate::get(systemTerminal)->terminal);
@@ -386,8 +406,8 @@ bool ZTerminalPrivate::commonStuff(ZTerminal::Options options) {
 
     tcsetattr (fd, TCSAFLUSH, &tattr);
 
-    if (systemRestoreFd == fd) {
-        tcgetattr(systemRestoreFd, &systemPresuspendTerminalAttributes);
+    if (systemRestoreFd.load() == fd) {
+        tcgetattr(systemRestoreFd.load(), &systemPresuspendTerminalAttributes);
     }
 
     termpaint_terminal_set_raw_input_filter_cb(terminal, raw_filter, pub());
@@ -423,14 +443,14 @@ void ZTerminalPrivate::pauseTerminal() {
     inputNotifier->setEnabled(false);
     termpaint_terminal_pause(terminal);
     tcsetattr(fd, TCSAFLUSH, &originalTerminalAttributes);
-    if (fd == systemRestoreFd) {
-        systemTerminalPaused = true;
+    if (fd == systemRestoreFd.load()) {
+        systemTerminalPaused.store(true);
     }
 }
 
 void ZTerminalPrivate::unpauseTerminal() {
-    if (fd == systemRestoreFd) {
-        systemTerminalPaused = false;
+    if (fd == systemRestoreFd.load()) {
+        systemTerminalPaused.store(false);
     }
     tcsetattr(fd, TCSAFLUSH, &prepauseTerminalAttributes);
     inputNotifier->setEnabled(true);
@@ -518,13 +538,13 @@ void ZTerminalPrivate::integration_awaiting_response() {
 }
 
 void ZTerminalPrivate::integration_restore_sequence_updated(const char *data, int len) {
-    if (fd == systemRestoreFd) {
+    if (fd == systemRestoreFd.load()) {
         unsigned length = static_cast<unsigned>(len);
-        const char *old = systemRestoreEscape;
+        const char *old = systemRestoreEscape.load();
         char *update = new char[length + 1];
         memcpy(update, data, length);
         update[length] = 0;
-        systemRestoreEscape = update;
+        systemRestoreEscape.store(update);
         PosixSignalManager::instance()->barrier();
         delete old;
     }
