@@ -37,6 +37,7 @@ TUIWIDGETS_NS_START
 // signal based terminal restore...
 static bool systemRestoreInited = false;
 static int systemRestoreFd = -1;
+static std::atomic<int> systemPausedFd { -1 };
 static termios systemOriginalTerminalAttributes;
 static const char *systemRestoreEscape = nullptr;
 static bool systemTerminalPaused = false;
@@ -58,18 +59,86 @@ static void restoreSystemHandler(const siginfo_t *info, void *context) {
     }
 }
 
+static void suspendHelper(bool tcattr) {
+    // !!! signal handler code, only use async-safe calls (see signal-safety(7)) , no Qt at all.
+    int duppedFd = fcntl(systemRestoreFd, F_DUPFD_CLOEXEC, 0);
+    if (duppedFd == -1) {
+        // There's not much we can do if basics like this fail,
+        // stuff will be broken after this. But likely the user just needs to regain control.
+        if (tcattr && tcgetpgrp(systemRestoreFd) == getpgrp()) {
+            tcsetattr(systemRestoreFd, TCSAFLUSH, &systemOriginalTerminalAttributes);
+        }
+        if (systemRestoreEscape) {
+            write(systemRestoreFd, systemRestoreEscape, strlen(systemRestoreEscape));
+        }
+        write(systemRestoreFd, "F_DUPFD_CLOEXEC failed, resume might be unreliable\r\n", strlen("F_DUPFD_CLOEXEC failed, resume might be unreliable\r\n"));
+        return;
+    }
+    int fd = -1;
+    if (systemPausedFd.compare_exchange_strong(fd, duppedFd)) { // 'signal paused' state was not yet entered
+        if (tcattr && tcgetpgrp(systemRestoreFd) == getpgrp()) {
+            // resave if this process is still in the foreground process group
+            tcgetattr(systemPausedFd, &systemPresuspendTerminalAttributes);
+        }
+
+        // make sure nothing is output to the teminal until it's properly restored
+        int nullfd = open("/dev/null", O_RDWR | O_CLOEXEC);
+        if (nullfd == -1) {
+            systemPausedFd = -1;
+            close(duppedFd);
+            // There's not much we can do if basics like this fail,
+            // stuff will be broken after this. But likely the user just needs to regain control.
+            if (tcattr && tcgetpgrp(systemRestoreFd) == getpgrp()) {
+                tcsetattr(systemRestoreFd, TCSAFLUSH, &systemOriginalTerminalAttributes);
+            }
+            if (systemRestoreEscape) {
+                write(systemRestoreFd, systemRestoreEscape, strlen(systemRestoreEscape));
+            }
+            write(systemRestoreFd, "opening of /dev/null failed, resume might be unreliable\r\n", strlen("opening of /dev/null failed, resume might be unreliable\r\n"));
+            return;
+        } else {
+            int tmp;
+            do {
+                tmp = dup3(nullfd, systemRestoreFd, O_CLOEXEC);
+            } while (tmp == -1 && errno == EINTR);
+            close(nullfd);
+
+            if (systemRestoreEscape) {
+                write(systemPausedFd, systemRestoreEscape, strlen(systemRestoreEscape));
+            }
+
+            if (tcattr && tcgetpgrp(systemPausedFd) == getpgrp()) {
+                tcsetattr(systemPausedFd, TCSAFLUSH, &systemOriginalTerminalAttributes);
+            }
+        }
+    } else {
+        close(duppedFd);
+    }
+}
+
+/*
+ * Needed manual tests:
+ * 1) send TSTP, resume via shell
+ * 2) send STOP, resume via shell
+ * 3) send CONT without STOP/TSTP
+ * 4) send TSTP, send CONT, resume via shell
+ * 5) send STOP, send CONT, resume via shell
+ *
+ * Use terminal title and push/pop to make sure sequences paired
+ *
+ * prepare: echo -ne "\033[22t\033];test1\033\\\033[22t\033];test2\033\\"
+ * do signal things
+ * check that title is "test2", echo -ne "\033[23t", check title is "test1"
+ * for next test either use a fresh terminal and prepare it or do echo -ne "\033[22t"; echo -ne "\033];test2\033\\"
+ */
+
 static void suspendHandler(PosixSignalFlags &flags, const siginfo_t *info, void *context) {
     // !!! signal handler code, only use async-safe calls (see signal-safety(7)) , no Qt at all.
     Q_UNUSED(info);
     Q_UNUSED(context);
 
-    if (!systemTerminalPaused) {
-        tcgetattr(systemRestoreFd, &systemPresuspendTerminalAttributes);
-
-        tcsetattr(systemRestoreFd, TCSAFLUSH, &systemOriginalTerminalAttributes);
-        if (systemRestoreEscape) {
-            write(systemRestoreFd, systemRestoreEscape, strlen(systemRestoreEscape));
-        }
+    if (!systemTerminalPaused && systemRestoreFd != -1) {
+        suspendHelper(true);
     }
 
     flags.reraise();
@@ -80,9 +149,30 @@ static void resumeHandler(PosixSignalFlags &flags, const siginfo_t *info, void *
     Q_UNUSED(info);
     Q_UNUSED(context);
 
-    if (systemTerminalPaused) return;
+    // This handler can be called either on
+    // a) resume from TSTP. In that case the state was prepared by suspendHandler
+    // b) resume from STOP. As stop is uncatchable, the state is normal steady application state
+    // c) whenever someone sends a CONT signal in other cases. This is just like b) but with less
+    //    likelyhood that someone changed the terminal settings inbetween.
 
-    tcsetattr(systemRestoreFd, TCSAFLUSH, &systemPresuspendTerminalAttributes);
+    if (systemTerminalPaused || systemRestoreFd == -1) return;
+
+    int fd = (systemPausedFd.load() != -1) ? systemPausedFd.load() : systemRestoreFd;
+    if (tcgetpgrp(fd) != getpgrp()) {
+        // spurious wakeup, this process is still not in the foreground process group,
+        // restoring the terminal state will just halt again anyway.
+        raise(SIGTTOU);
+        return;
+    }
+
+    // move into 'signal paused' state if not already.
+    suspendHelper(false);
+
+    if (systemPausedFd != -1) {
+        tcsetattr(systemPausedFd, TCSAFLUSH, &systemPresuspendTerminalAttributes);
+    } else {
+        tcsetattr(systemRestoreFd, TCSAFLUSH, &systemPresuspendTerminalAttributes);
+    }
 }
 // end of signal handling part
 
@@ -231,9 +321,21 @@ bool ZTerminalPrivate::commonStuff(ZTerminal::Options options) {
         // and a notifier part that triggers repaint in the next main loop interation
         systemTerminalResumeNotifier = std::unique_ptr<PosixSignalNotifier>(new PosixSignalNotifier(SIGCONT));
         QObject::connect(systemTerminalResumeNotifier.get(), &PosixSignalNotifier::activated, [] {
-            if (systemTerminal) {
-                systemTerminal->forceRepaint();
+            // This handler can be called either on
+            // a) resume from TSTP. In that case the state was prepared by suspendHandler
+            // b) resume from STOP. As stop is uncatchable, the state is normal steady application state
+            // c) whenever someone sends a CONT signal in other cases. This is just like b)
+
+            int pausedFd = systemPausedFd;
+            if (pausedFd != -1 && systemPausedFd.compare_exchange_strong(pausedFd, -1)) {
+                // TSTP ran at least once since init or the last invocation of this handler
+                dup2(pausedFd, systemRestoreFd);
+                close(pausedFd);
+                if (systemTerminal) {
+                    termpaint_terminal_unpause(ZTerminalPrivate::get(systemTerminal)->terminal);
+                }
             }
+            systemTerminal->forceRepaint();
         });
 
         systemTerminalSizeChangeNotifier = std::unique_ptr<PosixSignalNotifier>(new PosixSignalNotifier(SIGWINCH));
@@ -277,6 +379,10 @@ bool ZTerminalPrivate::commonStuff(ZTerminal::Options options) {
     }
 
     tcsetattr (fd, TCSAFLUSH, &tattr);
+
+    if (systemRestoreFd == fd) {
+        tcgetattr(systemPausedFd, &systemPresuspendTerminalAttributes);
+    }
 
     termpaint_terminal_set_raw_input_filter_cb(terminal, raw_filter, pub());
     termpaint_terminal_set_event_cb(terminal, event_handler, pub());
