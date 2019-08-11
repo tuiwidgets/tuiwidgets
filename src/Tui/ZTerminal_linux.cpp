@@ -296,6 +296,9 @@ bool ZTerminalPrivate::commonStuff(ZTerminal::Options options) {
     }
 
     tcgetattr(fd, &originalTerminalAttributes);
+    // The following call sends a TTOU signal if this process is in a background job.
+    // This cleanly stops terminal init, until after the process's job is moved to the foreground.
+    tcsetattr(fd, TCSANOW, &originalTerminalAttributes);
 
     if (!systemRestoreInited) {
         // TODO this only really works well for the first terminal in an process.
@@ -361,6 +364,9 @@ bool ZTerminalPrivate::commonStuff(ZTerminal::Options options) {
     tattr.c_iflag &= ~(BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL | IXON | IXOFF);
     tattr.c_oflag &= ~(OPOST|ONLCR|OCRNL|ONOCR|ONLRET);
     tattr.c_lflag &= ~(ICANON|IEXTEN|ECHO);
+    // Don't set c_lflag |= TOSTOP, because that would cause other background applications on the same tty
+    // to be stopped, which would be unexpected for non fullscreen applications. We would like to get
+    // this application to stop when it's in the background and tries to write, but that not possible separately.
     tattr.c_cc[VMIN] = 1;
     tattr.c_cc[VTIME] = 0;
 
@@ -381,7 +387,7 @@ bool ZTerminalPrivate::commonStuff(ZTerminal::Options options) {
     tcsetattr (fd, TCSAFLUSH, &tattr);
 
     if (systemRestoreFd == fd) {
-        tcgetattr(systemPausedFd, &systemPresuspendTerminalAttributes);
+        tcgetattr(systemRestoreFd, &systemPresuspendTerminalAttributes);
     }
 
     termpaint_terminal_set_raw_input_filter_cb(terminal, raw_filter, pub());
