@@ -254,6 +254,17 @@ void ZTerminal::resize(int width, int height) {
     forceRepaint();
 }
 
+void ZTerminalPrivate::updateNativeTerminalState() {
+    if (titleNeedsUpdate) {
+        termpaint_terminal_set_title(terminal, title.toUtf8().data(), TERMPAINT_TITLE_MODE_ENSURE_RESTORE);
+        titleNeedsUpdate = false;
+    }
+    if (iconTitleNeedsUpdate) {
+        termpaint_terminal_set_icon_title(terminal, title.toUtf8().data(), TERMPAINT_TITLE_MODE_ENSURE_RESTORE);
+        iconTitleNeedsUpdate = true;
+    }
+}
+
 void ZTerminal::updateOutput() {
     auto *const p = tuiwidgets_impl();
     if (p->initState == ZTerminalPrivate::InitState::InInitWithoutPendingPaintRequest) {
@@ -261,6 +272,7 @@ void ZTerminal::updateOutput() {
     } else if (p->initState == ZTerminalPrivate::InitState::InInitWithPendingPaintRequest) {
         // already requested
     } else if (p->initState == ZTerminalPrivate::InitState::Ready) {
+        p->updateNativeTerminalState();
         termpaint_terminal_flush(p->terminal, false);
     }
 }
@@ -272,8 +284,21 @@ void ZTerminal::updateOutputForceFullRepaint() {
     } else if (p->initState == ZTerminalPrivate::InitState::InInitWithPendingPaintRequest) {
         // already requested
     } else if (p->initState == ZTerminalPrivate::InitState::Ready) {
+        p->updateNativeTerminalState();
         termpaint_terminal_flush(tuiwidgets_impl()->terminal, true);
     }
+}
+
+void ZTerminal::setTitle(QString title) {
+    auto *const p = tuiwidgets_impl();
+    p->title = title;
+    p->titleNeedsUpdate = true;
+}
+
+void ZTerminal::setIconTitle(QString title) {
+    auto *const p = tuiwidgets_impl();
+    p->iconTitle = title;
+    p->iconTitleNeedsUpdate = true;
 }
 
 void ZTerminal::setAutoDetectTimeoutMessage(const QString &message) {

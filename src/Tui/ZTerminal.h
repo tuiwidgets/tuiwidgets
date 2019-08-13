@@ -57,6 +57,9 @@ public:
     void updateOutput();
     void updateOutputForceFullRepaint();
 
+    void setTitle(QString title);
+    void setIconTitle(QString title);
+
     void setAutoDetectTimeoutMessage(const QString& message);
     QString autoDetectTimeoutMessage() const;
 

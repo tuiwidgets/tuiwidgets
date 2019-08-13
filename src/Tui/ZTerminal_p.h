@@ -41,6 +41,7 @@ public:
     void sendOtherChangeEvent(QSet<ZSymbol> unchanged);
 
     void processPaintingAndUpdateOutput(bool fullRepaint);
+    void updateNativeTerminalState();
 
     bool initTerminal(ZTerminal::Options options);
     void deinitTerminal();
@@ -77,6 +78,10 @@ public:
     QPointer<ZWidget> keyboardGrabWidget;
     std::unique_ptr<ZShortcutManager> shortcutManager;
     ZTerminal::Options options;
+    QString title;
+    bool titleNeedsUpdate;
+    QString iconTitle;
+    bool iconTitleNeedsUpdate;
 
     enum class InitState {
         InInitWithoutPendingPaintRequest,
