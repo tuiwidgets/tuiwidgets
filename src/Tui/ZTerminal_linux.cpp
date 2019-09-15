@@ -196,9 +196,18 @@ static void resumeHandler(PosixSignalFlags &flags, const siginfo_t *info, void *
 }
 // end of signal handling part
 
+namespace  {
+    bool isFileRw(int fd) {
+        int ret = fcntl(fd, F_GETFL);
+        return ret != -1 && (ret & O_ACCMODE) == O_RDWR;
+    }
+}
+
 bool ZTerminalPrivate::terminalAvailable() {
     bool from_std_fd = false;
-    from_std_fd = isatty(0) || isatty(1) || isatty(2);
+    from_std_fd = (isatty(0) && isFileRw(0))
+            || (isatty(1) && isFileRw(1))
+            || (isatty(2) && isFileRw(2));
     if (from_std_fd) {
         return true;
     }
@@ -219,11 +228,11 @@ bool ZTerminalPrivate::setup(ZTerminal::Options options) {
     fd = -1;
     auto_close = false;
 
-    if (isatty(0)) {
+    if (isatty(0) && isFileRw(0)) {
         fd = 0;
-    } else if (isatty(1)) {
+    } else if (isatty(1) && isFileRw(1)) {
         fd = 1;
-    } else if (isatty(2)) {
+    } else if (isatty(2) && isFileRw(2)) {
         fd = 2;
     } else {
         fd = open("/dev/tty", O_RDWR | O_NOCTTY | FD_CLOEXEC);
