@@ -249,6 +249,7 @@ void ZTerminalPrivate::deinitTerminal() {
     inputNotifier = nullptr; // ensure no more notifications from this point
     termpaint_terminal_reset_attributes(terminal);
     termpaint_terminal_free_with_restore(terminal);
+    termpaint_integration_deinit(&integration);
     if (fd == systemRestoreFd.load()) {
         const char *old = systemRestoreEscape.load();
         systemRestoreEscape.store(nullptr);
@@ -561,27 +562,30 @@ void ZTerminalPrivate::integration_restore_sequence_updated(const char *data, in
 
 void ZTerminalPrivate::init_fns() {
     memset(&integration, 0, sizeof(integration));
-    integration.free = [] (termpaint_integration* ptr) {
+    auto free = [] (termpaint_integration* ptr) {
         container_of(ptr, ZTerminalPrivate, integration)->integration_free();
     };
-    integration.write = [] (termpaint_integration* ptr, const char *data, int length) {
+    auto write = [] (termpaint_integration* ptr, const char *data, int length) {
         container_of(ptr, ZTerminalPrivate, integration)->integration_write(data, length);
     };
-    integration.flush = [] (termpaint_integration* ptr) {
+    auto flush = [] (termpaint_integration* ptr) {
         container_of(ptr, ZTerminalPrivate, integration)->integration_flush();
     };
-    integration.is_bad = [] (termpaint_integration* ptr) {
-        return container_of(ptr, ZTerminalPrivate, integration)->integration_is_bad();
-    };
-    integration.request_callback = [] (termpaint_integration* ptr) {
+
+    termpaint_integration_init(&integration, free, write, flush);
+
+    termpaint_integration_set_is_bad(&integration, [] (termpaint_integration* ptr) {
+            return container_of(ptr, ZTerminalPrivate, integration)->integration_is_bad();
+    });
+    termpaint_integration_set_request_callback(&integration, [] (termpaint_integration* ptr) {
         container_of(ptr, ZTerminalPrivate, integration)->integration_request_callback();
-    };
-    integration.awaiting_response = [] (termpaint_integration* ptr) {
+    });
+    termpaint_integration_set_awaiting_response(&integration, [] (termpaint_integration* ptr) {
         container_of(ptr, ZTerminalPrivate, integration)->integration_awaiting_response();
-    };
-    integration.restore_sequence_updated = [] (termpaint_integration* ptr, const char *data, int length) {
+    });
+    termpaint_integration_set_restore_sequence_updated(&integration, [] (termpaint_integration* ptr, const char *data, int length) {
         container_of(ptr, ZTerminalPrivate, integration)->integration_restore_sequence_updated(data, length);
-    };
+    });
 }
 
 TUIWIDGETS_NS_END
