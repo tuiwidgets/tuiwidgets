@@ -269,7 +269,7 @@ void ZTerminalPrivate::deinitTerminal() {
             struct pollfd info;
             info.fd = fd;
             info.events = POLLIN;
-            ret = poll(&info, 1, 100 - timer.elapsed());
+            ret = poll(&info, 1, std::max((qint64)1, 100 - timer.elapsed()));
             if (ret == 1) {
                 char buff[1000];
                 int amount = (int)read(fd, buff, 999);
