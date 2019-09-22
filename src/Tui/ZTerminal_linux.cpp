@@ -250,7 +250,7 @@ void ZTerminalPrivate::deinitTerminal() {
     termpaint_terminal_reset_attributes(terminal);
     termpaint_terminal_free_with_restore(terminal);
     termpaint_integration_deinit(&integration);
-    if (fd == systemRestoreFd.load()) {
+    if (fd != -1 && fd == systemRestoreFd.load()) {
         const char *old = systemRestoreEscape.load();
         systemRestoreEscape.store(nullptr);
         PosixSignalManager::instance()->barrier();
@@ -279,7 +279,9 @@ void ZTerminalPrivate::deinitTerminal() {
             }
         }
     }
-    tcsetattr (fd, TCSAFLUSH, &originalTerminalAttributes);
+    if (fd != -1) {
+        tcsetattr (fd, TCSAFLUSH, &originalTerminalAttributes);
+    }
 }
 
 bool ZTerminalPrivate::setupFromControllingTerminal(ZTerminal::Options options) {

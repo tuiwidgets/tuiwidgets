@@ -7,6 +7,7 @@
 #include <QObject>
 
 #include <Tui/ZCommon.h>
+#include <Tui/ZValuePtr.h>
 #include <Tui/tuiwidgets_internal.h>
 
 TUIWIDGETS_NS_START
@@ -33,9 +34,21 @@ public:
     };
     Q_DECLARE_FLAGS(Options, Option)
 
+    class OffScreenData;
+    class OffScreen {
+    public:
+        OffScreen(int width, int height);
+        ~OffScreen();
+
+    private:
+        friend class OffScreenData;
+        ZValuePtr<OffScreenData> tuiwidgets_pimpl_ptr;
+    };
+
 public:
     explicit ZTerminal(QObject *parent = 0);
     explicit ZTerminal(Options options, QObject *parent = 0);
+    explicit ZTerminal(const OffScreen& offscreen, QObject *parent = 0);
     virtual ~ZTerminal();
 
 public:

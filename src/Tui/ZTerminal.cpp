@@ -163,9 +163,37 @@ ZTerminal::ZTerminal(Options options, QObject *parent)
     tuiwidgets_impl()->initTerminal(options);
 }
 
+ZTerminal::ZTerminal(const ZTerminal::OffScreen &offscreen, QObject *parent)
+    : QObject(parent), tuiwidgets_pimpl_ptr(std::make_unique<ZTerminalPrivate>(this, Options()))
+{
+    tuiwidgets_impl()->initOffscreen(offscreen);
+}
+
 
 bool ZTerminalPrivate::initTerminal(ZTerminal::Options options) {
     return setup(options);
+}
+
+void ZTerminalPrivate::initOffscreen(const ZTerminal::OffScreen &offscreen) {
+    auto free = [] (termpaint_integration* ptr) {
+        Q_UNUSED(ptr);
+    };
+    auto write = [] (termpaint_integration* ptr, const char *data, int length) {
+        Q_UNUSED(ptr);
+        Q_UNUSED(data);
+        Q_UNUSED(length);
+    };
+    auto flush = [] (termpaint_integration* ptr) {
+        Q_UNUSED(ptr);
+    };
+    termpaint_integration_init(&integration, free, write, flush);
+
+    callbackRequested = false;
+    terminal = termpaint_terminal_new(&integration);
+    surface = termpaint_terminal_get_surface(terminal);
+    auto * const offscreenData = ZTerminal::OffScreenData::get(&offscreen);
+    termpaint_surface_resize(surface, offscreenData->width, offscreenData->height);
+    termpaint_terminal_set_event_cb(terminal, [](void *, termpaint_event *) {}, nullptr);
 }
 
 ZTerminal::~ZTerminal() {
@@ -575,6 +603,15 @@ void ZTerminal::disconnectNotify(const QMetaMethod &signal) {
     Q_UNUSED(signal);
     // XXX needs to be thread-safe
 
+}
+
+ZTerminal::OffScreen::OffScreen(int width, int height) : tuiwidgets_pimpl_ptr(width, height) {
+}
+
+ZTerminal::OffScreen::~OffScreen() {
+}
+
+ZTerminal::OffScreenData::OffScreenData(int width, int height) : width(width), height(height) {
 }
 
 

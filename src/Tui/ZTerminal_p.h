@@ -44,6 +44,7 @@ public:
     void updateNativeTerminalState();
 
     bool initTerminal(ZTerminal::Options options);
+    void initOffscreen(const ZTerminal::OffScreen &offscreen);
     void deinitTerminal();
     void pauseTerminal();
     void unpauseTerminal();
@@ -106,6 +107,18 @@ public:
     ZTerminal* pub_ptr;
 
     TUIWIDGETS_DECLARE_PUBLIC(ZTerminal)
+};
+
+class ZTerminal::OffScreenData : public QSharedData {
+public:
+    OffScreenData(int width, int height);
+public:
+    int width;
+    int height;
+
+    // back door
+    static OffScreenData* get(ZTerminal::OffScreen *data) { return data->tuiwidgets_pimpl_ptr.get(); }
+    static const OffScreenData* get(const ZTerminal::OffScreen *data) { return data->tuiwidgets_pimpl_ptr.get(); }
 };
 
 TUIWIDGETS_NS_END
