@@ -67,6 +67,43 @@ ZShortcutManager *ZTerminalPrivate::ensureShortcutManager() {
     return shortcutManager.get();
 }
 
+void ZTerminal::setCursorStyle(CursorStyle style) {
+    auto *const p = tuiwidgets_impl();
+    switch (style) {
+        case CursorStyle::Unset:
+            termpaint_terminal_set_cursor_style(p->terminal, TERMPAINT_CURSOR_STYLE_TERM_DEFAULT, true);
+            break;
+        case CursorStyle::Bar:
+            termpaint_terminal_set_cursor_style(p->terminal, TERMPAINT_CURSOR_STYLE_BAR, true);
+            break;
+        case CursorStyle::Block:
+            termpaint_terminal_set_cursor_style(p->terminal, TERMPAINT_CURSOR_STYLE_BLOCK, true);
+            break;
+        case CursorStyle::Underline:
+            termpaint_terminal_set_cursor_style(p->terminal, TERMPAINT_CURSOR_STYLE_UNDERLINE, true);
+            break;
+    }
+}
+
+void ZTerminal::setCursorPosition(QPoint cursorPosition) {
+    auto *const p = tuiwidgets_impl();
+    termpaint_terminal_set_cursor_position(p->terminal, cursorPosition.x(), cursorPosition.y());
+    const bool cursorVisible = cursorPosition != QPoint{-1, -1};
+    termpaint_terminal_set_cursor_visible(p->terminal, cursorVisible);
+}
+
+void ZTerminal::setCursorColor(int cursorColorR, int cursorColorG, int cursorColorB) {
+    auto *const p = tuiwidgets_impl();
+    if (cursorColorR != -1) {
+        termpaint_terminal_set_color(p->terminal, TERMPAINT_COLOR_SLOT_CURSOR,
+                                     cursorColorR,
+                                     cursorColorG,
+                                     cursorColorB);
+    } else {
+        termpaint_terminal_reset_color(p->terminal, TERMPAINT_COLOR_SLOT_CURSOR);
+    }
+}
+
 void ZTerminalPrivate::processPaintingAndUpdateOutput(bool fullRepaint) {
     if (mainWidget.get()) {
         cursorPosition = QPoint{-1, -1};
@@ -74,38 +111,17 @@ void ZTerminalPrivate::processPaintingAndUpdateOutput(bool fullRepaint) {
         ZPaintEvent event(ZPaintEvent::update, &paint);
         QCoreApplication::sendEvent(mainWidget.get(), &event);
         if (initState == ZTerminalPrivate::InitState::Ready) {
-            termpaint_terminal_set_cursor_position(terminal,
-                                                   cursorPosition.x(), cursorPosition.y());
-            bool cursorVisible = cursorPosition != QPoint{-1, -1};
-            termpaint_terminal_set_cursor_visible(terminal, cursorVisible);
-
+            pub()->setCursorPosition(cursorPosition);
+            const bool cursorVisible = cursorPosition != QPoint{-1, -1};
             if (cursorVisible) {
                 CursorStyle style = CursorStyle::Unset;
                 if (focusWidget) {
                     style = focusWidget->cursorStyle;
-                    if (focusWidget->cursorColorR != -1) {
-                        termpaint_terminal_set_color(terminal, TERMPAINT_COLOR_SLOT_CURSOR,
-                                                     focusWidget->cursorColorR,
-                                                     focusWidget->cursorColorG,
-                                                     focusWidget->cursorColorB);
-                    } else {
-                        termpaint_terminal_reset_color(terminal, TERMPAINT_COLOR_SLOT_CURSOR);
-                    }
+                    pub()->setCursorColor(focusWidget->cursorColorR,
+                                          focusWidget->cursorColorG,
+                                          focusWidget->cursorColorB);
                 }
-                switch (style) {
-                    case CursorStyle::Unset:
-                        termpaint_terminal_set_cursor_style(terminal, TERMPAINT_CURSOR_STYLE_TERM_DEFAULT, true);
-                        break;
-                    case CursorStyle::Bar:
-                        termpaint_terminal_set_cursor_style(terminal, TERMPAINT_CURSOR_STYLE_BAR, true);
-                        break;
-                    case CursorStyle::Block:
-                        termpaint_terminal_set_cursor_style(terminal, TERMPAINT_CURSOR_STYLE_BLOCK, true);
-                        break;
-                    case CursorStyle::Underline:
-                        termpaint_terminal_set_cursor_style(terminal, TERMPAINT_CURSOR_STYLE_UNDERLINE, true);
-                        break;
-                }
+                pub()->setCursorStyle(style);
             }
         }
         Q_EMIT pub()->afterRendering();

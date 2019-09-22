@@ -6,6 +6,7 @@
 
 #include <QObject>
 
+#include <Tui/ZCommon.h>
 #include <Tui/tuiwidgets_internal.h>
 
 TUIWIDGETS_NS_START
@@ -66,6 +67,10 @@ public:
     void pauseOperation();
     void unpauseOperation();
     bool isPaused();
+
+    void setCursorStyle(CursorStyle style);
+    void setCursorPosition(QPoint cursorPosition);
+    void setCursorColor(int cursorColorR, int cursorColorG, int cursorColorB);
 
 protected:
     std::unique_ptr<ZKeyEvent> translateKeyEvent(const ZTerminalNativeEvent &nativeEvent);
