@@ -514,6 +514,23 @@ std::unique_ptr<ZKeyEvent> ZTerminal::translateKeyEvent(const ZTerminalNativeEve
     return nullptr;
 }
 
+void ZTerminal::dispatchKeyboardEvent(ZKeyEvent &translated) {
+    auto *const p = tuiwidgets_impl();
+    if (p->keyboardGrabWidget) {
+        QCoreApplication::sendEvent(p->keyboardGrabWidget, &translated);
+    } else if (!p->shortcutManager || !p->shortcutManager->process(&translated)) {
+        translated.accept();
+        QPointer<ZWidget> w = tuiwidgets_impl()->focus();
+        while (w) {
+            bool processed = QCoreApplication::sendEvent(w, &translated);
+            if ((processed && translated.isAccepted()) || !w) {
+                break;
+            }
+            w = w->parentWidget();
+        }
+    }
+}
+
 bool ZTerminal::event(QEvent *event) {
     auto *const p = tuiwidgets_impl();
     if (event->type() == ZEventType::rawSequence()) {
@@ -524,19 +541,7 @@ bool ZTerminal::event(QEvent *event) {
         if (native->type == TERMPAINT_EV_CHAR || native->type == TERMPAINT_EV_KEY) {
             std::unique_ptr<ZKeyEvent> translated = translateKeyEvent(*static_cast<Tui::ZTerminalNativeEvent*>(event));
             if (translated) {
-                if (p->keyboardGrabWidget) {
-                    QCoreApplication::sendEvent(p->keyboardGrabWidget, translated.get());
-                } else if (!p->shortcutManager || !p->shortcutManager->process(translated.get())) {
-                    translated->accept();
-                    QPointer<ZWidget> w = tuiwidgets_impl()->focus();
-                    while (w) {
-                        bool processed = QCoreApplication::sendEvent(w, translated.get());
-                        if ((processed && translated->isAccepted()) || !w) {
-                            break;
-                        }
-                        w = w->parentWidget();
-                    }
-                }
+                dispatchKeyboardEvent(*translated);
                 if (!translated->isAccepted()) {
                     if (translated->modifiers() == Qt::ControlModifier
                         && translated->text() == QStringLiteral("l")) {

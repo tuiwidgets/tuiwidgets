@@ -85,6 +85,8 @@ public:
     void setCursorPosition(QPoint cursorPosition);
     void setCursorColor(int cursorColorR, int cursorColorG, int cursorColorB);
 
+    void dispatchKeyboardEvent(ZKeyEvent &translated);
+
 protected:
     std::unique_ptr<ZKeyEvent> translateKeyEvent(const ZTerminalNativeEvent &nativeEvent);
 
