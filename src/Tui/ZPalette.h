@@ -9,6 +9,7 @@
 
 #include <Tui/ZColor.h>
 #include <Tui/ZSymbol.h>
+#include <Tui/ZValuePtr.h>
 
 #include <Tui/tuiwidgets_internal.h>
 
@@ -17,25 +18,6 @@ TUIWIDGETS_NS_START
 class ZWidget;
 
 class ZPalettePrivate;
-
-template <typename T>
-class TUIWIDGETS_EXPORT ZValuePtr : public std::unique_ptr<T> {
-public:
-    using std::unique_ptr<T>::unique_ptr;
-    ZValuePtr(const ZValuePtr &other) : std::unique_ptr<T>()
-    {
-        if (other) {
-            this->reset(new T(*other.get()));
-        }
-    }
-
-    ZValuePtr& operator=(const ZValuePtr& other) {
-        if (other) {
-            this->reset(new T(*other.get()));
-        }
-        return *this;
-    }
-};
 
 class TUIWIDGETS_EXPORT ZPalette {
 public:
