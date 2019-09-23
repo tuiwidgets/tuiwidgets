@@ -12,7 +12,7 @@ Tui::ZPalettePrivate::ZPalettePrivate() {
 
 }
 
-ZPalette::ZPalette() : tuiwidgets_pimpl_ptr(new ZPalettePrivate()) {
+ZPalette::ZPalette() {
 }
 
 ZPalette::ZPalette(const ZPalette &other) = default;
