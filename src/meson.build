@@ -17,6 +17,7 @@ tuiwidgets_public_headers = [
   'Tui/ZColor.h',
   'Tui/ZCommandManager.h',
   'Tui/ZCommandNotifier.h',
+  'Tui/ZCommon.h',
   'Tui/ZEvent.h',
   'Tui/ZImage.h',
   'Tui/ZLayout.h',
@@ -28,6 +29,8 @@ tuiwidgets_public_headers = [
   'Tui/ZSimpleFileLogger.h',
   'Tui/ZSymbol.h',
   'Tui/ZTerminal.h',
+  'Tui/ZTextMetrics.h',
+  'Tui/ZValuePtr.h',
   'Tui/ZWidget.h',
   'Tui/tuiwidgets_internal.h',
 ]
@@ -53,6 +56,7 @@ tuiwidgets_sources = [
   'Tui/ZSymbol.cpp',
   'Tui/ZTerminal.cpp',
   'Tui/ZTextMetrics.cpp',
+  'Tui/ZValuePtr.cpp',
   'Tui/ZWidget.cpp',
 ]
 
