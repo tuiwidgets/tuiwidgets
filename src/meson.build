@@ -33,6 +33,8 @@ tuiwidgets_public_headers = [
   'Tui/ZValuePtr.h',
   'Tui/ZWidget.h',
   'Tui/tuiwidgets_internal.h',
+  # not public, but needed until users are migrated from staging to toolkit proper
+  'Tui/MarkupParser.h',
 ]
 
 #ide:editable-filelist
