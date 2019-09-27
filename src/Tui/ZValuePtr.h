@@ -20,8 +20,13 @@ public:
     explicit ZValuePtr(T&& other) : data(new T(std::forward<T&&>(other))) {
     }
 
-    template< class... Args, typename = typename std::enable_if<std::is_constructible<T, Args&&...>::value, void>::type>
-    explicit ZValuePtr(Args&&... args) : data(new T(std::forward<Args>(args)...)) {
+    template<typename Arg1, typename... Args, typename = typename std::enable_if<
+                  std::conditional<
+                     std::is_same<typename std::remove_cv<typename std::remove_reference<Arg1>::type>::type, ZValuePtr<T>>::value,
+                     std::false_type, // make sure not to conflict with copy/move etc constructor or cause incomplete type errors (libc++)
+                     std::is_constructible<T, Arg1, Args&&...>
+                  >::type::value, void>::type>
+    explicit ZValuePtr(Arg1&& arg1, Args&&... args) : data(new T(std::forward<Arg1>(arg1), std::forward<Args>(args)...)) {
     }
 
     ~ZValuePtr() = default; // data destructor is fine.
