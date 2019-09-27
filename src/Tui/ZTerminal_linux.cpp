@@ -6,7 +6,6 @@
 #include <sys/stat.h>
 #include <poll.h>
 #include <fcntl.h>
-#include <malloc.h>
 #include <errno.h>
 #include <stdbool.h>
 
