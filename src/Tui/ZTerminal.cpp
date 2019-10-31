@@ -176,7 +176,7 @@ bool ZTerminalPrivate::initTerminal(ZTerminal::Options options) {
 
 void ZTerminalPrivate::initOffscreen(const ZTerminal::OffScreen &offscreen) {
     auto free = [] (termpaint_integration* ptr) {
-        Q_UNUSED(ptr);
+        termpaint_integration_deinit(ptr);
     };
     auto write = [] (termpaint_integration* ptr, const char *data, int length) {
         Q_UNUSED(ptr);
