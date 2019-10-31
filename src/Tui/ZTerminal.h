@@ -13,6 +13,7 @@
 TUIWIDGETS_NS_START
 
 class ZKeyEvent;
+class ZSymbol;
 class ZPainter;
 class ZTerminalNativeEvent;
 class ZTextMetrics;
@@ -76,6 +77,8 @@ public:
 
     void setAutoDetectTimeoutMessage(const QString& message);
     QString autoDetectTimeoutMessage() const;
+
+    bool hasCapability(ZSymbol cap);
 
     void pauseOperation();
     void unpauseOperation();

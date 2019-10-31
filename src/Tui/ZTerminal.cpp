@@ -355,6 +355,15 @@ QString ZTerminal::autoDetectTimeoutMessage() const {
     return p->autoDetectTimeoutMessage;
 }
 
+static ZSymbol extendedCharset = TUISYM_LITERAL("extendedCharset");
+bool ZTerminal::hasCapability(ZSymbol cap) {
+    auto *const p = tuiwidgets_impl();
+    if (cap == extendedCharset) {
+        return termpaint_terminal_capable(p->terminal, TERMPAINT_CAPABILITY_EXTENDED_CHARSET);
+    }
+    return false;
+}
+
 void ZTerminal::pauseOperation() {
     auto *const p = tuiwidgets_impl();
     if (p->initState != ZTerminalPrivate::InitState::Ready) return;
