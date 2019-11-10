@@ -125,6 +125,24 @@ void ZPainter::clearRect(int x, int y, int width, int height, ZColor fg, ZColor 
     termpaint_attr_free(termpaintAttr);
 }
 
+void ZPainter::setSoftwrapMarker(int x, int y) {
+    auto *const pimpl = tuiwidgets_impl();
+    if (x < 0) return;
+    if (y < 0) return;
+    if (x >= pimpl->width) return;
+    if (y >= pimpl->height) return;
+    termpaint_surface_set_softwrap_marker(pimpl->surface, pimpl->x + x, pimpl->y + y, true);
+}
+
+void ZPainter::clearSoftwrapMarker(int x, int y) {
+    auto *const pimpl = tuiwidgets_impl();
+    if (x < 0) return;
+    if (y < 0) return;
+    if (x >= pimpl->width) return;
+    if (y >= pimpl->height) return;
+    termpaint_surface_set_softwrap_marker(pimpl->surface, pimpl->x + x, pimpl->y + y, false);
+}
+
 void ZPainter::drawImage(int x, int y, const ZImage &image, int sx, int sy, int width, int height) {
     auto *const pimpl = tuiwidgets_impl();
 
