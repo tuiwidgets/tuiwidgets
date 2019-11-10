@@ -1,5 +1,7 @@
 #include "ZColor.h"
 
+#include <termpaint.h>
+
 TUIWIDGETS_NS_START
 
 ZColor::ZColor(int r, int g, int b)
@@ -37,7 +39,7 @@ void ZColor::setBlue(int blue) {
 }
 
 uint32_t ZColor::nativeValue() {
-    return val;
+    return TERMPAINT_RGB_COLOR_OFFSET | val;
 }
 
 ZColor ZColor::fromRgb(int r, int g, int b) {
@@ -46,7 +48,7 @@ ZColor ZColor::fromRgb(int r, int g, int b) {
 
 ZColor ZColor::defaultColor() {
     ZColor col;
-    col.val = 0x10000000;
+    col.val = TERMPAINT_DEFAULT_COLOR;
     return col;
 }
 
