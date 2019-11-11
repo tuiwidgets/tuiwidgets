@@ -48,6 +48,9 @@ public:
 
     void drawImage(int x, int y, const ZImage& image, int sx=0, int sy = 0, int width = -1, int height = -1);
 
+    void setForeground(int x, int y, ZColor fg);
+    void setBackground(int x, int y, ZColor bg);
+
     void setCursor(int x, int y);
 
     void setWidget(ZWidget *widget);

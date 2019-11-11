@@ -176,6 +176,24 @@ void ZPainter::drawImage(int x, int y, const ZImage &image, int sx, int sy, int 
                                 TERMPAINT_COPY_NO_TILE, TERMPAINT_COPY_NO_TILE);
 }
 
+void ZPainter::setForeground(int x, int y, ZColor fg) {
+    auto *const pimpl = tuiwidgets_impl();
+    if (x < 0) return;
+    if (y < 0) return;
+    if (x >= pimpl->width) return;
+    if (y >= pimpl->height) return;
+    termpaint_surface_set_fg_color(pimpl->surface, pimpl->x + x, pimpl->y + y, toTermPaintColor(fg));
+}
+
+void ZPainter::setBackground(int x, int y, ZColor bg) {
+    auto *const pimpl = tuiwidgets_impl();
+    if (x < 0) return;
+    if (y < 0) return;
+    if (x >= pimpl->width) return;
+    if (y >= pimpl->height) return;
+    termpaint_surface_set_bg_color(pimpl->surface, pimpl->x + x, pimpl->y + y, toTermPaintColor(bg));
+}
+
 void ZPainter::setCursor(int x, int y) {
     auto *const pimpl = tuiwidgets_impl();
 
