@@ -53,6 +53,13 @@ bool ZLayout::eventFilter(QObject *watched, QEvent *event) {
     return QObject::eventFilter(watched, event);
 }
 
+void ZLayout::relayout() {
+    ZWidget *w = widget();
+    if (w) {
+        w->layout()->setGeometry(w->layoutArea());
+    }
+}
+
 void ZLayout::timerEvent(QTimerEvent *event) {
     QObject::timerEvent(event);
 }
