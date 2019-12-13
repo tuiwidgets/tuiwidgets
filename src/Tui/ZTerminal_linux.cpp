@@ -114,7 +114,12 @@ static void suspendHelper(bool tcattr) {
         } else {
             int tmp;
             do {
+#ifndef __APPLE__
                 tmp = dup3(nullfd, restoreFd, O_CLOEXEC);
+#else
+                tmp = dup2(nullfd, restoreFd);
+                fcntl(tmp, F_SETFD, O_CLOEXEC);
+#endif
             } while (tmp == -1 && errno == EINTR);
             close(nullfd);
 
