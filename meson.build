@@ -1,4 +1,4 @@
-project('toolkit', ['c', 'cpp'], default_options : ['buildtype=debugoptimized'])
+project('toolkit', ['c', 'cpp'], default_options : ['buildtype=debugoptimized', 'cpp_std=c++14'])
 
 posixsignalmanager_dep = subproject('posixsignalmanager').get_variable('posixsignalmanager_dep')
 
