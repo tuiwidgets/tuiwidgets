@@ -98,6 +98,7 @@ namespace Colors {
     static constexpr Private::GlobalColorRGB red = {0xaa, 0, 0};
     static constexpr Private::GlobalColorRGB magenta = {0xaa, 0, 0xaa};
     static constexpr Private::GlobalColorRGB brown = {0xaa, 0x55, 0};
+    static constexpr Private::GlobalColorRGB yellow = {0xaa, 0xaa, 0};
     static constexpr Private::GlobalColorRGB brightBlue = {0x55, 0x55, 0xff};
     static constexpr Private::GlobalColorRGB brightGreen = {0x55, 0xff, 0x55};
     static constexpr Private::GlobalColorRGB brightCyan = {0x55, 0xff, 0xff};
