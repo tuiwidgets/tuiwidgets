@@ -5,7 +5,7 @@
 TUIWIDGETS_NS_START
 
 ZColor::ZColor(int r, int g, int b)
-    : val(static_cast<uint8_t>(r) << 16 | static_cast<uint8_t>(g) << 8 | static_cast<uint8_t>(b))
+    : val(TERMPAINT_RGB_COLOR_OFFSET | static_cast<uint8_t>(r) << 16 | static_cast<uint8_t>(g) << 8 | static_cast<uint8_t>(b))
 {
 }
 
@@ -19,7 +19,7 @@ int ZColor::red() const {
 }
 
 void ZColor::setRed(int red) {
-    val = (val & 0x00ffff) | static_cast<uint8_t>(red) << 16;
+    val = TERMPAINT_RGB_COLOR_OFFSET | (val & 0x00ffff) | static_cast<uint8_t>(red) << 16;
 }
 
 int ZColor::green() const {
@@ -27,7 +27,7 @@ int ZColor::green() const {
 }
 
 void ZColor::setGreen(int green) {
-    val = (val & 0xff00ff) | static_cast<uint8_t>(green) << 8;
+    val = TERMPAINT_RGB_COLOR_OFFSET | (val & 0xff00ff) | static_cast<uint8_t>(green) << 8;
 }
 
 int ZColor::blue() const {
@@ -35,11 +35,11 @@ int ZColor::blue() const {
 }
 
 void ZColor::setBlue(int blue) {
-    val = (val & 0xffff00) | static_cast<uint8_t>(blue);
+    val = TERMPAINT_RGB_COLOR_OFFSET | (val & 0xffff00) | static_cast<uint8_t>(blue);
 }
 
 uint32_t ZColor::nativeValue() {
-    return TERMPAINT_RGB_COLOR_OFFSET | val;
+    return val;
 }
 
 ZColor ZColor::fromRgb(int r, int g, int b) {

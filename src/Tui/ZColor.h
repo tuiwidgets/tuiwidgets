@@ -66,7 +66,7 @@ namespace Colors {
     static constexpr Private::GlobalColorRGB brightRed = {0xff, 0x55, 0x55};
     static constexpr Private::GlobalColorRGB brightMagenta = {0xff, 0x55, 0xff};
     static constexpr Private::GlobalColorRGB brightYellow = {0xff, 0xff, 0x55};
-};
+}
 
 TUIWIDGETS_NS_END
 
