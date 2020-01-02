@@ -30,9 +30,9 @@ public:
     ZColor(Private::GlobalColorRGB globalColor);
 
     int red() const;
-    void setRed(int blue);
+    void setRed(int red);
     int green() const;
-    void setGreen(int blue);
+    void setGreen(int green);
     int blue() const;
     void setBlue(int blue);
 
