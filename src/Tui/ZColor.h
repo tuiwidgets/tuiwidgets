@@ -23,12 +23,42 @@ namespace Private {
     };
 }
 
+enum class TerminalColor {
+    black = 0,
+    darkGray = 8,
+    lightGray = 7,
+    brightWhite = 15,
+    blue = 4,
+    green = 2,
+    cyan = 6,
+    red = 1,
+    magenta = 5,
+    yellow = 3,
+    brightBlue = 12,
+    brightGreen = 10,
+    brightCyan = 14,
+    brightRed = 9,
+    brightMagenta = 13,
+    brightYellow = 11
+};
+
 class TUIWIDGETS_EXPORT ZColor {
+    enum ColorType {
+        RGB,
+        Default,
+        Terminal,
+        TerminalIndexed
+    };
+
 public:
     ZColor() = default;
     ZColor(int r, int g, int b);
     ZColor(Private::GlobalColorRGB globalColor);
+    ZColor(TerminalColor color);
 
+    ColorType colorType() const;
+
+    // Only for colorType() == ColorType::RGB
     int red() const;
     void setRed(int red);
     int green() const;
@@ -36,11 +66,19 @@ public:
     int blue() const;
     void setBlue(int blue);
 
+    // Only for colorType() == ColorType::TerminalIndexed
+    int terminalColorIndexed();
+
+    // Only for colorType() == ColorType::Terminal
+    TerminalColor terminalColor();
+
     uint32_t nativeValue();
 
     static ZColor fromRgb(int r, int g, int b);
     static ZColor defaultColor();
-    //static ZColor fromIndexed();
+    static ZColor fromTerminalColor(TerminalColor color);
+    static ZColor fromTerminalColor(int color);
+    static ZColor fromTerminalColorIndexed(int color);
 
     bool operator==(const ZColor &other) const;
     bool operator!=(const ZColor &other) const;
@@ -67,6 +105,8 @@ namespace Colors {
     static constexpr Private::GlobalColorRGB brightMagenta = {0xff, 0x55, 0xff};
     static constexpr Private::GlobalColorRGB brightYellow = {0xff, 0xff, 0x55};
 }
+
+namespace Color = Colors;
 
 TUIWIDGETS_NS_END
 
