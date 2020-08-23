@@ -82,11 +82,24 @@ void MarkupTokenizer::storeAttribute()
     attrValue.clear();
 }
 
-static std::unordered_map<std::string, std::u32string> getEntities() {
-    static std::unordered_map<std::string, std::u32string> data = {
-#include "entities.inc"
+static uint32_t hash_fnv1a(const unsigned char* text) {
+    uint32_t hash = 2166136261;
+    for (; *text; ++text) {
+            hash = hash ^ *text;
+            hash = hash * 16777619;
+    }
+    return hash;
+}
+
+namespace {
+    struct EntitiesEntry {
+        uint8_t len;
+        uint8_t has_next;
+        uint16_t strpool_offset;
+        char32_t data[2];
     };
-    return data;
+
+    #include "entities.inc"
 }
 
 std::u32string MarkupTokenizer::tryTokenizeCharRef(char32_t additionalAllowedChar) {
@@ -98,7 +111,7 @@ std::u32string MarkupTokenizer::tryTokenizeCharRef(char32_t additionalAllowedCha
             || (additionalAllowedChar && ch1 == additionalAllowedChar)) {
         return {};
     } else if (ch1 == '#') {
-        unsigned int peekChar = nextInputChar+1;
+        unsigned int peekChar = nextInputChar + 1;
         bool hex = false;
         if (peekChar < text.size()) {
             char32_t ch = text[peekChar];
@@ -143,23 +156,37 @@ std::u32string MarkupTokenizer::tryTokenizeCharRef(char32_t additionalAllowedCha
         }
     } else {
         // Note: Needs to be fixed for spec compliance.
-        unsigned int peekChar = nextInputChar+1;
+        unsigned int peekChar = nextInputChar;
         std::string entityName;
         while (peekChar < text.size()) {
             char32_t ch = text[peekChar];
             if ((ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')) {
                 entityName.push_back(ch);
+                peekChar++;
             } else if (ch == ';') {
-                std::unordered_map<std::string, std::u32string> ents = getEntities();
-                auto it = ents.find(entityName);
-                if (it != ents.end()) {
-                    nextInputChar = peekChar + 1;
-                    std::u32string ret;
-                    ret += it->second;
-                    return ret;
-                } else {
-                    _isError = true;
-                    return {};
+                const int hash = hash_fnv1a(reinterpret_cast<const unsigned char*>(entityName.c_str())) % entitiesSize;
+                int entryIdx = entitiesHashtbl[hash];
+                while (true) {
+                    const EntitiesEntry& entry = entitiesEntries[entryIdx];
+                    if (entry.len == entityName.size()) {
+                        if (memcmp(entityName.c_str(), entitiesStringpool + entry.strpool_offset, entry.len) == 0) {
+                            // match found
+                            nextInputChar = peekChar + 1;
+                            std::u32string ret;
+                            if (entry.data[1] == 0) {
+                                // one code point
+                                return std::u32string(entry.data, 1);
+                            } else {
+                                return std::u32string(entry.data, 2);
+                            }
+                            return ret;
+                        }
+                    }
+                    if (!entry.has_next) {
+                        _isError = true;
+                        return {};
+                    }
+                    entryIdx++;
                 }
             } else {
                 return {};
