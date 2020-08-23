@@ -1,5 +1,7 @@
 #include "MarkupParser.h"
 
+#include <stdlib.h>
+
 #include <functional>
 #include <unordered_map>
 
@@ -582,7 +584,7 @@ const MarkupParserBase::ElementEnd &MarkupParserBase::elementEnd() {
         return _elementEnd;
     }
     // Precondition violation, cause explicit crash
-    return *static_cast<MarkupParser::ElementEnd*>(nullptr);
+    abort();
 }
 
 bool MarkupParserBase::isCharEvent() {
@@ -594,7 +596,7 @@ const MarkupParserBase::CharEvent &MarkupParserBase::charEvent() {
         return _charEvent;
     }
     // Precondition violation, cause explicit crash
-    return *static_cast<MarkupParser::CharEvent*>(nullptr);
+    abort();
 }
 
 bool MarkupParserBase::isDocumentEnd() {
@@ -606,7 +608,7 @@ const MarkupParserBase::DocumentEnd &MarkupParserBase::documentEnd() {
         return _documentEnd;
     }
     // Precondition violation, cause explicit crash
-    return *static_cast<MarkupParser::DocumentEnd*>(nullptr);
+    abort();
 }
 
 void MarkupParserBase::emitCurrentTokenizerElement() {
