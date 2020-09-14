@@ -252,7 +252,11 @@ bool ZTerminalPrivate::setup(ZTerminal::Options options) {
 void ZTerminalPrivate::deinitTerminal() {
     inputNotifier = nullptr; // ensure no more notifications from this point
     termpaint_terminal_reset_attributes(terminal);
-    termpaint_terminal_free_with_restore(terminal);
+    if (initState == ZTerminalPrivate::InitState::Paused) {
+        termpaint_terminal_free(terminal);
+    } else {
+        termpaint_terminal_free_with_restore(terminal);
+    }
     termpaint_integration_deinit(&integration);
     if (fd != -1 && fd == systemRestoreFd.load()) {
         const char *old = systemRestoreEscape.load();
