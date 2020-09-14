@@ -20,8 +20,8 @@ tuiwidgets_public_headers = [
   'Tui/ZCommon.h',
   'Tui/ZEvent.h',
   'Tui/ZImage.h',
-  'Tui/ZLayout.h',
   'Tui/ZLayoutItem.h',
+  'Tui/ZLayout.h',
   'Tui/ZPainter.h',
   'Tui/ZPalette.h',
   'Tui/ZRoot.h',
@@ -101,8 +101,8 @@ testlib = static_library('testlib', 'tests/catch_main.cpp')
 
 #ide:editable-filelist
 test_files = [
-  'tests/markupparser.cpp',
   'Tui/MarkupParser.cpp',
+  'tests/markupparser.cpp',
 ]
 
 silence_warnings = [
