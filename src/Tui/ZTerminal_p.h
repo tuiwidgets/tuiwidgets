@@ -88,7 +88,8 @@ public:
         InInitWithoutPendingPaintRequest,
         InInitWithPendingPaintRequest,
         Ready,
-        Paused
+        Paused,
+        Deinit
     } initState = InitState::InInitWithoutPendingPaintRequest;
     // stuff from integration
     int fd = -1;

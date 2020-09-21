@@ -250,6 +250,10 @@ bool ZTerminalPrivate::setup(ZTerminal::Options options) {
 }
 
 void ZTerminalPrivate::deinitTerminal() {
+    if (initState == ZTerminalPrivate::InitState::Deinit) {
+        // already done
+        return;
+    }
     inputNotifier = nullptr; // ensure no more notifications from this point
     termpaint_terminal_reset_attributes(terminal);
     if (initState == ZTerminalPrivate::InitState::Paused) {
@@ -290,6 +294,7 @@ void ZTerminalPrivate::deinitTerminal() {
     if (fd != -1) {
         tcsetattr (fd, TCSAFLUSH, &originalTerminalAttributes);
     }
+    initState = ZTerminalPrivate::InitState::Deinit;
 }
 
 bool ZTerminalPrivate::setupFromControllingTerminal(ZTerminal::Options options) {

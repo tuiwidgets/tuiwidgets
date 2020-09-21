@@ -1,12 +1,13 @@
 #include <Tui/ZTerminal.h>
 #include <Tui/ZTerminal_p.h>
 
-#include <QCoreApplication>
-#include <QVector>
-#include <QPointer>
-#include <QTimer>
-#include <QThread>
 #include <QAbstractEventDispatcher>
+#include <QCoreApplication>
+#include <QMetaMethod>
+#include <QPointer>
+#include <QThread>
+#include <QTimer>
+#include <QVector>
 
 #include <Tui/ZEvent.h>
 #include <Tui/ZPainter_p.h>
@@ -561,23 +562,51 @@ bool ZTerminal::event(QEvent *event) {
         } else if (native->type == TERMPAINT_EV_REPAINT_REQUESTED) {
             update();
         } else if (native->type == TERMPAINT_EV_AUTO_DETECT_FINISHED) {
-            p->autoDetectTimeoutTimer = nullptr;
-            QByteArray nativeOptions;
-            if ((p->options & (ZTerminal::AllowInterrupt | ZTerminal::AllowQuit | ZTerminal::AllowSuspend)) == 0) {
-                nativeOptions.append(" +kbdsig ");
-            }
-            if (p->options & DisableAlternativeScreen) {
-                nativeOptions.append(" -altscreen ");
-            }
-            termpaint_terminal_setup_fullscreen(p->terminal,
-                                                termpaint_surface_width(p->surface),
-                                                termpaint_surface_height(p->surface),
-                                                nativeOptions.data());
+            if (termpaint_terminal_might_be_supported(p->terminal)
+                    || (p->options & ZTerminal::ForceIncompatibleTerminals)) {
+                p->autoDetectTimeoutTimer = nullptr;
+                QByteArray nativeOptions;
+                if ((p->options & (ZTerminal::AllowInterrupt | ZTerminal::AllowQuit | ZTerminal::AllowSuspend)) == 0) {
+                    nativeOptions.append(" +kbdsig ");
+                }
+                if (p->options & DisableAlternativeScreen) {
+                    nativeOptions.append(" -altscreen ");
+                }
+                termpaint_terminal_setup_fullscreen(p->terminal,
+                                                    termpaint_surface_width(p->surface),
+                                                    termpaint_surface_height(p->surface),
+                                                    nativeOptions.data());
 
-            if (p->initState == ZTerminalPrivate::InitState::InInitWithPendingPaintRequest) {
-                update();
+                if (p->initState == ZTerminalPrivate::InitState::InInitWithPendingPaintRequest) {
+                    update();
+                }
+                p->initState = ZTerminalPrivate::InitState::Ready;
+
+                if (!termpaint_terminal_might_be_supported(p->terminal)) {
+                    incompatibleTerminalDetected();
+                }
+            } else {
+                if (isSignalConnected(QMetaMethod::fromSignal(&ZTerminal::incompatibleTerminalDetected))) {
+                    QPointer<ZTerminal> weak = this;
+                    QTimer::singleShot(0, [weak] {
+                        if (!weak.isNull()) {
+                            weak->tuiwidgets_impl()->deinitTerminal();
+                            weak->incompatibleTerminalDetected();
+                        }
+                    });
+                } else {
+                    QByteArray utf8 = QStringLiteral("Terminal auto detection failed. If this repeats the terminal might be incompatible.\r\n").toUtf8();
+                    p->integration_write(utf8.data(), utf8.size());
+                    p->integration_flush();
+                    QPointer<ZTerminal> weak = this;
+                    QTimer::singleShot(0, [weak] {
+                        if (!weak.isNull()) {
+                            weak->tuiwidgets_impl()->deinitTerminal();
+                            QCoreApplication::quit();
+                        }
+                    });
+                }
             }
-            p->initState = ZTerminalPrivate::InitState::Ready;
         }
 
         return true; // ???

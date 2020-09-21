@@ -32,6 +32,7 @@ public:
         DisableAutoResize = 1 << 3,
         DisableAlternativeScreen = 1 << 4,
         DisableAutoDetectTimeoutMessage = 1 << 5,
+        ForceIncompatibleTerminals = 1 << 6,
     };
     Q_DECLARE_FLAGS(Options, Option)
 
@@ -98,6 +99,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     void afterRendering();
+    void incompatibleTerminalDetected();
 
 protected:
     std::unique_ptr<ZTerminalPrivate> tuiwidgets_pimpl_ptr;
