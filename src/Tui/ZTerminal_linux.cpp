@@ -341,6 +341,7 @@ bool ZTerminalPrivate::commonStuff(ZTerminal::Options options) {
     }
 
     tcgetattr(fd, &originalTerminalAttributes);
+    backspaceIsX08 = (originalTerminalAttributes.c_cc[VERASE] == 0x08);
     // The following call sends a TTOU signal if this process is in a background job.
     // This cleanly stops terminal init, until after the process's job is moved to the foreground.
     tcsetattr(fd, TCSANOW, &originalTerminalAttributes);

@@ -99,6 +99,7 @@ public:
     QByteArray output_buffer;
     termios originalTerminalAttributes;
     termios prepauseTerminalAttributes;
+    bool backspaceIsX08 = false;
     QTimer callbackTimer;
     // ^^
 

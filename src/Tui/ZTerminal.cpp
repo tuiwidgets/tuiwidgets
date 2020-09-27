@@ -562,6 +562,7 @@ bool ZTerminal::event(QEvent *event) {
         } else if (native->type == TERMPAINT_EV_REPAINT_REQUESTED) {
             update();
         } else if (native->type == TERMPAINT_EV_AUTO_DETECT_FINISHED) {
+            termpaint_terminal_auto_detect_apply_input_quirks(p->terminal, p->backspaceIsX08);
             if (termpaint_terminal_might_be_supported(p->terminal)
                     || (p->options & ZTerminal::ForceIncompatibleTerminals)) {
                 p->autoDetectTimeoutTimer = nullptr;
