@@ -612,6 +612,10 @@ bool ZTerminal::event(QEvent *event) {
                 if (!termpaint_terminal_might_be_supported(p->terminal)) {
                     incompatibleTerminalDetected();
                 }
+
+                if (!(p->options & DisableTaggedPaste)) {
+                    termpaint_terminal_request_tagged_paste(p->terminal, true);
+                }
             } else {
                 if (isSignalConnected(QMetaMethod::fromSignal(&ZTerminal::incompatibleTerminalDetected))) {
                     QPointer<ZTerminal> weak = this;

@@ -34,6 +34,7 @@ public:
         DisableAlternativeScreen = 1 << 4,
         DisableAutoDetectTimeoutMessage = 1 << 5,
         ForceIncompatibleTerminals = 1 << 6,
+        DisableTaggedPaste = 1 << 7,
     };
     Q_DECLARE_FLAGS(Options, Option)
 
