@@ -151,6 +151,7 @@ public:
 protected:
     virtual void paintEvent(ZPaintEvent *event);
     virtual void keyEvent(ZKeyEvent *event);
+    virtual void pasteEvent(ZPasteEvent *event);
     virtual void focusInEvent(ZFocusEvent *event);
     virtual void focusOutEvent(ZFocusEvent *event);
     virtual void resizeEvent(ZResizeEvent *event);

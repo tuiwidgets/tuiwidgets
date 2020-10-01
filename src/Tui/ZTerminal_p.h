@@ -83,6 +83,7 @@ public:
     bool titleNeedsUpdate;
     QString iconTitle;
     bool iconTitleNeedsUpdate;
+    QString pasteTemp;
 
     enum class InitState {
         InInitWithoutPendingPaintRequest,

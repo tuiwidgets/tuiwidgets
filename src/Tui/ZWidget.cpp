@@ -845,6 +845,13 @@ bool ZWidget::event(QEvent *event) {
         } else {
             return false;
         }
+    } else if (event->type() == ZEventType::paste()) {
+        if (isEnabled()) {
+            pasteEvent(static_cast<ZPasteEvent*>(event));
+            return true;
+        } else {
+            return false;
+        }
     } else if (event->type() == ZEventType::updateRequest()) {
         tuiwidgets_impl()->updateRequestEvent(static_cast<ZPaintEvent*>(event));
         return true;
@@ -917,6 +924,10 @@ void ZWidget::paintEvent(ZPaintEvent *event) {
 }
 
 void ZWidget::keyEvent(ZKeyEvent *event) {
+    event->ignore();
+}
+
+void ZWidget::pasteEvent(ZPasteEvent *event) {
     event->ignore();
 }
 

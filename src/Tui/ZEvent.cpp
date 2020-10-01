@@ -21,6 +21,10 @@ TUIWIDGETS_EXPORT QEvent::Type ZEventType::key() {
     CALL_ONCE_REGISTEREVENTTYPE;
 }
 
+TUIWIDGETS_EXPORT QEvent::Type ZEventType::paste() {
+    CALL_ONCE_REGISTEREVENTTYPE;
+}
+
 TUIWIDGETS_EXPORT QEvent::Type ZEventType::queryAcceptsEnter() {
     CALL_ONCE_REGISTEREVENTTYPE;
 }
@@ -146,6 +150,20 @@ QString ZKeyEvent::text() const {
 
 Qt::KeyboardModifiers ZKeyEvent::modifiers() const {
     return tuiwidgets_impl()->modifiers;
+}
+
+ZPasteEventPrivate::ZPasteEventPrivate(const QString &text)
+    : text(text)
+{
+}
+
+ZPasteEvent::ZPasteEvent(const QString &text)
+    : ZEvent(ZEventType::paste(), std::make_unique<ZPasteEventPrivate>(text))
+{
+}
+
+QString ZPasteEvent::text() const {
+    return tuiwidgets_impl()->text;
 }
 
 ZFocusEventPrivate::ZFocusEventPrivate(Qt::FocusReason reason)

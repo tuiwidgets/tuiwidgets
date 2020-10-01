@@ -541,6 +541,22 @@ void ZTerminal::dispatchKeyboardEvent(ZKeyEvent &translated) {
     }
 }
 
+void ZTerminal::dispatchPasteEvent(ZPasteEvent &translated) {
+    auto *const p = tuiwidgets_impl();
+    if (p->keyboardGrabWidget) {
+        QCoreApplication::sendEvent(p->keyboardGrabWidget, &translated);
+    } else {
+        QPointer<ZWidget> w = tuiwidgets_impl()->focus();
+        while (w) {
+            bool processed = QCoreApplication::sendEvent(w, &translated);
+            if ((processed && translated.isAccepted()) || !w) {
+                break;
+            }
+            w = w->parentWidget();
+        }
+    }
+}
+
 bool ZTerminal::event(QEvent *event) {
     auto *const p = tuiwidgets_impl();
     if (event->type() == ZEventType::rawSequence()) {
@@ -558,6 +574,16 @@ bool ZTerminal::event(QEvent *event) {
                         forceRepaint();
                     }
                 }
+            }
+        } else if (native->type == TERMPAINT_EV_PASTE) {
+            if (native->paste.initial) {
+                p->pasteTemp = QString::fromUtf8(native->paste.string, native->paste.length);
+            } else {
+                p->pasteTemp += QString::fromUtf8(native->paste.string, native->paste.length);
+            }
+            if (native->paste.final) {
+                std::unique_ptr<ZPasteEvent> translated = std::make_unique<ZPasteEvent>(p->pasteTemp);
+                dispatchPasteEvent(*translated);
             }
         } else if (native->type == TERMPAINT_EV_REPAINT_REQUESTED) {
             update();

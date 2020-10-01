@@ -20,6 +20,7 @@ class ZRawSequenceEventPrivate;
 class ZTerminalNativeEventPrivate;
 class ZPaintEventPrivate;
 class ZKeyEventPrivate;
+class ZPasteEventPrivate;
 class ZFocusEventPrivate;
 class ZMoveEventPrivate;
 class ZResizeEventPrivate;
@@ -28,6 +29,7 @@ class ZOtherChangeEventPrivate;
 namespace ZEventType {
     QEvent::Type paint();
     QEvent::Type key();
+    QEvent::Type paste();
     QEvent::Type queryAcceptsEnter();
     QEvent::Type focusIn();
     QEvent::Type focusOut();
@@ -104,6 +106,17 @@ public:
 
 private:
     TUIWIDGETS_DECLARE_PRIVATE(ZKeyEvent)
+};
+
+class TUIWIDGETS_EXPORT ZPasteEvent : public ZEvent {
+public:
+    ZPasteEvent(const QString &text);
+
+public:
+    QString text() const;
+
+private:
+    TUIWIDGETS_DECLARE_PRIVATE(ZPasteEvent)
 };
 
 class TUIWIDGETS_EXPORT ZFocusEvent : public ZEvent {

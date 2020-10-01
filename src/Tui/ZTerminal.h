@@ -13,6 +13,7 @@
 TUIWIDGETS_NS_START
 
 class ZKeyEvent;
+class ZPasteEvent;
 class ZSymbol;
 class ZPainter;
 class ZTerminalNativeEvent;
@@ -90,6 +91,7 @@ public:
     void setCursorColor(int cursorColorR, int cursorColorG, int cursorColorB);
 
     void dispatchKeyboardEvent(ZKeyEvent &translated);
+    void dispatchPasteEvent(ZPasteEvent &translated);
 
 protected:
     std::unique_ptr<ZKeyEvent> translateKeyEvent(const ZTerminalNativeEvent &nativeEvent);

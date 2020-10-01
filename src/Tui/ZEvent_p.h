@@ -47,6 +47,14 @@ public:
     Qt::KeyboardModifiers modifiers = 0;
 };
 
+class ZPasteEventPrivate : public ZEventPrivate {
+public:
+    ZPasteEventPrivate(const QString &text);
+
+public:
+    QString text;
+};
+
 class ZFocusEventPrivate : public ZEventPrivate {
 public:
     ZFocusEventPrivate(Qt::FocusReason reason);
