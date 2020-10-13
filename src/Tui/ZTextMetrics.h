@@ -25,6 +25,8 @@ public:
 
     ClusterSize nextCluster(const QString &data, int offset);
     ClusterSize nextCluster(const QChar *data, int size);
+    ZTextMetrics::ClusterSize splitByColumns(const QString &data, int maxWidth);
+    ZTextMetrics::ClusterSize splitByColumns(const QChar *data, int size, int maxWidth);
 
 private:
     friend class ZTerminal;

@@ -29,6 +29,24 @@ ZTextMetrics::ClusterSize ZTextMetrics::nextCluster(const QChar *data, int size)
     return result;
 }
 
+ZTextMetrics::ClusterSize ZTextMetrics::splitByColumns(const QString &data, int maxWidth) {
+    return ZTextMetrics::splitByColumns(data.constData(), data.size(), maxWidth);
+}
+
+ZTextMetrics::ClusterSize ZTextMetrics::splitByColumns(const QChar *data, int size, int maxWidth) {
+    const auto* p = tuiwidgets_impl();
+    termpaint_text_measurement* tm = termpaint_text_measurement_new(p->surface);
+    termpaint_text_measurement_set_limit_width(tm, maxWidth);
+    termpaint_text_measurement_feed_utf16(tm, reinterpret_cast<const uint16_t*>(data), size, true);
+
+    ClusterSize result;
+    result.codePoints = termpaint_text_measurement_last_codepoints(tm);
+    result.codeUnits = termpaint_text_measurement_last_ref(tm);
+    result.columns = termpaint_text_measurement_last_width(tm);
+    termpaint_text_measurement_free(tm);
+    return result;
+}
+
 ZTextMetrics::ZTextMetrics(std::shared_ptr<ZTextMetricsPrivate> impl) : tuiwidgets_pimpl_ptr(impl)
 {
 }
