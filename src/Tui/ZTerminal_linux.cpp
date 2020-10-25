@@ -266,7 +266,7 @@ void ZTerminalPrivate::deinitTerminal() {
         const char *old = systemRestoreEscape.load();
         systemRestoreEscape.store(nullptr);
         PosixSignalManager::instance()->barrier();
-        delete old;
+        delete [] old;
     }
     terminal = nullptr;
     if (awaitingResponse) {
@@ -572,7 +572,7 @@ void ZTerminalPrivate::integration_restore_sequence_updated(const char *data, in
         update[length] = 0;
         systemRestoreEscape.store(update);
         PosixSignalManager::instance()->barrier();
-        delete old;
+        delete [] old;
     }
 }
 
