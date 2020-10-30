@@ -30,6 +30,7 @@ public:
     QSize sizeHint() const  override;
     SizePolicy sizePolicyH() const  override;
     SizePolicy sizePolicyV() const  override;
+    bool isVisible() const override;
 
 public:
     // public virtuals from base class override everything for later ABI compatibility

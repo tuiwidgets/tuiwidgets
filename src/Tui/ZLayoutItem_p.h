@@ -15,6 +15,7 @@ public:
     QSize sizeHint() const  override;
     SizePolicy sizePolicyH() const  override;
     SizePolicy sizePolicyV() const  override;
+    bool isVisible() const override;
 
 private:
     ZWidget *widget;

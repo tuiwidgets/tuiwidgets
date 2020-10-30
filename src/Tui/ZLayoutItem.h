@@ -22,6 +22,7 @@ public:
     virtual QSize sizeHint() const = 0;
     virtual SizePolicy sizePolicyH() const = 0;
     virtual SizePolicy sizePolicyV() const = 0;
+    virtual bool isVisible() const = 0;
 
     virtual bool isSpacer() const;
 

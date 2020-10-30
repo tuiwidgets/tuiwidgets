@@ -45,6 +45,10 @@ SizePolicy ZLayout::sizePolicyV() const {
     return SizePolicy::Preferred;
 }
 
+bool ZLayout::isVisible() const {
+    return true;
+}
+
 bool ZLayout::event(QEvent *event) {
     return QObject::event(event);
 }

@@ -36,4 +36,8 @@ SizePolicy ZWidgetLayoutItem::sizePolicyV() const {
     return widget->sizePolicyV();
 }
 
+bool ZWidgetLayoutItem::isVisible() const {
+    return widget->isVisible();
+}
+
 TUIWIDGETS_NS_END
