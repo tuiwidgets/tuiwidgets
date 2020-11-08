@@ -255,7 +255,6 @@ void ZTerminalPrivate::deinitTerminal() {
         return;
     }
     inputNotifier = nullptr; // ensure no more notifications from this point
-    termpaint_terminal_reset_attributes(terminal);
     if (initState == ZTerminalPrivate::InitState::Paused) {
         termpaint_terminal_free(terminal);
     } else {
