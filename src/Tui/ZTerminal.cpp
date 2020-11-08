@@ -408,9 +408,7 @@ std::unique_ptr<ZKeyEvent> ZTerminal::translateKeyEvent(const ZTerminalNativeEve
 
     if (native->type == TERMPAINT_EV_KEY) {
         int key = Qt::Key_unknown;
-        if (native->key.atom == termpaint_input_i_resync()) {
-            return nullptr;
-        } else if (native->key.atom == termpaint_input_page_up()) {
+        if (native->key.atom == termpaint_input_page_up()) {
             key = Qt::Key_PageUp;
         } else if (native->key.atom == termpaint_input_page_down()) {
             key = Qt::Key_PageDown;
