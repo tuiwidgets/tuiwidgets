@@ -15,6 +15,10 @@ class TUIWIDGETS_EXPORT ZRoot : public ZWidget {
 public:
     ZRoot();
 
+public:
+    void setFillChar(int fillChar);
+    int fillChar();
+
 protected:
     void paintEvent(ZPaintEvent *event) override;
     void keyEvent(ZKeyEvent *event) override;
@@ -43,7 +47,6 @@ protected:
 private:
     TUIWIDGETS_DECLARE_PRIVATE(ZRoot)
 };
-
 
 TUIWIDGETS_NS_END
 

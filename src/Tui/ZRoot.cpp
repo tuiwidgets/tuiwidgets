@@ -13,9 +13,19 @@ ZRoot::ZRoot() : ZWidget(nullptr, std::make_unique<ZRootPrivate>(this)) {
     setMinimumSize(40, 7);
 }
 
+void ZRoot::setFillChar(int fillChar) {
+    auto *const p = tuiwidgets_impl();
+    p->fillChar = fillChar;
+}
+
+int ZRoot::fillChar() {
+    auto *const p = tuiwidgets_impl();
+    return p->fillChar;
+}
+
 void ZRoot::paintEvent(ZPaintEvent *event) {
     auto *painter = event->painter();
-    painter->clear(getColor("root.fg"), getColor("root.bg"));
+    painter->clear(getColor("root.fg"), getColor("root.bg"), fillChar());
 }
 
 void ZRoot::keyEvent(ZKeyEvent *event) {

@@ -2,6 +2,7 @@
 #define TUIWIDGETS_ZROOT_P_INCLUDED
 
 #include <Tui/ZRoot.h>
+#include <Tui/ZPainter.h>
 #include <Tui/ZWidget.h>
 #include <Tui/ZWidget_p.h>
 
@@ -15,6 +16,7 @@ public:
     ZRootPrivate(ZRoot *pub);
 
 public:
+    int fillChar = ZPainter::Erased;
     QList<QObject*> windows;
 };
 
