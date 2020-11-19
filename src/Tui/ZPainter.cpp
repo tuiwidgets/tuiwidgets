@@ -91,16 +91,20 @@ void ZPainter::writeWithAttributes(int x, int y, QString string, ZColor fg, ZCol
 }
 
 void ZPainter::clear(ZColor fg, ZColor bg, Attributes attr) {
+    clear(fg, bg, Erased, attr);
+}
+
+void ZPainter::clear(ZColor fg, ZColor bg, int fillChar, Attributes attr) {
     auto *const pimpl = tuiwidgets_impl();
     termpaint_attr *termpaintAttr = termpaint_attr_new(toTermPaintColor(fg), toTermPaintColor(bg));
     termpaint_attr_set_style(termpaintAttr, attr);
-    termpaint_surface_clear_rect_with_attr(pimpl->surface,
+    termpaint_surface_clear_rect_with_attr_char(pimpl->surface,
                                  pimpl->x, pimpl->y, pimpl->width, pimpl->height,
-                                 termpaintAttr);
+                                 termpaintAttr, fillChar);
     termpaint_attr_free(termpaintAttr);
 }
 
-void ZPainter::clearRect(int x, int y, int width, int height, ZColor fg, ZColor bg, Attributes attr) {
+void ZPainter::clearRect(int x, int y, int width, int height, ZColor fg, ZColor bg, int fillChar, Attributes attr) {
     auto *const pimpl = tuiwidgets_impl();
     if (x < 0) {
         width += x;
@@ -121,10 +125,14 @@ void ZPainter::clearRect(int x, int y, int width, int height, ZColor fg, ZColor 
     x += pimpl->x;
     y += pimpl->y;
 
-    termpaint_surface_clear_rect_with_attr(pimpl->surface,
+    termpaint_surface_clear_rect_with_attr_char(pimpl->surface,
                                  x, y, width, height,
-                                 termpaintAttr);
+                                 termpaintAttr, fillChar);
     termpaint_attr_free(termpaintAttr);
+}
+
+void ZPainter::clearRect(int x, int y, int width, int height, ZColor fg, ZColor bg, Attributes attr) {
+    clearRect(x, y, width, height, fg, bg, Erased, attr);
 }
 
 void ZPainter::setSoftwrapMarker(int x, int y) {

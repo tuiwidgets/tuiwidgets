@@ -32,6 +32,8 @@ public:
     };
     Q_DECLARE_FLAGS(Attributes, Attribute)
 
+    static constexpr int Erased = 127;
+
 public:
     ZPainter(const ZPainter &other);
     virtual ~ZPainter();
@@ -43,7 +45,9 @@ public:
     void writeWithColors(int x, int y, QString string, ZColor fg, ZColor bg);
     void writeWithAttributes(int x, int y, QString string, ZColor fg, ZColor bg, Attributes attr);
     void clear(ZColor fg, ZColor bg, Attributes attr = {});
+    void clear(ZColor fg, ZColor bg, int fillChar, Attributes attr = {});
     void clearRect(int x, int y, int width, int height, ZColor fg, ZColor bg, Attributes attr = {});
+    void clearRect(int x, int y, int width, int height, ZColor fg, ZColor bg, int fillChar, Attributes attr = {});
     void setSoftwrapMarker(int x, int y);
     void clearSoftwrapMarker(int x, int y);
 
