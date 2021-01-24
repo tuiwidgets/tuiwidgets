@@ -27,8 +27,12 @@ ZWidgetPrivate::~ZWidgetPrivate()
 
 }
 
-ZWidget::ZWidget(ZWidget *parent) :
-    QObject(parent), tuiwidgets_pimpl_ptr(std::make_unique<ZWidgetPrivate>(this))
+ZWidget::ZWidget(ZWidget *parent) : ZWidget(parent, std::make_unique<ZWidgetPrivate>(this))
+{
+}
+
+ZWidget::ZWidget(QObject *parent, std::unique_ptr<ZWidgetPrivate> pimpl) :
+    QObject(parent), tuiwidgets_pimpl_ptr(move(pimpl))
 {
     // ??? maybe delay parenting to after some code here was run?
     // ??? should there be a posted event after creation? Could be useful for two phase init, but could be to late anyway
