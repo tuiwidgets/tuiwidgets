@@ -1,4 +1,5 @@
 #include "ZRoot.h"
+#include "ZRoot_p.h"
 
 #include <QSize>
 
@@ -7,7 +8,7 @@
 
 TUIWIDGETS_NS_START
 
-ZRoot::ZRoot() {
+ZRoot::ZRoot() : ZWidget(nullptr, std::make_unique<ZRootPrivate>(this)) {
     setPalette(ZPalette::classic());
 }
 
@@ -17,32 +18,34 @@ void ZRoot::paintEvent(ZPaintEvent *event) {
 }
 
 void ZRoot::keyEvent(ZKeyEvent *event) {
+    auto *const p = tuiwidgets_impl();
     if (event->key() == Qt::Key_F6 && (event->modifiers() == 0 || event->modifiers() == Qt::Modifier::SHIFT)) {
         ZWidget *first = nullptr;
         bool arm = false;
         bool found = false;
-        QList<ZWidget*> childWindows = findChildren<ZWidget*>(QStringLiteral(""), Qt::FindDirectChildrenOnly);
-        QMutableListIterator<ZWidget*> it(childWindows);
-        while (it.hasNext()) {
-            ZWidget* w = it.next();
-            if (!w->paletteClass().contains(QStringLiteral("window"))) {
-                it.remove();
-            }
-            if (!w->isVisible()) {
-                it.remove();
+
+        QList<ZWidget*> childWindows;
+        for (QObject* obj : p->windows) {
+            auto childWidget = qobject_cast<ZWidget*>(obj);
+            if (childWidget && childWidget->paletteClass().contains(QStringLiteral("window")) && childWidget->isVisible()) {
+                childWindows.append(childWidget);
             }
         }
+
         if (event->modifiers() == Qt::Modifier::SHIFT) {
             std::reverse(childWindows.begin(), childWindows.end());
         }
         for(ZWidget *win : childWindows) {
-            if (!first) {
-                first = win->placeFocus();
+            if (!first && win->placeFocus()) {
+                first = win;
             }
             if (arm) {
                 ZWidget *w = win->placeFocus();
                 if (w) {
                     w->setFocus(Qt::FocusReason::ActiveWindowFocusReason);
+                    if(win->paletteClass().contains(QStringLiteral("dialog"))) {
+                        win->raise();
+                    }
                     found = true;
                     break;
                 }
@@ -52,7 +55,10 @@ void ZRoot::keyEvent(ZKeyEvent *event) {
             }
         }
         if (!found && first) {
-            first->setFocus(Qt::FocusReason::ActiveWindowFocusReason);
+            first->placeFocus()->setFocus(Qt::FocusReason::ActiveWindowFocusReason);
+            if(first->paletteClass().contains(QStringLiteral("dialog"))) {
+                first->raise();
+            }
         }
     }
 }
@@ -70,6 +76,13 @@ void ZRoot::timerEvent(QTimerEvent *event) {
 }
 
 void ZRoot::childEvent(QChildEvent *event) {
+    auto *const p = tuiwidgets_impl();
+    if (event->added()) {
+        p->windows.prepend(event->child());
+    }
+    if (event->removed()) {
+        p->windows.removeOne(event->child());
+    }
     ZWidget::childEvent(event);
 }
 
@@ -109,6 +122,10 @@ void ZRoot::resizeEvent(ZResizeEvent *event) {
 
 void ZRoot::moveEvent(ZMoveEvent *event) {
     ZWidget::moveEvent(event);
+}
+
+Tui::ZRootPrivate::ZRootPrivate(ZRoot *pub) : ZWidgetPrivate(pub) {
+
 }
 
 TUIWIDGETS_NS_END

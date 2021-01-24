@@ -7,15 +7,18 @@
 
 TUIWIDGETS_NS_START
 
-class TUIWIDGETS_EXPORT ZRoot : public Tui::ZWidget {
+class ZRootPrivate;
+
+class TUIWIDGETS_EXPORT ZRoot : public ZWidget {
     Q_OBJECT
 
 public:
     ZRoot();
 
 protected:
-    void paintEvent(Tui::ZPaintEvent *event) override;
-    void keyEvent(Tui::ZKeyEvent *event) override;
+    void paintEvent(ZPaintEvent *event) override;
+    void keyEvent(ZKeyEvent *event) override;
+    void childEvent(QChildEvent *event) override;
 
 public:
     // public virtuals from base class override everything for later ABI compatibility
@@ -26,7 +29,6 @@ public:
 
 protected:
     // protected virtuals from base class override everything for later ABI compatibility
-    void childEvent(QChildEvent *event) override;
     void connectNotify(const QMetaMethod &signal) override;
     void customEvent(QEvent *event) override;
     void disconnectNotify(const QMetaMethod &signal) override;
@@ -35,6 +37,9 @@ protected:
     void moveEvent(ZMoveEvent *event) override;
     void resizeEvent(ZResizeEvent *event) override;
     void timerEvent(QTimerEvent *event) override;
+
+private:
+    TUIWIDGETS_DECLARE_PRIVATE(ZRoot)
 };
 
 
