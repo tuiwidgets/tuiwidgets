@@ -121,6 +121,13 @@ void ZWidget::setVisible(bool v) {
     update();
 }
 
+void ZWidget::raise() {
+    QList<QObject*>& list = parentWidget()->d_ptr->children;
+    if (list.size() <= 1) return;
+    list.move(list.indexOf(this), list.size() - 1);
+    update();
+}
+
 QSize ZWidget::minimumSize() const {
     auto *const p = tuiwidgets_impl();
     return p->minimumSize;

@@ -61,6 +61,7 @@ public:
     void setEnabled(bool e);
     bool isVisible() const;
     void setVisible(bool v);
+    void raise();
 
     QSize minimumSize() const;
     void setMinimumSize(int w, int h);
