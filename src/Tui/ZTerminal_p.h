@@ -40,6 +40,9 @@ public:
 
     void sendOtherChangeEvent(QSet<ZSymbol> unchanged);
 
+    void adjustViewportOffset();
+    bool viewportKeyEvent(ZKeyEvent *translated);
+
     void processPaintingAndUpdateOutput(bool fullRepaint);
     void updateNativeTerminalState();
 
@@ -84,6 +87,11 @@ public:
     QString iconTitle;
     bool iconTitleNeedsUpdate;
     QString pasteTemp;
+
+    bool viewportActive = false;
+    bool viewportUI = false;
+    QPoint viewportOffset = {0, 0};
+    QPoint viewportRange = {0, 0};
 
     enum class InitState {
         InInitWithoutPendingPaintRequest,

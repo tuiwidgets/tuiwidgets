@@ -108,13 +108,36 @@ void ZTerminal::setCursorColor(int cursorColorR, int cursorColorG, int cursorCol
 void ZTerminalPrivate::processPaintingAndUpdateOutput(bool fullRepaint) {
     if (mainWidget.get()) {
         cursorPosition = QPoint{-1, -1};
-        ZPainter paint = pub()->painter();
-        ZPaintEvent event(ZPaintEvent::update, &paint);
+        const QSize minSize = mainWidget->minimumSize();
+        std::unique_ptr<ZPainter> paint;
+        std::unique_ptr<ZImage> img;
+        if (minSize.width() > termpaint_surface_width(surface) || minSize.height() > termpaint_surface_height(surface)) {
+            viewportActive = true;
+            viewportRange.setX(std::min(0, termpaint_surface_width(surface) - minSize.width()));
+            viewportRange.setY(std::min(0, termpaint_surface_height(surface) - minSize.height() - 1));
+            adjustViewportOffset();
+            img = std::make_unique<ZImage>(pub(), std::max(minSize.width(), termpaint_surface_width(surface)),
+                                           std::max(minSize.height(), termpaint_surface_height(surface)));
+            paint = std::make_unique<ZPainter>(img->painter());
+        } else {
+            viewportActive = false;
+            viewportUI = false;
+            viewportRange.setX(0);
+            viewportRange.setY(0);
+            viewportOffset.setX(0);
+            viewportOffset.setY(0);
+            paint = std::make_unique<ZPainter>(pub()->painter());
+        }
+        ZPaintEvent event(ZPaintEvent::update, paint.get());
         QCoreApplication::sendEvent(mainWidget.get(), &event);
         if (initState == ZTerminalPrivate::InitState::Ready) {
-            pub()->setCursorPosition(cursorPosition);
-            const bool cursorVisible = cursorPosition != QPoint{-1, -1};
+            QPoint realCursorPosition = cursorPosition + viewportOffset;
+            const bool cursorVisible = !(realCursorPosition.x() < 0
+                                   || realCursorPosition.y() < 0
+                                   || realCursorPosition.x() >= termpaint_surface_width(surface)
+                                   || realCursorPosition.y() >= termpaint_surface_height(surface));
             if (cursorVisible) {
+                pub()->setCursorPosition(realCursorPosition);
                 CursorStyle style = CursorStyle::Unset;
                 if (focusWidget) {
                     style = focusWidget->cursorStyle;
@@ -123,9 +146,23 @@ void ZTerminalPrivate::processPaintingAndUpdateOutput(bool fullRepaint) {
                                           focusWidget->cursorColorB);
                 }
                 pub()->setCursorStyle(style);
+            } else {
+                pub()->setCursorPosition({-1, -1});
             }
         }
         Q_EMIT pub()->afterRendering();
+        if (viewportActive) {
+            ZPainter terminalPainter = pub()->painter();
+            terminalPainter.clear(ZColor::defaultColor(), ZColor::defaultColor());
+            terminalPainter.drawImage(viewportOffset.x(), viewportOffset.y(), *img);
+            if(viewportUI) {
+                terminalPainter.writeWithColors(0, termpaint_surface_height(surface) - 1, QStringLiteral("←↑→↓ ESC"),
+                                                ZColor::defaultColor(), ZColor::defaultColor());
+            } else {
+                terminalPainter.writeWithColors(0, termpaint_surface_height(surface) - 1, QStringLiteral("F6 Scroll"),
+                                                ZColor::defaultColor(), ZColor::defaultColor());
+            }
+        }
         if (fullRepaint) {
             pub()->updateOutputForceFullRepaint();
         } else {
@@ -294,7 +331,9 @@ void ZTerminal::resize(int width, int height) {
     auto *const p = tuiwidgets_impl();
     termpaint_surface_resize(p->surface, width, height);
     if (p->mainWidget) {
-        p->mainWidget->setGeometry({0, 0, termpaint_surface_width(p->surface), termpaint_surface_height(p->surface)});
+        const QSize minSize = p->mainWidget->minimumSize();
+        p->mainWidget->setGeometry({0, 0, std::max(minSize.width(), termpaint_surface_width(p->surface)),
+                                    std::max(minSize.height(), termpaint_surface_height(p->surface))});
     }
     forceRepaint();
 }
@@ -555,6 +594,38 @@ void ZTerminal::dispatchPasteEvent(ZPasteEvent &translated) {
     }
 }
 
+void ZTerminalPrivate::adjustViewportOffset() {
+    viewportOffset.setX(std::min(0, std::max(viewportRange.x(), viewportOffset.x())));
+    viewportOffset.setY(std::min(0, std::max(viewportRange.y(), viewportOffset.y())));
+}
+
+bool ZTerminalPrivate::viewportKeyEvent(ZKeyEvent *translated) {
+    if (viewportUI) {
+        if (translated->key() == Qt::Key_F6 && translated->modifiers() == 0) {
+            viewportUI = false;
+            return false;
+        } else if (translated->key() == Qt::Key_Escape) {
+            viewportUI = false;
+        } else if(translated->key() == Qt::Key_Left) {
+            viewportOffset.setX(viewportOffset.x() + 1);
+        } else if(translated->key() == Qt::Key_Right) {
+            viewportOffset.setX(viewportOffset.x() - 1);
+        } else if(translated->key() == Qt::Key_Down) {
+            viewportOffset.setY(viewportOffset.y() - 1);
+        } else if(translated->key() == Qt::Key_Up) {
+            viewportOffset.setY(viewportOffset.y() + 1);
+        }
+        adjustViewportOffset();
+        pub()->update();
+    } else if (viewportActive && translated->key() == Qt::Key_F6 && translated->modifiers() == 0) {
+        viewportUI = true;
+        pub()->update();
+    } else {
+        return false;
+    }
+    return true;
+}
+
 bool ZTerminal::event(QEvent *event) {
     auto *const p = tuiwidgets_impl();
     if (event->type() == ZEventType::rawSequence()) {
@@ -565,7 +636,9 @@ bool ZTerminal::event(QEvent *event) {
         if (native->type == TERMPAINT_EV_CHAR || native->type == TERMPAINT_EV_KEY) {
             std::unique_ptr<ZKeyEvent> translated = translateKeyEvent(*static_cast<Tui::ZTerminalNativeEvent*>(event));
             if (translated) {
-                dispatchKeyboardEvent(*translated);
+                if (!p->viewportKeyEvent(translated.get())) {
+                    dispatchKeyboardEvent(*translated);
+                }
                 if (!translated->isAccepted()) {
                     if (translated->modifiers() == Qt::ControlModifier
                         && translated->text() == QStringLiteral("l")) {
