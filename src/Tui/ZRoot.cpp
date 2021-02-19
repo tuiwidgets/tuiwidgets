@@ -10,6 +10,7 @@ TUIWIDGETS_NS_START
 
 ZRoot::ZRoot() : ZWidget(nullptr, std::make_unique<ZRootPrivate>(this)) {
     setPalette(ZPalette::classic());
+    setMinimumSize(40, 7);
 }
 
 void ZRoot::paintEvent(ZPaintEvent *event) {
