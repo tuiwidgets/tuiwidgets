@@ -150,7 +150,7 @@ void ZTerminalPrivate::processPaintingAndUpdateOutput(bool fullRepaint) {
                 pub()->setCursorPosition({-1, -1});
             }
         }
-        Q_EMIT pub()->afterRendering();
+
         if (viewportActive) {
             ZPainter terminalPainter = pub()->painter();
             terminalPainter.clear(ZColor::defaultColor(), ZColor::defaultColor());
@@ -163,6 +163,7 @@ void ZTerminalPrivate::processPaintingAndUpdateOutput(bool fullRepaint) {
                                                 ZColor::defaultColor(), ZColor::defaultColor());
             }
         }
+        Q_EMIT pub()->afterRendering();
         if (fullRepaint) {
             pub()->updateOutputForceFullRepaint();
         } else {
