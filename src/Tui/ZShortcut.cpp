@@ -80,6 +80,9 @@ bool ZShortcut::matches(ZWidget *focusWidget, const ZKeyEvent *event) {
         case Qt::WindowShortcut:
             {
                 ZWidget *window = focusWidget;
+                if (!window) {
+                    return false;
+                }
                 while (window->parent()) {
                     if (window->paletteClass().contains(QStringLiteral("window"))) {
                         break;
