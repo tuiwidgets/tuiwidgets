@@ -284,7 +284,7 @@ ZPalette ZPalette::classic() {
         { "window.default.control.focused.bg", Colors::blue},
         { "window.default.control.focused.fg", Colors::brightWhite},
         { "window.default.control.disabled.bg", Colors::blue},
-        { "window.default.control.disabled.fg", Colors::darkGray},
+        { "window.default.control.disabled.fg", Colors::black},
         { "window.default.control.shortcut.bg", Colors::blue},
         { "window.default.control.shortcut.fg", Colors::brightYellow},
         { "window.default.button.bg", Colors::green},
