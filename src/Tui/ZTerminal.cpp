@@ -192,7 +192,7 @@ void ZTerminal::dispatcherIsAboutToBlock() {
 }
 
 ZTerminal::ZTerminal(QObject *parent)
-    : ZTerminal(0, parent)
+    : ZTerminal({}, parent)
 {
 }
 
@@ -428,7 +428,7 @@ bool ZTerminal::isPaused() {
 std::unique_ptr<ZKeyEvent> ZTerminal::translateKeyEvent(const ZTerminalNativeEvent &nativeEvent) {
     termpaint_event* native = static_cast<termpaint_event*>(nativeEvent.nativeEventPointer());
 
-    Qt::KeyboardModifiers modifiers = 0;
+    Qt::KeyboardModifiers modifiers = {};
     unsigned nativeModifier = 0;
     if (native->type == TERMPAINT_EV_KEY) {
         nativeModifier = native->key.modifier;

@@ -17,7 +17,7 @@ public:
     // FIXME Massive changes needed
     ZKeySequence();
     static ZKeySequence forMnemonic(const QString &c);
-    static ZKeySequence forKey(int key, Qt::KeyboardModifiers modifiers = 0);
+    static ZKeySequence forKey(int key, Qt::KeyboardModifiers modifiers = {});
     static ZKeySequence forShortcut(const QString &c, Qt::KeyboardModifiers modifiers = Qt::ControlModifier);
 
 private:
@@ -25,7 +25,7 @@ private:
     friend class ZShortcut;
     QString _forMnemonic;
     QString _forShortcut;
-    Qt::KeyboardModifiers _modifiers = 0;
+    Qt::KeyboardModifiers _modifiers = {};
     int _forKey = 0;
 };
 

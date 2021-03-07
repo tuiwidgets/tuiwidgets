@@ -44,7 +44,7 @@ public:
 public:
     int key = Qt::Key_unknown;
     QString text;
-    Qt::KeyboardModifiers modifiers = 0;
+    Qt::KeyboardModifiers modifiers = {};
 };
 
 class ZPasteEventPrivate : public ZEventPrivate {
