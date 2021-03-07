@@ -18,7 +18,7 @@ class ZCommandManagerPrivate;
 class TUIWIDGETS_EXPORT ZCommandManager : public QObject {
     Q_OBJECT
 public:
-    explicit ZCommandManager(QObject *parent = 0);
+    explicit ZCommandManager(QObject *parent = nullptr);
     ~ZCommandManager() override;
 
     void registerCommandNotifier(ZCommandNotifier *notifier);

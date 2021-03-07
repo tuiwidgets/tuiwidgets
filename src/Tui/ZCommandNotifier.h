@@ -15,7 +15,7 @@ class ZCommandNotifierPrivate;
 class TUIWIDGETS_EXPORT ZCommandNotifier : public QObject {
     Q_OBJECT
 public:
-    explicit ZCommandNotifier(Tui::ZImplicitSymbol command, QObject *parent = 0);
+    explicit ZCommandNotifier(Tui::ZImplicitSymbol command, QObject *parent = nullptr);
     ~ZCommandNotifier() override;
 
 public:

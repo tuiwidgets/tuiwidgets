@@ -50,9 +50,9 @@ public:
     };
 
 public:
-    explicit ZTerminal(QObject *parent = 0);
-    explicit ZTerminal(Options options, QObject *parent = 0);
-    explicit ZTerminal(const OffScreen& offscreen, QObject *parent = 0);
+    explicit ZTerminal(QObject *parent = nullptr);
+    explicit ZTerminal(Options options, QObject *parent = nullptr);
+    explicit ZTerminal(const OffScreen& offscreen, QObject *parent = nullptr);
     virtual ~ZTerminal();
 
 public:
