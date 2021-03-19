@@ -103,6 +103,7 @@ public Q_SLOTS:
 Q_SIGNALS:
     void afterRendering();
     void incompatibleTerminalDetected();
+    void terminalConnectionLost();
 
 protected:
     std::unique_ptr<ZTerminalPrivate> tuiwidgets_pimpl_ptr;

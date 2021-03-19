@@ -19,6 +19,7 @@
 #include <QCoreApplication>
 #include <QPointer>
 #include <QRect>
+#include <QMetaMethod>
 
 #include <PosixSignalManager.h>
 
@@ -54,6 +55,20 @@ static termios systemPresuspendTerminalAttributes;
 static std::unique_ptr<PosixSignalNotifier> systemTerminalResumeNotifier;
 static std::unique_ptr<PosixSignalNotifier> systemTerminalSizeChangeNotifier;
 static QPointer<ZTerminal> systemTerminal;
+
+static bool terminal_is_disconnected(int fd) {
+    // !!! signal handler code, only use async-safe calls (see signal-safety(7)) , no Qt at all.
+
+    // Using poll seems to be the most portable way to detect if a tty is in hangup/disconnected state.
+    // Other alternatives: tcgetattr and checking errno for EIO works on linux.
+    //                     a zero bytes write and checking for EIO or ENXIO seems to work on may systems but posix
+    //                     does not say anything about 0 byte writes on terminals (only on regular files)
+    struct pollfd info;
+    info.fd = fd;
+    info.events = POLLIN;
+    int ret = poll(&info, 1, 0);
+    return ret == 1 && info.revents & POLLHUP;
+}
 
 static void restoreSystemHandler(const siginfo_t *info, void *context) {
     // !!! signal handler code, only use async-safe calls (see signal-safety(7)) , no Qt at all.
@@ -141,6 +156,26 @@ static void suspendHelper(bool tcattr) {
     }
 }
 
+static void hupHandler (PosixSignalFlags &flags, const siginfo_t *info, void *context) {
+    // !!! signal handler code, only use async-safe calls (see signal-safety(7)) , no Qt at all.
+    Q_UNUSED(info);
+    Q_UNUSED(context);
+
+    // It seems impossible to detect if this SIGHUP is really from a disconnected terminal or send for other reasons.
+    // That's because many applications that use a pty send a manual SIGHUP shortly before actually disconnecting
+    // the terminal. Thus no way to differentiate between a stray kill -HUP or a real terminal hangup without using
+    // fragile timeouts.
+    //
+    // So we just do nothing here and rely on the event loop integration to get a zero byte read and then detect the
+    // disconnected terminal.
+    //
+    // On the other side this mean that per default applications will ignore stray SIGHUP which should be ok. If some
+    // other handling is wanted the application is free to setup a sync handler using PosixSignalManager with
+    // `flags.reraise();` if terminating behavior is wanted or an async handler if event loop based handling is wanted.
+    //
+    // Ignore the signal via an empty handler instead of using SIG_IGN to not mess with state inheritable through execve
+}
+
 /*
  * Needed manual tests:
  * 1) send TSTP, resume via shell
@@ -185,6 +220,11 @@ static void resumeHandler(PosixSignalFlags &flags, const siginfo_t *info, void *
 
     int pausedFd = systemPausedFd.load();
     int fd = (pausedFd != -1) ? pausedFd : restoreFd;
+
+    if (terminal_is_disconnected(fd)) {
+        return;
+    }
+
     if (tcgetpgrp(fd) != getpgrp()) {
         // spurious wakeup, this process is still not in the foreground process group,
         // restoring the terminal state will just halt again anyway.
@@ -384,6 +424,7 @@ bool ZTerminalPrivate::commonStuff(ZTerminal::Options options) {
                 systemRestoreInited = true;
                 PosixSignalManager::instance()->addSyncTerminationHandler(restoreSystemHandler);
                 PosixSignalManager::instance()->addSyncCrashHandler(restoreSystemHandler);
+                PosixSignalManager::instance()->addSyncSignalHandler(SIGHUP, hupHandler);
                 PosixSignalManager::instance()->addSyncSignalHandler(SIGTSTP, suspendHandler);
                 PosixSignalManager::instance()->addSyncSignalHandler(SIGTTIN, suspendHandler);
                 PosixSignalManager::instance()->addSyncSignalHandler(SIGTTOU, suspendHandler);
@@ -404,11 +445,23 @@ bool ZTerminalPrivate::commonStuff(ZTerminal::Options options) {
                         // TSTP ran at least once since init or the last invocation of this handler
                         dup2(pausedFd, systemRestoreFd.load());
                         close(pausedFd);
+
+                        if (terminal_is_disconnected(systemRestoreFd.load())) {
+                            return;
+                        }
+
                         if (systemTerminal) {
                             termpaint_terminal_unpause(ZTerminalPrivate::get(systemTerminal)->terminal);
                         }
+                    } else {
+                        if (terminal_is_disconnected(systemRestoreFd.load())) {
+                            return;
+                        }
                     }
-                    systemTerminal->forceRepaint();
+
+                    if (systemTerminal) {
+                        systemTerminal->forceRepaint();
+                    }
                 });
 
                 systemTerminalSizeChangeNotifier = std::unique_ptr<PosixSignalNotifier>(new PosixSignalNotifier(SIGWINCH));
@@ -513,6 +566,24 @@ void ZTerminalPrivate::integration_terminalFdHasData(int socket) {
     awaitingResponse = false;
     char buff[100];
     int amount = read (socket, buff, 99);
+    if (amount == 0) {
+        if (terminal_is_disconnected((socket))) {
+            inputNotifier->setEnabled(false);
+            QPointer<ZTerminal> weak = pub();
+            if (pub()->isSignalConnected(QMetaMethod::fromSignal(&ZTerminal::terminalConnectionLost))) {
+                QTimer::singleShot(0, [weak] {
+                    if (!weak.isNull()) {
+                        weak->terminalConnectionLost();
+                    }
+                });
+            } else {
+                QCoreApplication::quit();
+            }
+            return;
+        }
+    } else if (amount < 0) {
+        return;
+    }
     termpaint_terminal_add_input_data(terminal, buff, amount);
     QString peek = QString::fromUtf8(termpaint_terminal_peek_input_buffer(terminal), termpaint_terminal_peek_input_buffer_length(terminal));
     if (peek.length()) {
