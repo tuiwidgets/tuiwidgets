@@ -430,10 +430,10 @@ bool ZTerminalPrivate::commonStuff(ZTerminal::Options options) {
 
     struct termios tattr;
     tcgetattr (fd, &tattr);
-    tattr.c_iflag |= IGNBRK|IGNPAR;
+    tattr.c_iflag |= IGNBRK | IGNPAR;
     tattr.c_iflag &= ~(BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL | IXON | IXOFF);
-    tattr.c_oflag &= ~(OPOST|ONLCR|OCRNL|ONOCR|ONLRET);
-    tattr.c_lflag &= ~(ICANON|IEXTEN|ECHO);
+    tattr.c_oflag &= ~(OPOST | ONLCR | OCRNL | ONOCR | ONLRET);
+    tattr.c_lflag &= ~(ICANON | IEXTEN | ECHO);
     // Don't set c_lflag |= TOSTOP, because that would cause other background applications on the same tty
     // to be stopped, which would be unexpected for non fullscreen applications. We would like to get
     // this application to stop when it's in the background and tries to write, but that not possible separately.
