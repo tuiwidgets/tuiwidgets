@@ -40,9 +40,10 @@ TUIWIDGETS_NS_START
 #endif
 
 // signal based terminal restore...
-static bool systemRestoreInited = false;
+static bool systemRestoreInited = false; // global once only signal handler registration
 STATIC_ASSERT_ALWAYS_LOCKFREE(std::atomic<int>);
 static std::atomic<int> systemRestoreFd { -1 }; // only written by non signal handling code
+                                                // atomic for release-aquire pair for systemOriginalTerminalAttributes
 static std::atomic<int> systemPausedFd { -1 }; // written by signal handling and non signal handling code
 static termios systemOriginalTerminalAttributes;
 STATIC_ASSERT_ALWAYS_LOCKFREE(std::atomic<const char *>);
@@ -62,6 +63,9 @@ static void restoreSystemHandler(const siginfo_t *info, void *context) {
     if (systemTerminalPaused.load()) return;
 
     int restoreFd = systemRestoreFd.load();
+
+    if (restoreFd == -1) return;
+
     tcsetattr(restoreFd, TCSAFLUSH, &systemOriginalTerminalAttributes);
     const char *restoreEscape = systemRestoreEscape.load();
     if (restoreEscape) {
@@ -264,6 +268,14 @@ void ZTerminalPrivate::deinitTerminal() {
     if (fd != -1 && fd == systemRestoreFd.load()) {
         const char *old = systemRestoreEscape.load();
         systemRestoreEscape.store(nullptr);
+        systemRestoreFd.store(-1);
+        systemTerminal = nullptr;
+        int pausedFd = systemPausedFd.load();
+        if (pausedFd != -1) {
+            dup2(pausedFd, fd);
+            close(pausedFd);
+            systemPausedFd.store(-1);
+        }
         PosixSignalManager::instance()->barrier();
         delete [] old;
     }
@@ -345,62 +357,75 @@ bool ZTerminalPrivate::commonStuff(ZTerminal::Options options) {
     // This cleanly stops terminal init, until after the process's job is moved to the foreground.
     tcsetattr(fd, TCSANOW, &originalTerminalAttributes);
 
-    if (!systemRestoreInited) {
-        // TODO this only really works well for the first terminal in an process.
-        // Thats ok for now, but destructing a terminal should reset it enough to
-        // connect to a newly created instance.
-        systemOriginalTerminalAttributes = originalTerminalAttributes;
-        systemRestoreInited = true;
-        systemRestoreFd.store(fd);
-        if (!PosixSignalManager::isCreated()) {
-            PosixSignalManager::create();
+    // determine if fd refers to the controlling tty
+    const bool controllingTty = (tcgetpgrp(fd) != -1);
+    if (controllingTty) {
+        if (systemRestoreFd.load() != -1) {
+            qWarning("Two ZTerminal instances connected to the controlling terminal at once is not supported");
+        } else {
+            if (!PosixSignalManager::isCreated()) {
+                PosixSignalManager::create();
+            }
+
+            systemOriginalTerminalAttributes = originalTerminalAttributes;
+
+            // The initial restore sequence update was in termpaint_terminal_new, we missed that
+            // because systemRestoreFd was not set yet, trigger update again
+            const char* tmp = termpaint_terminal_restore_sequence(terminal);
+            integration_restore_sequence_updated(tmp, static_cast<int>(strlen(tmp)), true);
+
+            // After this the signal handler pay attention to the just setup state
+            // Also this forms a release-aquire pair with reads in the signal handler
+            // to allow for race free access of systemOriginalTerminalAttributes.
+            systemRestoreFd.store(fd);
+            systemTerminal = pub();
+
+            if (!systemRestoreInited) {
+                systemRestoreInited = true;
+                PosixSignalManager::instance()->addSyncTerminationHandler(restoreSystemHandler);
+                PosixSignalManager::instance()->addSyncCrashHandler(restoreSystemHandler);
+                PosixSignalManager::instance()->addSyncSignalHandler(SIGTSTP, suspendHandler);
+                PosixSignalManager::instance()->addSyncSignalHandler(SIGTTIN, suspendHandler);
+                PosixSignalManager::instance()->addSyncSignalHandler(SIGTTOU, suspendHandler);
+                // resume is two step. A synchronous part which restores terminal mode
+                // and normalizes state in case suspendHandler was not called (SIGSTOP or manual SIGCONT)
+                PosixSignalManager::instance()->addSyncSignalHandler(SIGCONT, resumeHandler);
+                // and a notifier part that resends escape sequences and triggers
+                // repaint in the next main loop interation
+                systemTerminalResumeNotifier = std::unique_ptr<PosixSignalNotifier>(new PosixSignalNotifier(SIGCONT));
+                QObject::connect(systemTerminalResumeNotifier.get(), &PosixSignalNotifier::activated, [] {
+                    // This handler can be called either on
+                    // a) resume from TSTP. In that case the state was prepared by suspendHandler
+                    // b) resume from STOP. As stop is uncatchable, the state is normal steady application state
+                    // c) whenever someone sends a CONT signal in other cases. This is just like b)
+
+                    int pausedFd = systemPausedFd.load();
+                    if (pausedFd != -1 && systemPausedFd.compare_exchange_strong(pausedFd, -1)) {
+                        // TSTP ran at least once since init or the last invocation of this handler
+                        dup2(pausedFd, systemRestoreFd.load());
+                        close(pausedFd);
+                        if (systemTerminal) {
+                            termpaint_terminal_unpause(ZTerminalPrivate::get(systemTerminal)->terminal);
+                        }
+                    }
+                    systemTerminal->forceRepaint();
+                });
+
+                systemTerminalSizeChangeNotifier = std::unique_ptr<PosixSignalNotifier>(new PosixSignalNotifier(SIGWINCH));
+                QObject::connect(systemTerminalSizeChangeNotifier.get(), &PosixSignalNotifier::activated, [] {
+                    if (systemTerminal) {
+                        auto *const p = systemTerminal->tuiwidgets_impl();
+                        if (p->options.testFlag(ZTerminal::DisableAutoResize)) {
+                            return;
+                        }
+                        struct winsize s;
+                        if (isatty(p->fd) && ioctl(p->fd, TIOCGWINSZ, &s) >= 0) {
+                            systemTerminal->resize(s.ws_col, s.ws_row);
+                        }
+                    }
+                });
+            }
         }
-        // The initial restore sequence update was in termpaint_terminal_new, we missed that
-        // because systemRestoreFd was not set yet, trigger update again
-        const char* tmp = termpaint_terminal_restore_sequence(terminal);
-        integration_restore_sequence_updated(tmp, static_cast<int>(strlen(tmp)));
-        PosixSignalManager::instance()->addSyncTerminationHandler(restoreSystemHandler);
-        PosixSignalManager::instance()->addSyncCrashHandler(restoreSystemHandler);
-        PosixSignalManager::instance()->addSyncSignalHandler(SIGTSTP, suspendHandler);
-        PosixSignalManager::instance()->addSyncSignalHandler(SIGTTIN, suspendHandler);
-        PosixSignalManager::instance()->addSyncSignalHandler(SIGTTOU, suspendHandler);
-        // resume is two step. A synchronous part which restores terminal mode
-        PosixSignalManager::instance()->addSyncSignalHandler(SIGCONT, resumeHandler);
-        // and a notifier part that triggers repaint in the next main loop interation
-        systemTerminalResumeNotifier = std::unique_ptr<PosixSignalNotifier>(new PosixSignalNotifier(SIGCONT));
-        QObject::connect(systemTerminalResumeNotifier.get(), &PosixSignalNotifier::activated, [] {
-            // This handler can be called either on
-            // a) resume from TSTP. In that case the state was prepared by suspendHandler
-            // b) resume from STOP. As stop is uncatchable, the state is normal steady application state
-            // c) whenever someone sends a CONT signal in other cases. This is just like b)
-
-            int pausedFd = systemPausedFd.load();
-            if (pausedFd != -1 && systemPausedFd.compare_exchange_strong(pausedFd, -1)) {
-                // TSTP ran at least once since init or the last invocation of this handler
-                dup2(pausedFd, systemRestoreFd.load());
-                close(pausedFd);
-                if (systemTerminal) {
-                    termpaint_terminal_unpause(ZTerminalPrivate::get(systemTerminal)->terminal);
-                }
-            }
-            systemTerminal->forceRepaint();
-        });
-
-        systemTerminalSizeChangeNotifier = std::unique_ptr<PosixSignalNotifier>(new PosixSignalNotifier(SIGWINCH));
-        QObject::connect(systemTerminalSizeChangeNotifier.get(), &PosixSignalNotifier::activated, [] {
-            if (systemTerminal) {
-                auto *const p = systemTerminal->tuiwidgets_impl();
-                if (p->options.testFlag(ZTerminal::DisableAutoResize)) {
-                    return;
-                }
-                struct winsize s;
-                if (isatty(p->fd) && ioctl(p->fd, TIOCGWINSZ, &s) >= 0) {
-                    systemTerminal->resize(s.ws_col, s.ws_row);
-                }
-            }
-        });
-
-        systemTerminal = pub();
     }
 
     struct termios tattr;
@@ -429,7 +454,7 @@ bool ZTerminalPrivate::commonStuff(ZTerminal::Options options) {
         }
     }
 
-    tcsetattr (fd, TCSAFLUSH, &tattr);
+    tcsetattr(fd, TCSAFLUSH, &tattr);
 
     if (systemRestoreFd.load() == fd) {
         tcgetattr(systemRestoreFd.load(), &systemPresuspendTerminalAttributes);
@@ -562,8 +587,8 @@ void ZTerminalPrivate::integration_awaiting_response() {
     awaitingResponse = true;
 }
 
-void ZTerminalPrivate::integration_restore_sequence_updated(const char *data, int len) {
-    if (fd == systemRestoreFd.load()) {
+void ZTerminalPrivate::integration_restore_sequence_updated(const char *data, int len, bool force) {
+    if (fd == systemRestoreFd.load() || force) {
         unsigned length = static_cast<unsigned>(len);
         const char *old = systemRestoreEscape.load();
         char *update = new char[length + 1];
@@ -599,7 +624,7 @@ void ZTerminalPrivate::init_fns() {
         container_of(ptr, ZTerminalPrivate, integration)->integration_awaiting_response();
     });
     termpaint_integration_set_restore_sequence_updated(&integration, [] (termpaint_integration* ptr, const char *data, int length) {
-        container_of(ptr, ZTerminalPrivate, integration)->integration_restore_sequence_updated(data, length);
+        container_of(ptr, ZTerminalPrivate, integration)->integration_restore_sequence_updated(data, length, false);
     });
 }
 
