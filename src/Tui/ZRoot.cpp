@@ -105,6 +105,10 @@ QObject *ZRoot::facet(const QMetaObject metaObject) {
     return ZWidget::facet(metaObject);
 }
 
+QRect ZRoot::layoutArea() const {
+    return ZWidget::layoutArea();
+}
+
 QSize ZRoot::sizeHint() const {
     return ZWidget::sizeHint();
 }
@@ -119,6 +123,10 @@ void ZRoot::focusOutEvent(ZFocusEvent *event) {
 
 void ZRoot::moveEvent(ZMoveEvent *event) {
     ZWidget::moveEvent(event);
+}
+
+void ZRoot::pasteEvent(ZPasteEvent *event) {
+    ZWidget::pasteEvent(event);
 }
 
 void ZRoot::resizeEvent(ZResizeEvent *event) {

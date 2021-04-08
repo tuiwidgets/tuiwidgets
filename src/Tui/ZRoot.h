@@ -25,6 +25,7 @@ public:
     bool event(QEvent *event) override;
     bool eventFilter(QObject *watched, QEvent *event) override;
     QObject *facet(const QMetaObject metaObject) override;
+    QRect layoutArea() const override;
     QSize sizeHint() const override;
 
 protected:
@@ -35,6 +36,7 @@ protected:
     void focusInEvent(ZFocusEvent *event) override;
     void focusOutEvent(ZFocusEvent *event) override;
     void moveEvent(ZMoveEvent *event) override;
+    void pasteEvent(ZPasteEvent *event) override;
     void resizeEvent(ZResizeEvent *event) override;
     void timerEvent(QTimerEvent *event) override;
 
