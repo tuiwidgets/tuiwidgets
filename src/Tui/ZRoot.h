@@ -24,8 +24,8 @@ public:
     // public virtuals from base class override everything for later ABI compatibility
     bool event(QEvent *event) override;
     bool eventFilter(QObject *watched, QEvent *event) override;
-    QSize sizeHint() const override;
     QObject *facet(const QMetaObject metaObject) override;
+    QSize sizeHint() const override;
 
 protected:
     // protected virtuals from base class override everything for later ABI compatibility

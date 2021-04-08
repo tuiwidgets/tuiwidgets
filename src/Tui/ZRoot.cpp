@@ -101,12 +101,12 @@ void ZRoot::disconnectNotify(const QMetaMethod &signal) {
     ZWidget::disconnectNotify(signal);
 }
 
-QSize ZRoot::sizeHint() const {
-    return ZWidget::sizeHint();
-}
-
 QObject *ZRoot::facet(const QMetaObject metaObject) {
     return ZWidget::facet(metaObject);
+}
+
+QSize ZRoot::sizeHint() const {
+    return ZWidget::sizeHint();
 }
 
 void ZRoot::focusInEvent(ZFocusEvent *event) {
@@ -117,12 +117,12 @@ void ZRoot::focusOutEvent(ZFocusEvent *event) {
     ZWidget::focusOutEvent(event);
 }
 
-void ZRoot::resizeEvent(ZResizeEvent *event) {
-    ZWidget::resizeEvent(event);
-}
-
 void ZRoot::moveEvent(ZMoveEvent *event) {
     ZWidget::moveEvent(event);
+}
+
+void ZRoot::resizeEvent(ZResizeEvent *event) {
+    ZWidget::resizeEvent(event);
 }
 
 Tui::ZRootPrivate::ZRootPrivate(ZRoot *pub) : ZWidgetPrivate(pub) {
