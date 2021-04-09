@@ -2,6 +2,7 @@
 #define TUIWIDGETS_ZTERMINAL_P_INCLUDED
 
 #include <QByteArray>
+#include <QMap>
 #include <QPoint>
 #include <QPointer>
 #include <QSocketNotifier>
@@ -126,6 +127,8 @@ public:
 public:
     int width;
     int height;
+
+    QMap<ZSymbol, bool> capabilities;
 
     // back door
     static OffScreenData* get(ZTerminal::OffScreen *data) { return data->tuiwidgets_pimpl_ptr.get(); }

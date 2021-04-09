@@ -42,7 +42,15 @@ public:
     class OffScreen {
     public:
         OffScreen(int width, int height);
+        OffScreen(const OffScreen&);
         ~OffScreen();
+
+    public:
+        OffScreen& operator=(const OffScreen&);
+
+    public:
+        OffScreen withCapability(ZSymbol capability);
+        OffScreen withoutCapability(ZSymbol capability);
 
     private:
         friend class OffScreenData;

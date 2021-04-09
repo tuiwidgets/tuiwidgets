@@ -20,6 +20,8 @@
 
 TUIWIDGETS_NS_START
 
+static ZSymbol extendedCharset = TUISYM_LITERAL("extendedCharset");
+
 ZTerminalPrivate::ZTerminalPrivate(ZTerminal *pub, ZTerminal::Options options)
     : options(options)
 {
@@ -214,6 +216,8 @@ bool ZTerminalPrivate::initTerminal(ZTerminal::Options options) {
 }
 
 void ZTerminalPrivate::initOffscreen(const ZTerminal::OffScreen &offscreen) {
+    auto *const offscreenData = ZTerminal::OffScreenData::get(&offscreen);
+
     auto free = [] (termpaint_integration* ptr) {
         termpaint_integration_deinit(ptr);
     };
@@ -229,8 +233,10 @@ void ZTerminalPrivate::initOffscreen(const ZTerminal::OffScreen &offscreen) {
 
     callbackRequested = false;
     terminal = termpaint_terminal_new(&integration);
+    if (!offscreenData->capabilities.value(extendedCharset, true)) {
+        termpaint_terminal_disable_capability(terminal, TERMPAINT_CAPABILITY_EXTENDED_CHARSET);
+    }
     surface = termpaint_terminal_get_surface(terminal);
-    auto * const offscreenData = ZTerminal::OffScreenData::get(&offscreen);
     termpaint_surface_resize(surface, offscreenData->width, offscreenData->height);
     termpaint_terminal_set_event_cb(terminal, [](void *, termpaint_event *) {}, nullptr);
 }
@@ -396,7 +402,6 @@ QString ZTerminal::autoDetectTimeoutMessage() const {
     return p->autoDetectTimeoutMessage;
 }
 
-static ZSymbol extendedCharset = TUISYM_LITERAL("extendedCharset");
 bool ZTerminal::hasCapability(ZSymbol cap) {
     auto *const p = tuiwidgets_impl();
     if (cap == extendedCharset) {
@@ -754,11 +759,23 @@ void ZTerminal::disconnectNotify(const QMetaMethod &signal) {
 ZTerminal::OffScreen::OffScreen(int width, int height) : tuiwidgets_pimpl_ptr(width, height) {
 }
 
-ZTerminal::OffScreen::~OffScreen() {
+ZTerminal::OffScreen::OffScreen(const ZTerminal::OffScreen&) = default;
+ZTerminal::OffScreen::~OffScreen() = default;
+ZTerminal::OffScreen& ZTerminal::OffScreen::operator=(const ZTerminal::OffScreen&) = default;
+
+ZTerminal::OffScreen ZTerminal::OffScreen::withCapability(ZSymbol capability) {
+    OffScreen ret = *this;
+    OffScreenData::get(&ret)->capabilities[capability] = true;
+    return ret;
+}
+
+ZTerminal::OffScreen ZTerminal::OffScreen::withoutCapability(ZSymbol capability) {
+    OffScreen ret = *this;
+    OffScreenData::get(&ret)->capabilities[capability] = false;
+    return ret;
 }
 
 ZTerminal::OffScreenData::OffScreenData(int width, int height) : width(width), height(height) {
 }
-
 
 TUIWIDGETS_NS_END
