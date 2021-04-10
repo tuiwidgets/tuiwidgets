@@ -30,6 +30,7 @@ public:
 
 private:
     friend class ZTerminal;
+    friend class ZPainter;
     ZTextMetrics(std::shared_ptr<ZTextMetricsPrivate> impl);
 
 protected:

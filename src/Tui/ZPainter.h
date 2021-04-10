@@ -12,10 +12,11 @@ class QRect;
 
 TUIWIDGETS_NS_START
 
-class ZPainterPrivate;
 class ZImage;
+class ZTextMetrics;
 class ZWidget;
 
+class ZPainterPrivate;
 class TUIWIDGETS_EXPORT ZPainter {
 public:
     enum Attribute {
@@ -54,6 +55,8 @@ public:
     void setCursor(int x, int y);
 
     void setWidget(ZWidget *widget);
+
+    ZTextMetrics textMetrics();
 
 private:
     friend class ZTerminal;

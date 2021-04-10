@@ -6,6 +6,8 @@
 #include <Tui/ZColor.h>
 #include <Tui/ZImage_p.h>
 #include <Tui/ZTerminal_p.h>
+#include <Tui/ZTextMetrics.h>
+#include <Tui/ZTextMetrics_p.h>
 #include <Tui/ZWidget.h>
 
 TUIWIDGETS_NS_START
@@ -208,6 +210,11 @@ void ZPainter::setCursor(int x, int y) {
 void ZPainter::setWidget(ZWidget *widget) {
     auto *const pimpl = tuiwidgets_impl();
     pimpl->widget = widget;
+}
+
+ZTextMetrics ZPainter::textMetrics() {
+    auto *const pimpl = tuiwidgets_impl();
+    return ZTextMetrics(std::make_shared<ZTextMetricsPrivate>(pimpl->surface));
 }
 
 
