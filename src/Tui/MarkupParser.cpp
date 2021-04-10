@@ -31,13 +31,13 @@ MarkupTokenizer::MarkupTokenizer(QString markup)
             }
             cr = false;
         }
-        if (it->isHighSurrogate()) {
+        if (it->isLowSurrogate()) {
             _isError = true;
             break;
-        } else if (it->isLowSurrogate()) {
+        } else if (it->isHighSurrogate()) {
             it++;
-            if (it != markup.constEnd() && it->isHighSurrogate()) {
-                text.push_back(static_cast<char32_t>(QChar::surrogateToUcs4(it->unicode(), ch)));
+            if (it != markup.constEnd() && it->isLowSurrogate()) {
+                ch = static_cast<char32_t>(QChar::surrogateToUcs4(ch, it->unicode()));
             } else {
                 _isError = true;
                 break;

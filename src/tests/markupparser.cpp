@@ -28,3 +28,16 @@ TEST_CASE("markup parser entities") {
     CHECK(tok._isError == false);
     CHECK(tok.currentToken == Tui::Private::MarkupTokenizer::TT_EOF);
 }
+
+TEST_CASE("astral plain") {
+    Tui::Private::MarkupTokenizer tok{"😀"};
+    tok.getToken();
+    CHECK(tok._isError == false);
+    CHECK(tok.currentToken == Tui::Private::MarkupTokenizer::TT_Char);
+    CHECK(tok.currentChar == 0x1F600);
+    CHECK(tok.currentChar == U'😀');
+    tok.getToken();
+    CHECK(tok._isError == false);
+    CHECK(tok.currentToken == Tui::Private::MarkupTokenizer::TT_EOF);
+    // TODO this needs checks for unpaired surrogates and end of string just after a high surrogate.
+}
