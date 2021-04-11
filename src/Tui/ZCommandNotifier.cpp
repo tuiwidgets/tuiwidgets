@@ -13,6 +13,7 @@ ZCommandNotifier::ZCommandNotifier(ZImplicitSymbol command, QObject *parent)
     auto *const p = tuiwidgets_impl();
     p->command = command;
     probeParents();
+    enabledChanged(p->enabled);
 }
 
 ZCommandNotifier::~ZCommandNotifier() {
