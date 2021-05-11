@@ -96,8 +96,9 @@ ZPainter ZImage::painter() {
                                                       token));
 }
 
-ZImageData::ZImageData(termpaint_terminal *terminal, int width, int height) {
-    terminal = terminal;
+ZImageData::ZImageData(termpaint_terminal *terminal, int width, int height)
+    : terminal(terminal)
+{
     surface = termpaint_terminal_new_surface(terminal,
                                              width,
                                              height);
@@ -107,10 +108,12 @@ ZImageData::ZImageData(termpaint_terminal *terminal, termpaint_surface *surface)
     : terminal(terminal), surface(surface) {
 }
 
-ZImageData::ZImageData(const ZImageData &other) : QSharedData (other) {
+ZImageData::ZImageData(const ZImageData &other)
+    : QSharedData (other), terminal(other.terminal)
+{
     int width = termpaint_surface_width(other.surface);
     int height = termpaint_surface_height(other.surface);
-    terminal = terminal;
+
     surface = termpaint_terminal_new_surface(terminal,
                                              width,
                                              height);
