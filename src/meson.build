@@ -39,6 +39,11 @@ tuiwidgets_public_headers = [
   'Tui/MarkupParser.h',
 ]
 
+# private headers that are included by public headers (header only facilities)
+tuiwidgets_public_headers += [
+  'Tui/ZMoFunc_p.h',
+]
+
 #ide:editable-filelist
 tuiwidgets_sources = [
   'Tui/ListNode.cpp',
@@ -51,6 +56,7 @@ tuiwidgets_sources = [
   'Tui/ZImage.cpp',
   'Tui/ZLayout.cpp',
   'Tui/ZLayoutItem.cpp',
+  'Tui/ZMoFunc_p.h',
   'Tui/ZPainter.cpp',
   'Tui/ZPalette.cpp',
   'Tui/ZRoot.cpp',
