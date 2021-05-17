@@ -15,6 +15,8 @@ public:
     ZKeySequence key;
     bool enabled = true;
 
+    Private::ZMoFunc<bool()> enabledDelegate;
+
     QPointer<ZTerminal> terminal;
 };
 

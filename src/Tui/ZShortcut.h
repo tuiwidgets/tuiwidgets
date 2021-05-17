@@ -5,6 +5,8 @@
 
 #include <QObject>
 
+#include <Tui/ZMoFunc_p.h>
+
 #include <Tui/tuiwidgets_internal.h>
 
 TUIWIDGETS_NS_START
@@ -40,6 +42,8 @@ public:
 public:
     bool isEnabled() const;
     void setEnabled(bool enable);
+
+    void setEnabledDelegate(Private::ZMoFunc<bool()>&& delegate);
 
     bool matches(ZWidget *focusWidget, const ZKeyEvent *event);
 

@@ -32,9 +32,15 @@ ZShortcut::~ZShortcut() {
 
 bool ZShortcut::isEnabled() const {
     auto *const p = tuiwidgets_impl();
-    if (qobject_cast<ZWidget*>(parent())
-            && !qobject_cast<ZWidget*>(parent())->isEnabled()) {
-        return false;
+    if (!p->enabledDelegate) {
+        if (qobject_cast<ZWidget*>(parent())
+                && !qobject_cast<ZWidget*>(parent())->isEnabled()) {
+            return false;
+        }
+    } else {
+        if (!p->enabledDelegate()) {
+            return false;
+        }
     }
     return p->enabled;
 }
@@ -42,6 +48,11 @@ bool ZShortcut::isEnabled() const {
 void ZShortcut::setEnabled(bool enable) {
     auto *const p = tuiwidgets_impl();
     p->enabled = enable;
+}
+
+void ZShortcut::setEnabledDelegate(Private::ZMoFunc<bool()>&& delegate) {
+    auto *const p = tuiwidgets_impl();
+    p->enabledDelegate = std::move(delegate);
 }
 
 bool ZShortcut::matches(ZWidget *focusWidget, const ZKeyEvent *event) {
