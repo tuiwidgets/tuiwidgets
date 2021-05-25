@@ -75,6 +75,11 @@ void ZRoot::keyEvent(ZKeyEvent *event) {
 }
 
 bool ZRoot::event(QEvent *event) {
+    if (event->type() == Tui::ZEventType::otherChange()) {
+        if (!static_cast<Tui::ZOtherChangeEvent*>(event)->unchanged().contains(TUISYM_LITERAL("terminal"))) {
+            terminalChanged();
+        }
+    }
     return ZWidget::event(event);
 }
 
@@ -95,6 +100,10 @@ void ZRoot::childEvent(QChildEvent *event) {
         p->windows.removeOne(event->child());
     }
     ZWidget::childEvent(event);
+}
+
+void ZRoot::terminalChanged() {
+    // for derived classes to override
 }
 
 void ZRoot::customEvent(QEvent *event) {

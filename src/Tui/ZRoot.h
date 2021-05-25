@@ -23,6 +23,7 @@ protected:
     void paintEvent(ZPaintEvent *event) override;
     void keyEvent(ZKeyEvent *event) override;
     void childEvent(QChildEvent *event) override;
+    virtual void terminalChanged();
 
 public:
     // public virtuals from base class override everything for later ABI compatibility
