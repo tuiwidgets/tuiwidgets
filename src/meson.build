@@ -108,7 +108,7 @@ import('pkgconfig').generate(
 testlib = static_library('testlib', 'tests/catch_main.cpp')
 
 #ide:editable-filelist
-test_files = [
+testinternal_files = [
   'Tui/MarkupParser.cpp',
   'tests/markupparser.cpp',
 ]
@@ -117,8 +117,8 @@ silence_warnings = [
     '-Wno-padded'
 ]
 
-test('testtoolkit',
-  executable('testtoolkit', test_files,
+test('testtoolkitinternal',
+  executable('testtoolkitinternal', testinternal_files,
     link_with: [tuiwidgets, testlib],
     dependencies: [qt5_dep],
     cpp_args: ['-fno-inline', silence_warnings]
