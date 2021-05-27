@@ -25,4 +25,20 @@
 #define TUIWIDGETS_EXPORT Q_DECL_IMPORT
 #endif
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
+// Starting with qt 5.12 Q_DECLARE_OPERATORS_FOR_FLAGS for enums in the `Qt´ namespace is used in that namespace so
+// the usage of Q_DECLARE_OPERATORS_FOR_FLAGS for the Tui namespace can be done in the Tui namespace without
+// breaking usage of the qt enums/flags. Prefer doing that so that our enums/flags don't break if users have
+// operator| in their own namespaces.
+#define TUIWIDGETS_DECLARE_OPERATORS_FOR_FLAGS_IN_NAMESPACE(Flags) Q_DECLARE_OPERATORS_FOR_FLAGS(Flags)
+#define TUIWIDGETS_DECLARE_OPERATORS_FOR_FLAGS_GLOBAL(Flags)
+#else
+// Before qt 5.12 Q_DECLARE_OPERATORS_FOR_FLAGS for enums in the `Qt´ namespace is used in the global namespace so
+// any usage of Q_DECLARE_OPERATORS_FOR_FLAGS in a namespace breaks usage of the qt enums/flags for code in that namespace.
+// So usage of Q_DECLARE_OPERATORS_FOR_FLAGS in the Tui namespace should not be done. So when built old qt versions
+// also use the global namespace for operator| overloads for enums in the Tui namespace.
+#define TUIWIDGETS_DECLARE_OPERATORS_FOR_FLAGS_IN_NAMESPACE(Flags)
+#define TUIWIDGETS_DECLARE_OPERATORS_FOR_FLAGS_GLOBAL(Flags) Q_DECLARE_OPERATORS_FOR_FLAGS(Tui::TUIWIDGETS_NS_INLINE::Flags)
+#endif
+
 #endif // TUIWIDGETS_INTERNAL_H
