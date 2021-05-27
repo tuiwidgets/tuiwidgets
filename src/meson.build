@@ -110,20 +110,34 @@ testlib = static_library('testlib', 'tests/catch_main.cpp')
 test_env = environment()
 test_env.set('TUIWIDGETS_TEST_DATA', meson.current_source_dir() / 'tests')
 
+silence_warnings = [
+    '-Wno-padded'
+]
+
 #ide:editable-filelist
 testinternal_files = [
   'Tui/MarkupParser.cpp',
   'tests/markupparser.cpp',
 ]
 
-silence_warnings = [
-    '-Wno-padded'
-]
-
 test('testtoolkitinternal',
   executable('testtoolkitinternal', testinternal_files,
     link_with: [tuiwidgets, testlib],
     dependencies: [qt5_dep],
+    cpp_args: ['-fno-inline', silence_warnings]
+  ),
+  env: test_env
+)
+
+#ide:editable-filelist
+test_files = [
+  'tests/Testhelper.cpp',
+]
+
+test('testtoolkit',
+  executable('testtoolkit', test_files,
+    link_with: [tuiwidgets, testlib],
+    dependencies: [qt5_dep, termpaint_dep],
     cpp_args: ['-fno-inline', silence_warnings]
   ),
   env: test_env
