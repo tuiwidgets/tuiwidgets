@@ -107,6 +107,9 @@ import('pkgconfig').generate(
 
 testlib = static_library('testlib', 'tests/catch_main.cpp')
 
+test_env = environment()
+test_env.set('TUIWIDGETS_TEST_DATA', meson.current_source_dir() / 'tests')
+
 #ide:editable-filelist
 testinternal_files = [
   'Tui/MarkupParser.cpp',
@@ -122,5 +125,6 @@ test('testtoolkitinternal',
     link_with: [tuiwidgets, testlib],
     dependencies: [qt5_dep],
     cpp_args: ['-fno-inline', silence_warnings]
-  )
+  ),
+  env: test_env
 )
