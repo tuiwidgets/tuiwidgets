@@ -64,6 +64,8 @@ public:
 
     ZPalette& operator=(const ZPalette& other);
 
+    bool isNull() const;
+
 protected:
     ZValuePtr<ZPalettePrivate> tuiwidgets_pimpl_ptr;
 

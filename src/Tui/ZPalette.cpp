@@ -100,6 +100,12 @@ void ZPalette::addRules(QList<ZPalette::RuleDef> newRules) {
     p->rules += newRules;
 }
 
+bool ZPalette::isNull() const {
+    auto *const p = tuiwidgets_impl();
+
+    return p->colorDefinitions.isEmpty() && p->rules.isEmpty() && p->localAlias.isEmpty();
+}
+
 ZPalette &ZPalette::operator=(const ZPalette &other) = default;
 
 void ZPalette::setDefaultRules(ZPalette &p) {
