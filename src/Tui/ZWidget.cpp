@@ -287,7 +287,7 @@ ZColor ZWidget::getColor(const ZImplicitSymbol &x) {
     return p->palette.getColor(this, x);
 }
 
-QStringList ZWidget::paletteClass() {
+QStringList ZWidget::paletteClass() const {
     auto *const p = tuiwidgets_impl();
     return p->paletteClass;
 }
@@ -311,7 +311,7 @@ void ZWidget::removePaletteClass(QString clazz) {
     setPaletteClass(cls);
 }
 
-CursorStyle ZWidget::cursorStyle() {
+CursorStyle ZWidget::cursorStyle() const {
     auto *const p = tuiwidgets_impl();
     return p->cursorStyle;
 }

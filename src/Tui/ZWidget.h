@@ -96,12 +96,12 @@ public:
     void setPalette(const ZPalette &pal);
     ZColor getColor(const ZImplicitSymbol &x);
 
-    QStringList paletteClass();
+    QStringList paletteClass() const;
     void setPaletteClass(QStringList classes);
     void addPaletteClass(QString clazz);
     void removePaletteClass(QString clazz);
 
-    CursorStyle cursorStyle();
+    CursorStyle cursorStyle() const;
     void setCursorStyle(CursorStyle style);
     void resetCursorColor();
     void setCursorColor(int r, int b, int g);
