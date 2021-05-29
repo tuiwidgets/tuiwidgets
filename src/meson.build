@@ -135,6 +135,7 @@ test('testtoolkitinternal',
 #ide:editable-filelist
 test_files = [
   'tests/Testhelper.cpp',
+  'tests/viewport/moveviewport.cpp',
   'tests/window/window.cpp',
 ]
 
