@@ -2,6 +2,7 @@
 #include <Tui/ZPainter_p.h>
 
 #include <QRect>
+#include <QTextCodec>
 
 #include <Tui/ZColor.h>
 #include <Tui/ZImage_p.h>
@@ -65,29 +66,59 @@ ZPainter ZPainter::translateAndClip(int x, int y, int width, int height) {
     return ret;
 }
 
-void ZPainter::writeWithColors(int x, int y, QString string, ZColor fg, ZColor bg) {
+void ZPainter::writeWithColors(int x, int y, const QString &string, ZColor fg, ZColor bg) {
+    auto utf8 = string.toUtf8();
+    writeWithColors(x, y, utf8.data(), utf8.size(), fg, bg);
+}
+
+void ZPainter::writeWithColors(int x, int y, const char *stringUtf8, int utf8CodeUnits, ZColor fg, ZColor bg) {
     auto *const pimpl = tuiwidgets_impl();
     if (y >= pimpl->height) return;
 
-    termpaint_surface_write_with_colors_clipped(pimpl->surface,
-                                             x + pimpl->x, y + pimpl->y,
-                                             string.toUtf8().data(),
-                                             toTermPaintColor(fg), toTermPaintColor(bg),
-                                             pimpl->x, pimpl->x + pimpl->width - 1);
+    termpaint_surface_write_with_len_colors_clipped(pimpl->surface,
+                                                    x + pimpl->x, y + pimpl->y,
+                                                    stringUtf8, utf8CodeUnits,
+                                                    toTermPaintColor(fg), toTermPaintColor(bg),
+                                                    pimpl->x, pimpl->x + pimpl->width - 1);
 }
 
-void ZPainter::writeWithAttributes(int x, int y, QString string, ZColor fg, ZColor bg, Attributes attr) {
+void ZPainter::writeWithColors(int x, int y, const QChar *string, int size, ZColor fg, ZColor bg) {
+    QByteArray utf8 = QTextCodec::codecForMib(106)->fromUnicode(string, size);
+    writeWithColors(x, y, utf8.data(), utf8.size(), fg, bg);
+}
+
+void ZPainter::writeWithColors(int x, int y, const char16_t *string, int size, ZColor fg, ZColor bg) {
+    QByteArray utf8 = QTextCodec::codecForMib(106)->fromUnicode(reinterpret_cast<const QChar*>(string), size);
+    writeWithColors(x, y, utf8.data(), utf8.size(), fg, bg);
+}
+
+void ZPainter::writeWithAttributes(int x, int y, const QString &string, ZColor fg, ZColor bg, Attributes attr) {
+    auto utf8 = string.toUtf8();
+    writeWithAttributes(x, y, utf8.data(), utf8.size(), fg, bg, attr);
+}
+
+void ZPainter::writeWithAttributes(int x, int y, const char *stringUtf8, int utf8CodeUnits, ZColor fg, ZColor bg, Attributes attr) {
     auto *const pimpl = tuiwidgets_impl();
     if (y >= pimpl->height) return;
 
     termpaint_attr *termpaintAttr = termpaint_attr_new(toTermPaintColor(fg), toTermPaintColor(bg));
     termpaint_attr_set_style(termpaintAttr, attr);
-    termpaint_surface_write_with_attr_clipped(pimpl->surface,
-                                             x + pimpl->x, y + pimpl->y,
-                                             string.toUtf8().data(),
-                                             termpaintAttr,
-                                             pimpl->x, pimpl->x + pimpl->width - 1);
+    termpaint_surface_write_with_len_attr_clipped(pimpl->surface,
+                                                  x + pimpl->x, y + pimpl->y,
+                                                  stringUtf8, utf8CodeUnits,
+                                                  termpaintAttr,
+                                                  pimpl->x, pimpl->x + pimpl->width - 1);
     termpaint_attr_free(termpaintAttr);
+}
+
+void ZPainter::writeWithAttributes(int x, int y, const QChar *string, int size, ZColor fg, ZColor bg, Attributes attr) {
+    QByteArray utf8 = QTextCodec::codecForMib(106)->fromUnicode(string, size);
+    writeWithAttributes(x, y, utf8.data(), utf8.size(), fg, bg, attr);
+}
+
+void ZPainter::writeWithAttributes(int x, int y, const char16_t *string, int size, ZColor fg, ZColor bg, Attributes attr) {
+    QByteArray utf8 = QTextCodec::codecForMib(106)->fromUnicode(reinterpret_cast<const QChar*>(string), size);
+    writeWithAttributes(x, y, utf8.data(), utf8.size(), fg, bg, attr);
 }
 
 void ZPainter::clear(ZColor fg, ZColor bg, Attributes attr) {

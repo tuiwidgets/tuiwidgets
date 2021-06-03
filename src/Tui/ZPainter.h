@@ -2,6 +2,10 @@
 #define TUIWIDGETS_ZPAINTER_INCLUDED
 
 #include <memory>
+#include <string>
+#if defined(__cpp_lib_string_view) && defined(TUIWIDGETS_ABI_FORCE_INLINE)
+#include <string_view>
+#endif
 
 #include <QString>
 
@@ -42,8 +46,47 @@ public:
     ZPainter translateAndClip(QRect transform);
     ZPainter translateAndClip(int x, int y, int width, int height);
 
-    void writeWithColors(int x, int y, QString string, ZColor fg, ZColor bg);
-    void writeWithAttributes(int x, int y, QString string, ZColor fg, ZColor bg, Attributes attr);
+    void writeWithColors(int x, int y, const QString &string, ZColor fg, ZColor bg);
+    void writeWithColors(int x, int y, const QChar *string, int size, ZColor fg, ZColor bg);
+    void writeWithColors(int x, int y, const char16_t *string, int size, ZColor fg, ZColor bg);
+    void writeWithColors(int x, int y, const char *stringUtf8, int utf8CodeUnits, ZColor fg, ZColor bg);
+    void writeWithAttributes(int x, int y, const QString &string, ZColor fg, ZColor bg, Attributes attr);
+    void writeWithAttributes(int x, int y, const QChar *string, int size, ZColor fg, ZColor bg, Attributes attr);
+    void writeWithAttributes(int x, int y, const char16_t *string, int size, ZColor fg, ZColor bg, Attributes attr);
+    void writeWithAttributes(int x, int y, const char *stringUtf8, int utf8CodeUnits, ZColor fg, ZColor bg, Attributes attr);
+
+    // Wrappers for more modern types:
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0) && defined(TUIWIDGETS_ABI_FORCE_INLINE)
+    template <typename QSTRINGVIEW, Private::enable_if_same_remove_cvref<QSTRINGVIEW, QStringView> = 0>
+    TUIWIDGETS_ABI_FORCE_INLINE void writeWithColors(int x, int y, QSTRINGVIEW string, ZColor fg, ZColor bg) {
+        writeWithColors(x, y, string.data(), string.size(), fg, bg);
+    }
+    template <typename QSTRINGVIEW, Private::enable_if_same_remove_cvref<QSTRINGVIEW, QStringView> = 0>
+    TUIWIDGETS_ABI_FORCE_INLINE void writeWithAttributes(int x, int y, QSTRINGVIEW string, ZColor fg, ZColor bg, Attributes attr) {
+        writeWithAttributes(x, y, string.data(), string.size(), fg, bg, attr);
+    }
+#endif
+#if defined(__cpp_lib_string_view) && defined(TUIWIDGETS_ABI_FORCE_INLINE)
+    template <typename U16STRINGVIEW, Private::enable_if_same_remove_cvref<U16STRINGVIEW, std::u16string_view> = 0>
+    TUIWIDGETS_ABI_FORCE_INLINE void writeWithColors(int x, int y, U16STRINGVIEW string, ZColor fg, ZColor bg) {
+        writeWithColors(x, y, string.data(), string.size(), fg, bg);
+    }
+    template <typename U16STRINGVIEW, Private::enable_if_same_remove_cvref<U16STRINGVIEW, std::u16string_view> = 0>
+    TUIWIDGETS_ABI_FORCE_INLINE void writeWithAttributes(int x, int y, U16STRINGVIEW string, ZColor fg, ZColor bg, Attributes attr) {
+        writeWithAttributes(x, y, string.data(), string.size(), fg, bg, attr);
+    }
+
+    // Assumes utf8 in string_view
+    template <typename STRINGVIEW, Private::enable_if_same_remove_cvref<STRINGVIEW, std::string_view> = 0>
+    TUIWIDGETS_ABI_FORCE_INLINE void writeWithColors(int x, int y, STRINGVIEW string, ZColor fg, ZColor bg) {
+        writeWithColors(x, y, string.data(), string.size(), fg, bg);
+    }
+    template <typename STRINGVIEW, Private::enable_if_same_remove_cvref<STRINGVIEW, std::string_view> = 0>
+    TUIWIDGETS_ABI_FORCE_INLINE void writeWithAttributes(int x, int y, STRINGVIEW string, ZColor fg, ZColor bg, Attributes attr) {
+        writeWithAttributes(x, y, string.data(), string.size(), fg, bg, attr);
+    }
+#endif
+
     void clear(ZColor fg, ZColor bg, Attributes attr = {});
     void clear(ZColor fg, ZColor bg, int fillChar, Attributes attr = {});
     void clearRect(int x, int y, int width, int height, ZColor fg, ZColor bg, Attributes attr = {});
