@@ -41,4 +41,21 @@
 #define TUIWIDGETS_DECLARE_OPERATORS_FOR_FLAGS_GLOBAL(Flags) Q_DECLARE_OPERATORS_FOR_FLAGS(Tui::TUIWIDGETS_NS_INLINE::Flags)
 #endif
 
+// TUIWIDGETS_ABI_FORCE_INLINE is used when we use inline to avoid possible ABI trouble.
+// This is especially when wrappers around exported functions are enabled dependend of external library
+// versions. If left undefined those wrappers will not be defined.
+#if defined(__GNUC__)
+// gcc, clang and compatibles
+#define TUIWIDGETS_ABI_FORCE_INLINE inline __attribute__ ((__visibility__("hidden"), __always_inline__))
+#elif defined(_MSC_VER)
+#define TUIWIDGETS_ABI_FORCE_INLINE __forceinline
+#endif
+
+TUIWIDGETS_NS_START
+namespace Private {
+template <typename TOCONTRAINT, typename EXPECTEDTYPE>
+using enable_if_same_remove_cvref = typename std::enable_if<std::is_same<typename std::remove_cv<typename std::remove_reference<TOCONTRAINT>::type>::type, EXPECTEDTYPE>::value, int>::type;
+}
+TUIWIDGETS_NS_END
+
 #endif // TUIWIDGETS_INTERNAL_H
