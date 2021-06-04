@@ -119,14 +119,21 @@ silence_warnings = [
 
 #ide:editable-filelist
 testinternal_files = [
-  'Tui/MarkupParser.cpp',
   'tests/markupparser.cpp',
+  'tests/metrics/metrics.cpp',
+]
+
+# parts of the main library that are needed for the internal tests
+testinternal_files += [
+  'Tui/MarkupParser.cpp',
+  'Tui/ZPainter.cpp',
+  'Tui/ZTextMetrics.cpp',
 ]
 
 test('testtoolkitinternal',
   executable('testtoolkitinternal', testinternal_files,
     link_with: [tuiwidgets, testlib],
-    dependencies: [qt5_dep],
+    dependencies: [qt5_dep, termpaint_dep, termpaint_image_dep, posixsignalmanager_dep],
     cpp_args: ['-fno-inline', silence_warnings]
   ),
   env: test_env

@@ -121,4 +121,8 @@ Tui::ZTextMetricsPrivate::ZTextMetricsPrivate(termpaint_surface *surface) : surf
 {
 }
 
+ZTextMetrics ZTextMetricsPrivate::createForTesting(termpaint_surface *surface) {
+    return ZTextMetrics(std::make_shared<ZTextMetricsPrivate>(surface));
+}
+
 TUIWIDGETS_NS_END

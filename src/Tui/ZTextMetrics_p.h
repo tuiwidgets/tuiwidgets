@@ -12,6 +12,10 @@ public:
     ZTextMetricsPrivate(termpaint_surface *surface);
 
     termpaint_surface *surface;
+
+    // back door
+    static ZTextMetricsPrivate* get(ZTextMetrics *tm) { return tm->tuiwidgets_impl(); }
+    static ZTextMetrics createForTesting(termpaint_surface *surface);
 };
 
 TUIWIDGETS_NS_END

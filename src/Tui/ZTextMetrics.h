@@ -90,6 +90,7 @@ public:
 private:
     friend class ZTerminal;
     friend class ZPainter;
+    friend class ZTextMetricsPrivate;
     ZTextMetrics(std::shared_ptr<ZTextMetricsPrivate> impl);
 
 protected:
