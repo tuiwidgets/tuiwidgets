@@ -121,6 +121,7 @@ silence_warnings = [
 testinternal_files = [
   'tests/markupparser.cpp',
   'tests/metrics/metrics.cpp',
+  'tests/painting/painting.cpp',
 ]
 
 # parts of the main library that are needed for the internal tests

@@ -108,6 +108,7 @@ public:
 private:
     friend class ZTerminal;
     friend class ZImage;
+    friend class ZPainterPrivate;
     ZPainter(std::unique_ptr<ZPainterPrivate> impl);
 
 protected:

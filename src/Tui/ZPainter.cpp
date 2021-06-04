@@ -257,4 +257,13 @@ ZTextMetrics ZPainter::textMetrics() {
 }
 
 
+ZPainter ZPainterPrivate::createForTesting(termpaint_surface *surface) {
+    std::shared_ptr<char> token = std::make_shared<char>();
+    return ZPainter(std::make_unique<ZPainterPrivate>(surface,
+                                                      termpaint_surface_width(surface),
+                                                      termpaint_surface_height(surface),
+                                                      token));
+}
+
+
 TUIWIDGETS_NS_END
