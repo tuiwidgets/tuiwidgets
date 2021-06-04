@@ -155,7 +155,6 @@ void ZWidget::setMaximumSize(int w, int h) {
 }
 
 void ZWidget::setFixedSize(int w, int h) {
-    auto *const p = tuiwidgets_impl();
     setMinimumSize(w, h);
     setMaximumSize(w, h);
 }
@@ -945,23 +944,25 @@ void ZWidget::pasteEvent(ZPasteEvent *event) {
 }
 
 void ZWidget::focusInEvent(ZFocusEvent *event) {
+    (void)event;
     if (focusPolicy() != Qt::NoFocus) {
         update();
     }
 }
 
 void ZWidget::focusOutEvent(ZFocusEvent *event) {
+    (void)event;
     if (focusPolicy() != Qt::NoFocus) {
         update();
     }
 }
 
-void ZWidget::resizeEvent(ZResizeEvent *event)
-{
+void ZWidget::resizeEvent(ZResizeEvent *event) {
+    (void)event;
 }
 
-void ZWidget::moveEvent(ZMoveEvent *event)
-{
+void ZWidget::moveEvent(ZMoveEvent *event) {
+    (void)event;
 }
 
 void ZWidget::timerEvent(QTimerEvent *event) {

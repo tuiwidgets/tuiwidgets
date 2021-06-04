@@ -18,7 +18,7 @@ TEST_CASE("markup parser entities") {
     );
     CAPTURE(testCase.text);
     Tui::Private::MarkupTokenizer tok = testCase.text;
-    for (int i = 0; i < testCase.result.size(); i++) {
+    for (size_t i = 0; i < testCase.result.size(); i++) {
         tok.getToken();
         CHECK(tok._isError == false);
         CHECK(tok.currentToken == Tui::Private::MarkupTokenizer::TT_Char);

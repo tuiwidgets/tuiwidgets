@@ -6,6 +6,7 @@ namespace {
     static QString qtLogMessages;
 
     void qtMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg) {
+        (void)type; (void)context;
         qtLogMessages += msg + QStringLiteral("\n");
     }
 

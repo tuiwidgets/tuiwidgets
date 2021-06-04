@@ -22,8 +22,6 @@ ZPalette::~ZPalette() {
 }
 
 ZColor ZPalette::getColor(ZWidget *targetWidget, ZImplicitSymbol x) const {
-    auto *const p = tuiwidgets_impl();
-
     // TODO Most stupid impl., needs optimization
 
     QList<ZWidget*> widgets;

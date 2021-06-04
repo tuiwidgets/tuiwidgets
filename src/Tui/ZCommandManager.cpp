@@ -23,6 +23,7 @@ void ZCommandManager::registerCommandNotifier(ZCommandNotifier *notifier) {
 }
 
 void ZCommandManager::_tui_enabledChanged(bool s) {
+    (void)s;
     ZSymbol command = static_cast<ZCommandNotifier*>(sender())->command();
     compact(command);
     commandStateChanged(command);
