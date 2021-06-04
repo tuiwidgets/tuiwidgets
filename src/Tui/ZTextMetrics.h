@@ -84,6 +84,8 @@ public:
     }
 #endif
 
+    ZTextMetrics &operator=(const ZTextMetrics&);
+
 
 private:
     friend class ZTerminal;

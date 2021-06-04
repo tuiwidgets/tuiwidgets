@@ -111,6 +111,8 @@ int ZTextMetrics::sizeInColumns(const char *stringUtf8, int utf8CodeUnits) {
     return res;
 }
 
+ZTextMetrics &ZTextMetrics::operator=(const ZTextMetrics&) = default;
+
 ZTextMetrics::ZTextMetrics(std::shared_ptr<ZTextMetricsPrivate> impl) : tuiwidgets_pimpl_ptr(impl)
 {
 }
