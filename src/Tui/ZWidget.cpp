@@ -185,9 +185,18 @@ QSize ZWidget::sizeHint() const {
         QMargins cm = contentsMargins();
         s.rwidth() += cm.left() + cm.right();
         s.rheight() += cm.top() + cm.bottom();
-        return s.expandedTo(minimumSize()).boundedTo(maximumSize());
+        return s;
     }
     return {};
+}
+
+QSize ZWidget::effectiveSizeHint() const {
+    QSize s = sizeHint();
+    return s.expandedTo(minimumSize()).boundedTo(maximumSize());
+}
+
+QSize ZWidget::effectiveMinimumSize() const {
+    return minimumSize().boundedTo(maximumSize());
 }
 
 QRect ZWidget::layoutArea() const {

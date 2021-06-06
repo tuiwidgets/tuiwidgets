@@ -73,6 +73,8 @@ public:
     SizePolicy sizePolicyV() const;
     void setSizePolicyV(SizePolicy policy);
     virtual QSize sizeHint() const;
+    QSize effectiveSizeHint() const;
+    QSize effectiveMinimumSize() const;
     virtual QRect layoutArea() const;
     ZLayout *layout() const;
     void setLayout(ZLayout *l);
