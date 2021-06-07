@@ -4,11 +4,13 @@
 
 #include <QRect>
 
+#include <Tui/ZBasicWindowFacet.h>
 #include <Tui/ZColor.h>
 #include <Tui/ZPainter.h>
 #include <Tui/ZPalette.h>
 #include <Tui/ZTerminal.h>
 #include <Tui/ZWidget.h>
+#include <Tui/ZWindowFacet.h>
 
 #include "../Testhelper.h"
 
@@ -51,6 +53,10 @@ TEST_CASE("window-base", "") {
         CHECK(w.paletteClass() == QStringList{"window"});
         CHECK(w.sizePolicyH() == Tui::SizePolicy::Expanding);
         CHECK(w.sizePolicyV() == Tui::SizePolicy::Expanding);
+        auto windowFacet = w.facet(Tui::ZWindowFacet::staticMetaObject);
+        CHECK(windowFacet != nullptr);
+        CHECK(windowFacet->metaObject()->className() == Tui::ZBasicWindowFacet::staticMetaObject.className());
+        CHECK(static_cast<Tui::ZWindowFacet*>(windowFacet)->isManuallyPlaced() == true);
         Tui::ZWindow w2("Breakpoints");
         CHECK(w2.windowTitle() == "Breakpoints");
     }
@@ -72,6 +78,12 @@ TEST_CASE("window-base", "") {
         CHECK(w.borderEdges() == Qt::Edges{});
         w.setBorderEdges(Qt::Edge::TopEdge);
         CHECK(w.borderEdges() == Qt::Edge::TopEdge);
+    }
+
+    SECTION("setDefaultPlacement") {
+        w.setDefaultPlacement(Qt::AlignCenter);
+        auto windowFacet = static_cast<Tui::ZWindowFacet*>(w.facet(Tui::ZWindowFacet::staticMetaObject));
+        CHECK(windowFacet->isManuallyPlaced() == false);
     }
 }
 
@@ -573,5 +585,120 @@ TEST_CASE("window-misc", "") {
     SECTION("0x0-allocation") {
         t.render();
         // shall not crash
+    }
+}
+
+TEST_CASE("window-auto-placement", "") {
+    Testhelper t("window", "unused", 100, 30);
+    Tui::ZWindow *w = new Tui::ZWindow(t.root);
+    w->setGeometry({0, 0, 10, 4});
+
+    SECTION("setup") {
+        w->setDefaultPlacement(Qt::AlignCenter);
+        CHECK(w->geometry().x() == 46);
+        CHECK(w->geometry().y() == 14);
+    }
+
+    SECTION("resize") {
+        w->setDefaultPlacement(Qt::AlignCenter);
+        CHECK(w->geometry().x() == 46);
+        CHECK(w->geometry().y() == 14);
+
+        w->setGeometry({46, 14, 20, 6});
+        CHECK(w->geometry().x() == 41);
+        CHECK(w->geometry().y() == 13);
+    }
+
+    SECTION("reparented") {
+        Tui::ZWidget testParent;
+        testParent.setGeometry({0, 0, 40, 40});
+
+        w->setDefaultPlacement(Qt::AlignCenter);
+
+        w->setParent(&testParent);
+        CHECK(w->geometry().x() == 16);
+        CHECK(w->geometry().y() == 19);
+    }
+
+    SECTION("newly visible") {
+        w->setDefaultPlacement(Qt::AlignCenter);
+
+        w->setVisible(false);
+
+        w->setGeometry({0, 0, 10, 4});
+
+        w->setVisible(true);
+        CHECK(w->geometry().x() == 46);
+        CHECK(w->geometry().y() == 14);
+    }
+}
+
+namespace {
+    class WindowWithOwnFacet : public Tui::ZWindow {
+    public:
+        using Tui::ZWindow::ZWindow;
+
+    public:
+        QObject *facet(const QMetaObject metaObject) override {
+            if (metaObject.className() == Tui::ZWindowFacet::staticMetaObject.className()) {
+                return &f;
+            } else {
+                return Tui::ZWindow::facet(metaObject);
+            }
+        }
+        Tui::ZBasicWindowFacet f;
+    };
+}
+
+TEST_CASE("window-auto-placement-overriden-facet", "") {
+    Testhelper t("window", "unused", 100, 30);
+    WindowWithOwnFacet *w = new WindowWithOwnFacet(t.root);
+
+    DiagnosticMessageChecker msg;
+    msg.expectMessage("ZWindow::setDefaultPlacement calls with overriden WindowFacet do nothing.");
+    w->setDefaultPlacement(Qt::AlignCenter);
+    msg.tillHere();
+
+    w->setGeometry({0, 0, 10, 4});
+
+    SECTION("setup") {
+        w->f.setDefaultPlacement(Qt::AlignCenter, {0, 0});
+        // this does not trigger automatic placement on its own
+        CHECK(w->geometry().x() == 0);
+        CHECK(w->geometry().y() == 0);
+    }
+
+    SECTION("resize") {
+        w->f.setDefaultPlacement(Qt::AlignCenter, {0, 0});
+        // this does not trigger automatic placement on its own
+        CHECK(w->geometry().x() == 0);
+        CHECK(w->geometry().y() == 0);
+
+        w->setGeometry({46, 14, 20, 6});
+        CHECK(w->geometry().x() == 41);
+        CHECK(w->geometry().y() == 13);
+    }
+
+    SECTION("reparented") {
+        Tui::ZWidget testParent;
+        testParent.setGeometry({0, 0, 40, 40});
+
+        w->f.setDefaultPlacement(Qt::AlignCenter, {0, 0});
+
+        w->setParent(&testParent);
+        CHECK(w->geometry().x() == 16);
+        CHECK(w->geometry().y() == 19);
+    }
+
+    SECTION("newly visible") {
+        w->f.setDefaultPlacement(Qt::AlignCenter, {0, 0});
+
+        w->setVisible(false);
+
+        w->setGeometry({0, 0, 10, 4});
+
+        w->setVisible(true);
+        CHECK(w->geometry().x() == 46);
+        CHECK(w->geometry().y() == 14);
     }
 }

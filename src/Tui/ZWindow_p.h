@@ -3,6 +3,7 @@
 
 #include <Tui/ZWidget_p.h>
 #include <Tui/ZWindow.h>
+#include <Tui/ZBasicWindowFacet.h>
 
 #include <Tui/tuiwidgets_internal.h>
 
@@ -14,9 +15,13 @@ public:
     ~ZWindowPrivate() override = default;
 
 public:
+    void ensureAutoPlacement();
+
+public:
     ZWindow::Options options;
     QString windowTitle;
     Qt::Edges borders = Qt::TopEdge | Qt::RightEdge | Qt::BottomEdge | Qt::LeftEdge;
+    std::unique_ptr<ZBasicWindowFacet> windowFacet;
 };
 
 TUIWIDGETS_NS_END

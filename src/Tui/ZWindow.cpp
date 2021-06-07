@@ -63,6 +63,17 @@ void ZWindow::setBorderEdges(Qt::Edges borders) {
     p->borders = borders;
 }
 
+void ZWindow::setDefaultPlacement(Qt::Alignment align, QPoint displace) {
+    auto *const p = tuiwidgets_impl();
+    QObject *windowFacet = facet(ZWindowFacet::staticMetaObject);
+    if (windowFacet == p->windowFacet.get()) { // ensure that the default facet is actually used
+        p->windowFacet->setDefaultPlacement(align, displace);
+        p->ensureAutoPlacement();
+    } else {
+        qWarning("ZWindow::setDefaultPlacement calls with overriden WindowFacet do nothing.");
+    }
+}
+
 QSize ZWindow::sizeHint() const {
     auto *const p = tuiwidgets_impl();
 
@@ -107,6 +118,18 @@ QRect ZWindow::layoutArea() const {
     }
     r = r.marginsRemoved(contentsMargins());
     return r;
+}
+
+QObject *ZWindow::facet(const QMetaObject metaObject) {
+    auto *const p = tuiwidgets_impl();
+    if (metaObject.className() == ZWindowFacet::staticMetaObject.className()) {
+        if (!p->windowFacet) {
+            p->windowFacet = std::make_unique<ZBasicWindowFacet>();
+        }
+        return p->windowFacet.get();
+    } else {
+        return ZWidget::facet(metaObject);
+    }
 }
 
 const static struct {
@@ -241,16 +264,40 @@ void ZWindow::keyEvent(Tui::ZKeyEvent *event) {
     }
 }
 
+void ZWindowPrivate::ensureAutoPlacement() {
+    if (pub()->parentWidget()) {
+        ZWindowFacet *windowFacet = static_cast<ZWindowFacet*>(pub()->facet(ZWindowFacet::staticMetaObject));
+        if (windowFacet) {
+            if (!windowFacet->isManuallyPlaced()) {
+                windowFacet->autoPlace(pub()->parentWidget()->geometry().size(), pub());
+            }
+        }
+    }
+}
+
+void ZWindow::resizeEvent(Tui::ZResizeEvent *event) {
+    auto *const p = tuiwidgets_impl();
+
+    Tui::ZWidget::resizeEvent(event);
+
+    p->ensureAutoPlacement();
+}
+
 bool ZWindow::event(QEvent *event) {
+    auto *const p = tuiwidgets_impl();
+
+    if (event->type() == QEvent::ParentChange) {
+        p->ensureAutoPlacement();
+    }
+    if (event->type() == QEvent::ShowToParent) {
+        p->ensureAutoPlacement();
+    }
+
     return Tui::ZWidget::event(event);
 }
 
 bool ZWindow::eventFilter(QObject *watched, QEvent *event) {
     return Tui::ZWidget::eventFilter(watched, event);
-}
-
-QObject *ZWindow::facet(const QMetaObject metaObject) {
-    return Tui::ZWidget::facet(metaObject);
 }
 
 void ZWindow::timerEvent(QTimerEvent *event) {
@@ -283,10 +330,6 @@ void ZWindow::focusInEvent(Tui::ZFocusEvent *event) {
 
 void ZWindow::focusOutEvent(Tui::ZFocusEvent *event) {
     Tui::ZWidget::focusOutEvent(event);
-}
-
-void ZWindow::resizeEvent(Tui::ZResizeEvent *event) {
-    Tui::ZWidget::resizeEvent(event);
 }
 
 void ZWindow::moveEvent(Tui::ZMoveEvent *event) {

@@ -3,6 +3,7 @@ qt5_dep = dependency('qt5', modules: 'Core')
 
 #ide:editable-filelist
 tuiwidgets_moc_headers = [
+  'Tui/ZBasicWindowFacet.h',
   'Tui/ZCommandManager.h',
   'Tui/ZCommandNotifier.h',
   'Tui/ZLayout.h',
@@ -11,10 +12,12 @@ tuiwidgets_moc_headers = [
   'Tui/ZTerminal.h',
   'Tui/ZWidget.h',
   'Tui/ZWindow.h',
+  'Tui/ZWindowFacet.h',
 ]
 
 # find Tui -name "*.h" | grep -E -v -e "_p" -e "^Tui/[A-Y]" | sed -e "s/\\(.*\\)/  '\1',/" | sort
 tuiwidgets_public_headers = [
+  'Tui/ZBasicWindowFacet.h',
   'Tui/ZColor.h',
   'Tui/ZCommandManager.h',
   'Tui/ZCommandNotifier.h',
@@ -36,6 +39,7 @@ tuiwidgets_public_headers = [
   'Tui/ZValuePtr.h',
   'Tui/ZWidget.h',
   'Tui/ZWindow.h',
+  'Tui/ZWindowFacet.h',
   'Tui/tuiwidgets_internal.h',
   # not public, but needed until users are migrated from staging to toolkit proper
   'Tui/MarkupParser.h',
@@ -48,6 +52,7 @@ tuiwidgets_public_headers += [
 
 #ide:editable-filelist
 tuiwidgets_sources = [
+  'Tui/ZBasicWindowFacet.cpp',
   'Tui/ListNode.cpp',
   'Tui/MarkupParser.cpp',
   'Tui/ZColor.cpp',
@@ -73,6 +78,7 @@ tuiwidgets_sources = [
   'Tui/ZValuePtr.cpp',
   'Tui/ZWidget.cpp',
   'Tui/ZWindow.cpp',
+  'Tui/ZWindowFacet.cpp',
 ]
 
 tuiwidgets_sources += [
@@ -142,6 +148,7 @@ test('testtoolkitinternal',
 
 #ide:editable-filelist
 test_files = [
+  'tests/basicwindowfacet/basicwindowfacet.cpp',
   'tests/Testhelper.cpp',
   'tests/viewport/moveviewport.cpp',
   'tests/window/window.cpp',

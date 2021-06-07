@@ -1,6 +1,8 @@
 #ifndef TUIWIDGETS_ZWINDOW_INCLUDED
 #define TUIWIDGETS_ZWINDOW_INCLUDED
 
+#include <QPoint>
+
 #include <Tui/ZWidget.h>
 
 #include <Tui/tuiwidgets_internal.h>
@@ -30,8 +32,12 @@ public:
     Qt::Edges borderEdges() const;
     void setBorderEdges(Qt::Edges borders);
 
+    void setDefaultPlacement(Qt::Alignment align, QPoint displace = {0,0});
+
     QSize sizeHint() const override;
     QRect layoutArea() const override;
+    QObject *facet(const QMetaObject metaObject) override;
+    bool event(QEvent *event) override;
 
 public Q_SLOTS:
     void setWindowTitle(const QString &title);
@@ -42,12 +48,11 @@ Q_SIGNALS:
 protected:
     void paintEvent(ZPaintEvent *event) override;
     void keyEvent(ZKeyEvent *event) override;
+    void resizeEvent(ZResizeEvent *event) override;
 
 public:
     // public virtuals from base classes: override everything for later ABI compatibility
-    bool event(QEvent *event) override;
     bool eventFilter(QObject *watched, QEvent *event) override;
-    QObject *facet(const QMetaObject metaObject) override;
 
 protected:
     // protected virtuals from base classes: override everything for later ABI compatibility
@@ -59,7 +64,6 @@ protected:
     void pasteEvent(ZPasteEvent *event) override;
     void focusInEvent(ZFocusEvent *event) override;
     void focusOutEvent(ZFocusEvent *event) override;
-    void resizeEvent(ZResizeEvent *event) override;
     void moveEvent(ZMoveEvent *event) override;
 
 private:
