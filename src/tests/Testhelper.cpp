@@ -162,3 +162,40 @@ QString Testhelper::basePath() {
     }
     return path;
 }
+
+thread_local QStringList DiagnosticMessageChecker::messages;
+thread_local QtMessageHandler DiagnosticMessageChecker::oldMessageHandler;
+thread_local bool DiagnosticMessageChecker::active = false;
+
+DiagnosticMessageChecker::DiagnosticMessageChecker() {
+    if (active) {
+        FAIL("DiagnosticMessageChecker can only be active once per thread.");
+    }
+    active = true;
+    oldMessageHandler = qInstallMessageHandler(qtMessageOutput);
+}
+
+DiagnosticMessageChecker::~DiagnosticMessageChecker() {
+    qInstallMessageHandler(oldMessageHandler);
+    active = false;
+}
+
+void DiagnosticMessageChecker::expectMessage(const QString &msg) {
+    messages.append(msg);
+}
+
+void DiagnosticMessageChecker::tillHere() {
+    while (messages.size()) {
+        FAIL_CHECK("Expected diagnostic message not seen: " + messages.front().toStdString());
+        messages.pop_front();
+    }
+}
+
+void DiagnosticMessageChecker::qtMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg) {
+    (void)type; (void)context;
+    if (messages.front() == msg) {
+        messages.pop_front();
+    } else {
+        FAIL_CHECK("Unexpected diagnostic message: " + msg.toStdString());
+    }
+}

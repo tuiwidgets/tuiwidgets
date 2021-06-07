@@ -49,6 +49,24 @@ public:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Testhelper::Options)
 
+class DiagnosticMessageChecker {
+public:
+    DiagnosticMessageChecker();
+    ~DiagnosticMessageChecker();
+
+public:
+    void expectMessage(const QString &msg);
+    void tillHere();
+
+private:
+    static void qtMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg);
+
+private:
+    static thread_local QStringList messages;
+    static thread_local QtMessageHandler oldMessageHandler;
+    static thread_local bool active;
+};
+
 
 class StubLayout : public Tui::ZLayout {
 public:
