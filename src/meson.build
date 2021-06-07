@@ -108,7 +108,7 @@ import('pkgconfig').generate(
   subdirs: ['.']
 )
 
-testlib = static_library('testlib', 'tests/catch_main.cpp')
+testlib = static_library('testlib', 'tests/catch_main.cpp', dependencies: [qt5_dep])
 
 test_env = environment()
 test_env.set('TUIWIDGETS_TEST_DATA', meson.current_source_dir() / 'tests')
