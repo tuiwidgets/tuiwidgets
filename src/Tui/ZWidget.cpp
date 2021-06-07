@@ -123,10 +123,18 @@ bool ZWidget::isVisible() const {
 
 void ZWidget::setVisible(bool v) {
     auto *const p = tuiwidgets_impl();
+    if (p->visible == v) return;
     p->visible = v;
     // TODO care about focus
     // TODO cache effect in hierarchy
     // TODO send events (QShowEvent  QHideEvent? QEvent::HideToParent? QEvent::ShowToParent?)
+    if (v) {
+        QEvent showToParentEvent(QEvent::ShowToParent);
+        QCoreApplication::sendEvent(this, &showToParentEvent);
+    } else {
+        QEvent hideToParentEvent(QEvent::HideToParent);
+        QCoreApplication::sendEvent(this, &hideToParentEvent);
+    }
     update();
 }
 
