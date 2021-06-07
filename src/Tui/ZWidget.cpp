@@ -63,12 +63,15 @@ ZWidget::~ZWidget() {
     }
 }
 
-void ZWidget::setParent(ZWidget *parent) {
-    // QEvent::ParentAboutToChange
+void ZWidget::setParent(ZWidget *newParent) {
+    if (parent() == newParent) return;
+    QEvent e1{QEvent::ParentAboutToChange};
+    QCoreApplication::sendEvent(this, &e1);
     // TODO care about focus
-    QObject::setParent(parent);
+    QObject::setParent(newParent);
     // TODO care about caches for everything (e.g. visibiltiy, enabled, etc)
-    // QEvent::ParentChange
+    QEvent e2{QEvent::ParentChange};
+    QCoreApplication::sendEvent(this, &e2);
 }
 
 QRect ZWidget::geometry() const {

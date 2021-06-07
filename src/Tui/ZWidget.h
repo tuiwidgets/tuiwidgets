@@ -52,7 +52,7 @@ protected:
 
 public:
     ZWidget* parentWidget() const { return static_cast<ZWidget*>(parent()); }
-    void setParent(ZWidget *parent);
+    void setParent(ZWidget *newParent);
     QRect geometry() const;
     void setGeometry(const QRect &geometry);
     QRect rect() const;
