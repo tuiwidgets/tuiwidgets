@@ -15,8 +15,8 @@ static Tui::ZSymbol extendedCharset = TUISYM_LITERAL("extendedCharset");
 Testhelper::Testhelper(QString dir, QString namePrefix, int width, int height, Options options)
     : namePrefix(dir + QStringLiteral("/") + namePrefix)
 {
-    char prgname[] = "test";
-    char* argv[] = {prgname, nullptr};
+    static char prgname[] = "test";
+    static char *argv[] = {prgname, nullptr};
     int argc = 1;
     app = std::make_unique<QCoreApplication>(argc, argv);
 
