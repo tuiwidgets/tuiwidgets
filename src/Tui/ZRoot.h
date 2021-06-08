@@ -23,6 +23,7 @@ protected:
     void paintEvent(ZPaintEvent *event) override;
     void keyEvent(ZKeyEvent *event) override;
     void childEvent(QChildEvent *event) override;
+    void resizeEvent(ZResizeEvent *event) override;
     virtual void terminalChanged();
 
 public:
@@ -42,7 +43,6 @@ protected:
     void focusOutEvent(ZFocusEvent *event) override;
     void moveEvent(ZMoveEvent *event) override;
     void pasteEvent(ZPasteEvent *event) override;
-    void resizeEvent(ZResizeEvent *event) override;
     void timerEvent(QTimerEvent *event) override;
 
 private:

@@ -5,6 +5,7 @@
 
 #include <Tui/ZPalette.h>
 #include <Tui/ZPainter.h>
+#include <Tui/ZWindowFacet.h>
 
 TUIWIDGETS_NS_START
 
@@ -83,6 +84,24 @@ bool ZRoot::event(QEvent *event) {
     return ZWidget::event(event);
 }
 
+void ZRoot::resizeEvent(ZResizeEvent *event) {
+    const int height = geometry().height();
+    const int width = geometry().width();
+    for (QObject *o: children()) {
+        auto childWidget = qobject_cast<ZWidget*>(o);
+        if (childWidget) {
+            ZWindowFacet *windowFacet = static_cast<ZWindowFacet*>(childWidget->facet(ZWindowFacet::staticMetaObject));
+            if (windowFacet) {
+                if (!windowFacet->isManuallyPlaced()) {
+                    windowFacet->autoPlace({width, height}, childWidget);
+                    continue;
+                }
+            }
+        }
+    }
+    ZWidget::resizeEvent(event);
+}
+
 bool ZRoot::eventFilter(QObject *watched, QEvent *event) {
     return ZWidget::eventFilter(watched, event);
 }
@@ -146,10 +165,6 @@ void ZRoot::moveEvent(ZMoveEvent *event) {
 
 void ZRoot::pasteEvent(ZPasteEvent *event) {
     ZWidget::pasteEvent(event);
-}
-
-void ZRoot::resizeEvent(ZResizeEvent *event) {
-    ZWidget::resizeEvent(event);
 }
 
 Tui::ZRootPrivate::ZRootPrivate(ZRoot *pub) : ZWidgetPrivate(pub) {
