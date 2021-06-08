@@ -51,7 +51,7 @@ protected:
     std::unique_ptr<ZWidgetPrivate> tuiwidgets_pimpl_ptr;
 
 public:
-    ZWidget* parentWidget() const { return static_cast<ZWidget*>(parent()); }
+    ZWidget *parentWidget() const { return static_cast<ZWidget*>(parent()); }
     void setParent(ZWidget *newParent);
     QRect geometry() const;
     void setGeometry(const QRect &geometry);
