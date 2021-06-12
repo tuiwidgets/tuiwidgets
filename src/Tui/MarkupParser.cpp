@@ -572,7 +572,7 @@ const MarkupParserBase::ElementBegin &MarkupParserBase::elementBegin() {
         return _elementBegin;
     }
     // Precondition violation, cause explicit crash
-    return *static_cast<MarkupParser::ElementBegin*>(nullptr);
+    abort();
 }
 
 bool MarkupParserBase::isElementEnd() {
