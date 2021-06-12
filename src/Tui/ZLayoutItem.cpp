@@ -25,7 +25,7 @@ void ZWidgetLayoutItem::setGeometry(QRect r) {
 }
 
 QSize ZWidgetLayoutItem::sizeHint() const {
-    return widget->sizeHint();
+    return widget->effectiveSizeHint();
 }
 
 SizePolicy ZWidgetLayoutItem::sizePolicyH() const {
