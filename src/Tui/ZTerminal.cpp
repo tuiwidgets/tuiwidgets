@@ -243,7 +243,7 @@ void ZTerminalPrivate::initOffscreen(const ZTerminal::OffScreen &offscreen) {
 
 ZTerminal::~ZTerminal() {
     // widget destructors might depend on our services.
-    // so ensure the widget hierarchie is torn down before the terminal.
+    // so ensure the widget hierarchy is torn down before the terminal.
     tuiwidgets_impl()->mainWidget.reset();
 }
 
@@ -317,7 +317,7 @@ void ZTerminal::forceRepaint() {
 }
 
 ZImage ZTerminal::grabCurrentImage() const {
-    auto * const surface = tuiwidgets_impl()->surface;
+    auto *const surface = tuiwidgets_impl()->surface;
     ZImage img = ZImage(this, width(), height());
     termpaint_surface_copy_rect(surface, 0, 0, width(), height(),
                                 ZImageData::get(&img)->surface, 0, 0,
@@ -326,13 +326,13 @@ ZImage ZTerminal::grabCurrentImage() const {
 }
 
 int ZTerminal::width() const {
-    const auto * const surface = tuiwidgets_impl()->surface;
+    const auto *const surface = tuiwidgets_impl()->surface;
     return termpaint_surface_width(surface);
 
 }
 
 int ZTerminal::height() const {
-    const auto * const surface = tuiwidgets_impl()->surface;
+    const auto *const surface = tuiwidgets_impl()->surface;
     return termpaint_surface_height(surface);
 }
 

@@ -8,6 +8,7 @@
 
 TUIWIDGETS_NS_START
 
+
 template <typename T>
 class TUIWIDGETS_EXPORT ZValuePtr {
 public:
