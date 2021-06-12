@@ -43,10 +43,8 @@ protected:
     void connectNotify(const QMetaMethod &signal) override;
     void disconnectNotify(const QMetaMethod &signal) override;
 
-private Q_SLOTS:
-    void _tui_enabledChanged(bool s);
-
 private:
+    void _tui_enabledChanged(bool s);
     void compact(ZSymbol command);
 
 private:
