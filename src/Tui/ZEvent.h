@@ -165,6 +165,8 @@ public:
 public:
     QSet<ZSymbol> unchanged() const;
 
+    static bool match(const QEvent *event, ZSymbol changed);
+
 private:
     TUIWIDGETS_DECLARE_PRIVATE(ZOtherChangeEvent)
 };

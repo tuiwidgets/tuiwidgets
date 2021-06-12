@@ -118,8 +118,7 @@ bool ZShortcut::matches(ZWidget *focusWidget, const ZKeyEvent *event) {
 
 bool ZShortcut::event(QEvent *event) {
     auto *const p = tuiwidgets_impl();
-    if (event->type() == ZEventType::otherChange()
-            && !static_cast<ZOtherChangeEvent*>(event)->unchanged().contains(TUISYM_LITERAL("terminal"))) {
+    if (ZOtherChangeEvent::match(event, TUISYM_LITERAL("terminal"))) {
         auto newTerminal = static_cast<ZWidget*>(parent())->terminal();
         if (p->terminal != newTerminal) {
             if (p->terminal) {

@@ -232,6 +232,12 @@ QSet<ZSymbol> ZOtherChangeEvent::unchanged() const {
     return tuiwidgets_impl()->unchanged;
 }
 
+bool ZOtherChangeEvent::match(const QEvent *event, ZSymbol changed) {
+    if (!event || event->type() != ZEventType::otherChange()) return false;
+
+    return !static_cast<const ZOtherChangeEvent&>(*event).unchanged().contains(changed);
+}
+
 ZOtherChangeEventPrivate::ZOtherChangeEventPrivate(QSet<ZSymbol> unchanged)
      : unchanged(unchanged)
 {
