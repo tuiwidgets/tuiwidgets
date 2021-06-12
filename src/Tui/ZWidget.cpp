@@ -65,6 +65,7 @@ ZWidget::~ZWidget() {
 
 void ZWidget::setParent(ZWidget *newParent) {
     if (parent() == newParent) return;
+    auto prevTerminal = terminal();
     QEvent e1{QEvent::ParentAboutToChange};
     QCoreApplication::sendEvent(this, &e1);
     // TODO care about focus
@@ -72,6 +73,18 @@ void ZWidget::setParent(ZWidget *newParent) {
     // TODO care about caches for everything (e.g. visibiltiy, enabled, etc)
     QEvent e2{QEvent::ParentChange};
     QCoreApplication::sendEvent(this, &e2);
+    if (prevTerminal != terminal()) {
+        ZOtherChangeEvent change(ZOtherChangeEvent::all().subtract({TUISYM_LITERAL("terminal")}));
+
+        auto f = [&](QObject *w) {
+            QCoreApplication::sendEvent(w, &change);
+            change.setAccepted(true);
+        };
+
+        f(this);
+
+        zwidgetForEachDescendant(this, f);
+    }
 }
 
 QRect ZWidget::geometry() const {
