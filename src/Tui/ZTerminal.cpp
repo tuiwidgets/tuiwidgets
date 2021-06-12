@@ -280,16 +280,18 @@ void ZTerminal::setMainWidget(ZWidget *w) {
 }
 
 void ZTerminalPrivate::sendOtherChangeEvent(QSet<ZSymbol> unchanged) {
+
+    if (!mainWidget) return;
+
     ZOtherChangeEvent change(unchanged);
-    QVector<QPointer<QObject>> todo;
-    todo.append(mainWidget.get());
-    while (todo.size()) {
-        QObject *o = todo.takeLast();
-        if (!o) continue;
-        for (QObject* x : o->children()) todo.append(x);
-        QCoreApplication::sendEvent(o, &change);
+
+    auto f = [&](QObject *w) {
+        QCoreApplication::sendEvent(w, &change);
         change.setAccepted(true);
-    }
+    };
+
+    f(mainWidget.get());
+    zwidgetForEachDescendant(mainWidget.get(), f);
 }
 
 ZWidget *ZTerminal::focusWidget() {
