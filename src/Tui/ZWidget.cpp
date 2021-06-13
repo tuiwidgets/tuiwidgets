@@ -224,7 +224,9 @@ QSize ZWidget::effectiveMinimumSize() const {
 }
 
 QRect ZWidget::layoutArea() const {
-    return { QPoint(0, 0), geometry().marginsRemoved(contentsMargins()).size() };
+    QRect tmp = geometry();
+    tmp.moveTo(0, 0);
+    return tmp.marginsRemoved(contentsMargins());
 }
 
 ZLayout *ZWidget::layout() const {
