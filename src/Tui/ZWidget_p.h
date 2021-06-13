@@ -24,13 +24,13 @@ struct FocusHistoryTag;
 template <typename CALLABLE>
 void zwidgetForEachDescendant(ZWidget *start, CALLABLE&& callable) {
     QVector<QPointer<QObject>> todo;
-    for (QObject* x : start->children()) {
+    for (QObject *x : start->children()) {
         todo.append(x);
     }
     while (todo.size()) {
         QObject *o = todo.takeLast();
         if (!o) continue;
-        for (QObject* x : o->children()) {
+        for (QObject *x : o->children()) {
             todo.append(x);
         }
         callable(o);
