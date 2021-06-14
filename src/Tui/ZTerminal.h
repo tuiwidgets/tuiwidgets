@@ -99,6 +99,11 @@ public:
     void setCursorPosition(QPoint cursorPosition);
     void setCursorColor(int cursorColorR, int cursorColorG, int cursorColorB);
 
+    void maybeRequestLayout(ZWidget *w);
+    void requestLayout(ZWidget *w);
+    bool isLayoutPending();
+    void doLayout();
+
     void dispatchKeyboardEvent(ZKeyEvent &translated);
     void dispatchPasteEvent(ZPasteEvent &translated);
 

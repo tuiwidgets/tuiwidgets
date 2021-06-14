@@ -107,8 +107,44 @@ void ZTerminal::setCursorColor(int cursorColorR, int cursorColorG, int cursorCol
     }
 }
 
+void ZTerminal::maybeRequestLayout(ZWidget *w) {
+    // TODO ignore calls when the neighborhood of w does not do automatic layout
+    requestLayout(w);
+}
+
+void ZTerminal::requestLayout(ZWidget *w) {
+    auto *const p = tuiwidgets_impl();
+    QPointer<ZWidget> wp = w;
+    if (!p->layoutPendingWidgets.contains(wp)) {
+        p->layoutPendingWidgets.append(std::move(wp));
+        if (!p->layoutRequested) {
+            QCoreApplication::postEvent(this, new QEvent(QEvent::LayoutRequest), Qt::EventPriority::HighEventPriority);
+            p->layoutRequested = true;
+        }
+    }
+}
+
+bool ZTerminal::isLayoutPending() {
+    auto *const p = tuiwidgets_impl();
+    return p->layoutPendingWidgets.size() > 0;
+}
+
+void ZTerminal::doLayout() {
+    auto *const p = tuiwidgets_impl();
+    auto copy = p->layoutPendingWidgets;
+    p->layoutPendingWidgets.clear();
+    for (auto &w: copy) {
+        if (w.isNull()) continue;
+        QEvent request(QEvent::LayoutRequest);
+        QCoreApplication::sendEvent(w.data(), &request);
+    }
+}
+
 void ZTerminalPrivate::processPaintingAndUpdateOutput(bool fullRepaint) {
     if (mainWidget.get()) {
+        if (pub()->isLayoutPending()) {
+            pub()->doLayout();
+        }
         cursorPosition = QPoint{-1, -1};
         const QSize minSize = mainWidget->minimumSize();
         std::unique_ptr<ZPainter> paint;
@@ -725,6 +761,10 @@ bool ZTerminal::event(QEvent *event) {
         // XXX ZTerminal uses updateRequest with null painter internally
         p->updateRequested = false;
         p->processPaintingAndUpdateOutput(false);
+    }
+    if (event->type() == QEvent::LayoutRequest) {
+        p->layoutRequested = false;
+        doLayout();
     }
 
     return QObject::event(event);

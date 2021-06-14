@@ -89,6 +89,9 @@ public:
     bool iconTitleNeedsUpdate;
     QString pasteTemp;
 
+    QList<QPointer<ZWidget>> layoutPendingWidgets;
+    bool layoutRequested = false;
+
     bool viewportActive = false;
     bool viewportUI = false;
     QPoint viewportOffset = {0, 0};
