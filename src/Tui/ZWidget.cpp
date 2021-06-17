@@ -148,6 +148,7 @@ void ZWidget::setVisible(bool v) {
         QEvent hideToParentEvent(QEvent::HideToParent);
         QCoreApplication::sendEvent(this, &hideToParentEvent);
     }
+    updateGeometry();
     update();
 }
 
@@ -238,6 +239,10 @@ void ZWidget::setLayout(ZLayout *l) {
     auto *const p = tuiwidgets_impl();
     l->setParent(this);
     p->layout = l;
+    ZTerminal *term = terminal();
+    if (term) {
+        term->requestLayout(this);
+    }
 }
 
 void ZWidget::showCursor(QPoint position) {
@@ -263,6 +268,16 @@ ZTerminal *ZWidget::terminal() const {
 void ZWidget::update() {
     auto *terminal = tuiwidgets_impl()->findTerminal();
     if (terminal) terminal->update();
+}
+
+void ZWidget::updateGeometry() {
+    ZTerminal *term = terminal();
+    if (term) {
+        ZWidget *par = parentWidget();
+        if (par) {
+            term->maybeRequestLayout(par);
+        }
+    }
 }
 
 void ZWidget::setFocusPolicy(Qt::FocusPolicy policy) {

@@ -83,6 +83,7 @@ public:
     ZTerminal *terminal() const;
 
     void update();
+    void updateGeometry();
 
     void setFocusPolicy(Qt::FocusPolicy policy);
     Qt::FocusPolicy focusPolicy() const;

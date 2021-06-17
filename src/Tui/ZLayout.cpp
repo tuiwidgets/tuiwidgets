@@ -6,7 +6,10 @@
 #include <QRect>
 #include <QSize>
 
+#include <Tui/ZSymbol.h>
+#include <Tui/ZTerminal.h>
 #include <Tui/ZWidget.h>
+
 
 TUIWIDGETS_NS_START
 
@@ -18,8 +21,15 @@ ZLayout::~ZLayout() {
 }
 
 void ZLayout::widgetEvent(QEvent *event) {
-    if (event->type() == ZEventType::resize()) {
-        setGeometry(widget()->layoutArea());
+    if (event->type() == ZEventType::resize()
+          || ZOtherChangeEvent::match(event, TUISYM_LITERAL("terminal"))) {
+        ZWidget *w = widget();
+        if (w) {
+            ZTerminal *term = w->terminal();
+            if (term) {
+                term->requestLayout(w);
+            }
+        }
     } else if (event->type() == QEvent::LayoutRequest) {
         setGeometry(widget()->layoutArea());
     }
