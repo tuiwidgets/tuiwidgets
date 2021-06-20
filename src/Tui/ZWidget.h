@@ -129,6 +129,8 @@ public:
     const ZWidget *placeFocus(bool last = false) const;
     ZWidget *placeFocus(bool last = false);
 
+    virtual ZWidget *resolveSizeHintChain();
+
     ZCommandManager* commandManager();
     ZCommandManager* ensureCommandManager();
     void setCommandManager(ZCommandManager* cmd);

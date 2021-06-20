@@ -778,6 +778,14 @@ ZWidget *ZWidget::placeFocus(bool last) {
     return const_cast<ZWidget *>(static_cast<ZWidget const *>(this)->placeFocus(last));
 }
 
+ZWidget *ZWidget::resolveSizeHintChain() {
+    ZWidget *p = parentWidget();
+    if (p && p->layout()) {
+        return p->resolveSizeHintChain();
+    }
+    return this;
+}
+
 /*
 ZWidget *ZWidget::nextFocusable(bool outside) {
     auto *const p = tuiwidgets_impl();

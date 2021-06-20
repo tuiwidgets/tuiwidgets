@@ -31,7 +31,15 @@ void ZLayout::widgetEvent(QEvent *event) {
             }
         }
     } else if (event->type() == QEvent::LayoutRequest) {
-        setGeometry(widget()->layoutArea());
+        ZWidget *w = widget();
+        ZWidget *chainRoot = w->resolveSizeHintChain();
+
+        // ensure that the root of the layout chain gets to layout first
+        if (chainRoot != w) {
+            QEvent request(QEvent::LayoutRequest);
+            QCoreApplication::sendEvent(chainRoot, &request);
+        }
+        setGeometry(w->layoutArea());
     }
 }
 
