@@ -1,10 +1,12 @@
 #include "ZLayout.h"
 #include "ZLayout_p.h"
 
+#include <QCoreApplication>
 #include <QEvent>
 #include <QPoint>
 #include <QRect>
 #include <QSize>
+#include <QThread>
 
 #include <Tui/ZSymbol.h>
 #include <Tui/ZTerminal.h>
@@ -39,7 +41,14 @@ void ZLayout::widgetEvent(QEvent *event) {
             QEvent request(QEvent::LayoutRequest);
             QCoreApplication::sendEvent(chainRoot, &request);
         }
-        setGeometry(w->layoutArea());
+        // if this layout is still pending now, layout locally by doing an additional layout starting here.
+        // This could happen if i.e. if sizeHint does not change but positions need to be updated
+        // i.e. one widget was replaced with a widget of the same size
+        ZTerminal *term = w->terminal();
+        if (!ZLayoutPrivate::alreadyLayoutedInThisGeneration(term, w)) {
+            ZLayoutPrivate::markAsAlreadyLayouted(term, w);
+            setGeometry(w->layoutArea());
+        }
     }
 }
 
@@ -105,5 +114,49 @@ void ZLayout::disconnectNotify(const QMetaMethod &signal) {
     // XXX needs to be thread-safe
     QObject::disconnectNotify(signal);
 }
+
+
+thread_local QHash<ZTerminal*, ZLayoutPrivate::LayoutGenData> ZLayoutPrivate::layoutGenData;
+
+void ZLayoutPrivate::markAsAlreadyLayouted(ZTerminal *term, ZWidget *w) {
+    if (!ensureLayoutGenData(term)) {
+        return;
+    }
+    layoutGenData[term].alreadyDone.insert(w);
+}
+
+bool ZLayoutPrivate::alreadyLayoutedInThisGeneration(ZTerminal *term, ZWidget *w) {
+    if (!ensureLayoutGenData(term)) {
+        return true;
+    }
+
+    return layoutGenData[term].alreadyDone.contains(w);
+}
+
+bool ZLayoutPrivate::ensureLayoutGenData(ZTerminal *term) {
+    if (!layoutGenData.contains(term)) {
+        if (QThread::currentThread() != term->thread()) {
+            qWarning("ZLayout: ZTerminal thread does not match current thread.");
+            return false;
+        }
+        // create entry
+        layoutGenData[term];
+        QObject::connect(term, &QObject::destroyed, [term]{
+            layoutGenData.remove(term);
+        });
+    }
+
+    auto& lgd = layoutGenData[term];
+    if (lgd.lastSeenLayoutGeneration != term->currentLayoutGeneration()) {
+        lgd.reset();
+    }
+
+    return true;
+}
+
+void ZLayoutPrivate::LayoutGenData::reset() {
+    alreadyDone.clear();
+}
+
 
 TUIWIDGETS_NS_END

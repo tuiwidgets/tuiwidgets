@@ -93,6 +93,7 @@ public:
 
     QList<QPointer<ZWidget>> layoutPendingWidgets;
     bool layoutRequested = false;
+    int layoutGeneration = -1;
 
     bool viewportActive = false;
     bool viewportUI = false;

@@ -102,6 +102,7 @@ public:
     void requestLayout(ZWidget *w);
     bool isLayoutPending();
     void doLayout();
+    int currentLayoutGeneration();
 
     void dispatchKeyboardEvent(ZKeyEvent &translated);
     void dispatchPasteEvent(ZPasteEvent &translated);

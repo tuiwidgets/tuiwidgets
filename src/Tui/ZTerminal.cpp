@@ -1,6 +1,8 @@
 #include <Tui/ZTerminal.h>
 #include <Tui/ZTerminal_p.h>
 
+#include <limits>
+
 #include <QAbstractEventDispatcher>
 #include <QCoreApplication>
 #include <QMetaMethod>
@@ -114,12 +116,19 @@ void ZTerminal::maybeRequestLayout(ZWidget *w) {
 
 void ZTerminal::requestLayout(ZWidget *w) {
     auto *const p = tuiwidgets_impl();
-    QPointer<ZWidget> wp = w;
-    if (!p->layoutPendingWidgets.contains(wp)) {
-        p->layoutPendingWidgets.append(std::move(wp));
-        if (!p->layoutRequested) {
-            QCoreApplication::postEvent(this, new QEvent(QEvent::LayoutRequest), Qt::EventPriority::HighEventPriority);
-            p->layoutRequested = true;
+
+    if (p->layoutGeneration > 0) {
+        // doLayout is runnig, so do synchronous layout
+        QEvent request(QEvent::LayoutRequest);
+        QCoreApplication::sendEvent(w, &request);
+    } else {
+        QPointer<ZWidget> wp = w;
+        if (!p->layoutPendingWidgets.contains(wp)) {
+            p->layoutPendingWidgets.append(std::move(wp));
+            if (!p->layoutRequested) {
+                QCoreApplication::postEvent(this, new QEvent(QEvent::LayoutRequest), Qt::EventPriority::HighEventPriority);
+                p->layoutRequested = true;
+            }
         }
     }
 }
@@ -129,14 +138,82 @@ bool ZTerminal::isLayoutPending() {
     return p->layoutPendingWidgets.size() > 0;
 }
 
+namespace {
+    struct LayoutGenerationUpdaterScope {
+        LayoutGenerationUpdaterScope(int &generation) : _generation(generation) {
+            if (_generation < 0) {
+                // unnested layout
+                _generation = -_generation + 1;
+                wrapGenerationIfNeeded();
+            } else {
+                // nested layout
+                qWarning("ZTerminal::doLayout: Called nested, this should not happen");
+                nested = true;
+
+                wrapGenerationIfNeeded();
+                _generation += 1;
+            }
+        }
+
+        ~LayoutGenerationUpdaterScope() {
+            if (!nested) {
+                _generation = -(_generation + 1);
+            } else {
+                _generation += 1;
+            }
+        }
+
+    private:
+        void wrapGenerationIfNeeded() {
+            if (_generation > std::numeric_limits<decltype(ZTerminalPrivate::layoutGeneration)>::max() - 10) {
+                _generation = 2;
+            }
+        }
+
+        int& _generation;
+        bool nested = false;
+    };
+}
+
 void ZTerminal::doLayout() {
     auto *const p = tuiwidgets_impl();
     auto copy = p->layoutPendingWidgets;
     p->layoutPendingWidgets.clear();
+    LayoutGenerationUpdaterScope generationUpdater(p->layoutGeneration);
+    for (auto &w: copy) {
+        int depth = 0;
+        ZWidget *wTmp = w;
+        while (wTmp) {
+            ++depth;
+            wTmp = wTmp->parentWidget();
+        }
+        auto *wp = ZWidgetPrivate::get(w);
+        wp->doLayoutScratchDepth = depth;
+    }
+
+    std::sort(copy.begin(), copy.end(), [](const ZWidget *const a, const ZWidget *const b) {
+        return ZWidgetPrivate::get(a)->doLayoutScratchDepth < ZWidgetPrivate::get(b)->doLayoutScratchDepth;
+    });
+
     for (auto &w: copy) {
         if (w.isNull()) continue;
         QEvent request(QEvent::LayoutRequest);
         QCoreApplication::sendEvent(w.data(), &request);
+    }
+}
+
+int ZTerminal::currentLayoutGeneration() {
+    auto *const p = tuiwidgets_impl();
+    if (p->layoutGeneration < 0) {
+        // outside of doLayout, always return a new value
+        if (p->layoutGeneration < std::numeric_limits<decltype(p->layoutGeneration)>::min() + 10) {
+            p->layoutGeneration = -2;
+        }
+        p->layoutGeneration -= 1;
+        return -(p->layoutGeneration);
+    } else {
+        // inside doLayout, the value is stable
+        return p->layoutGeneration;
     }
 }
 
