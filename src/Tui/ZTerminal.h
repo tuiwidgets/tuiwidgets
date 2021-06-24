@@ -2,7 +2,6 @@
 #define TUIWIDGETS_ZTERMINAL_INCLUDED
 
 #include <memory>
-#include <termios.h>
 
 #include <QObject>
 

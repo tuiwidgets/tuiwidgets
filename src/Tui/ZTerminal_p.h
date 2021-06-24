@@ -1,6 +1,8 @@
 #ifndef TUIWIDGETS_ZTERMINAL_P_INCLUDED
 #define TUIWIDGETS_ZTERMINAL_P_INCLUDED
 
+#include <termios.h>
+
 #include <QByteArray>
 #include <QMap>
 #include <QPoint>
