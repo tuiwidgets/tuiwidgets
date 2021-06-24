@@ -12,14 +12,38 @@ ZImage::ZImage(const ZTerminal *terminal, int width, int height)
     : tuiwidgets_pimpl_ptr(new ZImageData(ZTerminalPrivate::get(terminal)->terminal, width, height)) {
 }
 
+
+ZImage::ZImage(QSharedDataPointer<ZImageData> pimpl) : tuiwidgets_pimpl_ptr(pimpl) {
+}
+
 ZImage::ZImage(const ZTerminal *terminal, const QString &fileName) {
-    termpaint_surface* surface = termpaint_image_load(ZTerminalPrivate::get(terminal)->terminal,
+    termpaint_surface *surface = termpaint_image_load(ZTerminalPrivate::get(terminal)->terminal,
                                                       fileName.toUtf8().data());
     if (!surface) {
         throw std::runtime_error("ZImage: could not load"); // FIXME
     }
 
     tuiwidgets_pimpl_ptr = new ZImageData(ZTerminalPrivate::get(terminal)->terminal, surface);
+}
+
+ZImage *ZImage::fromFile(const ZTerminal *terminal, QString fileName) {
+    termpaint_surface *surface = termpaint_image_load(ZTerminalPrivate::get(terminal)->terminal,
+                                                      fileName.toUtf8().data());
+    if (!surface) {
+        return nullptr;
+    }
+
+    return new ZImage(QSharedDataPointer<ZImageData>{new ZImageData(ZTerminalPrivate::get(terminal)->terminal, surface)});
+}
+
+ZImage *ZImage::fromByteArray(const ZTerminal *terminal, QByteArray data) {
+    termpaint_surface *surface = termpaint_image_load_from_buffer(ZTerminalPrivate::get(terminal)->terminal,
+                                                                  data.data(), data.size());
+    if (!surface) {
+        return nullptr;
+    }
+
+    return new ZImage(QSharedDataPointer<ZImageData>{new ZImageData(ZTerminalPrivate::get(terminal)->terminal, surface)});
 }
 
 ZImage::ZImage(const ZImage &other) : tuiwidgets_pimpl_ptr(other.tuiwidgets_pimpl_ptr) {
@@ -80,8 +104,19 @@ QSize ZImage::size() const {
 
 bool ZImage::save(const QString &fileName) const {
     auto *surface = tuiwidgets_pimpl_ptr->surface;
-    termpaint_image_save(surface, fileName.toUtf8().data());
-    return true;
+    return termpaint_image_save(surface, fileName.toUtf8().data());
+}
+
+QByteArray ZImage::saveToByteArray() const {
+    QByteArray ret;
+    auto *surface = tuiwidgets_pimpl_ptr->surface;
+    char *data = termpaint_image_save_alloc_buffer(surface);
+    if (data) {
+        ret = data;
+        termpaint_image_save_dealloc_buffer(data);
+    }
+    return ret;
+
 }
 
 ZPainter ZImage::painter() {
