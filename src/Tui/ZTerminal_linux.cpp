@@ -637,7 +637,7 @@ void ZTerminalPrivate::integration_write_uncached(char *data, int length) {
 
 void ZTerminalPrivate::integration_write(const char *data, int length) {
     output_buffer.append(data, length);
-    if (output_buffer.size() > 512) {
+    if (output_buffer.size() > 512 || options.testFlag(ZTerminal::DebugDisableBufferedIo)) {
         integration_flush();
     }
 }

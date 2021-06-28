@@ -25,7 +25,7 @@ class ZTerminalPrivate;
 class TUIWIDGETS_EXPORT ZTerminal : public QObject {
     Q_OBJECT
 public:
-    enum Option {
+    enum Option : uint32_t {
         AllowInterrupt = 1 << 0,
         AllowSuspend = 1 << 1,
         AllowQuit = 1 << 2,
@@ -34,6 +34,7 @@ public:
         DisableAutoDetectTimeoutMessage = 1 << 5,
         ForceIncompatibleTerminals = 1 << 6,
         DisableTaggedPaste = 1 << 7,
+        DebugDisableBufferedIo = 1 << 8,
     };
     Q_DECLARE_FLAGS(Options, Option)
 
