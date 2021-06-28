@@ -115,6 +115,7 @@ protected:
 public Q_SLOTS:
 
 Q_SIGNALS:
+    void beforeRendering();
     void afterRendering();
     void incompatibleTerminalDetected();
     void terminalConnectionLost();

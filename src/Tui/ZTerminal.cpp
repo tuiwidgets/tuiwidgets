@@ -426,6 +426,7 @@ void ZTerminal::update() {
 
 void ZTerminal::forceRepaint() {
     auto *const p = tuiwidgets_impl();
+    Q_EMIT beforeRendering();
     p->processPaintingAndUpdateOutput(true);
 }
 
@@ -840,6 +841,7 @@ bool ZTerminal::event(QEvent *event) {
         p->processPaintingAndUpdateOutput(false);
     }
     if (event->type() == QEvent::LayoutRequest) {
+        Q_EMIT beforeRendering();
         p->layoutRequested = false;
         doLayout();
     }
