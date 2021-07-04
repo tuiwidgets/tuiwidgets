@@ -42,6 +42,30 @@ enum class TerminalColor {
     brightYellow = 11
 };
 
+class TUIWIDGETS_EXPORT ZColorHSV {
+public:
+    ZColorHSV();
+    ZColorHSV(double hue, double saturation, double value);
+
+public:
+    double hue() const;
+    void setHue(double hue);
+
+    double saturation() const;
+    void setSaturation(double saturation);
+
+    double value() const;
+    void setValue(double value);
+
+    bool operator==(const ZColorHSV &other) const;
+    bool operator!=(const ZColorHSV &other) const;
+
+private:
+    double _hue = 0;
+    double _saturation = 0;
+    double _value = 0;
+};
+
 class TUIWIDGETS_EXPORT ZColor {
 public:
     enum ColorType {
@@ -77,6 +101,8 @@ public:
     int greenOrGuess() const;
     int blueOrGuess() const;
 
+    ZColorHSV toHsv() const;
+
     uint32_t nativeValue();
 
     static ZColor defaultColor();
@@ -84,6 +110,11 @@ public:
     static ZColor fromTerminalColor(TerminalColor color);
     static ZColor fromTerminalColor(int color);
     static ZColor fromTerminalColorIndexed(int color);
+
+    static ZColor fromHsvStrict(double hue, double saturation, double value);
+    static ZColor fromHsvStrict(const ZColorHSV &hsv);
+    static ZColor fromHsv(double hue, double saturation, double value);
+    static ZColor fromHsv(const ZColorHSV &hsv);
 
     bool operator==(const ZColor &other) const;
     bool operator!=(const ZColor &other) const;

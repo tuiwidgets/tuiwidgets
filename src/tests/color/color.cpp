@@ -212,3 +212,119 @@ TEST_CASE("zcolor - guess rgb") {
     }
 }
 
+
+static double applyGamma(uint8_t val) {
+    return pow(val / 255., 2.2);
+}
+
+TEST_CASE("zcolor - hsv") {
+
+    SECTION("listed test cases") {
+        struct TestCase {
+            Tui::ZColor color;
+            Tui::ZColorHSV hsv;
+        };
+
+        const int linear50 = pow(0.5, 1/2.2) * 255 + 0.5;
+        CAPTURE(linear50);
+
+        auto testCase = GENERATE_COPY(
+                    TestCase{Tui::ZColor::fromRgb(0, 0, 0), Tui::ZColorHSV(0, 0, 0)},
+                    TestCase{Tui::ZColor::fromRgb(255, 0, 0), Tui::ZColorHSV(0, 1, 1)},
+                    TestCase{Tui::ZColor::fromRgb(255, 255, 0), Tui::ZColorHSV(60, 1, 1)},
+                    TestCase{Tui::ZColor::fromRgb(0, 255, 0), Tui::ZColorHSV(120, 1, 1)},
+                    TestCase{Tui::ZColor::fromRgb(0, 255, 255), Tui::ZColorHSV(180, 1, 1)},
+                    TestCase{Tui::ZColor::fromRgb(0, 0, 255), Tui::ZColorHSV(240, 1, 1)},
+                    TestCase{Tui::ZColor::fromRgb(255, 0, 255), Tui::ZColorHSV(300, 1, 1)},
+                    TestCase{Tui::ZColor::fromRgb(255, 255, 255), Tui::ZColorHSV(0, 0, 1)},
+                    TestCase{Tui::ZColor::fromRgb(127, 127, 127), Tui::ZColorHSV(0, 0, applyGamma(127))},
+                    TestCase{Tui::ZColor::fromRgb(0xbf, 0xbf, 0), Tui::ZColorHSV(60, 1, applyGamma(0xbf))},
+                    TestCase{Tui::ZColor::fromRgb(0x00, 0x80, 0x00), Tui::ZColorHSV(120, 1, applyGamma(0x80))},
+                    TestCase{Tui::ZColor::fromRgb(linear50, 0xff, 0xff), Tui::ZColorHSV(180, 0.50, 1)},
+                    TestCase{Tui::ZColor::fromRgb(linear50, linear50, 0xff), Tui::ZColorHSV(240, 0.50, 1)}
+        );
+        Tui::ZColor color = testCase.color;
+        CAPTURE(color.red(), color.green(), color.blue());
+        auto hsv = color.toHsv();
+        REQUIRE(hsv.value() == Approx(testCase.hsv.value()).margin(5e-6));
+        REQUIRE(hsv.saturation() == Approx(testCase.hsv.saturation()).margin(0.00296));
+        CHECK(hsv.hue() == Approx(testCase.hsv.hue()).margin(0.258));
+
+        auto color2 = Tui::ZColor::fromHsvStrict(hsv);
+        CHECK(color2.red() == color.red());
+        CHECK(color2.green() == color.green());
+        CHECK(color2.blue() == color.blue());
+    }
+
+    SECTION("zcolor - grey value") {
+        int testCase = GENERATE(0, 255);
+
+        Tui::ZColor color = Tui::ZColor::fromRgb(testCase, testCase, testCase);
+        CAPTURE(color.red(), color.green(), color.blue());
+        auto hsv = color.toHsv();
+        REQUIRE(hsv.saturation() == 0);
+        CHECK(hsv.hue() == 0);
+        REQUIRE(hsv.value() == pow(testCase / 255., 2.2));
+    }
+}
+
+TEST_CASE("zcolor - hsv brute force", "[!hide]") {
+    for (int r = 0; r < 256; r++) {
+        for (int g = 0; g < 256; g++) {
+            for (int b = 0; b < 256; b++) {
+                Tui::ZColor color = Tui::ZColor::fromRgb(r, g, b);
+                auto hsv = color.toHsv();
+                auto color2 = Tui::ZColor::fromHsvStrict(hsv);
+                if (std::max(abs(color2.red() - color.red()), std::max(abs(color2.blue() - color.blue()), abs(color2.green() - color.green()))) > 0) {
+                    CAPTURE(color.red());
+                    CAPTURE(color.green());
+                    CAPTURE(color.blue());
+                    CAPTURE(hsv.hue());
+                    CAPTURE(hsv.saturation());
+                    CAPTURE(hsv.value());
+                    CAPTURE(color2.red());
+                    CAPTURE(color2.green());
+                    CAPTURE(color2.blue());
+                    FAIL("ZColor->ZColorHSV->ZColor not identical");
+                }
+            }
+        }
+    }
+}
+
+/*
+TEST_CASE("zcolor - hsv brute bench", "[!hide]") {
+
+    BENCHMARK("fromHSV") {
+        double sink = 0;
+        for (int r = 0; r < 256; r++) {
+            for (int g = 0; g < 256; g++) {
+                for (int b = 0; b < 256; b++) {
+                    Tui::ZColor color = Tui::ZColor::fromRgb(r, g, b);
+                    auto hsv = color.toHsv();
+                    //sink += hsv.hue();
+                    auto color2 = Tui::ZColor::fromHsv(hsv);
+                    sink += color2.red() + color2.green() + color2.blue();
+                }
+            }
+        }
+        return sink;
+    };
+    BENCHMARK("fromHSVStrict") {
+        double sink = 0;
+        for (int r = 0; r < 256; r++) {
+            for (int g = 0; g < 256; g++) {
+                for (int b = 0; b < 256; b++) {
+                    Tui::ZColor color = Tui::ZColor::fromRgb(r, g, b);
+                    auto hsv = color.toHsv();
+                    //sink += hsv.hue();
+                    auto color2 = Tui::ZColor::fromHsvStrict(hsv);
+                    sink += color2.red() + color2.green() + color2.blue();
+                }
+            }
+        }
+        return sink;
+    };
+
+}
+*/
