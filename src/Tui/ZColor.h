@@ -43,6 +43,7 @@ enum class TerminalColor {
 };
 
 class TUIWIDGETS_EXPORT ZColor {
+public:
     enum ColorType {
         RGB,
         Default,
@@ -74,8 +75,8 @@ public:
 
     uint32_t nativeValue();
 
-    static ZColor fromRgb(int r, int g, int b);
     static ZColor defaultColor();
+    static ZColor fromRgb(int r, int g, int b);
     static ZColor fromTerminalColor(TerminalColor color);
     static ZColor fromTerminalColor(int color);
     static ZColor fromTerminalColorIndexed(int color);

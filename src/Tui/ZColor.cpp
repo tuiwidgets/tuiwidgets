@@ -17,6 +17,24 @@ ZColor::ZColor(Private::GlobalColorRGB globalColor)
 ZColor::ZColor(TerminalColor color) : val(ZColor::fromTerminalColor(color).val) {
 }
 
+ZColor::ColorType ZColor::colorType() const {
+    static_assert ((TERMPAINT_NAMED_COLOR & 0xff000000) == (TERMPAINT_INDEXED_COLOR & 0xff000000),
+                   "TERMPAINT_NAMED_COLOR or TERMPAINT_INDEXED_COLOR not as expected");
+    switch (val & 0xff000000) {
+        case TERMPAINT_RGB_COLOR_OFFSET:
+            return ColorType::RGB;
+        case TERMPAINT_NAMED_COLOR & 0xff000000:
+            if ((val & 0xfff00000) == TERMPAINT_NAMED_COLOR) {
+                return ColorType::Terminal;
+            } else if ((val & 0xfff00000) == TERMPAINT_INDEXED_COLOR) {
+                return ColorType::TerminalIndexed;
+            }
+            [[fallthrough]];
+        default:
+            return ColorType::Default;
+    }
+}
+
 int ZColor::red() const {
     if (colorType() != ColorType::RGB) {
         return 0;
@@ -63,7 +81,7 @@ void ZColor::setBlue(int blue) {
 }
 
 int ZColor::terminalColorIndexed() {
-    if (colorType() != ColorType::TerminalIndexed) {
+    if (colorType() == ColorType::TerminalIndexed) {
         return val & 0xff;
     } else {
         return 0;
@@ -75,19 +93,6 @@ TerminalColor ZColor::terminalColor() {
         return static_cast<TerminalColor>(val & 0xf);
     } else {
         return TerminalColor::black;
-    }
-}
-
-ZColor::ColorType ZColor::colorType() const {
-    switch (val & 0xff000000) {
-        case TERMPAINT_RGB_COLOR_OFFSET:
-            return ColorType::RGB;
-        case TERMPAINT_NAMED_COLOR:
-            return ColorType::Terminal;
-        case TERMPAINT_INDEXED_COLOR:
-            return ColorType::TerminalIndexed;
-        default:
-            return ColorType::Default;
     }
 }
 
