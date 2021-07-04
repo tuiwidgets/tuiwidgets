@@ -73,6 +73,10 @@ public:
     // Only for colorType() == ColorType::Terminal
     TerminalColor terminalColor();
 
+    int redOrGuess() const;
+    int greenOrGuess() const;
+    int blueOrGuess() const;
+
     uint32_t nativeValue();
 
     static ZColor defaultColor();
