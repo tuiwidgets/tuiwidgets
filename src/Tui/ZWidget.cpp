@@ -215,13 +215,21 @@ QSize ZWidget::sizeHint() const {
     return {};
 }
 
+QSize ZWidget::minimumSizeHint() const {
+    return QSize();
+}
+
 QSize ZWidget::effectiveSizeHint() const {
     QSize s = sizeHint();
     return s.expandedTo(minimumSize()).boundedTo(maximumSize());
 }
 
 QSize ZWidget::effectiveMinimumSize() const {
-    return minimumSize().boundedTo(maximumSize());
+    if (minimumSize().isValid())  {
+        return minimumSize().boundedTo(maximumSize());
+    } else {
+        return minimumSizeHint().boundedTo(maximumSize());
+    }
 }
 
 QRect ZWidget::layoutArea() const {
