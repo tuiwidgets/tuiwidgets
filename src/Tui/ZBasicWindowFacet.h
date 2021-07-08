@@ -17,7 +17,7 @@ public:
 
 public:
     bool isExtendViewport() const override;
-    bool isManuallyPlaced() override;
+    bool isManuallyPlaced() const override;
     void autoPlace(const QSize &available, ZWidget *self) override;
 
     void setDefaultPlacement(Qt::Alignment align, QPoint displace);

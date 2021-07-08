@@ -18,7 +18,7 @@ bool ZBasicWindowFacet::isExtendViewport() const {
     return p->extendViewport;
 }
 
-bool ZBasicWindowFacet::isManuallyPlaced() {
+bool ZBasicWindowFacet::isManuallyPlaced() const {
     auto *const p = tuiwidgets_impl();
     return p->manuallyPlaced;
 }

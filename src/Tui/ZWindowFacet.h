@@ -14,8 +14,8 @@ class TUIWIDGETS_EXPORT ZWindowFacet : public QObject {
     Q_OBJECT
 public:
     virtual bool isExtendViewport() const;
-    virtual bool isManuallyPlaced() { return true; }
-    virtual void autoPlace(const QSize &available, ZWidget *self) { (void)available; (void)self; }
+    virtual bool isManuallyPlaced() const;
+    virtual void autoPlace(const QSize &available, ZWidget *self);
 
 protected:
     ZWindowFacet();

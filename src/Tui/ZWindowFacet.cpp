@@ -16,4 +16,8 @@ ZWindowFacet::~ZWindowFacet() {
 
 bool ZWindowFacet::isExtendViewport() const { return false; }
 
+bool ZWindowFacet::isManuallyPlaced() const { return true; }
+
+void ZWindowFacet::autoPlace(const QSize &available, ZWidget *self) { (void)available; (void)self; }
+
 TUIWIDGETS_NS_END
