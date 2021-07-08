@@ -92,10 +92,10 @@ public:
     void setBlue(int blue);
 
     // Only for colorType() == ColorType::TerminalIndexed
-    int terminalColorIndexed();
+    int terminalColorIndexed() const;
 
     // Only for colorType() == ColorType::Terminal
-    TerminalColor terminalColor();
+    TerminalColor terminalColor() const;
 
     int redOrGuess() const;
     int greenOrGuess() const;
@@ -103,7 +103,7 @@ public:
 
     ZColorHSV toHsv() const;
 
-    uint32_t nativeValue();
+    uint32_t nativeValue() const;
 
     static ZColor defaultColor();
     static ZColor fromRgb(int r, int g, int b);

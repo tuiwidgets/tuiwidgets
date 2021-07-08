@@ -84,7 +84,7 @@ void ZColor::setBlue(int blue) {
     }
 }
 
-int ZColor::terminalColorIndexed() {
+int ZColor::terminalColorIndexed() const {
     if (colorType() == ColorType::TerminalIndexed) {
         return val & 0xff;
     } else {
@@ -92,7 +92,7 @@ int ZColor::terminalColorIndexed() {
     }
 }
 
-TerminalColor ZColor::terminalColor() {
+TerminalColor ZColor::terminalColor() const {
     if (colorType() == ColorType::Terminal) {
         return static_cast<TerminalColor>(val & 0xf);
     } else {
@@ -397,7 +397,7 @@ ZColorHSV ZColor::toHsv() const {
     return ret;
 }
 
-uint32_t ZColor::nativeValue() {
+uint32_t ZColor::nativeValue() const {
     return val;
 }
 
