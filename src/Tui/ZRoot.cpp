@@ -5,6 +5,7 @@
 
 #include <Tui/ZPalette.h>
 #include <Tui/ZPainter.h>
+#include <Tui/ZTerminal.h>
 #include <Tui/ZWindowFacet.h>
 
 TUIWIDGETS_NS_START
@@ -110,6 +111,34 @@ void ZRoot::timerEvent(QTimerEvent *event) {
     ZWidget::timerEvent(event);
 }
 
+QSize ZRoot::minimumSizeHint() const {
+    QSize hint;
+    for (QObject *o: children()) {
+        auto childWidget = qobject_cast<ZWidget*>(o);
+        if (childWidget) {
+            ZWindowFacet *windowFacet = static_cast<ZWindowFacet*>(childWidget->facet(ZWindowFacet::staticMetaObject));
+            if (windowFacet) {
+                if (windowFacet->isExtendViewport()) {
+                    hint = hint.expandedTo(QSize(childWidget->geometry().right() + 1, childWidget->geometry().bottom() + 1));
+                }
+            }
+        }
+    }
+    return hint;
+}
+
+QRect ZRoot::layoutArea() const {
+    QRect tmp = geometry();
+    if (terminal() && terminal()->mainWidget() == this) {
+        // keep base layout inside the area we would get without children with extend viewport enabled.
+        QSize terminalSize = { terminal()->width(), terminal()->height() };
+
+        tmp = { {0, 0}, terminalSize.expandedTo(minimumSize()) };
+    }
+    tmp.moveTo(0, 0);
+    return tmp.marginsRemoved(contentsMargins());
+}
+
 void ZRoot::childEvent(QChildEvent *event) {
     auto *const p = tuiwidgets_impl();
     if (event->added()) {
@@ -141,10 +170,6 @@ void ZRoot::disconnectNotify(const QMetaMethod &signal) {
 
 QObject *ZRoot::facet(const QMetaObject metaObject) {
     return ZWidget::facet(metaObject);
-}
-
-QRect ZRoot::layoutArea() const {
-    return ZWidget::layoutArea();
 }
 
 QSize ZRoot::sizeHint() const {

@@ -223,7 +223,19 @@ void ZTerminalPrivate::processPaintingAndUpdateOutput(bool fullRepaint) {
             pub()->doLayout();
         }
         cursorPosition = QPoint{-1, -1};
-        const QSize minSize = mainWidget->minimumSize();
+        const QSize minSize = mainWidget->minimumSize().expandedTo(mainWidget->minimumSizeHint());
+        {
+            int geoWidth = std::max(minSize.width(), termpaint_surface_width(surface));
+            int geoHeight = std::max(minSize.height(), termpaint_surface_height(surface));
+            if (mainWidget->geometry().width() != geoWidth || mainWidget->geometry().height() != geoHeight) {
+                mainWidget->setGeometry({0, 0, geoWidth, geoHeight});
+
+                if (pub()->isLayoutPending()) {
+                    pub()->doLayout();
+                }
+            }
+        }
+
         std::unique_ptr<ZPainter> paint;
         std::unique_ptr<ZImage> img;
         if (minSize.width() > termpaint_surface_width(surface) || minSize.height() > termpaint_surface_height(surface)) {
@@ -454,7 +466,7 @@ void ZTerminal::resize(int width, int height) {
     auto *const p = tuiwidgets_impl();
     termpaint_surface_resize(p->surface, width, height);
     if (p->mainWidget) {
-        const QSize minSize = p->mainWidget->minimumSize();
+        const QSize minSize = p->mainWidget->minimumSize().expandedTo(p->mainWidget->minimumSizeHint());
         p->mainWidget->setGeometry({0, 0, std::max(minSize.width(), termpaint_surface_width(p->surface)),
                                     std::max(minSize.height(), termpaint_surface_height(p->surface))});
     }

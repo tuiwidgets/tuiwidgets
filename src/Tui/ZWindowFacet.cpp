@@ -14,4 +14,6 @@ ZWindowFacet::ZWindowFacet(std::unique_ptr<ZWindowFacetPrivate> pimpl)
 ZWindowFacet::~ZWindowFacet() {
 }
 
+bool ZWindowFacet::isExtendViewport() const { return false; }
+
 TUIWIDGETS_NS_END

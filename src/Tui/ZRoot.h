@@ -25,13 +25,14 @@ protected:
     void childEvent(QChildEvent *event) override;
     void resizeEvent(ZResizeEvent *event) override;
     virtual void terminalChanged();
+    QSize minimumSizeHint() const override;
+    QRect layoutArea() const override;
 
 public:
     // public virtuals from base class override everything for later ABI compatibility
     bool event(QEvent *event) override;
     bool eventFilter(QObject *watched, QEvent *event) override;
     QObject *facet(const QMetaObject metaObject) override;
-    QRect layoutArea() const override;
     QSize sizeHint() const override;
 
 protected:

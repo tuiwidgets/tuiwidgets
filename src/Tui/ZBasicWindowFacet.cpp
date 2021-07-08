@@ -13,6 +13,11 @@ ZBasicWindowFacet::ZBasicWindowFacet() : ZWindowFacet(std::make_unique<ZBasicWin
 ZBasicWindowFacet::~ZBasicWindowFacet() {
 }
 
+bool ZBasicWindowFacet::isExtendViewport() const {
+    auto *const p = tuiwidgets_impl();
+    return p->extendViewport;
+}
+
 bool ZBasicWindowFacet::isManuallyPlaced() {
     auto *const p = tuiwidgets_impl();
     return p->manuallyPlaced;
@@ -72,6 +77,10 @@ void ZBasicWindowFacet::setDefaultPlacement(Qt::Alignment align, QPoint displace
     p->manuallyPlaced = false;
 }
 
+void ZBasicWindowFacet::setExtendViewport(bool extend) {
+    auto *const p = tuiwidgets_impl();
+    p->extendViewport = extend;
+}
 
 TUIWIDGETS_NS_END
 

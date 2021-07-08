@@ -16,10 +16,12 @@ public:
     ~ZBasicWindowFacet();
 
 public:
+    bool isExtendViewport() const override;
     bool isManuallyPlaced() override;
     void autoPlace(const QSize &available, ZWidget *self) override;
 
     void setDefaultPlacement(Qt::Alignment align, QPoint displace);
+    void setExtendViewport(bool extend);
 
 private:
     TUIWIDGETS_DECLARE_PRIVATE(ZBasicWindowFacet)
