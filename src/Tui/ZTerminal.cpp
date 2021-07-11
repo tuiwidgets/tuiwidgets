@@ -515,6 +515,9 @@ QString ZTerminal::title() const {
 
 void ZTerminal::setTitle(QString title) {
     auto *const p = tuiwidgets_impl();
+    if (p->title == title) {
+        return;
+    }
     p->title = title;
     p->titleNeedsUpdate = true;
 }
@@ -526,6 +529,9 @@ QString ZTerminal::iconTitle() const {
 
 void ZTerminal::setIconTitle(QString title) {
     auto *const p = tuiwidgets_impl();
+    if (p->iconTitle == title) {
+        return;
+    }
     p->iconTitle = title;
     p->iconTitleNeedsUpdate = true;
 }
