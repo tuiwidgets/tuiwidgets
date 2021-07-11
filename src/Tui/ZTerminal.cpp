@@ -508,10 +508,20 @@ void ZTerminal::updateOutputForceFullRepaint() {
     }
 }
 
+QString ZTerminal::title() const {
+    auto *const p = tuiwidgets_impl();
+    return p->title;
+}
+
 void ZTerminal::setTitle(QString title) {
     auto *const p = tuiwidgets_impl();
     p->title = title;
     p->titleNeedsUpdate = true;
+}
+
+QString ZTerminal::iconTitle() const {
+    auto *const p = tuiwidgets_impl();
+    return p->iconTitle;
 }
 
 void ZTerminal::setIconTitle(QString title) {
