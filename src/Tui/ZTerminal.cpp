@@ -74,6 +74,7 @@ ZShortcutManager *ZTerminalPrivate::ensureShortcutManager() {
 
 void ZTerminal::setCursorStyle(CursorStyle style) {
     auto *const p = tuiwidgets_impl();
+    p->terminalCursorStyle = style;
     switch (style) {
         case CursorStyle::Unset:
             termpaint_terminal_set_cursor_style(p->terminal, TERMPAINT_CURSOR_STYLE_TERM_DEFAULT, true);
@@ -93,8 +94,10 @@ void ZTerminal::setCursorStyle(CursorStyle style) {
 void ZTerminal::setCursorPosition(QPoint cursorPosition) {
     auto *const p = tuiwidgets_impl();
     termpaint_terminal_set_cursor_position(p->terminal, cursorPosition.x(), cursorPosition.y());
+    p->terminalCursorPosition = cursorPosition;
     const bool cursorVisible = cursorPosition != QPoint{-1, -1};
     termpaint_terminal_set_cursor_visible(p->terminal, cursorVisible);
+    p->terminalCursorVisible  = cursorVisible;
 }
 
 void ZTerminal::setCursorColor(int cursorColorR, int cursorColorG, int cursorColorB) {
@@ -104,8 +107,14 @@ void ZTerminal::setCursorColor(int cursorColorR, int cursorColorG, int cursorCol
                                      cursorColorR,
                                      cursorColorG,
                                      cursorColorB);
+        p->terminalCursorR = cursorColorR;
+        p->terminalCursorG = cursorColorG;
+        p->terminalCursorB = cursorColorB;
     } else {
         termpaint_terminal_reset_color(p->terminal, TERMPAINT_COLOR_SLOT_CURSOR);
+        p->terminalCursorR = -1;
+        p->terminalCursorG = -1;
+        p->terminalCursorB = -1;
     }
 }
 
@@ -449,6 +458,26 @@ ZImage ZTerminal::grabCurrentImage() const {
                                 ZImageData::get(&img)->surface, 0, 0,
                                 TERMPAINT_COPY_NO_TILE, TERMPAINT_COPY_NO_TILE);
     return img;
+}
+
+QPoint ZTerminal::grabCursorPosition() const {
+    auto *const p = tuiwidgets_impl();
+    return p->terminalCursorPosition;
+}
+
+bool ZTerminal::grabCursorVisibility() const {
+    auto *const p = tuiwidgets_impl();
+    return p->terminalCursorVisible;
+}
+
+CursorStyle ZTerminal::grabCursorStyle() const {
+    auto *const p = tuiwidgets_impl();
+    return p->terminalCursorStyle;
+}
+
+std::tuple<int, int, int> ZTerminal::grabCursorColor() const {
+    auto *const p = tuiwidgets_impl();
+    return { p->terminalCursorR, p->terminalCursorG, p->terminalCursorB };
 }
 
 int ZTerminal::width() const {

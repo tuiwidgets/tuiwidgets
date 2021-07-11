@@ -73,6 +73,10 @@ public:
 
     termpaint_surface *surface = nullptr; // TODO use ref counted ptr of some kind
     termpaint_terminal *terminal = nullptr;
+    QPoint terminalCursorPosition;
+    CursorStyle terminalCursorStyle = CursorStyle::Unset;
+    bool terminalCursorVisible = true;
+    int terminalCursorR = -1, terminalCursorG = -1, terminalCursorB = -1;
     termpaint_integration integration;
     std::unique_ptr<QSocketNotifier> inputNotifier;
 

@@ -75,6 +75,10 @@ public:
     void forceRepaint();
 
     ZImage grabCurrentImage() const;
+    QPoint grabCursorPosition() const;
+    bool grabCursorVisibility() const;
+    CursorStyle grabCursorStyle() const;
+    std::tuple<int, int, int> grabCursorColor() const;
 
     int width() const;
     int height() const;
