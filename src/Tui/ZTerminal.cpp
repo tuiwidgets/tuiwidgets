@@ -264,6 +264,7 @@ void ZTerminalPrivate::processPaintingAndUpdateOutput(bool fullRepaint) {
             viewportOffset.setY(0);
             paint = std::make_unique<ZPainter>(pub()->painter());
         }
+        paint->setWidget(mainWidget.get());
         ZPaintEvent event(ZPaintEvent::update, paint.get());
         QCoreApplication::sendEvent(mainWidget.get(), &event);
         if (initState == ZTerminalPrivate::InitState::Ready) {
