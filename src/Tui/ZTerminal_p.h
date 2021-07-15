@@ -52,24 +52,34 @@ public:
     bool initTerminal(ZTerminal::Options options);
     void initOffscreen(const ZTerminal::OffScreen &offscreen);
     void deinitTerminal();
-    void pauseTerminal();
-    void unpauseTerminal();
 
-    void init_fns();
-    bool terminalAvailable();
-    bool setup(ZTerminal::Options options);
+    // internal connection
+    void initIntegrationForInternalConnection();
+    bool terminalAvailableForInternalConnection();
+    bool setupInternalConnection(ZTerminal::Options options);
     bool setupFromControllingTerminal(ZTerminal::Options options);
-    bool commonStuff(ZTerminal::Options options);
+    bool commonInitForInternalConnection(ZTerminal::Options options);
+    void deinitTerminalForInternalConnection();
+    void pauseTerminalForInternalConnection();
+    void unpauseTerminalForInternalConnection();
 
-    void integration_free();
-    void integration_write(const char *data, int length);
-    void integration_write_uncached(char *data, int length);
-    void integration_flush();
-    bool integration_is_bad();
+    void internalConnection_integration_free();
+    void internalConnection_integration_write(const char *data, int length);
+    void internalConnection_integration_write_uncached(char *data, int length);
+    void internalConnection_integration_flush();
+    bool internalConnection_integration_is_bad();
+    void internalConnection_integration_restore_sequence_updated(const char *data, int len, bool force);
+    void internalConnectionTerminalFdHasData(int socket);
+    // ^^
+    // common integration
+    void initIntegrationCommon();
+    void initCommon();
+    static _Bool raw_filter(void *user_data, const char *data, unsigned length, _Bool overflow);
+    static void event_handler(void *user_data, termpaint_event *event);
     void integration_request_callback();
     void integration_awaiting_response();
-    void integration_restore_sequence_updated(const char *data, int len, bool force);
-    void integration_terminalFdHasData(int socket);
+    void inputFromConnection(const char *data, int length);
+    // ^^
 
     termpaint_surface *surface = nullptr; // TODO use ref counted ptr of some kind
     termpaint_terminal *terminal = nullptr;
@@ -114,17 +124,20 @@ public:
     // stuff from integration
     int fd = -1;
     bool auto_close = false;
-    bool callbackRequested = false;
-    bool awaitingResponse = false;
     QByteArray output_buffer;
     termios originalTerminalAttributes;
     termios prepauseTerminalAttributes;
-    bool backspaceIsX08 = false;
-    QTimer callbackTimer;
     // ^^
+
+    // common integration
+    QTimer callbackTimer;
+    bool backspaceIsX08 = false;
+    bool callbackRequested = false;
+    bool awaitingResponse = false;
 
     QString autoDetectTimeoutMessage = QStringLiteral("Terminal auto detection is taking unusually long, press space to abort.");
     std::unique_ptr<QTimer> autoDetectTimeoutTimer;
+    // ^^
 
     ZTerminal* pub_ptr;
 

@@ -252,7 +252,7 @@ namespace  {
     }
 }
 
-bool ZTerminalPrivate::terminalAvailable() {
+bool ZTerminalPrivate::terminalAvailableForInternalConnection() {
     bool from_std_fd = false;
     from_std_fd = (isatty(0) && isFileRw(0))
             || (isatty(1) && isFileRw(1))
@@ -269,7 +269,7 @@ bool ZTerminalPrivate::terminalAvailable() {
     return false;
 }
 
-bool ZTerminalPrivate::setup(ZTerminal::Options options) {
+bool ZTerminalPrivate::setupInternalConnection(ZTerminal::Options options) {
     if (fd != -1) {
         return false;
     }
@@ -291,21 +291,11 @@ bool ZTerminalPrivate::setup(ZTerminal::Options options) {
         }
     }
 
-    return commonStuff(options);
+    return commonInitForInternalConnection(options);
 }
 
-void ZTerminalPrivate::deinitTerminal() {
-    if (initState == ZTerminalPrivate::InitState::Deinit) {
-        // already done
-        return;
-    }
+void ZTerminalPrivate::deinitTerminalForInternalConnection() {
     inputNotifier = nullptr; // ensure no more notifications from this point
-    if (initState == ZTerminalPrivate::InitState::Paused) {
-        termpaint_terminal_free(terminal);
-    } else {
-        termpaint_terminal_free_with_restore(terminal);
-    }
-    termpaint_integration_deinit(&integration);
     if (fd != -1 && fd == systemRestoreFd.load()) {
         const char *old = systemRestoreEscape.load();
         systemRestoreEscape.store(nullptr);
@@ -320,7 +310,6 @@ void ZTerminalPrivate::deinitTerminal() {
         PosixSignalManager::instance()->barrier();
         delete [] old;
     }
-    terminal = nullptr;
     if (awaitingResponse) {
         // If terminal auto detection or another operation with response is cut short
         // the reponse will leak out into the next application.
@@ -346,7 +335,6 @@ void ZTerminalPrivate::deinitTerminal() {
     if (fd != -1) {
         tcsetattr (fd, TCSAFLUSH, &originalTerminalAttributes);
     }
-    initState = ZTerminalPrivate::InitState::Deinit;
 }
 
 bool ZTerminalPrivate::setupFromControllingTerminal(ZTerminal::Options options) {
@@ -361,26 +349,11 @@ bool ZTerminalPrivate::setupFromControllingTerminal(ZTerminal::Options options) 
     }
     auto_close = true;
 
-    return commonStuff(options);
+    return commonInitForInternalConnection(options);
 }
 
-
-
-static _Bool raw_filter(void *user_data, const char *data, unsigned length, _Bool overflow) {
-    ZTerminal* that = static_cast<ZTerminal*>(user_data);
-    QString rawSequence = QString::fromUtf8(data, length);
-    ZRawSequenceEvent event{rawSequence};
-    return QCoreApplication::sendEvent(that, &event);
-}
-
-static void event_handler(void *user_data, termpaint_event *event) {
-    ZTerminal* that = static_cast<ZTerminal*>(user_data);
-    ZTerminalNativeEvent tuiEvent{event};
-    QCoreApplication::sendEvent(that, &tuiEvent);
-}
-
-bool ZTerminalPrivate::commonStuff(ZTerminal::Options options) {
-    init_fns();
+bool ZTerminalPrivate::commonInitForInternalConnection(ZTerminal::Options options) {
+    initIntegrationForInternalConnection();
     callbackRequested = false;
     terminal = termpaint_terminal_new(&integration);
     surface = termpaint_terminal_get_surface(terminal);
@@ -413,7 +386,7 @@ bool ZTerminalPrivate::commonStuff(ZTerminal::Options options) {
             // The initial restore sequence update was in termpaint_terminal_new, we missed that
             // because systemRestoreFd was not set yet, trigger update again
             const char* tmp = termpaint_terminal_restore_sequence(terminal);
-            integration_restore_sequence_updated(tmp, static_cast<int>(strlen(tmp)), true);
+            internalConnection_integration_restore_sequence_updated(tmp, static_cast<int>(strlen(tmp)), true);
 
             // After this the signal handler pay attention to the just setup state
             // Also this forms a release-aquire pair with reads in the signal handler
@@ -514,34 +487,16 @@ bool ZTerminalPrivate::commonStuff(ZTerminal::Options options) {
         tcgetattr(systemRestoreFd.load(), &systemPresuspendTerminalAttributes);
     }
 
-    termpaint_terminal_set_raw_input_filter_cb(terminal, raw_filter, pub());
-    termpaint_terminal_set_event_cb(terminal, event_handler, pub());
-
-    if (!options.testFlag(ZTerminal::DisableAutoDetectTimeoutMessage)) {
-        autoDetectTimeoutTimer.reset(new QTimer(pub()));
-        autoDetectTimeoutTimer->setSingleShot(true);
-        autoDetectTimeoutTimer->start(10000);
-        QObject::connect(autoDetectTimeoutTimer.get(), &QTimer::timeout, pub(), [this] {
-            QByteArray utf8 = autoDetectTimeoutMessage.toUtf8();
-            integration_write(utf8.data(), utf8.size());
-            integration_flush();
-        });
-    }
-    termpaint_terminal_auto_detect(terminal);
-
-    callbackTimer.setSingleShot(true);
-    QObject::connect(&callbackTimer, &QTimer::timeout, pub(), [terminal=terminal] {
-        termpaint_terminal_callback(terminal);
-    });
+    initCommon();
 
     inputNotifier.reset(new QSocketNotifier(fd, QSocketNotifier::Read));
     QObject::connect(inputNotifier.get(), &QSocketNotifier::activated,
-                     pub(), [this] (int socket) -> void { integration_terminalFdHasData(socket); });
+                     pub(), [this] (int socket) -> void { internalConnectionTerminalFdHasData(socket); });
 
     return true;
 }
 
-void ZTerminalPrivate::pauseTerminal() {
+void ZTerminalPrivate::pauseTerminalForInternalConnection() {
     tcgetattr(fd, &prepauseTerminalAttributes);
 
     inputNotifier->setEnabled(false);
@@ -552,7 +507,7 @@ void ZTerminalPrivate::pauseTerminal() {
     }
 }
 
-void ZTerminalPrivate::unpauseTerminal() {
+void ZTerminalPrivate::unpauseTerminalForInternalConnection() {
     if (fd == systemRestoreFd.load()) {
         systemTerminalPaused.store(false);
     }
@@ -561,12 +516,9 @@ void ZTerminalPrivate::unpauseTerminal() {
     termpaint_terminal_unpause(terminal);
 }
 
-void ZTerminalPrivate::integration_terminalFdHasData(int socket) {
-    callbackTimer.stop();
-    callbackRequested = false;
-    awaitingResponse = false;
+void ZTerminalPrivate::internalConnectionTerminalFdHasData(int socket) {
     char buff[100];
-    int amount = read (socket, buff, 99);
+    int amount = read(socket, buff, 99);
     if (amount == 0) {
         if (terminal_is_disconnected((socket))) {
             inputNotifier->setEnabled(false);
@@ -585,25 +537,17 @@ void ZTerminalPrivate::integration_terminalFdHasData(int socket) {
     } else if (amount < 0) {
         return;
     }
-    termpaint_terminal_add_input_data(terminal, buff, amount);
-    QString peek = QString::fromUtf8(termpaint_terminal_peek_input_buffer(terminal), termpaint_terminal_peek_input_buffer_length(terminal));
-    if (peek.length()) {
-        ZRawSequenceEvent event(ZRawSequenceEvent::pending, peek);
-        QCoreApplication::sendEvent(pub(), &event);
-    }
-    if (callbackRequested) {
-        callbackTimer.start(100);
-    }
+    inputFromConnection(buff, amount);
 }
 
-void ZTerminalPrivate::integration_free() {
+void ZTerminalPrivate::internalConnection_integration_free() {
     // this does not really free, because ZTerminalPrivate is externally owned
     if (auto_close && fd != -1) {
         close(fd);
     }
 }
 
-void ZTerminalPrivate::integration_write_uncached(char *data, int length) {
+void ZTerminalPrivate::internalConnection_integration_write_uncached(char *data, int length) {
     int written = 0;
     int ret;
     errno = 0;
@@ -635,31 +579,23 @@ void ZTerminalPrivate::integration_write_uncached(char *data, int length) {
     }
 }
 
-void ZTerminalPrivate::integration_write(const char *data, int length) {
+void ZTerminalPrivate::internalConnection_integration_write(const char *data, int length) {
     output_buffer.append(data, length);
     if (output_buffer.size() > 512 || options.testFlag(ZTerminal::DebugDisableBufferedIo)) {
-        integration_flush();
+        internalConnection_integration_flush();
     }
 }
 
-void ZTerminalPrivate::integration_flush() {
-    integration_write_uncached(output_buffer.data(), output_buffer.size());
+void ZTerminalPrivate::internalConnection_integration_flush() {
+    internalConnection_integration_write_uncached(output_buffer.data(), output_buffer.size());
     output_buffer.clear();
 }
 
-bool ZTerminalPrivate::integration_is_bad() {
+bool ZTerminalPrivate::internalConnection_integration_is_bad() {
     return fd == -1;
 }
 
-void ZTerminalPrivate::integration_request_callback() {
-    callbackRequested = true;
-}
-
-void ZTerminalPrivate::integration_awaiting_response() {
-    awaitingResponse = true;
-}
-
-void ZTerminalPrivate::integration_restore_sequence_updated(const char *data, int len, bool force) {
+void ZTerminalPrivate::internalConnection_integration_restore_sequence_updated(const char *data, int len, bool force) {
     if (fd == systemRestoreFd.load() || force) {
         unsigned length = static_cast<unsigned>(len);
         const char *old = systemRestoreEscape.load();
@@ -672,31 +608,27 @@ void ZTerminalPrivate::integration_restore_sequence_updated(const char *data, in
     }
 }
 
-void ZTerminalPrivate::init_fns() {
+void ZTerminalPrivate::initIntegrationForInternalConnection() {
     memset(&integration, 0, sizeof(integration));
     auto free = [] (termpaint_integration* ptr) {
-        container_of(ptr, ZTerminalPrivate, integration)->integration_free();
+        container_of(ptr, ZTerminalPrivate, integration)->internalConnection_integration_free();
     };
     auto write = [] (termpaint_integration* ptr, const char *data, int length) {
-        container_of(ptr, ZTerminalPrivate, integration)->integration_write(data, length);
+        container_of(ptr, ZTerminalPrivate, integration)->internalConnection_integration_write(data, length);
     };
     auto flush = [] (termpaint_integration* ptr) {
-        container_of(ptr, ZTerminalPrivate, integration)->integration_flush();
+        container_of(ptr, ZTerminalPrivate, integration)->internalConnection_integration_flush();
     };
 
     termpaint_integration_init(&integration, free, write, flush);
 
+    initIntegrationCommon();
+
     termpaint_integration_set_is_bad(&integration, [] (termpaint_integration* ptr) {
-            return container_of(ptr, ZTerminalPrivate, integration)->integration_is_bad();
-    });
-    termpaint_integration_set_request_callback(&integration, [] (termpaint_integration* ptr) {
-        container_of(ptr, ZTerminalPrivate, integration)->integration_request_callback();
-    });
-    termpaint_integration_set_awaiting_response(&integration, [] (termpaint_integration* ptr) {
-        container_of(ptr, ZTerminalPrivate, integration)->integration_awaiting_response();
+            return container_of(ptr, ZTerminalPrivate, integration)->internalConnection_integration_is_bad();
     });
     termpaint_integration_set_restore_sequence_updated(&integration, [] (termpaint_integration* ptr, const char *data, int length) {
-        container_of(ptr, ZTerminalPrivate, integration)->integration_restore_sequence_updated(data, length, false);
+        container_of(ptr, ZTerminalPrivate, integration)->internalConnection_integration_restore_sequence_updated(data, length, false);
     });
 }
 

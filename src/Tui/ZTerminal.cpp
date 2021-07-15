@@ -347,7 +347,7 @@ ZTerminal::ZTerminal(const ZTerminal::OffScreen &offscreen, QObject *parent)
 
 
 bool ZTerminalPrivate::initTerminal(ZTerminal::Options options) {
-    return setup(options);
+    return setupInternalConnection(options);
 }
 
 void ZTerminalPrivate::initOffscreen(const ZTerminal::OffScreen &offscreen) {
@@ -374,6 +374,84 @@ void ZTerminalPrivate::initOffscreen(const ZTerminal::OffScreen &offscreen) {
     surface = termpaint_terminal_get_surface(terminal);
     termpaint_surface_resize(surface, offscreenData->width, offscreenData->height);
     termpaint_terminal_set_event_cb(terminal, [](void *, termpaint_event *) {}, nullptr);
+}
+
+void ZTerminalPrivate::initCommon() {
+    termpaint_terminal_set_raw_input_filter_cb(terminal, raw_filter, pub());
+    termpaint_terminal_set_event_cb(terminal, event_handler, pub());
+
+    if (!options.testFlag(ZTerminal::DisableAutoDetectTimeoutMessage)) {
+        autoDetectTimeoutTimer.reset(new QTimer(pub()));
+        autoDetectTimeoutTimer->setSingleShot(true);
+        autoDetectTimeoutTimer->start(10000);
+        QObject::connect(autoDetectTimeoutTimer.get(), &QTimer::timeout, pub(), [this] {
+            QByteArray utf8 = autoDetectTimeoutMessage.toUtf8();
+            internalConnection_integration_write(utf8.data(), utf8.size());
+            internalConnection_integration_flush();
+        });
+    }
+    termpaint_terminal_auto_detect(terminal);
+
+    callbackTimer.setSingleShot(true);
+    QObject::connect(&callbackTimer, &QTimer::timeout, pub(), [terminal=terminal] {
+        termpaint_terminal_callback(terminal);
+    });
+}
+
+void ZTerminalPrivate::deinitTerminal() {
+    if (initState == ZTerminalPrivate::InitState::Deinit) {
+        // already done
+        return;
+    }
+    if (initState == ZTerminalPrivate::InitState::Paused) {
+        termpaint_terminal_free(terminal);
+    } else {
+        termpaint_terminal_free_with_restore(terminal);
+    }
+    terminal = nullptr;
+    termpaint_integration_deinit(&integration);
+
+    deinitTerminalForInternalConnection();
+
+    initState = ZTerminalPrivate::InitState::Deinit;
+}
+
+void ZTerminalPrivate::inputFromConnection(const char *data, int length) {
+    callbackTimer.stop();
+    callbackRequested = false;
+    awaitingResponse = false;
+
+    termpaint_terminal_add_input_data(terminal, data, length);
+    QString peek = QString::fromUtf8(termpaint_terminal_peek_input_buffer(terminal), termpaint_terminal_peek_input_buffer_length(terminal));
+    if (peek.length()) {
+        ZRawSequenceEvent event(ZRawSequenceEvent::pending, peek);
+        QCoreApplication::sendEvent(pub(), &event);
+    }
+    if (callbackRequested) {
+        callbackTimer.start(100);
+    }
+}
+
+_Bool ZTerminalPrivate::raw_filter(void *user_data, const char *data, unsigned length, _Bool overflow) {
+    // TODO what to do about _overflow?
+    ZTerminal* that = static_cast<ZTerminal*>(user_data);
+    QString rawSequence = QString::fromUtf8(data, length);
+    ZRawSequenceEvent event{rawSequence};
+    return QCoreApplication::sendEvent(that, &event);
+}
+
+void ZTerminalPrivate::event_handler(void *user_data, termpaint_event *event) {
+    ZTerminal* that = static_cast<ZTerminal*>(user_data);
+    ZTerminalNativeEvent tuiEvent{event};
+    QCoreApplication::sendEvent(that, &tuiEvent);
+}
+
+void ZTerminalPrivate::integration_request_callback() {
+    callbackRequested = true;
+}
+
+void ZTerminalPrivate::integration_awaiting_response() {
+    awaitingResponse = true;
 }
 
 ZTerminal::~ZTerminal() {
@@ -587,14 +665,14 @@ bool ZTerminal::hasCapability(ZSymbol cap) {
 void ZTerminal::pauseOperation() {
     auto *const p = tuiwidgets_impl();
     if (p->initState != ZTerminalPrivate::InitState::Ready) return;
-    p->pauseTerminal();
+    p->pauseTerminalForInternalConnection();
     p->initState = ZTerminalPrivate::InitState::Paused;
 }
 
 void ZTerminal::unpauseOperation() {
     auto *const p = tuiwidgets_impl();
     if (p->initState != ZTerminalPrivate::InitState::Paused) return;
-    p->unpauseTerminal();
+    p->unpauseTerminalForInternalConnection();
     p->initState = ZTerminalPrivate::InitState::Ready;
     updateOutputForceFullRepaint();
 }
@@ -878,8 +956,8 @@ bool ZTerminal::event(QEvent *event) {
                     });
                 } else {
                     QByteArray utf8 = QStringLiteral("Terminal auto detection failed. If this repeats the terminal might be incompatible.\r\n").toUtf8();
-                    p->integration_write(utf8.data(), utf8.size());
-                    p->integration_flush();
+                    p->internalConnection_integration_write(utf8.data(), utf8.size());
+                    p->internalConnection_integration_flush();
                     QPointer<ZTerminal> weak = this;
                     QTimer::singleShot(0, [weak] {
                         if (!weak.isNull()) {
@@ -955,6 +1033,20 @@ ZTerminal::OffScreen ZTerminal::OffScreen::withoutCapability(ZSymbol capability)
 }
 
 ZTerminal::OffScreenData::OffScreenData(int width, int height) : width(width), height(height) {
+}
+
+#ifdef Q_CC_GNU
+#pragma GCC diagnostic ignored "-Winvalid-offsetof"
+#endif
+#define container_of(ptr, type, member) (reinterpret_cast<type *>(reinterpret_cast<char *>(ptr) - offsetof(type, member)))
+
+void ZTerminalPrivate::initIntegrationCommon() {
+    termpaint_integration_set_request_callback(&integration, [] (termpaint_integration* ptr) {
+        container_of(ptr, ZTerminalPrivate, integration)->integration_request_callback();
+    });
+    termpaint_integration_set_awaiting_response(&integration, [] (termpaint_integration* ptr) {
+        container_of(ptr, ZTerminalPrivate, integration)->integration_awaiting_response();
+    });
 }
 
 TUIWIDGETS_NS_END
