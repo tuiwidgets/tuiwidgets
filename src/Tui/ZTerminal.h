@@ -57,10 +57,43 @@ public:
         ZValuePtr<OffScreenData> tuiwidgets_pimpl_ptr;
     };
 
+    class TerminalConnectionDelegate {
+    public:
+        virtual void write(const char *data, int length) = 0;
+        virtual void flush() = 0;
+        virtual void restoreSequenceUpdated(const char *data, int len) = 0;
+        virtual void deinit(bool awaitingResponse) = 0;
+        virtual void pause();
+        virtual void unpause();
+
+    protected:
+        ~TerminalConnectionDelegate();
+    };
+
+    class TerminalConnectionPrivate;
+    class TerminalConnection {
+    public:
+        TerminalConnection();
+        ~TerminalConnection();
+
+    public:
+        void terminalInput(const char *data, int length);
+        void setDelegate(TerminalConnectionDelegate *delegate);
+        void setBackspaceIsX08(bool val);
+        void setSize(int width, int height);
+
+    protected:
+        std::unique_ptr<TerminalConnectionPrivate> tuiwidgets_pimpl_ptr;
+    private:
+        Q_DISABLE_COPY(TerminalConnection)
+        TUIWIDGETS_DECLARE_PRIVATE(TerminalConnection)
+    };
+
 public:
     explicit ZTerminal(QObject *parent = nullptr);
     explicit ZTerminal(Options options, QObject *parent = nullptr);
     explicit ZTerminal(const OffScreen& offscreen, QObject *parent = nullptr);
+    explicit ZTerminal(TerminalConnection *connection, Options options, QObject *parent = nullptr);
     virtual ~ZTerminal();
 
 public:

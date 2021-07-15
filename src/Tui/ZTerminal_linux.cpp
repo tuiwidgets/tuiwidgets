@@ -541,7 +541,7 @@ void ZTerminalPrivate::internalConnectionTerminalFdHasData(int socket) {
 }
 
 void ZTerminalPrivate::internalConnection_integration_free() {
-    // this does not really free, because ZTerminalPrivate is externally owned
+    // this does not really free, because ZTerminalPrivate which contains the integration struct is externally owned
     if (auto_close && fd != -1) {
         close(fd);
     }

@@ -51,6 +51,7 @@ public:
 
     bool initTerminal(ZTerminal::Options options);
     void initOffscreen(const ZTerminal::OffScreen &offscreen);
+    void initExternal(ZTerminal::TerminalConnectionPrivate *connection, ZTerminal::Options options);
     void deinitTerminal();
 
     // internal connection
@@ -71,6 +72,11 @@ public:
     void internalConnection_integration_restore_sequence_updated(const char *data, int len, bool force);
     void internalConnectionTerminalFdHasData(int socket);
     // ^^
+
+    // external connection
+    void externalWasResized();
+    // ^^
+
     // common integration
     void initIntegrationCommon();
     void initCommon();
@@ -121,12 +127,17 @@ public:
         Paused,
         Deinit
     } initState = InitState::InInitWithoutPendingPaintRequest;
-    // stuff from integration
+
+    // stuff from internal integration
     int fd = -1;
     bool auto_close = false;
     QByteArray output_buffer;
     termios originalTerminalAttributes;
     termios prepauseTerminalAttributes;
+    // ^^
+
+    // external integration
+    ZTerminal::TerminalConnectionPrivate *externalConnection = nullptr;
     // ^^
 
     // common integration

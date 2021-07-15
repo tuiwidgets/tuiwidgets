@@ -22,6 +22,18 @@
 
 TUIWIDGETS_NS_START
 
+class ZTerminal::TerminalConnectionPrivate {
+public:
+    static TerminalConnectionPrivate* get(ZTerminal::TerminalConnection *data) { return data->tuiwidgets_pimpl_ptr.get(); }
+
+    bool backspaceIsX08 = false;
+    int width = 0;
+    int height = 0;
+
+    ZTerminal::TerminalConnectionDelegate *delegate;
+    ZTerminalPrivate *terminal;
+};
+
 static ZSymbol extendedCharset = TUISYM_LITERAL("extendedCharset");
 
 ZTerminalPrivate::ZTerminalPrivate(ZTerminal *pub, ZTerminal::Options options)
@@ -345,6 +357,12 @@ ZTerminal::ZTerminal(const ZTerminal::OffScreen &offscreen, QObject *parent)
     tuiwidgets_impl()->initOffscreen(offscreen);
 }
 
+ZTerminal::ZTerminal(ZTerminal::TerminalConnection *connection, Options options, QObject *parent)
+    : QObject(parent), tuiwidgets_pimpl_ptr(std::make_unique<ZTerminalPrivate>(this, options))
+{
+    tuiwidgets_impl()->initExternal(ZTerminal::TerminalConnectionPrivate::get(connection), options);
+}
+
 
 bool ZTerminalPrivate::initTerminal(ZTerminal::Options options) {
     return setupInternalConnection(options);
@@ -386,8 +404,13 @@ void ZTerminalPrivate::initCommon() {
         autoDetectTimeoutTimer->start(10000);
         QObject::connect(autoDetectTimeoutTimer.get(), &QTimer::timeout, pub(), [this] {
             QByteArray utf8 = autoDetectTimeoutMessage.toUtf8();
-            internalConnection_integration_write(utf8.data(), utf8.size());
-            internalConnection_integration_flush();
+            if (externalConnection) {
+                externalConnection->delegate->write(utf8.data(), utf8.size());
+                externalConnection->delegate->flush();
+            } else {
+                internalConnection_integration_write(utf8.data(), utf8.size());
+                internalConnection_integration_flush();
+            }
         });
     }
     termpaint_terminal_auto_detect(terminal);
@@ -411,7 +434,12 @@ void ZTerminalPrivate::deinitTerminal() {
     terminal = nullptr;
     termpaint_integration_deinit(&integration);
 
-    deinitTerminalForInternalConnection();
+    if (externalConnection) {
+        externalConnection->delegate->deinit(awaitingResponse);
+        externalConnection->terminal = nullptr;
+    } else {
+        deinitTerminalForInternalConnection();
+    }
 
     initState = ZTerminalPrivate::InitState::Deinit;
 }
@@ -429,6 +457,22 @@ void ZTerminalPrivate::inputFromConnection(const char *data, int length) {
     }
     if (callbackRequested) {
         callbackTimer.start(100);
+    }
+}
+
+void ZTerminalPrivate::externalWasResized() {
+    if (options.testFlag(ZTerminal::DisableAutoResize)) {
+        return;
+    }
+    pub()->resize(externalConnection->width, externalConnection->height);
+}
+
+void ZTerminal::TerminalConnection::terminalInput(const char *data, int length) {
+    auto *const p = tuiwidgets_impl();
+    if (p->terminal) {
+        p->terminal->inputFromConnection(data, length);
+    } else {
+        qWarning("ZTerminal::TerminalConnection::terminalInput: No terminal associated!");
     }
 }
 
@@ -665,14 +709,24 @@ bool ZTerminal::hasCapability(ZSymbol cap) {
 void ZTerminal::pauseOperation() {
     auto *const p = tuiwidgets_impl();
     if (p->initState != ZTerminalPrivate::InitState::Ready) return;
-    p->pauseTerminalForInternalConnection();
+    if (p->externalConnection) {
+        termpaint_terminal_pause(p->terminal);
+        p->externalConnection->delegate->pause();
+    } else {
+        p->pauseTerminalForInternalConnection();
+    }
     p->initState = ZTerminalPrivate::InitState::Paused;
 }
 
 void ZTerminal::unpauseOperation() {
     auto *const p = tuiwidgets_impl();
     if (p->initState != ZTerminalPrivate::InitState::Paused) return;
-    p->unpauseTerminalForInternalConnection();
+    if (p->externalConnection) {
+        termpaint_terminal_unpause(p->terminal);
+        p->externalConnection->delegate->unpause();
+    } else {
+        p->unpauseTerminalForInternalConnection();
+    }
     p->initState = ZTerminalPrivate::InitState::Ready;
     updateOutputForceFullRepaint();
 }
@@ -956,8 +1010,13 @@ bool ZTerminal::event(QEvent *event) {
                     });
                 } else {
                     QByteArray utf8 = QStringLiteral("Terminal auto detection failed. If this repeats the terminal might be incompatible.\r\n").toUtf8();
-                    p->internalConnection_integration_write(utf8.data(), utf8.size());
-                    p->internalConnection_integration_flush();
+                    if (p->externalConnection) {
+                        p->externalConnection->delegate->write(utf8.data(), utf8.size());
+                        p->externalConnection->delegate->flush();
+                    } else {
+                        p->internalConnection_integration_write(utf8.data(), utf8.size());
+                        p->internalConnection_integration_flush();
+                    }
                     QPointer<ZTerminal> weak = this;
                     QTimer::singleShot(0, [weak] {
                         if (!weak.isNull()) {
@@ -1035,6 +1094,43 @@ ZTerminal::OffScreen ZTerminal::OffScreen::withoutCapability(ZSymbol capability)
 ZTerminal::OffScreenData::OffScreenData(int width, int height) : width(width), height(height) {
 }
 
+void ZTerminal::TerminalConnectionDelegate::pause() {
+}
+
+void ZTerminal::TerminalConnectionDelegate::unpause() {
+}
+
+ZTerminal::TerminalConnectionDelegate::~TerminalConnectionDelegate() {
+}
+
+ZTerminal::TerminalConnection::TerminalConnection() : tuiwidgets_pimpl_ptr(std::make_unique<ZTerminal::TerminalConnectionPrivate>()) {
+}
+
+ZTerminal::TerminalConnection::~TerminalConnection() {
+}
+
+void ZTerminal::TerminalConnection::setDelegate(ZTerminal::TerminalConnectionDelegate *delegate) {
+    auto *const p = tuiwidgets_impl();
+    p->delegate = delegate;
+}
+
+void ZTerminal::TerminalConnection::setBackspaceIsX08(bool val) {
+    auto *const p = tuiwidgets_impl();
+    p->backspaceIsX08 = val;
+}
+
+void ZTerminal::TerminalConnection::setSize(int width, int height) {
+    auto *const p = tuiwidgets_impl();
+    if (p->width == width && p->height == height) {
+        return;
+    }
+    p->width = width;
+    p->height = height;
+    if (p->terminal) {
+        p->terminal->externalWasResized();
+    }
+}
+
 #ifdef Q_CC_GNU
 #pragma GCC diagnostic ignored "-Winvalid-offsetof"
 #endif
@@ -1047,6 +1143,45 @@ void ZTerminalPrivate::initIntegrationCommon() {
     termpaint_integration_set_awaiting_response(&integration, [] (termpaint_integration* ptr) {
         container_of(ptr, ZTerminalPrivate, integration)->integration_awaiting_response();
     });
+}
+
+void ZTerminalPrivate::initExternal(ZTerminal::TerminalConnectionPrivate *connection, ZTerminal::Options options) {
+    if (connection->terminal != nullptr) {
+        qWarning("ZTerminal: ZTerminal::TerminalConnection instance already associated with an ZTerminal instance. This will not work.");
+        // Nothing much we can do except crash of making this a dummy instance. For now cowardly refuse to crash.
+        initOffscreen(ZTerminal::OffScreen{0, 0});
+        return;
+    }
+    connection->terminal = this;
+    externalConnection = connection;
+
+    backspaceIsX08 = connection->backspaceIsX08;
+
+    memset(&integration, 0, sizeof(integration));
+    auto free = [] (termpaint_integration* ptr) {
+        (void)ptr;
+        // this does not really free, because ZTerminalPrivate which contains the integration struct is externally owned
+    };
+    auto write = [] (termpaint_integration* ptr, const char *data, int length) {
+        container_of(ptr, ZTerminalPrivate, integration)->externalConnection->delegate->write(data, length);
+    };
+    auto flush = [] (termpaint_integration* ptr) {
+        container_of(ptr, ZTerminalPrivate, integration)->externalConnection->delegate->flush();
+    };
+    termpaint_integration_init(&integration, free, write, flush);
+
+    initIntegrationCommon();
+
+    termpaint_integration_set_restore_sequence_updated(&integration, [] (termpaint_integration* ptr, const char *data, int length) {
+        container_of(ptr, ZTerminalPrivate, integration)->externalConnection->delegate->restoreSequenceUpdated(data, length);
+    });
+
+    callbackRequested = false;
+    terminal = termpaint_terminal_new(&integration);
+    surface = termpaint_terminal_get_surface(terminal);
+    termpaint_surface_resize(surface, connection->width, connection->height);
+
+    initCommon();
 }
 
 TUIWIDGETS_NS_END
