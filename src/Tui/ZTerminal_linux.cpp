@@ -547,7 +547,7 @@ void ZTerminalPrivate::internalConnection_integration_free() {
     }
 }
 
-void ZTerminalPrivate::internalConnection_integration_write_uncached(char *data, int length) {
+void ZTerminalPrivate::internalConnection_integration_write_unbuffered(char *data, int length) {
     int written = 0;
     int ret;
     errno = 0;
@@ -587,7 +587,7 @@ void ZTerminalPrivate::internalConnection_integration_write(const char *data, in
 }
 
 void ZTerminalPrivate::internalConnection_integration_flush() {
-    internalConnection_integration_write_uncached(output_buffer.data(), output_buffer.size());
+    internalConnection_integration_write_unbuffered(output_buffer.data(), output_buffer.size());
     output_buffer.clear();
 }
 

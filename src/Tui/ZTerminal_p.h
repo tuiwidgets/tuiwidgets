@@ -65,7 +65,7 @@ public:
 
     void internalConnection_integration_free();
     void internalConnection_integration_write(const char *data, int length);
-    void internalConnection_integration_write_uncached(char *data, int length);
+    void internalConnection_integration_write_unbuffered(char *data, int length);
     void internalConnection_integration_flush();
     bool internalConnection_integration_is_bad();
     void internalConnection_integration_restore_sequence_updated(const char *data, int len, bool force);
