@@ -559,6 +559,11 @@ ZWidget *ZTerminal::focusWidget() {
     }
 }
 
+ZWidget *ZTerminal::keyboardGrabber() {
+    auto *const p = tuiwidgets_impl();
+    return p->keyboardGrab();
+}
+
 void ZTerminal::update() {
     if (tuiwidgets_impl()->updateRequested) {
         return;

@@ -103,6 +103,7 @@ public:
     void setMainWidget(ZWidget* w);
 
     ZWidget *focusWidget();
+    ZWidget *keyboardGrabber();
 
     void update();
     void forceRepaint();
