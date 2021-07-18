@@ -119,7 +119,7 @@ QSize ZRoot::minimumSizeHint() const {
             ZWindowFacet *windowFacet = static_cast<ZWindowFacet*>(childWidget->facet(ZWindowFacet::staticMetaObject));
             if (windowFacet) {
                 if (windowFacet->isExtendViewport()) {
-                    hint = hint.expandedTo(QSize(childWidget->geometry().right() + 1, childWidget->geometry().bottom() + 1));
+                    hint = hint.expandedTo(QSize(childWidget->geometry().right(), childWidget->geometry().bottom() + 1));
                 }
             }
         }
