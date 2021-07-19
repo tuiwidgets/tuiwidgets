@@ -57,7 +57,8 @@ public:
     void setGeometry(const QRect &geometry);
     QRect rect() const;
     QRect contentsRect() const;
-    bool isEnabled() const;
+    bool isEnabled() const; // includes enabled state of parents
+    bool isLocallyEnabled() const;
     void setEnabled(bool e);
     bool isVisible() const;
     void setVisible(bool v);

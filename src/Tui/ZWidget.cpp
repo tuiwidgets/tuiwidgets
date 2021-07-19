@@ -30,7 +30,11 @@ ZWidgetPrivate::~ZWidgetPrivate()
 ZWidget::ZWidget(ZWidget *parent)
     : ZWidget(parent, std::make_unique<ZWidgetPrivate>(this))
 {
-
+    auto *const p = tuiwidgets_impl();
+    if (parent) {
+        auto *const pp = ZWidgetPrivate::get(parent);
+        p->effectivelyEnabled = pp->effectivelyEnabled;
+    }
 }
 
 ZWidget::ZWidget(QObject *parent, std::unique_ptr<ZWidgetPrivate> pimpl)
@@ -64,6 +68,7 @@ ZWidget::~ZWidget() {
 }
 
 void ZWidget::setParent(ZWidget *newParent) {
+    auto *const p = tuiwidgets_impl();
     if (parent() == newParent) return;
     auto prevTerminal = terminal();
     QEvent e1{QEvent::ParentAboutToChange};
@@ -71,6 +76,7 @@ void ZWidget::setParent(ZWidget *newParent) {
     // TODO care about focus
     QObject::setParent(newParent);
     // TODO care about caches for everything (e.g. visibiltiy, enabled, etc)
+    p->updateEffectivelyEnabledRecursively();
     QEvent e2{QEvent::ParentChange};
     QCoreApplication::sendEvent(this, &e2);
     if (prevTerminal != terminal()) {
@@ -117,16 +123,45 @@ QRect ZWidget::contentsRect() const {
 }
 
 bool ZWidget::isEnabled() const {
+    return tuiwidgets_impl()->effectivelyEnabled;
+}
+
+bool ZWidget::isLocallyEnabled() const {
     return tuiwidgets_impl()->enabled;
 }
 
 void ZWidget::setEnabled(bool e) {
     auto *const p = tuiwidgets_impl();
+    if (p->enabled == e) return;
     p->enabled = e;
     // TODO care about focus
     // TODO cache effect in hierarchy
-    // TODO send events (QEvent::EnabledChange ? )
+    p->updateEffectivelyEnabledRecursively();
     // TODO trigger repaint (qt does this in the specific virtual for the event)
+}
+
+void ZWidgetPrivate::updateEffectivelyEnabledRecursively() {
+    bool newEffectiveValue;
+    if (pub()->parentWidget()) {
+        auto *const pp = ZWidgetPrivate::get(pub()->parentWidget());
+        newEffectiveValue = pp->effectivelyEnabled && enabled;
+    } else {
+        newEffectiveValue = enabled;
+    }
+    if (effectivelyEnabled == newEffectiveValue) {
+        return;
+    }
+    effectivelyEnabled = newEffectiveValue;
+    for (QObject *childQObj : pub()->children()) {
+        ZWidget *child = qobject_cast<ZWidget*>(childQObj);
+        if (!child) {
+            continue;
+        }
+        auto *const childP = ZWidgetPrivate::get(child);
+        childP->updateEffectivelyEnabledRecursively();
+    }
+    QEvent enabledChangedEvent(QEvent::EnabledChange);
+    QCoreApplication::instance()->sendEvent(pub(), &enabledChangedEvent);
 }
 
 bool ZWidget::isVisible() const {
@@ -443,7 +478,7 @@ bool ZWidget::isEnabledTo(const ZWidget *ancestor) const {
         if (w == ancestor) {
             return true;
         }
-        if (!w->isEnabled()) {
+        if (!w->isLocallyEnabled()) {
             return false;
         }
         w = w->parentWidget();
