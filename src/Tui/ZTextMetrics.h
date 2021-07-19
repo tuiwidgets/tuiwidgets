@@ -27,31 +27,31 @@ public:
         int columns;
     };
 
-    ClusterSize nextCluster(const QString &data, int offset);
-    ClusterSize nextCluster(const QChar *data, int size);
-    ClusterSize nextCluster(const char16_t *data, int size);
-    ClusterSize nextCluster(const char *stringUtf8, int utf8CodeUnits);
-    ZTextMetrics::ClusterSize splitByColumns(const QString &data, int maxWidth);
-    ZTextMetrics::ClusterSize splitByColumns(const QChar *data, int size, int maxWidth);
-    ZTextMetrics::ClusterSize splitByColumns(const char16_t *data, int size, int maxWidth);
-    ZTextMetrics::ClusterSize splitByColumns(const char *stringUtf8, int utf8CodeUnits, int maxWidth);
-    int sizeInColumns(const QString &data);
-    int sizeInColumns(const QChar *data, int size);
-    int sizeInColumns(const char16_t *data, int size);
-    int sizeInColumns(const char *stringUtf8, int utf8CodeUnits);
+    ClusterSize nextCluster(const QString &data, int offset) const;
+    ClusterSize nextCluster(const QChar *data, int size) const;
+    ClusterSize nextCluster(const char16_t *data, int size) const;
+    ClusterSize nextCluster(const char *stringUtf8, int utf8CodeUnits) const;
+    ZTextMetrics::ClusterSize splitByColumns(const QString &data, int maxWidth) const;
+    ZTextMetrics::ClusterSize splitByColumns(const QChar *data, int size, int maxWidth) const;
+    ZTextMetrics::ClusterSize splitByColumns(const char16_t *data, int size, int maxWidth) const;
+    ZTextMetrics::ClusterSize splitByColumns(const char *stringUtf8, int utf8CodeUnits, int maxWidth) const;
+    int sizeInColumns(const QString &data) const;
+    int sizeInColumns(const QChar *data, int size) const;
+    int sizeInColumns(const char16_t *data, int size) const;
+    int sizeInColumns(const char *stringUtf8, int utf8CodeUnits) const;
 
     // Wrappers for more modern types:
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0) && defined(TUIWIDGETS_ABI_FORCE_INLINE)
     template <typename QSTRINGVIEW, Private::enable_if_same_remove_cvref<QSTRINGVIEW, QStringView> = 0>
-    TUIWIDGETS_ABI_FORCE_INLINE ClusterSize nextCluster(QSTRINGVIEW data) {
+    TUIWIDGETS_ABI_FORCE_INLINE ClusterSize nextCluster(QSTRINGVIEW data) const {
         return nextCluster(data.data(), data.size());
     }
     template <typename QSTRINGVIEW, Private::enable_if_same_remove_cvref<QSTRINGVIEW, QStringView> = 0>
-    TUIWIDGETS_ABI_FORCE_INLINE ZTextMetrics::ClusterSize splitByColumns(QSTRINGVIEW data, int maxWidth) {
+    TUIWIDGETS_ABI_FORCE_INLINE ZTextMetrics::ClusterSize splitByColumns(QSTRINGVIEW data, int maxWidth) const {
         return splitByColumns(data.data(), data.size(), maxWidth);
     }
     template <typename QSTRINGVIEW, Private::enable_if_same_remove_cvref<QSTRINGVIEW, QStringView> = 0>
-    TUIWIDGETS_ABI_FORCE_INLINE int sizeInColumns(QSTRINGVIEW data) {
+    TUIWIDGETS_ABI_FORCE_INLINE int sizeInColumns(QSTRINGVIEW data) const {
         return sizeInColumns(data.data(), data.size());
     }
 #endif

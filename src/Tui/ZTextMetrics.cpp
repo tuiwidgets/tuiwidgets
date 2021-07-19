@@ -11,15 +11,15 @@ ZTextMetrics::ZTextMetrics(const ZTextMetrics& other) : tuiwidgets_pimpl_ptr(oth
 ZTextMetrics::~ZTextMetrics() {
 }
 
-ZTextMetrics::ClusterSize ZTextMetrics::nextCluster(const QString &data, int offset) {
+ZTextMetrics::ClusterSize ZTextMetrics::nextCluster(const QString &data, int offset) const {
     return nextCluster(data.constData()+offset, data.size() - offset);
 }
 
-ZTextMetrics::ClusterSize ZTextMetrics::nextCluster(const QChar *data, int size) {
+ZTextMetrics::ClusterSize ZTextMetrics::nextCluster(const QChar *data, int size) const {
     return nextCluster(reinterpret_cast<const char16_t*>(data), size);
 }
 
-ZTextMetrics::ClusterSize ZTextMetrics::nextCluster(const char16_t *data, int size) {
+ZTextMetrics::ClusterSize ZTextMetrics::nextCluster(const char16_t *data, int size) const {
     const auto* p = tuiwidgets_impl();
     // TODO have some kind of pool
     termpaint_text_measurement* tm = termpaint_text_measurement_new(p->surface);
@@ -33,7 +33,7 @@ ZTextMetrics::ClusterSize ZTextMetrics::nextCluster(const char16_t *data, int si
     return result;
 }
 
-ZTextMetrics::ClusterSize ZTextMetrics::nextCluster(const char *stringUtf8, int utf8CodeUnits) {
+ZTextMetrics::ClusterSize ZTextMetrics::nextCluster(const char *stringUtf8, int utf8CodeUnits) const {
     const auto* p = tuiwidgets_impl();
     // TODO have some kind of pool
     termpaint_text_measurement* tm = termpaint_text_measurement_new(p->surface);
@@ -47,15 +47,15 @@ ZTextMetrics::ClusterSize ZTextMetrics::nextCluster(const char *stringUtf8, int 
     return result;
 }
 
-ZTextMetrics::ClusterSize ZTextMetrics::splitByColumns(const QString &data, int maxWidth) {
+ZTextMetrics::ClusterSize ZTextMetrics::splitByColumns(const QString &data, int maxWidth) const {
     return ZTextMetrics::splitByColumns(data.constData(), data.size(), maxWidth);
 }
 
-ZTextMetrics::ClusterSize ZTextMetrics::splitByColumns(const QChar *data, int size, int maxWidth) {
+ZTextMetrics::ClusterSize ZTextMetrics::splitByColumns(const QChar *data, int size, int maxWidth) const {
     return ZTextMetrics::splitByColumns(reinterpret_cast<const char16_t*>(data), size, maxWidth);
 }
 
-ZTextMetrics::ClusterSize ZTextMetrics::splitByColumns(const char16_t *data, int size, int maxWidth) {
+ZTextMetrics::ClusterSize ZTextMetrics::splitByColumns(const char16_t *data, int size, int maxWidth) const {
     const auto* p = tuiwidgets_impl();
     termpaint_text_measurement* tm = termpaint_text_measurement_new(p->surface);
     termpaint_text_measurement_set_limit_width(tm, maxWidth);
@@ -69,7 +69,7 @@ ZTextMetrics::ClusterSize ZTextMetrics::splitByColumns(const char16_t *data, int
     return result;
 }
 
-ZTextMetrics::ClusterSize ZTextMetrics::splitByColumns(const char *stringUtf8, int utf8CodeUnits, int maxWidth) {
+ZTextMetrics::ClusterSize ZTextMetrics::splitByColumns(const char *stringUtf8, int utf8CodeUnits, int maxWidth) const {
     const auto* p = tuiwidgets_impl();
     termpaint_text_measurement* tm = termpaint_text_measurement_new(p->surface);
     termpaint_text_measurement_set_limit_width(tm, maxWidth);
@@ -83,15 +83,15 @@ ZTextMetrics::ClusterSize ZTextMetrics::splitByColumns(const char *stringUtf8, i
     return result;
 }
 
-int ZTextMetrics::sizeInColumns(const QString &data) {
+int ZTextMetrics::sizeInColumns(const QString &data) const {
     return sizeInColumns(data.constData(), data.size());
 }
 
-int ZTextMetrics::sizeInColumns(const QChar *data, int size) {
+int ZTextMetrics::sizeInColumns(const QChar *data, int size) const {
     return sizeInColumns(reinterpret_cast<const char16_t*>(data), size);
 }
 
-int ZTextMetrics::sizeInColumns(const char16_t *data, int size) {
+int ZTextMetrics::sizeInColumns(const char16_t *data, int size) const {
     const auto* p = tuiwidgets_impl();
     termpaint_text_measurement* tm = termpaint_text_measurement_new(p->surface);
     termpaint_text_measurement_feed_utf16(tm, reinterpret_cast<const uint16_t*>(data), size, true);
@@ -101,7 +101,7 @@ int ZTextMetrics::sizeInColumns(const char16_t *data, int size) {
     return res;
 }
 
-int ZTextMetrics::sizeInColumns(const char *stringUtf8, int utf8CodeUnits) {
+int ZTextMetrics::sizeInColumns(const char *stringUtf8, int utf8CodeUnits) const {
     const auto* p = tuiwidgets_impl();
     termpaint_text_measurement* tm = termpaint_text_measurement_new(p->surface);
     termpaint_text_measurement_feed_utf8(tm, stringUtf8, utf8CodeUnits, true);
