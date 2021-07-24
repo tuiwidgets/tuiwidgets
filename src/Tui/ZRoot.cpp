@@ -27,7 +27,7 @@ int ZRoot::fillChar() {
 
 void ZRoot::paintEvent(ZPaintEvent *event) {
     auto *painter = event->painter();
-    painter->clear(getColor("root.fg"), getColor("root.bg"), fillChar());
+    painter->clearWithChar(getColor("root.fg"), getColor("root.bg"), fillChar());
 }
 
 void ZRoot::keyEvent(ZKeyEvent *event) {
