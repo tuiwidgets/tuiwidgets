@@ -58,6 +58,57 @@ TEST_CASE("zcolor - color types") {
     Tui::ZColor color;
 
     SECTION("named") {
+
+        color = Tui::ZColor::fromTerminalColor(Tui::TerminalColor::black);
+        CHECK(color.nativeValue() == static_cast<uint32_t>(TERMPAINT_COLOR_BLACK));
+
+        color = Tui::ZColor::fromTerminalColor(Tui::TerminalColor::darkGray);
+        CHECK(color.nativeValue() == static_cast<uint32_t>(TERMPAINT_COLOR_DARK_GREY));
+
+        color = Tui::ZColor::fromTerminalColor(Tui::TerminalColor::lightGray);
+        CHECK(color.nativeValue() == static_cast<uint32_t>(TERMPAINT_COLOR_LIGHT_GREY));
+
+        color = Tui::ZColor::fromTerminalColor(Tui::TerminalColor::brightWhite);
+        CHECK(color.nativeValue() == static_cast<uint32_t>(TERMPAINT_COLOR_WHITE));
+
+        color = Tui::ZColor::fromTerminalColor(Tui::TerminalColor::blue);
+        CHECK(color.nativeValue() == static_cast<uint32_t>(TERMPAINT_COLOR_BLUE));
+
+        color = Tui::ZColor::fromTerminalColor(Tui::TerminalColor::green);
+        CHECK(color.nativeValue() == static_cast<uint32_t>(TERMPAINT_COLOR_GREEN));
+
+        color = Tui::ZColor::fromTerminalColor(Tui::TerminalColor::cyan);
+        CHECK(color.nativeValue() == static_cast<uint32_t>(TERMPAINT_COLOR_CYAN));
+
+        color = Tui::ZColor::fromTerminalColor(Tui::TerminalColor::red);
+        CHECK(color.nativeValue() == static_cast<uint32_t>(TERMPAINT_COLOR_RED));
+
+        color = Tui::ZColor::fromTerminalColor(Tui::TerminalColor::magenta);
+        CHECK(color.nativeValue() == static_cast<uint32_t>(TERMPAINT_COLOR_MAGENTA));
+
+        color = Tui::ZColor::fromTerminalColor(Tui::TerminalColor::yellow);
+        CHECK(color.nativeValue() == static_cast<uint32_t>(TERMPAINT_COLOR_YELLOW));
+
+        color = Tui::ZColor::fromTerminalColor(Tui::TerminalColor::brightBlue);
+        CHECK(color.nativeValue() == static_cast<uint32_t>(TERMPAINT_COLOR_BRIGHT_BLUE));
+
+        color = Tui::ZColor::fromTerminalColor(Tui::TerminalColor::brightGreen);
+        CHECK(color.nativeValue() == static_cast<uint32_t>(TERMPAINT_COLOR_BRIGHT_GREEN));
+
+        color = Tui::ZColor::fromTerminalColor(Tui::TerminalColor::brightCyan);
+        CHECK(color.nativeValue() == static_cast<uint32_t>(TERMPAINT_COLOR_BRIGHT_CYAN));
+
+        color = Tui::ZColor::fromTerminalColor(Tui::TerminalColor::brightRed);
+        CHECK(color.nativeValue() == static_cast<uint32_t>(TERMPAINT_COLOR_BRIGHT_RED));
+
+        color = Tui::ZColor::fromTerminalColor(Tui::TerminalColor::brightMagenta);
+        CHECK(color.nativeValue() == static_cast<uint32_t>(TERMPAINT_COLOR_BRIGHT_MAGENTA));
+
+        color = Tui::ZColor::fromTerminalColor(Tui::TerminalColor::brightYellow);
+        CHECK(color.nativeValue() == static_cast<uint32_t>(TERMPAINT_COLOR_BRIGHT_YELLOW));
+    }
+
+    SECTION("named-number") {
         int testCase = GENERATE(0, 15);
         color = Tui::ZColor::fromTerminalColor(testCase);
         CHECK(color.colorType() == Tui::ZColor::Terminal);
