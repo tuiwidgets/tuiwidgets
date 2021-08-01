@@ -3,6 +3,8 @@
 
 #include <termpaint_image.h>
 
+#include <Tui/ZColor.h>
+
 #include "ZPainter_p.h"
 #include "ZTerminal_p.h"
 
@@ -107,6 +109,39 @@ QByteArray ZImage::saveToByteArray() const {
     }
     return ret;
 
+}
+
+QString ZImage::peekText(int x, int y, int *left, int *right) {
+    auto *surface = tuiwidgets_pimpl_ptr->surface;
+    int len;
+    const char *data = termpaint_surface_peek_text(surface, x, y, &len, left, right);
+    return QString::fromUtf8(data, len);
+}
+
+ZColor ZImage::peekForground(int x, int y) {
+    auto *surface = tuiwidgets_pimpl_ptr->surface;
+    ZColor color;
+    color.val = termpaint_surface_peek_fg_color(surface, x, y);
+    return color;
+}
+
+ZColor ZImage::peekBackground(int x, int y) {
+    auto *surface = tuiwidgets_pimpl_ptr->surface;
+    ZColor color;
+    color.val = termpaint_surface_peek_bg_color(surface, x, y);
+    return color;
+}
+
+ZColor ZImage::peekDecoration(int x, int y) {
+    auto *surface = tuiwidgets_pimpl_ptr->surface;
+    ZColor color;
+    color.val = termpaint_surface_peek_deco_color(surface, x, y);
+    return color;
+}
+
+ZTextAttributes ZImage::peekAttributes(int x, int y) {
+    auto *surface = tuiwidgets_pimpl_ptr->surface;
+    return (ZTextAttributes)termpaint_surface_peek_style(surface, x, y);
 }
 
 ZPainter ZImage::painter() {

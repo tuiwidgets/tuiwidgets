@@ -6,12 +6,15 @@
 #include <QSharedDataPointer>
 #include <QSize>
 
+#include <Tui/ZCommon.h>
+
 #include <Tui/tuiwidgets_internal.h>
 
 TUIWIDGETS_NS_START
 
 class ZTerminal;
 class ZPainter;
+class ZColor;
 
 class ZImageData;
 
@@ -25,6 +28,7 @@ public:
     ZImage& operator=(const ZImage& other);
     ZImage& operator=(ZImage&& other);
     virtual ~ZImage();
+
     bool operator==(const ZImage& other);
     bool operator!=(const ZImage& other);
 
@@ -37,6 +41,12 @@ public:
 
     bool save(const QString &fileName) const;
     QByteArray saveToByteArray() const;
+
+    QString peekText(int x, int y, int *left, int *right);
+    ZColor peekForground(int x, int y);
+    ZColor peekBackground(int x, int y);
+    ZColor peekDecoration(int x, int y);
+    ZTextAttributes peekAttributes(int x, int y);
 
     ZPainter painter();
 

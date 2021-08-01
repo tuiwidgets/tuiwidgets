@@ -121,6 +121,7 @@ public:
 
 private:
     uint32_t val = 0;
+    friend class ZImage;
 };
 
 namespace Colors {
