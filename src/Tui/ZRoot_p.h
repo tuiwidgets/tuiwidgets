@@ -16,7 +16,7 @@ public:
     ZRootPrivate(ZRoot *pub);
 
 public:
-    int fillChar = ZPainter::Erased;
+    int fillChar = Erased;
     QList<QObject*> windows;
 };
 

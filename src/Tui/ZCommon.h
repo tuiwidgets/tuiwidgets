@@ -13,6 +13,25 @@ enum class CursorStyle {
     Bar = 2
 };
 
+enum class ZTextAttribute {
+    Bold = (1<<0),
+    Italic = (1<<1),
+    Blink = (1<<4),
+    Overline = (1<<5),
+    Inverse = (1<<6),
+    Strike = (1<<7),
+    Underline = (1<<16),
+    UnderlineDouble = (1<<17),
+    UnderlineCurly = (1<<18)
+};
+Q_DECLARE_FLAGS(ZTextAttributes, ZTextAttribute)
+
+static constexpr int Erased = 127;
+
+TUIWIDGETS_DECLARE_OPERATORS_FOR_FLAGS_IN_NAMESPACE(ZTextAttributes)
+
 TUIWIDGETS_NS_END
+
+TUIWIDGETS_DECLARE_OPERATORS_FOR_FLAGS_GLOBAL(ZTextAttributes)
 
 #endif // TUIWIDGETS_ZCOMMON_INCLUDED

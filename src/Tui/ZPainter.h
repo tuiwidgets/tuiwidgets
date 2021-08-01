@@ -9,6 +9,7 @@
 
 #include <QString>
 
+#include <Tui/ZCommon.h>
 #include <Tui/ZColor.h>
 #include <Tui/tuiwidgets_internal.h>
 
@@ -23,20 +24,10 @@ class ZWidget;
 class ZPainterPrivate;
 class TUIWIDGETS_EXPORT ZPainter {
 public:
-    enum class Attribute {
-        Bold = (1<<0),
-        Italic = (1<<1),
-        Blink = (1<<4),
-        Overline = (1<<5),
-        Inverse = (1<<6),
-        Strike = (1<<7),
-        Underline = (1<<16),
-        UnderlineDouble = (1<<17),
-        UnderlineCurly = (1<<18)
-    };
-    Q_DECLARE_FLAGS(Attributes, Attribute)
+    using Attribute = ::TUIWIDGETS_NS_FULL::ZTextAttribute;
+    using Attributes = ::TUIWIDGETS_NS_FULL::ZTextAttributes;
 
-    static constexpr int Erased = 127;
+    static constexpr int Erased = ::TUIWIDGETS_NS_FULL::Erased;
 
 public:
     ZPainter(const ZPainter &other);
@@ -117,10 +108,7 @@ protected:
 private:
     TUIWIDGETS_DECLARE_PRIVATE(ZPainter)
 };
-TUIWIDGETS_DECLARE_OPERATORS_FOR_FLAGS_IN_NAMESPACE(ZPainter::Attributes)
 
 TUIWIDGETS_NS_END
-
-TUIWIDGETS_DECLARE_OPERATORS_FOR_FLAGS_GLOBAL(ZPainter::Attributes)
 
 #endif // TUIWIDGETS_ZPAINTER_INCLUDED

@@ -212,7 +212,7 @@ void writeWithColorsWrapper(Kind kind, Tui::ZPainter &painter, int x, int y, con
 
 }
 
-void writeWithAttributesWrapper(Kind kind, Tui::ZPainter &painter, int x, int y, const QString &string, Tui::ZColor fg, Tui::ZColor bg, Tui::ZPainter::Attributes attr) {
+void writeWithAttributesWrapper(Kind kind, Tui::ZPainter &painter, int x, int y, const QString &string, Tui::ZColor fg, Tui::ZColor bg, Tui::ZTextAttributes attr) {
     switch (kind) {
         case KindQString:
             painter.writeWithAttributes(x, y, string, fg, bg, attr);
@@ -333,20 +333,20 @@ TEST_CASE("ZPainter: text with attributes") {
     Tui::ZPainter painter = Tui::ZPainterPrivate::createForTesting(f.surface);
 
     struct Testcase {
-        Tui::ZPainter::Attribute attr;
+        Tui::ZTextAttribute attr;
         int style;
     };
 
     auto testcase = GENERATE(
-        Testcase{Tui::ZPainter::Attribute::Bold, TERMPAINT_STYLE_BOLD},
-        Testcase{Tui::ZPainter::Attribute::Blink, TERMPAINT_STYLE_BLINK},
-        Testcase{Tui::ZPainter::Attribute::Italic, TERMPAINT_STYLE_ITALIC},
-        Testcase{Tui::ZPainter::Attribute::Strike, TERMPAINT_STYLE_STRIKE},
-        Testcase{Tui::ZPainter::Attribute::Inverse, TERMPAINT_STYLE_INVERSE},
-        Testcase{Tui::ZPainter::Attribute::Overline, TERMPAINT_STYLE_OVERLINE},
-        Testcase{Tui::ZPainter::Attribute::Underline, TERMPAINT_STYLE_UNDERLINE},
-        Testcase{Tui::ZPainter::Attribute::UnderlineCurly, TERMPAINT_STYLE_UNDERLINE_CURLY},
-        Testcase{Tui::ZPainter::Attribute::UnderlineDouble, TERMPAINT_STYLE_UNDERLINE_DBL}
+        Testcase{Tui::ZTextAttribute::Bold, TERMPAINT_STYLE_BOLD},
+        Testcase{Tui::ZTextAttribute::Blink, TERMPAINT_STYLE_BLINK},
+        Testcase{Tui::ZTextAttribute::Italic, TERMPAINT_STYLE_ITALIC},
+        Testcase{Tui::ZTextAttribute::Strike, TERMPAINT_STYLE_STRIKE},
+        Testcase{Tui::ZTextAttribute::Inverse, TERMPAINT_STYLE_INVERSE},
+        Testcase{Tui::ZTextAttribute::Overline, TERMPAINT_STYLE_OVERLINE},
+        Testcase{Tui::ZTextAttribute::Underline, TERMPAINT_STYLE_UNDERLINE},
+        Testcase{Tui::ZTextAttribute::UnderlineCurly, TERMPAINT_STYLE_UNDERLINE_CURLY},
+        Testcase{Tui::ZTextAttribute::UnderlineDouble, TERMPAINT_STYLE_UNDERLINE_DBL}
     );
     CAPTURE(testcase.attr);
 
@@ -377,20 +377,20 @@ TEST_CASE("ZPainter: clear") {
     checkEmptyPlusSome(f.surface, {}, singleWideChar(TERMPAINT_ERASED).withFg(TERMPAINT_COLOR_BLACK).withBg(TERMPAINT_COLOR_RED));
 
     struct Testcase {
-        Tui::ZPainter::Attribute attr;
+        Tui::ZTextAttribute attr;
         int style;
     };
 
     auto testcase = GENERATE(
-        Testcase{Tui::ZPainter::Attribute::Bold, TERMPAINT_STYLE_BOLD},
-        Testcase{Tui::ZPainter::Attribute::Blink, TERMPAINT_STYLE_BLINK},
-        Testcase{Tui::ZPainter::Attribute::Italic, TERMPAINT_STYLE_ITALIC},
-        Testcase{Tui::ZPainter::Attribute::Strike, TERMPAINT_STYLE_STRIKE},
-        Testcase{Tui::ZPainter::Attribute::Inverse, TERMPAINT_STYLE_INVERSE},
-        Testcase{Tui::ZPainter::Attribute::Overline, TERMPAINT_STYLE_OVERLINE},
-        Testcase{Tui::ZPainter::Attribute::Underline, TERMPAINT_STYLE_UNDERLINE},
-        Testcase{Tui::ZPainter::Attribute::UnderlineCurly, TERMPAINT_STYLE_UNDERLINE_CURLY},
-        Testcase{Tui::ZPainter::Attribute::UnderlineDouble, TERMPAINT_STYLE_UNDERLINE_DBL}
+        Testcase{Tui::ZTextAttribute::Bold, TERMPAINT_STYLE_BOLD},
+        Testcase{Tui::ZTextAttribute::Blink, TERMPAINT_STYLE_BLINK},
+        Testcase{Tui::ZTextAttribute::Italic, TERMPAINT_STYLE_ITALIC},
+        Testcase{Tui::ZTextAttribute::Strike, TERMPAINT_STYLE_STRIKE},
+        Testcase{Tui::ZTextAttribute::Inverse, TERMPAINT_STYLE_INVERSE},
+        Testcase{Tui::ZTextAttribute::Overline, TERMPAINT_STYLE_OVERLINE},
+        Testcase{Tui::ZTextAttribute::Underline, TERMPAINT_STYLE_UNDERLINE},
+        Testcase{Tui::ZTextAttribute::UnderlineCurly, TERMPAINT_STYLE_UNDERLINE_CURLY},
+        Testcase{Tui::ZTextAttribute::UnderlineDouble, TERMPAINT_STYLE_UNDERLINE_DBL}
     );
     CAPTURE(testcase.attr);
 
@@ -435,20 +435,20 @@ TEST_CASE("ZPainter: clearRect") {
                        });
 
     struct Testcase {
-        Tui::ZPainter::Attribute attr;
+        Tui::ZTextAttribute attr;
         int style;
     };
 
     auto testcase = GENERATE(
-        Testcase{Tui::ZPainter::Attribute::Bold, TERMPAINT_STYLE_BOLD},
-        Testcase{Tui::ZPainter::Attribute::Blink, TERMPAINT_STYLE_BLINK},
-        Testcase{Tui::ZPainter::Attribute::Italic, TERMPAINT_STYLE_ITALIC},
-        Testcase{Tui::ZPainter::Attribute::Strike, TERMPAINT_STYLE_STRIKE},
-        Testcase{Tui::ZPainter::Attribute::Inverse, TERMPAINT_STYLE_INVERSE},
-        Testcase{Tui::ZPainter::Attribute::Overline, TERMPAINT_STYLE_OVERLINE},
-        Testcase{Tui::ZPainter::Attribute::Underline, TERMPAINT_STYLE_UNDERLINE},
-        Testcase{Tui::ZPainter::Attribute::UnderlineCurly, TERMPAINT_STYLE_UNDERLINE_CURLY},
-        Testcase{Tui::ZPainter::Attribute::UnderlineDouble, TERMPAINT_STYLE_UNDERLINE_DBL}
+        Testcase{Tui::ZTextAttribute::Bold, TERMPAINT_STYLE_BOLD},
+        Testcase{Tui::ZTextAttribute::Blink, TERMPAINT_STYLE_BLINK},
+        Testcase{Tui::ZTextAttribute::Italic, TERMPAINT_STYLE_ITALIC},
+        Testcase{Tui::ZTextAttribute::Strike, TERMPAINT_STYLE_STRIKE},
+        Testcase{Tui::ZTextAttribute::Inverse, TERMPAINT_STYLE_INVERSE},
+        Testcase{Tui::ZTextAttribute::Overline, TERMPAINT_STYLE_OVERLINE},
+        Testcase{Tui::ZTextAttribute::Underline, TERMPAINT_STYLE_UNDERLINE},
+        Testcase{Tui::ZTextAttribute::UnderlineCurly, TERMPAINT_STYLE_UNDERLINE_CURLY},
+        Testcase{Tui::ZTextAttribute::UnderlineDouble, TERMPAINT_STYLE_UNDERLINE_DBL}
     );
     CAPTURE(testcase.attr);
 
@@ -876,7 +876,7 @@ TEST_CASE("ZPainter: write text with setForeground") {
     termpaint_surface_clear(f.surface, TERMPAINT_DEFAULT_COLOR, TERMPAINT_DEFAULT_COLOR);
 
     Tui::ZPainter painter = Tui::ZPainterPrivate::createForTesting(f.surface);
-    painter.writeWithAttributes(0, 0, "B", Tui::TerminalColor::red, Tui::TerminalColor::blue, Tui::ZPainter::Attribute::Bold);
+    painter.writeWithAttributes(0, 0, "B", Tui::TerminalColor::red, Tui::TerminalColor::blue, Tui::ZTextAttribute::Bold);
     painter.setForeground(0, 0, Tui::TerminalColor::brightWhite);
     checkEmptyPlusSome(f.surface, {
                            {{0, 0}, singleWideChar("B").withFg(TERMPAINT_COLOR_WHITE).withBg(TERMPAINT_COLOR_BLUE).withStyle(TERMPAINT_STYLE_BOLD)}
@@ -899,7 +899,7 @@ TEST_CASE("ZPainter: write text with setBackground") {
     termpaint_surface_clear(f.surface, TERMPAINT_DEFAULT_COLOR, TERMPAINT_DEFAULT_COLOR);
 
     Tui::ZPainter painter = Tui::ZPainterPrivate::createForTesting(f.surface);
-    painter.writeWithAttributes(0, 0, "B", Tui::TerminalColor::cyan, Tui::TerminalColor::blue, Tui::ZPainter::Attribute::Bold);
+    painter.writeWithAttributes(0, 0, "B", Tui::TerminalColor::cyan, Tui::TerminalColor::blue, Tui::ZTextAttribute::Bold);
     painter.setBackground(0, 0, Tui::TerminalColor::red);
     checkEmptyPlusSome(f.surface, {
                            {{0, 0}, singleWideChar("B").withFg(TERMPAINT_COLOR_CYAN).withBg(TERMPAINT_COLOR_RED).withStyle(TERMPAINT_STYLE_BOLD)}
@@ -979,24 +979,24 @@ TEST_CASE("ZPainter: translateAndClip write") {
             for (int x = -2; x <= 3; x++) {
                 if(y == 0) continue;
                 INFO("x,y: " << x << y);
-                writeWithAttributesWrapper(kind, painter, x, y, "0123456789", Tui::TerminalColor::cyan, Tui::TerminalColor::green, Tui::ZPainter::Attribute::Bold);
+                writeWithAttributesWrapper(kind, painter, x, y, "0123456789", Tui::TerminalColor::cyan, Tui::TerminalColor::green, Tui::ZTextAttribute::Bold);
                 checkEmptyPlusSome(f.surface, {});
             }
         }
 
-        writeWithAttributesWrapper(kind, painter, -2, 0, "0123456789", Tui::TerminalColor::cyan, Tui::TerminalColor::green, Tui::ZPainter::Attribute::Bold);
+        writeWithAttributesWrapper(kind, painter, -2, 0, "0123456789", Tui::TerminalColor::cyan, Tui::TerminalColor::green, Tui::ZTextAttribute::Bold);
         checkEmptyPlusSome(f.surface, {
                            {{2, 3}, singleWideChar("2").withFg(TERMPAINT_COLOR_CYAN).withBg(TERMPAINT_COLOR_GREEN).withStyle(TERMPAINT_STYLE_BOLD)}
                        });
-        writeWithAttributesWrapper(kind, painter, -1, 0, "0123456789", Tui::TerminalColor::cyan, Tui::TerminalColor::green, Tui::ZPainter::Attribute::Bold);
+        writeWithAttributesWrapper(kind, painter, -1, 0, "0123456789", Tui::TerminalColor::cyan, Tui::TerminalColor::green, Tui::ZTextAttribute::Bold);
         checkEmptyPlusSome(f.surface, {
                            {{2, 3}, singleWideChar("1").withFg(TERMPAINT_COLOR_CYAN).withBg(TERMPAINT_COLOR_GREEN).withStyle(TERMPAINT_STYLE_BOLD)}
                        });
-        writeWithAttributesWrapper(kind, painter, 0, 0, "0123456789", Tui::TerminalColor::cyan, Tui::TerminalColor::green, Tui::ZPainter::Attribute::Bold);
+        writeWithAttributesWrapper(kind, painter, 0, 0, "0123456789", Tui::TerminalColor::cyan, Tui::TerminalColor::green, Tui::ZTextAttribute::Bold);
         checkEmptyPlusSome(f.surface, {
                            {{2, 3}, singleWideChar("0").withFg(TERMPAINT_COLOR_CYAN).withBg(TERMPAINT_COLOR_GREEN).withStyle(TERMPAINT_STYLE_BOLD)}
                        });
-        writeWithAttributesWrapper(kind, painter, 2, 0, "0123456789", Tui::TerminalColor::cyan, Tui::TerminalColor::green, Tui::ZPainter::Attribute::Bold);
+        writeWithAttributesWrapper(kind, painter, 2, 0, "0123456789", Tui::TerminalColor::cyan, Tui::TerminalColor::green, Tui::ZTextAttribute::Bold);
         checkEmptyPlusSome(f.surface, {
                            {{2, 3}, singleWideChar("0").withFg(TERMPAINT_COLOR_CYAN).withBg(TERMPAINT_COLOR_GREEN).withStyle(TERMPAINT_STYLE_BOLD)}
                        });
@@ -1004,7 +1004,7 @@ TEST_CASE("ZPainter: translateAndClip write") {
 
     SECTION("writeWithAttributes-inside") {
         Tui::ZPainter painter = Tui::ZPainterPrivate::createForTesting(f.surface).translateAndClip({1, 2, 21, 11});
-        writeWithAttributesWrapper(kind, painter, 4, 3, "01234", Tui::TerminalColor::cyan, Tui::TerminalColor::green, Tui::ZPainter::Attribute::Bold);
+        writeWithAttributesWrapper(kind, painter, 4, 3, "01234", Tui::TerminalColor::cyan, Tui::TerminalColor::green, Tui::ZTextAttribute::Bold);
         checkEmptyPlusSome(f.surface, {
                                {{5, 5}, singleWideChar("0").withFg(TERMPAINT_COLOR_CYAN).withBg(TERMPAINT_COLOR_GREEN).withStyle(TERMPAINT_STYLE_BOLD)},
                                {{6, 5}, singleWideChar("1").withFg(TERMPAINT_COLOR_CYAN).withBg(TERMPAINT_COLOR_GREEN).withStyle(TERMPAINT_STYLE_BOLD)},
@@ -1017,7 +1017,7 @@ TEST_CASE("ZPainter: translateAndClip write") {
 
     SECTION("writeWithAttributes-utf8") {
         Tui::ZPainter painter = Tui::ZPainterPrivate::createForTesting(f.surface).translateAndClip({2, 3, 2, 1});
-        writeWithAttributesWrapper(kind, painter, 0, 0, "😎", Tui::TerminalColor::cyan, Tui::TerminalColor::green, Tui::ZPainter::Attribute::Bold);
+        writeWithAttributesWrapper(kind, painter, 0, 0, "😎", Tui::TerminalColor::cyan, Tui::TerminalColor::green, Tui::ZTextAttribute::Bold);
 
         checkEmptyPlusSome(f.surface, {
                                {{2, 3}, doubleWideChar("😎").withFg(TERMPAINT_COLOR_CYAN).withBg(TERMPAINT_COLOR_GREEN).withStyle(TERMPAINT_STYLE_BOLD)}
@@ -1025,7 +1025,7 @@ TEST_CASE("ZPainter: translateAndClip write") {
     }
     SECTION("writeWithAttributes-utf8-cut") {
         Tui::ZPainter painter = Tui::ZPainterPrivate::createForTesting(f.surface).translateAndClip({2, 3, 1, 1});
-        writeWithAttributesWrapper(kind, painter, 0, 0, "😎", Tui::TerminalColor::cyan, Tui::TerminalColor::green, Tui::ZPainter::Attribute::Bold);
+        writeWithAttributesWrapper(kind, painter, 0, 0, "😎", Tui::TerminalColor::cyan, Tui::TerminalColor::green, Tui::ZTextAttribute::Bold);
 
         checkEmptyPlusSome(f.surface, {
                                {{2, 3}, singleWideChar(" ").withFg(TERMPAINT_COLOR_CYAN).withBg(TERMPAINT_COLOR_GREEN).withStyle(TERMPAINT_STYLE_BOLD)}
