@@ -60,7 +60,8 @@ public:
     bool isEnabled() const; // includes enabled state of parents
     bool isLocallyEnabled() const;
     void setEnabled(bool e);
-    bool isVisible() const;
+    bool isVisible() const; // includes visible state of parents
+    bool isLocallyVisible() const;
     void setVisible(bool v);
     void raise();
 

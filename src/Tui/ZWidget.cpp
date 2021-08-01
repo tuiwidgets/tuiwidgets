@@ -34,6 +34,7 @@ ZWidget::ZWidget(ZWidget *parent)
     if (parent) {
         auto *const pp = ZWidgetPrivate::get(parent);
         p->effectivelyEnabled = pp->effectivelyEnabled;
+        p->effectivelyVisible = pp->effectivelyVisible;
     }
 }
 
@@ -77,6 +78,7 @@ void ZWidget::setParent(ZWidget *newParent) {
     QObject::setParent(newParent);
     // TODO care about caches for everything (e.g. visibiltiy, enabled, etc)
     p->updateEffectivelyEnabledRecursively();
+    p->updateEffectivelyVisibleRecursively();
     QEvent e2{QEvent::ParentChange};
     QCoreApplication::sendEvent(this, &e2);
     if (prevTerminal != terminal()) {
@@ -165,8 +167,11 @@ void ZWidgetPrivate::updateEffectivelyEnabledRecursively() {
 }
 
 bool ZWidget::isVisible() const {
-    return tuiwidgets_impl()->visible;
+    return tuiwidgets_impl()->effectivelyVisible;
+}
 
+bool ZWidget::isLocallyVisible() const {
+    return tuiwidgets_impl()->visible;
 }
 
 void ZWidget::setVisible(bool v) {
@@ -175,6 +180,7 @@ void ZWidget::setVisible(bool v) {
     p->visible = v;
     // TODO care about focus
     // TODO cache effect in hierarchy
+    p->updateEffectivelyVisibleRecursively();
     // TODO send events (QShowEvent  QHideEvent? QEvent::HideToParent? QEvent::ShowToParent?)
     if (v) {
         QEvent showToParentEvent(QEvent::ShowToParent);
@@ -185,6 +191,36 @@ void ZWidget::setVisible(bool v) {
     }
     updateGeometry();
     update();
+}
+
+void ZWidgetPrivate::updateEffectivelyVisibleRecursively() {
+    bool newEffectiveValue;
+    if (pub()->parentWidget()) {
+        auto *const pp = ZWidgetPrivate::get(pub()->parentWidget());
+        newEffectiveValue = pp->effectivelyVisible && visible;
+    } else {
+        newEffectiveValue = visible;
+    }
+    if (effectivelyVisible == newEffectiveValue) {
+        return;
+    }
+    effectivelyVisible = newEffectiveValue;
+    if (!effectivelyVisible) {
+        QEvent hideEvent(ZEventType::hide());
+        QCoreApplication::instance()->sendEvent(pub(), &hideEvent);
+    }
+    for (QObject *childQObj : pub()->children()) {
+        ZWidget *child = qobject_cast<ZWidget*>(childQObj);
+        if (!child) {
+            continue;
+        }
+        auto *const childP = ZWidgetPrivate::get(child);
+        childP->updateEffectivelyVisibleRecursively();
+    }
+    if (effectivelyVisible) {
+        QEvent showEvent(ZEventType::show());
+        QCoreApplication::instance()->sendEvent(pub(), &showEvent);
+    }
 }
 
 void ZWidget::raise() {
@@ -492,7 +528,7 @@ bool ZWidget::isVisibleTo(const ZWidget *ancestor) const {
         if (w == ancestor) {
             return true;
         }
-        if (!w->isVisible()) {
+        if (!w->isLocallyVisible()) {
             return false;
         }
         w = w->parentWidget();
@@ -1002,7 +1038,7 @@ void ZWidgetPrivate::updateRequestEvent(ZPaintEvent *event)
         if (!child) {
             continue;
         }
-        if (!child->isVisible()) {
+        if (!child->isLocallyVisible()) {
             continue;
         }
         const QRect &childRect = child->tuiwidgets_impl()->geometry;

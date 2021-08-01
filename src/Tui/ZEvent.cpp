@@ -49,6 +49,14 @@ TUIWIDGETS_EXPORT QEvent::Type ZEventType::otherChange() {
     CALL_ONCE_REGISTEREVENTTYPE;
 }
 
+TUIWIDGETS_EXPORT QEvent::Type ZEventType::show() {
+    CALL_ONCE_REGISTEREVENTTYPE;
+}
+
+TUIWIDGETS_EXPORT QEvent::Type ZEventType::hide() {
+    CALL_ONCE_REGISTEREVENTTYPE;
+}
+
 TUIWIDGETS_EXPORT QEvent::Type ZEventType::updateRequest() {
     CALL_ONCE_REGISTEREVENTTYPE;
 }

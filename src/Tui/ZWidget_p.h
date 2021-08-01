@@ -52,6 +52,7 @@ public:
     bool isFocusable() const { return enabled && focusPolicy != Qt::FocusPolicy::NoFocus; }
 
     void updateEffectivelyEnabledRecursively();
+    void updateEffectivelyVisibleRecursively();
 
     // variables
     QRect geometry;
@@ -63,6 +64,7 @@ public:
     bool visible = true;
 
     bool effectivelyEnabled = true;
+    bool effectivelyVisible = true;
 
     QSize minimumSize;
     QSize maximumSize = {tuiMaxSize, tuiMaxSize};

@@ -37,7 +37,7 @@ SizePolicy ZWidgetLayoutItem::sizePolicyV() const {
 }
 
 bool ZWidgetLayoutItem::isVisible() const {
-    return widget->isVisible();
+    return widget->isLocallyVisible();
 }
 
 TUIWIDGETS_NS_END
