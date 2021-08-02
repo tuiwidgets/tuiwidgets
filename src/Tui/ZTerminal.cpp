@@ -750,6 +750,11 @@ std::unique_ptr<ZKeyEvent> ZTerminal::translateKeyEvent(const ZTerminalNativeEve
         nativeModifier = native->key.modifier;
     } else if (native->type == TERMPAINT_EV_CHAR) {
         nativeModifier = native->c.modifier;
+        if (nativeModifier == TERMPAINT_MOD_SHIFT) {
+            // some keyboard modes assert shift for normal uppercase letters,
+            // ignore that here as it's not generally meaningful.
+            nativeModifier = 0;
+        }
     }
 
     if (nativeModifier & TERMPAINT_MOD_SHIFT) {
@@ -981,7 +986,7 @@ bool ZTerminal::event(QEvent *event) {
                     || (p->options & ZTerminal::ForceIncompatibleTerminals)) {
                 p->autoDetectTimeoutTimer = nullptr;
                 QByteArray nativeOptions;
-                if ((p->options & (ZTerminal::AllowInterrupt | ZTerminal::AllowQuit | ZTerminal::AllowSuspend)) == 0) {
+                if (p->options & (ZTerminal::AllowInterrupt | ZTerminal::AllowQuit | ZTerminal::AllowSuspend)) {
                     nativeOptions.append(" +kbdsig ");
                 }
                 if (p->options & DisableAlternativeScreen) {
