@@ -348,7 +348,13 @@ ZTerminal::ZTerminal(QObject *parent)
 ZTerminal::ZTerminal(Options options, QObject *parent)
     : QObject(parent), tuiwidgets_pimpl_ptr(std::make_unique<ZTerminalPrivate>(this, options))
 {
-    tuiwidgets_impl()->initTerminal(options);
+    tuiwidgets_impl()->initTerminal(options, nullptr);
+}
+
+ZTerminal::ZTerminal(ZTerminal::FileDescriptor fd, Options options, QObject *parent)
+    : QObject(parent), tuiwidgets_pimpl_ptr(std::make_unique<ZTerminalPrivate>(this, options))
+{
+    tuiwidgets_impl()->initTerminal(options, &fd);
 }
 
 ZTerminal::ZTerminal(const ZTerminal::OffScreen &offscreen, QObject *parent)
@@ -364,8 +370,8 @@ ZTerminal::ZTerminal(ZTerminal::TerminalConnection *connection, Options options,
 }
 
 
-bool ZTerminalPrivate::initTerminal(ZTerminal::Options options) {
-    return setupInternalConnection(options);
+bool ZTerminalPrivate::initTerminal(ZTerminal::Options options, ZTerminal::FileDescriptor* fd) {
+    return setupInternalConnection(options, fd);
 }
 
 void ZTerminalPrivate::initOffscreen(const ZTerminal::OffScreen &offscreen) {

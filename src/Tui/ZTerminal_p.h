@@ -49,7 +49,7 @@ public:
     void processPaintingAndUpdateOutput(bool fullRepaint);
     void updateNativeTerminalState();
 
-    bool initTerminal(ZTerminal::Options options);
+    bool initTerminal(ZTerminal::Options options, ZTerminal::FileDescriptor *fd);
     void initOffscreen(const ZTerminal::OffScreen &offscreen);
     void initExternal(ZTerminal::TerminalConnectionPrivate *connection, ZTerminal::Options options);
     void deinitTerminal();
@@ -57,7 +57,7 @@ public:
     // internal connection
     void initIntegrationForInternalConnection();
     static bool terminalAvailableForInternalConnection();
-    bool setupInternalConnection(ZTerminal::Options options);
+    bool setupInternalConnection(ZTerminal::Options options, ZTerminal::FileDescriptor *explicitFd);
     bool setupFromControllingTerminal(ZTerminal::Options options);
     bool commonInitForInternalConnection(ZTerminal::Options options);
     void deinitTerminalForInternalConnection();

@@ -269,13 +269,21 @@ bool ZTerminalPrivate::terminalAvailableForInternalConnection() {
     return false;
 }
 
-bool ZTerminalPrivate::setupInternalConnection(ZTerminal::Options options) {
+bool ZTerminalPrivate::setupInternalConnection(ZTerminal::Options options, ZTerminal::FileDescriptor *explicitFd) {
     if (fd != -1) {
         return false;
     }
 
     fd = -1;
     auto_close = false;
+
+    if (explicitFd) {
+        if (isatty(explicitFd->fd()) && isFileRw(explicitFd->fd())) {
+            fd = explicitFd->fd();
+            return commonInitForInternalConnection(options);
+        }
+        return false;
+    }
 
     if (isatty(0) && isFileRw(0)) {
         fd = 0;

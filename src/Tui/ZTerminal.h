@@ -38,6 +38,15 @@ public:
     };
     Q_DECLARE_FLAGS(Options, Option)
 
+    struct FileDescriptor {
+        explicit FileDescriptor(int fd) : _fd(fd) {}
+
+        int fd() { return _fd; }
+
+    private:
+        int _fd;
+    };
+
     class OffScreenData;
     class OffScreen {
     public:
@@ -92,6 +101,7 @@ public:
 public:
     explicit ZTerminal(QObject *parent = nullptr);
     explicit ZTerminal(Options options, QObject *parent = nullptr);
+    explicit ZTerminal(FileDescriptor fd, Options options, QObject *parent = nullptr);
     explicit ZTerminal(const OffScreen& offscreen, QObject *parent = nullptr);
     explicit ZTerminal(TerminalConnection *connection, Options options, QObject *parent = nullptr);
     virtual ~ZTerminal();
