@@ -56,7 +56,7 @@ public:
 
     // internal connection
     void initIntegrationForInternalConnection();
-    bool terminalAvailableForInternalConnection();
+    static bool terminalAvailableForInternalConnection();
     bool setupInternalConnection(ZTerminal::Options options);
     bool setupFromControllingTerminal(ZTerminal::Options options);
     bool commonInitForInternalConnection(ZTerminal::Options options);

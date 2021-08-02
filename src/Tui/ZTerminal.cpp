@@ -504,6 +504,10 @@ ZTerminal::~ZTerminal() {
     tuiwidgets_impl()->mainWidget.reset();
 }
 
+bool ZTerminal::defaultTerminalAvailable() {
+    return ZTerminalPrivate::terminalAvailableForInternalConnection();
+}
+
 ZPainter ZTerminal::painter() {
     auto *surface = tuiwidgets_impl()->surface;
     return ZPainter(std::make_unique<ZPainterPrivate>(surface,

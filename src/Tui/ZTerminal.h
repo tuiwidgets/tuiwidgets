@@ -97,6 +97,9 @@ public:
     virtual ~ZTerminal();
 
 public:
+    static bool defaultTerminalAvailable();
+
+public:
     ZPainter painter();
     ZTextMetrics textMetrics() const;
     ZWidget* mainWidget();
