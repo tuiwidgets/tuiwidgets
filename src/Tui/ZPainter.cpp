@@ -49,6 +49,9 @@ ZPainter ZPainter::translateAndClip(QRect transform) {
 }
 
 ZPainter ZPainter::translateAndClip(int x, int y, int width, int height) {
+    x = std::max(0, x);
+    y = std::max(0, y);
+
     ZPainter ret = *this;
 
     auto *const pimpl = ret.tuiwidgets_impl();
