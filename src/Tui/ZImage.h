@@ -40,7 +40,7 @@ public:
 
     ZPainter painter();
 
-private:
+protected:
     friend class ZImageData;
     QSharedDataPointer<ZImageData> tuiwidgets_pimpl_ptr;
     ZImage(QSharedDataPointer<ZImageData> pimpl);

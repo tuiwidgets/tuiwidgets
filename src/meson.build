@@ -133,8 +133,13 @@ testinternal_files = [
 # parts of the main library that are needed for the internal tests
 testinternal_files += [
   'Tui/MarkupParser.cpp',
+  'Tui/ZImage.cpp',
   'Tui/ZPainter.cpp',
+  'Tui/ZShortcutManager.cpp',
+  'Tui/ZTerminal.cpp',
+  'Tui/ZTerminal_linux.cpp',
   'Tui/ZTextMetrics.cpp',
+  'Tui/ZWidget.cpp',
 ]
 
 test('testtoolkitinternal',
