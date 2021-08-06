@@ -23,7 +23,7 @@ class ZWidget;
 class ZPainterPrivate;
 class TUIWIDGETS_EXPORT ZPainter {
 public:
-    enum Attribute {
+    enum class Attribute {
         Bold = (1<<0),
         Italic = (1<<1),
         Blink = (1<<4),
