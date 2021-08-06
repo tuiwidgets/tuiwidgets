@@ -76,7 +76,7 @@ void ZPainter::writeWithColors(int x, int y, const QString &string, ZColor fg, Z
 
 void ZPainter::writeWithColors(int x, int y, const char *stringUtf8, int utf8CodeUnits, ZColor fg, ZColor bg) {
     auto *const pimpl = tuiwidgets_impl();
-    if (y >= pimpl->height) return;
+    if (y >= pimpl->height || y < 0) return;
 
     termpaint_surface_write_with_len_colors_clipped(pimpl->surface,
                                                     x + pimpl->x, y + pimpl->y,
@@ -102,7 +102,7 @@ void ZPainter::writeWithAttributes(int x, int y, const QString &string, ZColor f
 
 void ZPainter::writeWithAttributes(int x, int y, const char *stringUtf8, int utf8CodeUnits, ZColor fg, ZColor bg, Attributes attr) {
     auto *const pimpl = tuiwidgets_impl();
-    if (y >= pimpl->height) return;
+    if (y >= pimpl->height || y < 0) return;
 
     termpaint_attr *termpaintAttr = termpaint_attr_new(toTermPaintColor(fg), toTermPaintColor(bg));
     termpaint_attr_set_style(termpaintAttr, attr);
