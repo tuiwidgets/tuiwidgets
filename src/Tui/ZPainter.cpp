@@ -184,24 +184,24 @@ void ZPainter::clearSoftwrapMarker(int x, int y) {
     termpaint_surface_set_softwrap_marker(pimpl->surface, pimpl->x + x, pimpl->y + y, false);
 }
 
-void ZPainter::drawImage(int x, int y, const ZImage &image, int sx, int sy, int width, int height) {
+void ZPainter::drawImage(int x, int y, const ZImage &sourceImage, int sourceX, int sourceY, int width, int height) {
     auto *const pimpl = tuiwidgets_impl();
 
     if (width == -1) {
-        width = image.width();
+        width = sourceImage.width();
     }
     if (height == -1) {
-        height = image.height();
+        height = sourceImage.height();
     }
 
     if (x < 0) {
         width += x;
-        sx -= x;
+        sourceX -= x;
         x = 0;
     }
     if (y < 0) {
         height += y;
-        sy -= y;
+        sourceY -= y;
         y = 0;
     }
 
@@ -212,7 +212,7 @@ void ZPainter::drawImage(int x, int y, const ZImage &image, int sx, int sy, int 
         return;
     }
 
-    termpaint_surface_copy_rect(ZImageData::get(&image)->surface, sx, sy, width, height,
+    termpaint_surface_copy_rect(ZImageData::get(&sourceImage)->surface, sourceX, sourceY, width, height,
                                 pimpl->surface, pimpl->x + x, pimpl->y + y,
                                 TERMPAINT_COPY_NO_TILE, TERMPAINT_COPY_NO_TILE);
 }
