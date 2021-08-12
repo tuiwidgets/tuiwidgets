@@ -16,13 +16,16 @@ class TUIWIDGETS_EXPORT ZCommandNotifier : public QObject {
     Q_OBJECT
 public:
     explicit ZCommandNotifier(Tui::ZImplicitSymbol command, QObject *parent = nullptr);
+    explicit ZCommandNotifier(Tui::ZImplicitSymbol command, QObject *parent, Qt::ShortcutContext context /*= Qt::ApplicationShortcut*/);
     ~ZCommandNotifier() override;
 
 public:
     ZSymbol command();
+    Qt::ShortcutContext context();
 
     bool isEnabled();
     void setEnabled(bool s);
+    bool isContextSatisfied();
 
 Q_SIGNALS:
     void activated();

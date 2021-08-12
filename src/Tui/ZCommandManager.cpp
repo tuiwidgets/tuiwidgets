@@ -52,7 +52,7 @@ bool ZCommandManager::isCommandEnabled(ZSymbol command) {
     if (p->commandNotifiers.contains(command)) {
         for (const auto &notifier : p->commandNotifiers[command]) {
             if (!notifier.isNull()) {
-                if (notifier->isEnabled()) {
+                if (notifier->isEnabled() && notifier->isContextSatisfied()) {
                     enabled = true;
                     break;
                 }
@@ -67,7 +67,7 @@ void ZCommandManager::activateCommand(ZSymbol command) {
     if (p->commandNotifiers.contains(command)) {
         for (const auto &notifier : p->commandNotifiers[command]) {
             if (!notifier.isNull()) {
-                if (notifier->isEnabled()) {
+                if (notifier->isEnabled() && notifier->isContextSatisfied()) {
                     notifier->activated();
                     break;
                 }
