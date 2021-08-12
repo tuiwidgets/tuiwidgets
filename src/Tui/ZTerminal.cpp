@@ -63,6 +63,7 @@ void ZTerminalPrivate::setFocus(ZWidget *w) {
         focusWidget = ZWidgetPrivate::get(w);
         focusHistory.appendOrMoveToLast(focusWidget);
     }
+    Q_EMIT pub()->focusChanged();
 }
 
 ZWidget *ZTerminalPrivate::focus() {

@@ -172,6 +172,7 @@ Q_SIGNALS:
     void afterRendering();
     void incompatibleTerminalDetected();
     void terminalConnectionLost();
+    void focusChanged();
 
 protected:
     std::unique_ptr<ZTerminalPrivate> tuiwidgets_pimpl_ptr;
