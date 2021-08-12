@@ -18,6 +18,8 @@ class TUIWIDGETS_EXPORT ZLayoutItem {
 public:
     ZLayoutItem();
     virtual ~ZLayoutItem();
+
+public:
     virtual void setGeometry(QRect r) = 0;
     virtual QSize sizeHint() const = 0;
     virtual SizePolicy sizePolicyH() const = 0;

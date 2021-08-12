@@ -638,7 +638,7 @@ namespace {
         func(w);
         const QObjectList &children = w->children();
         for (int i = 0; i < children.size(); i++) {
-            ZWidget* tmp = qobject_cast<ZWidget*>(children[i]);
+            ZWidget *tmp = qobject_cast<ZWidget*>(children[i]);
             if (!tmp) continue;
             forTree(tmp, func);
         }
@@ -649,7 +649,7 @@ namespace {
         func(w, false);
         const QObjectList &children = w->children();
         for (int i = 0; i < children.size(); i++) {
-            ZWidget* tmp = qobject_cast<ZWidget*>(children[i]);
+            ZWidget *tmp = qobject_cast<ZWidget*>(children[i]);
             if (!tmp) continue;
             if (tmp->focusMode() != FocusContainerMode::None) {
                 func(tmp, true);
@@ -678,7 +678,7 @@ namespace {
         return true;
     }
 
-    const ZWidget *searchBackwardInGroup(const ZWidget* currentFocus, const ZWidget *currentTree, FocusContainerMode focusMode) {
+    const ZWidget *searchBackwardInGroup(const ZWidget *currentFocus, const ZWidget *currentTree, FocusContainerMode focusMode) {
 
         unsigned int position = 0;
 
@@ -732,7 +732,7 @@ namespace {
         return currentFocus;
     }
 
-    ZWidget const *searchForwardInGroup(const ZWidget* currentFocus,
+    ZWidget const *searchForwardInGroup(const ZWidget *currentFocus,
                      const ZWidget *currentTree, FocusContainerMode focusMode) {
 
         unsigned int position = 0;
@@ -1034,7 +1034,7 @@ void ZWidgetPrivate::updateRequestEvent(ZPaintEvent *event)
         QCoreApplication::instance()->sendEvent(pub(), &nestedEvent);
     }
     for (QObject *childQObj : pub()->children()) {
-        ZWidget* child = qobject_cast<ZWidget*>(childQObj);
+        ZWidget *child = qobject_cast<ZWidget*>(childQObj);
         if (!child) {
             continue;
         }
