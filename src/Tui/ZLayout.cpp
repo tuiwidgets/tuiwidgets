@@ -89,7 +89,10 @@ bool ZLayout::eventFilter(QObject *watched, QEvent *event) {
 void ZLayout::relayout() {
     ZWidget *w = widget();
     if (w) {
-        w->layout()->setGeometry(w->layoutArea());
+        auto *term = w->terminal();
+        if (term) {
+            term->requestLayout(w);
+        }
     }
 }
 
