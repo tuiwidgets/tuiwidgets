@@ -70,7 +70,7 @@ public:
     QSize maximumSize = {tuiMaxSize, tuiMaxSize};
     SizePolicy sizePolicyH = SizePolicy::Preferred;
     SizePolicy sizePolicyV = SizePolicy::Preferred;
-    ZLayout *layout = nullptr;
+    QPointer<ZLayout> layout;
 
     QMargins contentsMargins;
 
