@@ -16,16 +16,6 @@ ZImage::ZImage(const ZTerminal *terminal, int width, int height)
 ZImage::ZImage(QSharedDataPointer<ZImageData> pimpl) : tuiwidgets_pimpl_ptr(pimpl) {
 }
 
-ZImage::ZImage(const ZTerminal *terminal, const QString &fileName) {
-    termpaint_surface *surface = termpaint_image_load(ZTerminalPrivate::get(terminal)->terminal,
-                                                      fileName.toUtf8().data());
-    if (!surface) {
-        throw std::runtime_error("ZImage: could not load"); // FIXME
-    }
-
-    tuiwidgets_pimpl_ptr = new ZImageData(ZTerminalPrivate::get(terminal)->terminal, surface);
-}
-
 std::unique_ptr<ZImage> ZImage::fromFile(const ZTerminal *terminal, QString fileName) {
     termpaint_surface *surface = termpaint_image_load(ZTerminalPrivate::get(terminal)->terminal,
                                                       fileName.toUtf8().data());
