@@ -19,8 +19,8 @@ class TUIWIDGETS_EXPORT ZImage {
 public:
     ZImage(const ZTerminal* terminal, int width, int height);
     ZImage(const ZTerminal *terminal, const QString& fileName); // this throws
-    static ZImage *fromFile(const ZTerminal *terminal, QString fileName);
-    static ZImage *fromByteArray(const ZTerminal *terminal, QByteArray data);
+    static std::unique_ptr<ZImage> fromFile(const ZTerminal *terminal, QString fileName);
+    static std::unique_ptr<ZImage> fromByteArray(const ZTerminal *terminal, QByteArray data);
     ZImage(const ZImage& other);
     ZImage(ZImage&& other);
     ZImage& operator=(const ZImage& other);

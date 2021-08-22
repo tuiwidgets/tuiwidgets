@@ -26,24 +26,24 @@ ZImage::ZImage(const ZTerminal *terminal, const QString &fileName) {
     tuiwidgets_pimpl_ptr = new ZImageData(ZTerminalPrivate::get(terminal)->terminal, surface);
 }
 
-ZImage *ZImage::fromFile(const ZTerminal *terminal, QString fileName) {
+std::unique_ptr<ZImage> ZImage::fromFile(const ZTerminal *terminal, QString fileName) {
     termpaint_surface *surface = termpaint_image_load(ZTerminalPrivate::get(terminal)->terminal,
                                                       fileName.toUtf8().data());
     if (!surface) {
         return nullptr;
     }
 
-    return new ZImage(QSharedDataPointer<ZImageData>{new ZImageData(ZTerminalPrivate::get(terminal)->terminal, surface)});
+    return std::unique_ptr<ZImage>(new ZImage(QSharedDataPointer<ZImageData>{new ZImageData(ZTerminalPrivate::get(terminal)->terminal, surface)}));
 }
 
-ZImage *ZImage::fromByteArray(const ZTerminal *terminal, QByteArray data) {
+std::unique_ptr<ZImage> ZImage::fromByteArray(const ZTerminal *terminal, QByteArray data) {
     termpaint_surface *surface = termpaint_image_load_from_buffer(ZTerminalPrivate::get(terminal)->terminal,
                                                                   data.data(), data.size());
     if (!surface) {
         return nullptr;
     }
 
-    return new ZImage(QSharedDataPointer<ZImageData>{new ZImageData(ZTerminalPrivate::get(terminal)->terminal, surface)});
+    return std::unique_ptr<ZImage>(new ZImage(QSharedDataPointer<ZImageData>{new ZImageData(ZTerminalPrivate::get(terminal)->terminal, surface)}));
 }
 
 ZImage::ZImage(const ZImage &other) : tuiwidgets_pimpl_ptr(other.tuiwidgets_pimpl_ptr) {
