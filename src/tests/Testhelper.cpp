@@ -92,8 +92,9 @@ void Testhelper::compare(QString name) {
         actual.save(fileNameOfTest + QStringLiteral("-new.tpi"));
         FAIL((QStringLiteral("image missing: ") + fileNameOfTest).toUtf8().toStdString());
     } else {
-        Tui::ZImage expected(terminal.get(), fileNameOfTest + QStringLiteral(".tpi"));
-        if (actual != expected) {
+        std::unique_ptr<Tui::ZImage> expected = Tui::ZImage::fromFile(terminal.get(), fileNameOfTest + QStringLiteral(".tpi"));
+        REQUIRE(expected != nullptr);
+        if (actual != *expected) {
             actual.save(fileNameOfTest + QStringLiteral("-failed.tpi"));
             FAIL((QStringLiteral("diff image: ") + fileNameOfTest).toUtf8().toStdString());
         }
@@ -122,15 +123,16 @@ void Testhelper::crossCheckWithMask(std::vector<std::string> overrideNames,
     }
 
     QString fileNameOfTest = QString(basePath() + namePrefix + "-" + QString::fromStdString(name)).replace(' ', '-');
-    Tui::ZImage expected(terminal.get(), fileNameOfTest + ".tpi");
+    std::unique_ptr<Tui::ZImage> expected = Tui::ZImage::fromFile(terminal.get(), fileNameOfTest + ".tpi");
+    REQUIRE(expected != nullptr);
     Tui::ZImage actual = *lastCapture;
-    Tui::ZPainter expectedPainter = expected.painter();
+    Tui::ZPainter expectedPainter = expected->painter();
     Tui::ZPainter actualPainter = actual.painter();
     for (const auto &item : ignore) {
         expectedPainter.clearRect(item.x(), item.y(), 1, 1, Tui::ZColor::defaultColor(), Tui::ZColor::defaultColor());
         actualPainter.clearRect(item.x(), item.y(), 1, 1, Tui::ZColor::defaultColor(), Tui::ZColor::defaultColor());
     }
-    if (actual != expected) {
+    if (actual != *expected) {
         FAIL(("cross check failed: " + fileNameOfTest).toUtf8().toStdString());
     }
 }
