@@ -94,11 +94,14 @@ bool ZShortcut::matches(ZWidget *focusWidget, const ZKeyEvent *event) {
                 if (!window) {
                     return false;
                 }
-                while (window->parent()) {
+                while (window) {
                     if (window->paletteClass().contains(QStringLiteral("window"))) {
                         break;
                     }
                     window = window->parentWidget();
+                }
+                if (!window) {
+                    return false;
                 }
                 QObject *w = par;
                 while (w) {

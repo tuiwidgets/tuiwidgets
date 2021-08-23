@@ -93,19 +93,21 @@ void ZCommandNotifierPrivate::updateContextSatisfied(Tui::ZCommandNotifier *pub)
                 if (!window) {
                     contextSatisfied = false;
                 }
-                while (window->parent()) {
+                while (window) {
                     if (window->paletteClass().contains(QStringLiteral("window"))) {
                         break;
                     }
                     window = window->parentWidget();
                 }
-                QObject *w = par;
-                while (w) {
-                    if (w == window) {
-                        contextSatisfied = true;
-                        break;
+                if (window) {
+                    QObject *w = par;
+                    while (w) {
+                        if (w == window) {
+                            contextSatisfied = true;
+                            break;
+                        }
+                        w = w->parent();
                     }
-                    w = w->parent();
                 }
             }
             break;
