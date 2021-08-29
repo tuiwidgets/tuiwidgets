@@ -20,6 +20,8 @@ public:
     int fillChar();
 
 protected:
+    virtual void raiseOnFocus(ZWidget *w);
+
     void paintEvent(ZPaintEvent *event) override;
     void keyEvent(ZKeyEvent *event) override;
     void childEvent(QChildEvent *event) override;

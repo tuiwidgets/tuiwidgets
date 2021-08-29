@@ -25,6 +25,12 @@ int ZRoot::fillChar() {
     return p->fillChar;
 }
 
+void ZRoot::raiseOnFocus(ZWidget *w) {
+    if (w->paletteClass().contains(QStringLiteral("dialog"))) {
+        w->raise();
+    }
+}
+
 void ZRoot::paintEvent(ZPaintEvent *event) {
     auto *painter = event->painter();
     painter->clearWithChar(getColor("root.fg"), getColor("root.bg"), fillChar());
@@ -56,9 +62,7 @@ void ZRoot::keyEvent(ZKeyEvent *event) {
                 ZWidget *w = win->placeFocus();
                 if (w) {
                     w->setFocus(Qt::FocusReason::ActiveWindowFocusReason);
-                    if(win->paletteClass().contains(QStringLiteral("dialog"))) {
-                        win->raise();
-                    }
+                    raiseOnFocus(win);
                     found = true;
                     break;
                 }
@@ -69,9 +73,7 @@ void ZRoot::keyEvent(ZKeyEvent *event) {
         }
         if (!found && first) {
             first->placeFocus()->setFocus(Qt::FocusReason::ActiveWindowFocusReason);
-            if(first->paletteClass().contains(QStringLiteral("dialog"))) {
-                first->raise();
-            }
+            raiseOnFocus(first);
         }
     }
 }
