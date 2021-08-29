@@ -26,7 +26,30 @@ int ZRoot::fillChar() {
 }
 
 void ZRoot::raiseOnFocus(ZWidget *w) {
-    if (w->paletteClass().contains(QStringLiteral("dialog"))) {
+    ZWidget *under = nullptr;
+    if (!w->paletteClass().contains(QStringLiteral("dialog"))) {
+        bool phase = false; // false -> looking for w, true -> looking for stack under widget
+        for (QObject *childQObj : children()) {
+            ZWidget* child = qobject_cast<ZWidget*>(childQObj);
+            if (!child) {
+                continue;
+            }
+            if (!phase) {
+                if (child == w) {
+                    phase = true;
+                    continue;
+                }
+            } else {
+                if (child->paletteClass().contains(QStringLiteral("dialog"))) {
+                    under = child;
+                    break;
+                }
+            }
+        }
+    }
+    if (under) {
+        w->stackUnder(under);
+    } else {
         w->raise();
     }
 }
