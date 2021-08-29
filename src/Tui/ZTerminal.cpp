@@ -240,7 +240,7 @@ int ZTerminal::currentLayoutGeneration() {
 }
 
 void ZTerminalPrivate::processPaintingAndUpdateOutput(bool fullRepaint) {
-    if (mainWidget.get()) {
+    if (mainWidget.data()) {
         if (pub()->isLayoutPending()) {
             pub()->doLayout();
         }
@@ -277,9 +277,9 @@ void ZTerminalPrivate::processPaintingAndUpdateOutput(bool fullRepaint) {
             viewportOffset.setY(0);
             paint = std::make_unique<ZPainter>(pub()->painter());
         }
-        paint->setWidget(mainWidget.get());
+        paint->setWidget(mainWidget.data());
         ZPaintEvent event(ZPaintEvent::update, paint.get());
-        QCoreApplication::sendEvent(mainWidget.get(), &event);
+        QCoreApplication::sendEvent(mainWidget.data(), &event);
         if (initState == ZTerminalPrivate::InitState::Ready) {
             QPoint realCursorPosition = cursorPosition + viewportOffset;
             const bool cursorVisible = !(realCursorPosition.x() < 0
@@ -324,11 +324,11 @@ void ZTerminalPrivate::processPaintingAndUpdateOutput(bool fullRepaint) {
 
 void ZTerminal::dispatcherIsAboutToBlock() {
     auto *const p = tuiwidgets_impl();
-    if (!p->focusWidget || !p->focusWidget->enabled || !p->focusWidget->pub()->isVisibleTo(p->mainWidget.get())) {
+    if (!p->focusWidget || !p->focusWidget->enabled || !p->focusWidget->pub()->isVisibleTo(p->mainWidget.data())) {
         bool focusWasSet = false;
         ZWidgetPrivate *w = p->focusHistory.last;
         while (w) {
-            if (w->enabled && w->pub()->isVisibleTo(p->mainWidget.get())) {
+            if (w->enabled && w->pub()->isVisibleTo(p->mainWidget.data())) {
                 w->pub()->setFocus();
                 focusWasSet = true;
                 break;
@@ -336,7 +336,7 @@ void ZTerminal::dispatcherIsAboutToBlock() {
             w = w->focusHistory.prev;
         }
         if (!focusWasSet) {
-            p->setFocus(p->mainWidget.get());
+            p->setFocus(p->mainWidget.data());
         }
     }
 }
@@ -506,9 +506,9 @@ void ZTerminalPrivate::integration_awaiting_response() {
 }
 
 ZTerminal::~ZTerminal() {
-    // widget destructors might depend on our services.
-    // so ensure the widget hierarchy is torn down before the terminal.
-    tuiwidgets_impl()->mainWidget.reset();
+    if (tuiwidgets_impl()->mainWidget) {
+        ZWidgetPrivate::get(tuiwidgets_impl()->mainWidget.data())->unsetTerminal();
+    }
 }
 
 bool ZTerminal::defaultTerminalAvailable() {
@@ -528,15 +528,14 @@ ZTextMetrics ZTerminal::textMetrics() const {
 }
 
 ZWidget *ZTerminal::mainWidget() {
-    return tuiwidgets_impl()->mainWidget.get();
+    return tuiwidgets_impl()->mainWidget.data();
 }
 
 void ZTerminal::setMainWidget(ZWidget *w) {
     if (tuiwidgets_impl()->mainWidget) {
-        ZWidgetPrivate::get(tuiwidgets_impl()->mainWidget.get())->unsetTerminal();
-        tuiwidgets_impl()->mainWidget.release();
+        ZWidgetPrivate::get(tuiwidgets_impl()->mainWidget.data())->unsetTerminal();
     }
-    tuiwidgets_impl()->mainWidget.reset(w);
+    tuiwidgets_impl()->mainWidget = w;
     ZWidgetPrivate::get(w)->setManagingTerminal(this);
 
     tuiwidgets_impl()->sendOtherChangeEvent(ZOtherChangeEvent::all().subtract({TUISYM_LITERAL("terminal")}));
@@ -558,8 +557,8 @@ void ZTerminalPrivate::sendOtherChangeEvent(QSet<ZSymbol> unchanged) {
         change.setAccepted(true);
     };
 
-    f(mainWidget.get());
-    zwidgetForEachDescendant(mainWidget.get(), f);
+    f(mainWidget.data());
+    zwidgetForEachDescendant(mainWidget.data(), f);
 }
 
 ZWidget *ZTerminal::focusWidget() {

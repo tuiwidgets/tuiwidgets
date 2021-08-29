@@ -98,7 +98,7 @@ public:
 
     bool updateRequested = false;
 
-    std::unique_ptr<ZWidget> mainWidget;
+    QPointer<ZWidget> mainWidget;
     QPoint cursorPosition = {-1, -1};
     ZWidgetPrivate *focusWidget = nullptr;
     ListHead<ZWidgetPrivate, FocusHistoryTag> focusHistory;
