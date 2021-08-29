@@ -532,8 +532,19 @@ ZWidget *ZTerminal::mainWidget() {
 }
 
 void ZTerminal::setMainWidget(ZWidget *w) {
-    if (tuiwidgets_impl()->mainWidget) {
-        ZWidgetPrivate::get(tuiwidgets_impl()->mainWidget.data())->unsetTerminal();
+    auto *const p = tuiwidgets_impl();
+
+    if (w == p->mainWidget.data()) {
+        return;
+    }
+    if (p->mainWidget) {
+        ZWidgetPrivate::get(p->mainWidget.data())->unsetTerminal();
+        // clear all state relating to widgets
+        p->focusWidget = nullptr;
+        p->focusHistory.clear();
+        p->keyboardGrabWidget = nullptr;
+        p->layoutPendingWidgets.clear();
+        LayoutGenerationUpdaterScope generationUpdater(p->layoutGeneration);
     }
     tuiwidgets_impl()->mainWidget = w;
     ZWidgetPrivate::get(w)->setManagingTerminal(this);
