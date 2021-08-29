@@ -64,6 +64,7 @@ public:
     bool isLocallyVisible() const;
     void setVisible(bool v);
     void raise();
+    void stackUnder(ZWidget *w);
 
     QSize minimumSize() const;
     void setMinimumSize(int w, int h);

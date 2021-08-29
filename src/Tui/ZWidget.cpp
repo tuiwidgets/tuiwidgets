@@ -230,6 +230,15 @@ void ZWidget::raise() {
     update();
 }
 
+void ZWidget::stackUnder(ZWidget *w) {
+    QList<QObject*>& list = parentWidget()->d_ptr->children;
+    if (list.size() <= 1) return;
+    int to = list.indexOf(w);
+    if (to < 1) return;
+    list.move(list.indexOf(this), to - 1);
+    update();
+}
+
 QSize ZWidget::minimumSize() const {
     auto *const p = tuiwidgets_impl();
     return p->minimumSize;
