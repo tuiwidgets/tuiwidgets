@@ -18,6 +18,10 @@ public:
     ListHead(){}
 
     ~ListHead() {
+        clear();
+    }
+
+    void clear() {
         while (first) {
             remove(first);
         }
