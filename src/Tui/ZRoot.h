@@ -19,8 +19,12 @@ public:
     void setFillChar(int fillChar);
     int fillChar();
 
-protected:
+    void focusNextWindow();
+    void focusPreviousWindow();
+
     virtual void raiseOnFocus(ZWidget *w);
+
+protected:
 
     void paintEvent(ZPaintEvent *event) override;
     void keyEvent(ZKeyEvent *event) override;
@@ -29,6 +33,9 @@ protected:
     virtual void terminalChanged();
     QSize minimumSizeHint() const override;
     QRect layoutArea() const override;
+
+private:
+    void focusWindowHelper(bool forward);
 
 public:
     // public virtuals from base class override everything for later ABI compatibility

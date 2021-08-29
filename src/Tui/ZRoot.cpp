@@ -25,6 +25,14 @@ int ZRoot::fillChar() {
     return p->fillChar;
 }
 
+void ZRoot::focusNextWindow() {
+    focusWindowHelper(true);
+}
+
+void ZRoot::focusPreviousWindow() {
+    focusWindowHelper(false);
+}
+
 void ZRoot::raiseOnFocus(ZWidget *w) {
     ZWidget *under = nullptr;
     if (!w->paletteClass().contains(QStringLiteral("dialog"))) {
@@ -54,6 +62,46 @@ void ZRoot::raiseOnFocus(ZWidget *w) {
     }
 }
 
+void ZRoot::focusWindowHelper(bool forward) {
+    auto *const p = tuiwidgets_impl();
+    ZWidget *first = nullptr;
+    bool arm = false;
+    bool found = false;
+
+    QList<ZWidget*> childWindows;
+    for (QObject* obj : p->windows) {
+        auto childWidget = qobject_cast<ZWidget*>(obj);
+        if (childWidget && childWidget->paletteClass().contains(QStringLiteral("window")) && childWidget->isVisible()) {
+            childWindows.append(childWidget);
+        }
+    }
+
+    if (!forward) {
+        std::reverse(childWindows.begin(), childWindows.end());
+    }
+    for(ZWidget *win : childWindows) {
+        if (!first && win->placeFocus()) {
+            first = win;
+        }
+        if (arm) {
+            ZWidget *w = win->placeFocus();
+            if (w) {
+                w->setFocus(Qt::FocusReason::ActiveWindowFocusReason);
+                raiseOnFocus(win);
+                found = true;
+                break;
+            }
+        }
+        if (win->isInFocusPath()) {
+            arm = true;
+        }
+    }
+    if (!found && first) {
+        first->placeFocus()->setFocus(Qt::FocusReason::ActiveWindowFocusReason);
+        raiseOnFocus(first);
+    }
+}
+
 void ZRoot::paintEvent(ZPaintEvent *event) {
     auto *painter = event->painter();
     painter->clearWithChar(getColor("root.fg"), getColor("root.bg"), fillChar());
@@ -62,42 +110,7 @@ void ZRoot::paintEvent(ZPaintEvent *event) {
 void ZRoot::keyEvent(ZKeyEvent *event) {
     auto *const p = tuiwidgets_impl();
     if (event->key() == Qt::Key_F6 && (event->modifiers() == 0 || event->modifiers() == Qt::Modifier::SHIFT)) {
-        ZWidget *first = nullptr;
-        bool arm = false;
-        bool found = false;
-
-        QList<ZWidget*> childWindows;
-        for (QObject* obj : p->windows) {
-            auto childWidget = qobject_cast<ZWidget*>(obj);
-            if (childWidget && childWidget->paletteClass().contains(QStringLiteral("window")) && childWidget->isVisible()) {
-                childWindows.append(childWidget);
-            }
-        }
-
-        if (event->modifiers() == Qt::Modifier::SHIFT) {
-            std::reverse(childWindows.begin(), childWindows.end());
-        }
-        for(ZWidget *win : childWindows) {
-            if (!first && win->placeFocus()) {
-                first = win;
-            }
-            if (arm) {
-                ZWidget *w = win->placeFocus();
-                if (w) {
-                    w->setFocus(Qt::FocusReason::ActiveWindowFocusReason);
-                    raiseOnFocus(win);
-                    found = true;
-                    break;
-                }
-            }
-            if (win->isInFocusPath()) {
-                arm = true;
-            }
-        }
-        if (!found && first) {
-            first->placeFocus()->setFocus(Qt::FocusReason::ActiveWindowFocusReason);
-            raiseOnFocus(first);
-        }
+        focusWindowHelper(event->modifiers() != Qt::Modifier::SHIFT);
     }
 }
 
