@@ -63,8 +63,8 @@ ZPainter ZPainter::translateAndClip(int x, int y, int width, int height) {
     pimpl->y += y;
 
     // clip
-    pimpl->width = std::min(pimpl->width, width);
-    pimpl->height = std::min(pimpl->height, height);
+    pimpl->width = std::max(std::min(pimpl->width, width), 0);
+    pimpl->height = std::max(std::min(pimpl->height, height), 0);
 
     return ret;
 }
