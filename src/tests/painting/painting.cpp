@@ -253,13 +253,6 @@ void writeWithAttributesWrapper(Kind kind, Tui::ZPainter &painter, int x, int y,
 
 }
 
-class ZImageTest : public Tui::ZImage {
-public:
-    ZImageTest (QSharedDataPointer<Tui::ZImageData>pimpl) : Tui::ZImage(pimpl) {
-
-    }
-};
-
 TEST_CASE("ZPainter: simple text") {
     auto kind = GENERATE(ALLKINDS);
     CAPTURE(kind);
@@ -662,7 +655,7 @@ TEST_CASE("ZPainter: translateAndClip") {
 
 
     SECTION("drawImage") {
-        ZImageTest image {QSharedDataPointer<Tui::ZImageData>(new Tui::ZImageData(f.terminal, 10, 10))};
+        Tui::ZImage image = Tui::ZImageData::createForTesting(f.terminal, 10, 10);
         image.painter().clear(Tui::TerminalColor::cyan, Tui::TerminalColor::green);
         image.painter().setBackground(2, 2, Tui::TerminalColor::blue);
         painter.drawImage(-2, -2, image);
@@ -674,7 +667,7 @@ TEST_CASE("ZPainter: translateAndClip") {
     SECTION("drawImage-inside") {
         Tui::ZPainter painter = useQRect ? painterUnclipped.translateAndClip({1, 2, 20, 3})
                                          : painterUnclipped.translateAndClip(1, 2, 20, 3);
-        ZImageTest image {QSharedDataPointer<Tui::ZImageData>(new Tui::ZImageData(f.terminal, 5, 1))};
+        Tui::ZImage image = Tui::ZImageData::createForTesting(f.terminal, 5, 1);
         image.painter().clear(Tui::TerminalColor::cyan, Tui::TerminalColor::green);
         image.painter().setBackground(2, 0, Tui::TerminalColor::blue);
         image.painter().setBackground(3, 0, Tui::TerminalColor::blue);
@@ -692,7 +685,7 @@ TEST_CASE("ZPainter: translateAndClip") {
     SECTION("drawImage-outside") {
         Tui::ZPainter painter = useQRect ? painterUnclipped.translateAndClip({1, 2, 10, 3})
                                          : painterUnclipped.translateAndClip(1, 2, 10, 3);
-        ZImageTest image {QSharedDataPointer<Tui::ZImageData>(new Tui::ZImageData(f.terminal, 10, 10))};
+        Tui::ZImage image = Tui::ZImageData::createForTesting(f.terminal, 10, 10);
         image.painter().clear(Tui::TerminalColor::cyan, Tui::TerminalColor::green);
         image.painter().setBackground(2, 2, Tui::TerminalColor::blue);
         painter.drawImage(12, 2, image);
@@ -815,14 +808,14 @@ TEST_CASE("ZPainter: drawImage") {
     termpaint_surface_clear(f.surface, TERMPAINT_DEFAULT_COLOR, TERMPAINT_DEFAULT_COLOR);
 
     Tui::ZPainter painter = Tui::ZPainterPrivate::createForTesting(f.surface);
-    ZImageTest image {QSharedDataPointer<Tui::ZImageData>(new Tui::ZImageData(f.terminal, 1, 1))};
+    Tui::ZImage image = Tui::ZImageData::createForTesting(f.terminal, 1, 1);
     image.painter().setBackground(0, 0, Tui::TerminalColor::blue);
     painter.drawImage(0, 0, image);
     checkEmptyPlusSome(f.surface, {
                            {{0, 0}, singleWideChar(TERMPAINT_ERASED).withBg(TERMPAINT_COLOR_BLUE)}
                        });
 
-    image = ZImageTest {QSharedDataPointer<Tui::ZImageData>(new Tui::ZImageData(f.terminal, 3, 2))};
+    image = Tui::ZImageData::createForTesting(f.terminal, 3, 2);
     image.painter().writeWithColors(0, 0, "ASD", Tui::TerminalColor::red, Tui::TerminalColor::cyan);
     image.painter().writeWithColors(0, 1, "123", Tui::TerminalColor::red, Tui::TerminalColor::cyan);
     painter.drawImage(0, 0, image, 0, 0, -1, -1);

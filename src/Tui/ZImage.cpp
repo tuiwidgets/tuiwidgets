@@ -164,4 +164,8 @@ ZImageData::~ZImageData() {
     termpaint_surface_free(surface);
 }
 
+ZImage ZImageData::createForTesting(termpaint_terminal *terminal, int width, int height) {
+    return ZImage{QSharedDataPointer<Tui::ZImageData>(new Tui::ZImageData(terminal, width, height))};
+}
+
 TUIWIDGETS_NS_END

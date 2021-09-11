@@ -27,6 +27,7 @@ public:
     // back door
     static ZImageData* get(ZImage *image) { return image->tuiwidgets_pimpl_ptr.data(); }
     static const ZImageData* get(const ZImage *image) { return image->tuiwidgets_pimpl_ptr.data(); }
+    static ZImage createForTesting(termpaint_terminal *terminal, int width, int height);
 
 public:
     std::weak_ptr<char> hasPainter;
