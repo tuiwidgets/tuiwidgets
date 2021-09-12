@@ -36,6 +36,7 @@ tuiwidgets_public_headers = [
   'Tui/ZTerminal.h',
   'Tui/ZTest.h',
   'Tui/ZTextMetrics.h',
+  'Tui/ZTextStyle.h',
   'Tui/ZValuePtr.h',
   'Tui/ZWidget.h',
   'Tui/ZWindow.h',
@@ -75,6 +76,7 @@ tuiwidgets_sources = [
   'Tui/ZTerminal.cpp',
   'Tui/ZTest.cpp',
   'Tui/ZTextMetrics.cpp',
+  'Tui/ZTextStyle.cpp',
   'Tui/ZValuePtr.cpp',
   'Tui/ZWidget.cpp',
   'Tui/ZWindow.cpp',
@@ -156,6 +158,7 @@ test_files = [
   'tests/basicwindowfacet/basicwindowfacet.cpp',
   'tests/color/color.cpp',
   'tests/Testhelper.cpp',
+  'tests/textstyle.cpp',
   'tests/viewport/moveviewport.cpp',
   'tests/window/window.cpp',
 ]
