@@ -35,7 +35,7 @@ public:
     ZValuePtr(const ZValuePtr &other) : data(new T(*other.data)) {
     }
 
-    ZValuePtr(const ZValuePtr &&other) : data(std::exchange(move(other.data), new T())) {
+    ZValuePtr(ZValuePtr &&other) : data(std::exchange(other.data, std::make_unique<T>())) {
         // Safety over perf: Moved from state is default constructed state.
     }
 
@@ -44,9 +44,9 @@ public:
         return *this;
     }
 
-    ZValuePtr& operator=(const ZValuePtr&& other) {
+    ZValuePtr& operator=(ZValuePtr&& other) {
         // Safety over perf: Moved from state is default constructed state.
-        data = std::exchange(move(other.data), new T());
+        data = std::exchange(other.data, std::make_unique<T>());
         return *this;
     }
 
