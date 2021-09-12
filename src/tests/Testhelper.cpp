@@ -201,3 +201,28 @@ void DiagnosticMessageChecker::qtMessageOutput(QtMsgType type, const QMessageLog
         FAIL_CHECK("Unexpected diagnostic message: " + msg.toStdString());
     }
 }
+
+void TestBackground::paintEvent(Tui::ZPaintEvent *event) {
+    Tui::ZWindow::paintEvent(event);
+    auto *painter = event->painter();
+    int w = geometry().width();
+    int h = geometry().height();
+    int startX = 0;
+    int startY = 0;
+    auto border = borderEdges();
+    if (border & Qt::TopEdge) {
+        startY = 1;
+    }
+    if (border & Qt::BottomEdge) {
+        h -= 1;
+    }
+    if (border & Qt::LeftEdge) {
+        startX = 1;
+    }
+    if (border & Qt::RightEdge) {
+        w -= 1;
+    }
+    for(int i = startY; i < h; i++) {
+        painter->writeWithColors(startX, i, QString("␥").repeated(w - startX), getColor("window.frame.focused.fg"), getColor("window.frame.focused.bg"));
+    }
+}

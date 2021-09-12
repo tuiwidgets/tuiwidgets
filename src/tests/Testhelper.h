@@ -10,6 +10,7 @@
 #include <Tui/ZLayout.h>
 #include <Tui/ZPainter.h>
 #include <Tui/ZRoot.h>
+#include <Tui/ZWindow.h>
 
 #include "../third-party/catch.hpp"
 
@@ -104,5 +105,12 @@ public:
     Tui::ZColor bg;
 };
 
+class TestBackground : public Tui::ZWindow {
+public:
+    explicit TestBackground(Tui::ZWidget *parent) : Tui::ZWindow(parent) {}
+
+protected:
+    void paintEvent(Tui::ZPaintEvent *event) override;
+};
 
 #endif // TESTHELPER_H
