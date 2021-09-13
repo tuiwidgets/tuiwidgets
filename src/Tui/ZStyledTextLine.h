@@ -34,8 +34,9 @@ public:
     void setMnemonicStyle(ZTextStyle newBaseStyle, ZTextStyle newMnemonicStyle);
 
     QString mnemonic() const;
+    bool hasParsingError() const;
     int width(const ZTextMetrics &metrics) const;
-    void write(ZPainter* painter, int x, int y, int width) const;
+    void write(ZPainter *painter, int x, int y, int width) const;
 
 protected:
     ZValuePtr<ZStyledTextLinePrivate> tuiwidgets_pimpl_ptr;

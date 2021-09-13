@@ -28,6 +28,7 @@ public:
     mutable QString textFromMarkup;
     mutable QVector<StylePos> styles;
     mutable QString mnemonic;
+    mutable bool parsingError = false;
 };
 
 TUIWIDGETS_NS_END

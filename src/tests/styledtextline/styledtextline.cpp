@@ -38,6 +38,7 @@ TEST_CASE("styledtextline-base", "") {
         CHECK(stl->text() == "");
         CHECK(stl->markup() == "");
         CHECK(stl->mnemonic() == "");
+        CHECK(stl->hasParsingError() == false);
     }
 
     SECTION("get-set-text") {
@@ -45,12 +46,14 @@ TEST_CASE("styledtextline-base", "") {
         CHECK(stl->text() == "m");
         CHECK(stl->markup() == "");
         CHECK(stl->mnemonic() == "");
+        CHECK(stl->hasParsingError() == false);
     }
 
     SECTION("get-set-markup") {
         stl->setMarkup("<m>m</m>");
         CHECK(stl->markup() == "<m>m</m>");
         CHECK(stl->text() == "");
+        CHECK(stl->hasParsingError() == false);
     }
 
     SECTION("setBaseStyle") {
@@ -66,7 +69,84 @@ TEST_CASE("styledtextline-base", "") {
     SECTION("mnemonic") {
         CHECK(stl->mnemonic() == "");
         stl->setMarkup("<m>H</m>allo Welt");
+        CHECK(stl->hasParsingError() == false);
         CHECK(stl->mnemonic() == "H");
+        stl->setMarkup("<m>&amp;</m>allo Welt");
+        CHECK(stl->hasParsingError() == false);
+        CHECK(stl->mnemonic() == "&");
+        stl->setMarkup("<m>&lt;</m>allo Welt");
+        CHECK(stl->hasParsingError() == false);
+        CHECK(stl->mnemonic() == "<");
+        stl->setMarkup("&lt;<m>H</m>allo Welt");
+        CHECK(stl->hasParsingError() == false);
+        CHECK(stl->mnemonic() == "H");
+        stl->setMarkup("<m>></m>allo Welt");
+        CHECK(stl->hasParsingError() == false);
+        CHECK(stl->mnemonic() == ">");
+        stl->setMarkup("<m>H</m>>allo Welt");
+        CHECK(stl->hasParsingError() == false);
+        CHECK(stl->mnemonic() == "H");
+        stl->setMarkup("<m>H</m>all<m>o</m> Welt");
+        CHECK(stl->hasParsingError() == false);
+        CHECK(stl->mnemonic() == "");
+        stl->setMarkup("<m>H</m>all<b>o</b> Welt");
+        CHECK(stl->hasParsingError() == false);
+        CHECK(stl->mnemonic() == "H");
+        stl->setMarkup("<m>😇</m>allo Welt");
+        CHECK(stl->hasParsingError() == false);
+        CHECK(stl->mnemonic() == "😇");
+        stl->setMarkup("<m> </m>allo Welt");
+        CHECK(stl->hasParsingError() == false);
+        CHECK(stl->mnemonic() == " ");
+        stl->setMarkup("<b><m>h</m>allo Welt</b>");
+        CHECK(stl->hasParsingError() == false);
+        CHECK(stl->mnemonic() == "h");
+        stl->setMarkup("<m><b>h</b></m>allo Welt");
+        CHECK(stl->hasParsingError() == false);
+        CHECK(stl->mnemonic() == "h");
+        stl->setMarkup("h<m></m>allo Welt");
+        CHECK(stl->hasParsingError() == false);
+        CHECK(stl->mnemonic() == "");
+        stl->setMarkup("<m>\n</m>allo Welt");
+        CHECK(stl->hasParsingError() == false);
+        CHECK(stl->mnemonic() == "\n");
+        stl->setMarkup("<m>/</m>allo Welt");
+        CHECK(stl->hasParsingError() == false);
+        CHECK(stl->mnemonic() == "/");
+
+        // Parsing Errors
+        DiagnosticMessageChecker msg;
+        msg.expectMessage("MarkupParser: Not yet implemented:  mis-nested tags: adoption agency algorithm");
+        stl->setMarkup("<b><m>h</b></m>allo Welt");
+        CHECK(stl->hasParsingError() == true);
+        CHECK(stl->mnemonic() == "");
+        msg.tillHere();
+
+        stl->setMarkup("<m>H<m>allo Welt");
+        CHECK(stl->hasParsingError() == true);
+        CHECK(stl->mnemonic() == "");
+        stl->setMarkup("<m><m>h</m>allo Welt</m>");
+        CHECK(stl->hasParsingError() == true);
+        CHECK(stl->mnemonic() == "");
+        stl->setMarkup("<m>h<m/>allo Welt");
+        CHECK(stl->hasParsingError() == true);
+        CHECK(stl->mnemonic() == "");
+        stl->setMarkup("<m/>h</m>allo Welt");
+        CHECK(stl->hasParsingError() == true);
+        CHECK(stl->mnemonic() == "");
+
+        stl->setMarkup("<<m>H</m>allo Welt");
+        CHECK(stl->hasParsingError() == true);
+        CHECK(stl->mnemonic() == "");
+        stl->setMarkup("<m>H</m><allo Welt");
+        CHECK(stl->hasParsingError() == true);
+        CHECK(stl->mnemonic() == "");
+        stl->setMarkup("<m><</m>allo Welt");
+        CHECK(stl->hasParsingError() == true);
+        CHECK(stl->mnemonic() == "");
+        stl->setMarkup("&kaput;");
+        CHECK(stl->hasParsingError() == true);
+        CHECK(stl->mnemonic() == "");
     }
 
     SECTION("width-setText") {
@@ -86,6 +166,7 @@ TEST_CASE("styledtextline-base", "") {
         CHECK(stl->width(t.terminal->textMetrics()) == 5);
         stl->setText("A<b>C</b>D");
         CHECK(stl->width(t.terminal->textMetrics()) == 10);
+        CHECK(stl->hasParsingError() == false);
     }
     SECTION("width-setMarkup") {
         CHECK(stl->width(t.terminal->textMetrics()) == 0);

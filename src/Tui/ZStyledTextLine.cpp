@@ -96,10 +96,16 @@ void ZStyledTextLine::write(ZPainter *painter, int x, int y, int width) const {
                                          p->styles.last().style.attributes());
     }
 }
+bool ZStyledTextLine::hasParsingError() const {
+    auto *const p = tuiwidgets_impl();
+    p->ensureCache();
+    return p->parsingError;
+}
 
 void ZStyledTextLinePrivate::ensureCache() const {
     if (!cached) {
         cached = true;
+        parsingError = false;
         textFromMarkup.clear();
         styles.clear();
         mnemonic.clear();
@@ -166,6 +172,7 @@ void ZStyledTextLinePrivate::ensureCache() const {
                 styles.clear();
                 textFromMarkup = QStringLiteral("Error parsing");
                 styles.append({0, ZTextStyle({0xff, 0, 0}, {0, 0, 0})});
+                parsingError = true;
             } else {
                 if (maybeMnemonic.size() == 1) {
                     mnemonic = maybeMnemonic;
