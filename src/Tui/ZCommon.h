@@ -28,6 +28,8 @@ Q_DECLARE_FLAGS(ZTextAttributes, ZTextAttribute)
 
 static constexpr int Erased = 127;
 
+constexpr class WithMarkupTag {} withMarkup {};
+
 TUIWIDGETS_DECLARE_OPERATORS_FOR_FLAGS_IN_NAMESPACE(ZTextAttributes)
 
 TUIWIDGETS_NS_END
