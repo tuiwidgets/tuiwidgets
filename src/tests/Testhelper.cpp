@@ -6,6 +6,7 @@
 #include <QPoint>
 
 #include <Tui/ZPainter.h>
+#include <Tui/ZPalette.h>
 #include <Tui/ZSymbol.h>
 #include <Tui/ZTerminal.h>
 #include <Tui/ZTest.h>
@@ -225,4 +226,70 @@ void TestBackground::paintEvent(Tui::ZPaintEvent *event) {
     for(int i = startY; i < h; i++) {
         painter->writeWithColors(startX, i, QString("␥").repeated(w - startX), getColor("window.frame.focused.fg"), getColor("window.frame.focused.bg"));
     }
+}
+
+std::vector<std::string> checkWidgetsDefaultsExcept(const Tui::ZWidget *w, DefaultExceptions exceptions) {
+    std::vector<std::string> errors;
+
+    if (!exceptions.testFlag(DefaultException::Enabled) && !w->isLocallyEnabled()) {
+        errors.push_back("is not enabled");
+    }
+
+    if (!exceptions.testFlag(DefaultException::Visible) && !w->isLocallyVisible()) {
+        errors.push_back("is not visible");
+    }
+
+    if (!exceptions.testFlag(DefaultException::MinimumSize) && w->minimumSize() != QSize()) {
+        errors.push_back("has minimum size");
+    }
+
+    if (!exceptions.testFlag(DefaultException::MaximumSize) && w->maximumSize() != QSize{Tui::tuiMaxSize, Tui::tuiMaxSize}) {
+        errors.push_back("has maximum size");
+    }
+
+    if (!exceptions.testFlag(DefaultException::SizePolicyH) && w->sizePolicyH() != Tui::SizePolicy::Preferred) {
+        errors.push_back("sizePolicyH() != Tui::SizePolicy::Preferred");
+    }
+
+    if (!exceptions.testFlag(DefaultException::SizePolicyV) && w->sizePolicyV() != Tui::SizePolicy::Preferred) {
+        errors.push_back("sizePolicyV() != Tui::SizePolicy::Preferred");
+    }
+
+    if (!exceptions.testFlag(DefaultException::Layout) && w->layout()) {
+        errors.push_back("has layout");
+    }
+
+    if (!exceptions.testFlag(DefaultException::FocusPolicy) && w->focusPolicy() != Qt::NoFocus) {
+        errors.push_back("focusPolicy() != NoFocus");
+    }
+
+    if (!exceptions.testFlag(DefaultException::FocusMode) && w->focusMode() != Tui::FocusContainerMode::None) {
+        errors.push_back("focusMode() != None");
+    }
+
+    if (!exceptions.testFlag(DefaultException::FocusOrder) && w->focusOrder() != 0) {
+        errors.push_back("focusOrder() != 0");
+    }
+
+    if (!exceptions.testFlag(DefaultException::ContentsMargins) && !w->contentsMargins().isNull()) {
+        errors.push_back("contentsMargins() set");
+    }
+
+    if (!exceptions.testFlag(DefaultException::Palette) && !w->palette().isNull()) {
+        errors.push_back("palette() is not null");
+    }
+
+    if (!exceptions.testFlag(DefaultException::PaletteClass) && w->paletteClass().size()) {
+        errors.push_back("paletteClass() not empty");
+    }
+
+    if (!exceptions.testFlag(DefaultException::CursorStyle) && w->cursorStyle() != Tui::CursorStyle::Unset) {
+        errors.push_back("cursorStyle() != Unset");
+    }
+
+    if (!exceptions.testFlag(DefaultException::Focus) && w->focus()) {
+        errors.push_back("has focus");
+    }
+
+    return errors;
 }

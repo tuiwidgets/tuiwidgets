@@ -10,6 +10,7 @@
 #include <Tui/ZLayout.h>
 #include <Tui/ZPainter.h>
 #include <Tui/ZRoot.h>
+#include <Tui/ZTerminal.h>
 #include <Tui/ZWindow.h>
 
 #include "../third-party/catch.hpp"
@@ -112,5 +113,31 @@ public:
 protected:
     void paintEvent(Tui::ZPaintEvent *event) override;
 };
+
+enum class DefaultException {
+    Enabled = 1 << 0,
+    Visible = 1 << 1,
+    MinimumSize = 1 << 2,
+    MaximumSize = 1 << 3,
+    SizePolicyH = 1 << 4,
+    SizePolicyV = 1 << 5,
+    Layout = 1 << 6,
+    FocusPolicy = 1 << 7,
+    FocusMode = 1 << 8,
+    FocusOrder = 1 << 9,
+    ContentsMargins = 1 << 10,
+    Palette = 1 << 11,
+    PaletteClass = 1 << 12,
+    CursorStyle = 1 << 13,
+    Focus = 1 << 14
+};
+
+Q_DECLARE_FLAGS(DefaultExceptions, DefaultException)
+Q_DECLARE_OPERATORS_FOR_FLAGS(DefaultExceptions)
+
+[[nodiscard]]
+std::vector<std::string> checkWidgetsDefaultsExcept(const Tui::ZWidget *w, DefaultExceptions exceptions = {});
+
+#define FAIL_CHECK_VEC(x) do { for (const auto& f : x) { FAIL_CHECK(f);} } while (0)
 
 #endif // TESTHELPER_H
