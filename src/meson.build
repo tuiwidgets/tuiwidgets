@@ -4,6 +4,7 @@ qt5_dep = dependency('qt5', modules: 'Core')
 #ide:editable-filelist
 tuiwidgets_moc_headers = [
   'Tui/ZBasicWindowFacet.h',
+  'Tui/ZCheckBox.h',
   'Tui/ZCommandManager.h',
   'Tui/ZCommandNotifier.h',
   'Tui/ZLabel.h',
@@ -24,6 +25,7 @@ tuiwidgets_moc_headers = [
 # find Tui -name "*.h" | grep -E -v -e "_p" -e "^Tui/[A-Y]" | sed -e "s/\\(.*\\)/  '\1',/" | sort
 tuiwidgets_public_headers = [
   'Tui/ZBasicWindowFacet.h',
+  'Tui/ZCheckBox.h',
   'Tui/ZColor.h',
   'Tui/ZCommandManager.h',
   'Tui/ZCommandNotifier.h',
@@ -68,6 +70,7 @@ tuiwidgets_sources = [
   'Tui/ZBasicWindowFacet.cpp',
   'Tui/ListNode.cpp',
   'Tui/MarkupParser.cpp',
+  'Tui/ZCheckBox.cpp',
   'Tui/ZColor.cpp',
   'Tui/ZCommandManager.cpp',
   'Tui/ZCommandNotifier.cpp',
@@ -174,6 +177,7 @@ test('testtoolkitinternal',
 #ide:editable-filelist
 test_files = [
   'tests/basicwindowfacet/basicwindowfacet.cpp',
+  'tests/checkbox/checkbox.cpp',
   'tests/color/color.cpp',
   'tests/Testhelper.cpp',
   'tests/label/label.cpp',
