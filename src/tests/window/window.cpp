@@ -45,20 +45,33 @@ TEST_CASE("window-base", "") {
 
     Tui::ZWindow w(parent ? &parentWidget : nullptr);
 
-    SECTION("defaults") {
-        CHECK(w.windowTitle() == "");
-        CHECK(w.options() == Tui::ZWindow::Options{});
-        CHECK(w.borderEdges() == (Qt::TopEdge | Qt::RightEdge | Qt::BottomEdge | Qt::LeftEdge));
-        CHECK(w.focusMode() == Tui::FocusContainerMode::Cycle);
-        CHECK(w.paletteClass() == QStringList{"window"});
-        CHECK(w.sizePolicyH() == Tui::SizePolicy::Expanding);
-        CHECK(w.sizePolicyV() == Tui::SizePolicy::Expanding);
-        auto windowFacet = w.facet(Tui::ZWindowFacet::staticMetaObject);
+    auto checkDefaultState = [] (Tui::ZWindow *w) {
+        CHECK(w->options() == Tui::ZWindow::Options{});
+        CHECK(w->borderEdges() == (Qt::TopEdge | Qt::RightEdge | Qt::BottomEdge | Qt::LeftEdge));
+        CHECK(w->focusMode() == Tui::FocusContainerMode::Cycle);
+        CHECK(w->paletteClass() == QStringList{"window"});
+        CHECK(w->sizePolicyH() == Tui::SizePolicy::Expanding);
+        CHECK(w->sizePolicyV() == Tui::SizePolicy::Expanding);
+        auto windowFacet = w->facet(Tui::ZWindowFacet::staticMetaObject);
         CHECK(windowFacet != nullptr);
         CHECK(windowFacet->metaObject()->className() == Tui::ZBasicWindowFacet::staticMetaObject.className());
         CHECK(static_cast<Tui::ZWindowFacet*>(windowFacet)->isManuallyPlaced() == true);
+        FAIL_CHECK_VEC(checkWidgetsDefaultsExcept(w, DefaultException::SizePolicyV
+                                                   | DefaultException::SizePolicyH
+                                                   | DefaultException::FocusMode
+                                                   | DefaultException::PaletteClass));
+    };
+
+
+    SECTION("constructor") {
+        CHECK(w.windowTitle() == "");
+        checkDefaultState(&w);
+    }
+
+    SECTION("constructor-with-title") {
         Tui::ZWindow w2("Breakpoints");
         CHECK(w2.windowTitle() == "Breakpoints");
+        checkDefaultState(&w);
     }
 
     SECTION("get-set-title") {
