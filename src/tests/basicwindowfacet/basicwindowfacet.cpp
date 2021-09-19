@@ -33,7 +33,7 @@ TEST_CASE("basicwindowfacet-base") {
 
     CAPTURE(testCase.name);
 
-    facet.setDefaultPlacement(testCase.align, {0,0});
+    facet.setDefaultPlacement(testCase.align, {0, 0});
     CHECK(facet.isManuallyPlaced() == false);
 
     facet.autoPlace({100, 30}, &w);

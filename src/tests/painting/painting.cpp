@@ -118,12 +118,12 @@ Cell readCell(termpaint_surface *surface, int x, int y) {
 }
 
 static void checkEmptyPlusSome(termpaint_surface *surface,
-                               const std::map<std::tuple<int,int>, Cell> &some,
+                               const std::map<std::tuple<int, int>, Cell> &some,
                                Cell empty = singleWideChar(TERMPAINT_ERASED)) {
     const int width = termpaint_surface_width(surface);
     const int height = termpaint_surface_height(surface);
     for (auto it = some.begin(); it != some.end(); it++) {
-       std::tuple<int,int> key = it->first;
+       std::tuple<int, int> key = it->first;
        CHECK(std::get<0>(key) < width);
        CHECK(std::get<0>(key) >= 0);
        CHECK(std::get<1>(key) < height);
@@ -584,7 +584,7 @@ TEST_CASE("ZPainter: translateAndClip") {
     }
 
     SECTION("clearSoftwrapMarker") {
-        std::map<std::tuple<int,int>, Cell> expected;
+        std::map<std::tuple<int, int>, Cell> expected;
         for (int x = -2; x <= 3; x++) {
             for (int y = -2; y <= 3; y++) {
                 painterUnclipped.setSoftwrapMarker(x, y);
@@ -607,7 +607,7 @@ TEST_CASE("ZPainter: translateAndClip") {
     SECTION("setSoftwrapMarker") {
         Tui::ZPainter painter = useQRect ? painterUnclipped.translateAndClip({1, 2, 3, 3})
                                          : painterUnclipped.translateAndClip(1, 2, 3, 3);
-        std::map<std::tuple<int,int>, Cell> expected;
+        std::map<std::tuple<int, int>, Cell> expected;
         for (int y = -2; y <= 3; y++) {
             for (int x = -2; x <= 3; x++) {
                 painter.setSoftwrapMarker(x, y);
@@ -623,7 +623,7 @@ TEST_CASE("ZPainter: translateAndClip") {
     SECTION("setForeground") {
         Tui::ZPainter painter = useQRect ? painterUnclipped.translateAndClip({1, 2, 3, 3})
                                          : painterUnclipped.translateAndClip(1, 2, 3, 3);
-        std::map<std::tuple<int,int>, Cell> expected;
+        std::map<std::tuple<int, int>, Cell> expected;
         for (int y = -2; y <= 3; y++) {
             for (int x = -2; x <= 3; x++) {
                 painter.setForeground(x, y, Tui::TerminalColor::red);
@@ -639,7 +639,7 @@ TEST_CASE("ZPainter: translateAndClip") {
     SECTION("setBackground") {
         Tui::ZPainter painter = useQRect ? painterUnclipped.translateAndClip({1, 2, 3, 3})
                                          : painterUnclipped.translateAndClip(1, 2, 3, 3);
-        std::map<std::tuple<int,int>, Cell> expected;
+        std::map<std::tuple<int, int>, Cell> expected;
         for (int y = -2; y <= 3; y++) {
             for (int x = -2; x <= 3; x++) {
                 painter.setBackground(x, y, Tui::TerminalColor::red);
@@ -915,7 +915,7 @@ TEST_CASE("ZPainter: translateAndClip write") {
         for (int y = -2; y <= 3; y++) {
             for (int x = -2; x <= 3; x++) {
                 if(y == 0) continue;
-                INFO("x,y: " << x << y);
+                INFO("x, y: " << x << y);
                 writeWithColorsWrapper(kind, painter, x, y, "0123456789", Tui::TerminalColor::cyan, Tui::TerminalColor::green);
                 checkEmptyPlusSome(f.surface, {});
             }
@@ -971,7 +971,7 @@ TEST_CASE("ZPainter: translateAndClip write") {
         for (int y = -2; y <= 3; y++) {
             for (int x = -2; x <= 3; x++) {
                 if(y == 0) continue;
-                INFO("x,y: " << x << y);
+                INFO("x, y: " << x << y);
                 writeWithAttributesWrapper(kind, painter, x, y, "0123456789", Tui::TerminalColor::cyan, Tui::TerminalColor::green, Tui::ZTextAttribute::Bold);
                 checkEmptyPlusSome(f.surface, {});
             }

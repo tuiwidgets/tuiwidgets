@@ -162,7 +162,7 @@ TEST_CASE("zcolor - color types") {
 }
 
 TEST_CASE("zcolor - guess rgb") {
-    struct TestCase { int nr; int r,g,b; };
+    struct TestCase { int nr; int r, g, b; };
     auto testCase = GENERATE(
         TestCase{ 0, 0, 0, 0 }, TestCase{ 1, 0xaa, 0, 0 }, TestCase{ 2, 0, 0xaa, 0 }, TestCase{ 3, 0xaa, 0xaa, 0 },
         TestCase{ 4, 0, 0, 0xaa }, TestCase{ 5, 0xaa, 0, 0xaa }, TestCase{ 6, 0, 0xaa, 0xaa }, TestCase{ 7, 0xaa, 0xaa, 0xaa },

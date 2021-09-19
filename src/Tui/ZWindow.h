@@ -32,7 +32,7 @@ public:
     Qt::Edges borderEdges() const;
     void setBorderEdges(Qt::Edges borders);
 
-    void setDefaultPlacement(Qt::Alignment align, QPoint displace = {0,0});
+    void setDefaultPlacement(Qt::Alignment align, QPoint displace = {0, 0});
 
     QSize sizeHint() const override;
     QRect layoutArea() const override;
