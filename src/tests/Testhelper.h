@@ -28,6 +28,7 @@ public:
 
 public:
     Testhelper(QString dir, QString namePrefix, int width, int height, Options options = {});
+    ~Testhelper() { delete root; }
 
     void sendChar(QString ch, Qt::KeyboardModifiers modifiers = {});
     void sendKey(Qt::Key key, Qt::KeyboardModifiers modifiers = {});
