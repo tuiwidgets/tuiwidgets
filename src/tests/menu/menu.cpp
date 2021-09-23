@@ -1159,9 +1159,9 @@ TEST_CASE("menubar-margin", "") {
 }
 
 TEST_CASE("without-terminal", "") {
-    Tui::ZWindow *w = new Tui::ZWindow(nullptr);
-    w->setGeometry({0, 0, 15, 5});
-    Tui::ZMenubar *m = new Tui::ZMenubar(w);
+    Tui::ZWindow w;
+    w.setGeometry({0, 0, 15, 5});
+    Tui::ZMenubar *m = new Tui::ZMenubar(&w);
     m->sizeHint();
     m->right();
     m->left();
