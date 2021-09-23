@@ -6,6 +6,8 @@
 TUIWIDGETS_NS_START
 
 class ZWindowFacetPrivate {
+public:
+    virtual ~ZWindowFacetPrivate();
 };
 
 TUIWIDGETS_NS_END

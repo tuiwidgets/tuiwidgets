@@ -20,7 +20,7 @@ public:
 protected:
     ZWindowFacet();
     ZWindowFacet(std::unique_ptr<ZWindowFacetPrivate> pimpl);
-    ~ZWindowFacet();
+    ~ZWindowFacet() override;
 
     std::unique_ptr<ZWindowFacetPrivate> tuiwidgets_pimpl_ptr;
 

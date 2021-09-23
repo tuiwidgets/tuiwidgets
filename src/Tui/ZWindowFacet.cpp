@@ -20,4 +20,6 @@ bool ZWindowFacet::isManuallyPlaced() const { return true; }
 
 void ZWindowFacet::autoPlace(const QSize &available, ZWidget *self) { (void)available; (void)self; }
 
+ZWindowFacetPrivate::~ZWindowFacetPrivate() = default;
+
 TUIWIDGETS_NS_END
