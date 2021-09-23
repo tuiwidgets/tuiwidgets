@@ -195,7 +195,9 @@ void ZMenubar::close() {
     if (!parentWidget() || p->items.isEmpty()) {
         return;
     }
-    delete p->activeMenu;
+    if (p->activeMenu) {
+        p->activeMenu->deleteLater();
+    }
     grabKeyboard(); // hack to make sure keyboard grab is released
     releaseKeyboard();
     p->active = false;

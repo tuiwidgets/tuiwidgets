@@ -653,7 +653,7 @@ TEST_CASE("submenu", "") {
     m->setGeometry({0, 0, 15, 1});
 
     m->setItems({
-                    {"<m>o</m>ne", "", {}, {
+                    {"<m>o</m>ne", nullptr, [] { return QVector<Tui::ZMenuItem>{
                          {"Kilo", "", "kilo", {}},
                          {"Mega", "", "mega", {}},
                          {"<m>G</m>iga", "", "giga", {}},
@@ -663,7 +663,7 @@ TEST_CASE("submenu", "") {
                          {"Exa", "", "exa", {}},
                          {"Zetta", "", "zetta", {}},
                          {"Yotta", "", "yotta", {}}
-                     }},
+                     };}},
                     {"Edit", "", {}, {
                          {"😀", "", "", {}},
                          {"😀😁", "", "", {}},
