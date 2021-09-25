@@ -22,6 +22,7 @@ tuiwidgets_moc_headers = [
   'Tui/ZTextLine.h',
   'Tui/ZWidget.h',
   'Tui/ZWindow.h',
+  'Tui/ZWindowContainer.h',
   'Tui/ZWindowFacet.h',
 ]
 
@@ -60,6 +61,7 @@ tuiwidgets_public_headers = [
   'Tui/ZValuePtr.h',
   'Tui/ZWidget.h',
   'Tui/ZWindow.h',
+  'Tui/ZWindowContainer.h',
   'Tui/ZWindowFacet.h',
   'Tui/tuiwidgets_internal.h',
   # not public, but needed until users are migrated from staging to toolkit proper
@@ -110,6 +112,7 @@ tuiwidgets_sources = [
   'Tui/ZValuePtr.cpp',
   'Tui/ZWidget.cpp',
   'Tui/ZWindow.cpp',
+  'Tui/ZWindowContainer.cpp',
   'Tui/ZWindowFacet.cpp',
 ]
 

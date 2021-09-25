@@ -4,6 +4,7 @@
 #include <QObject>
 
 #include <Tui/ZWidget.h>
+#include <Tui/ZWindowContainer.h>
 
 #include <Tui/tuiwidgets_internal.h>
 
@@ -16,6 +17,8 @@ public:
     virtual bool isExtendViewport() const;
     virtual bool isManuallyPlaced() const;
     virtual void autoPlace(const QSize &available, ZWidget *self);
+    virtual ZWindowContainer *container();
+    virtual void setContainer(ZWindowContainer *container);
 
     virtual void setManuallyPlaced(bool manual);
 

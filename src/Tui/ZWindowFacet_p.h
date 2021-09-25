@@ -1,6 +1,8 @@
 #ifndef TUIWIDGETS_ZWINDOWFACET_P_INCLUDED
 #define TUIWIDGETS_ZWINDOWFACET_P_INCLUDED
 
+#include <Tui/ZWindowFacet.h>
+
 #include <Tui/tuiwidgets_internal.h>
 
 TUIWIDGETS_NS_START
@@ -11,6 +13,7 @@ public:
 
 public:
     bool manuallyPlaced = true;
+    ZWindowContainer *container = nullptr;
 };
 
 TUIWIDGETS_NS_END

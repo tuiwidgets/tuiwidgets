@@ -17,6 +17,7 @@ TEST_CASE("ZWindowFacet") {
     SECTION("defaults-and-fixed") {
         CHECK(f.isExtendViewport() == false);
         CHECK(f.isManuallyPlaced() == true);
+        CHECK(f.container() == nullptr);
     }
 
     SECTION("setManuallyPlaced") {
@@ -40,4 +41,13 @@ TEST_CASE("ZWindowFacet") {
         CHECK(w.geometry() == QRect(200, 200, 10, 20));
         f.setManuallyPlaced(true);
     }
+
+    SECTION("setContainer") {
+        Tui::ZWindowContainer container;
+        f.setContainer(&container);
+        CHECK(f.container() == &container);
+        f.setContainer(nullptr);
+        CHECK(f.container() == nullptr);
+    }
+
 }

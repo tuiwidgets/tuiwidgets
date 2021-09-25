@@ -40,6 +40,16 @@ void ZWindowFacet::setManuallyPlaced(bool manual) {
     p->manuallyPlaced = manual;
 }
 
+ZWindowContainer *ZWindowFacet::container() {
+    auto *const p = tuiwidgets_impl();
+    return p->container;
+}
+
+void ZWindowFacet::setContainer(ZWindowContainer *container) {
+    auto *const p = tuiwidgets_impl();
+    p->container = container;
+}
+
 ZWindowFacetPrivate::~ZWindowFacetPrivate() = default;
 
 TUIWIDGETS_NS_END
