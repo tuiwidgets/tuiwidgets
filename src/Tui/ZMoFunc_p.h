@@ -15,6 +15,7 @@ class ZMoFunc;
 template<typename ReturnType, typename... Args>
 class ZMoFunc<ReturnType(Args...)> {
     // Not implementing small object optimization keeps this fairly simple
+    // It also allows to be safe against deletion/reassignment while the function is running.
 public:
     ZMoFunc() {}
     ZMoFunc(std::nullptr_t) {}
@@ -23,7 +24,7 @@ public:
 
     template <typename F>
     ZMoFunc(F&& f)
-        : _impl(std::make_unique<Impl<std::decay_t<F>>>(std::forward<F&&>(f)))
+        : _impl(new Impl<std::decay_t<F>>(std::forward<F&&>(f)))
     {
     }
 
@@ -50,6 +51,34 @@ private:
     struct Base {
         virtual ~Base() = default;
         virtual ReturnType operator()(Args... args) = 0;
+
+        int refs = 1;
+        void addRef() {
+            refs++;
+        }
+        void release() {
+            refs--;
+            if (refs == 0) {
+                delete this;
+            }
+        }
+        struct Deleter {
+            void operator()(Base *t) {
+                t->release();
+            }
+        };
+
+        struct KeepAlive {
+            KeepAlive(Base *b) : b(b) {
+                b->addRef();
+            }
+
+            ~KeepAlive() {
+                b->release();
+            }
+
+            Base *b;
+        };
     };
 
 
@@ -62,13 +91,14 @@ private:
         }
 
         virtual ReturnType operator()(Args... args) override {
+            typename Base::KeepAlive ka{this};
             return _f(args...);
         }
 
         F _f;
     };
 
-    std::unique_ptr<Base> _impl;
+    std::unique_ptr<Base, typename Base::Deleter> _impl;
 };
 
 }
