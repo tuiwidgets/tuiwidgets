@@ -131,7 +131,7 @@ void ZRoot::resizeEvent(ZResizeEvent *event) {
         if (childWidget) {
             ZWindowFacet *windowFacet = static_cast<ZWindowFacet*>(childWidget->facet(ZWindowFacet::staticMetaObject));
             if (windowFacet) {
-                if (!windowFacet->isManuallyPlaced()) {
+                if (!windowFacet->isManuallyPlaced() && !windowFacet->container()) {
                     windowFacet->autoPlace({width, height}, childWidget);
                     continue;
                 }
