@@ -9,6 +9,8 @@
 #include <Tui/ZCommon.h>
 
 #include <Tui/ZEvent.h>
+#include <Tui/ZMoFunc_p.h>
+
 #include <Tui/tuiwidgets_internal.h>
 
 TUIWIDGETS_NS_START
@@ -115,6 +117,7 @@ public:
 
     void setFocus(Qt::FocusReason reason = Qt::OtherFocusReason);
     void grabKeyboard();
+    void grabKeyboard(Private::ZMoFunc<void(QEvent*)> handler);
     void releaseKeyboard();
 
     bool isAncestorOf(const ZWidget *child) const;

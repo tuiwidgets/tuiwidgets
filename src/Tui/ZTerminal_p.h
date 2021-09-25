@@ -13,6 +13,7 @@
 #include <termpaint.h>
 
 #include <Tui/ListNode_p.h>
+#include <Tui/ZMoFunc_p.h>
 #include <Tui/ZTerminal.h>
 
 #include <Tui/tuiwidgets_internal.h>
@@ -37,6 +38,7 @@ public:
     ZWidget *focus();
 
     void setKeyboardGrab(ZWidget *w);
+    void setKeyboardGrab(ZWidget *w, Private::ZMoFunc<void(QEvent*)> handler);
     ZWidget *keyboardGrab();
 
     ZShortcutManager* ensureShortcutManager();
@@ -103,6 +105,7 @@ public:
     ZWidgetPrivate *focusWidget = nullptr;
     ListHead<ZWidgetPrivate, FocusHistoryTag> focusHistory;
     QPointer<ZWidget> keyboardGrabWidget;
+    Private::ZMoFunc<void(QEvent*)> keyboardGrabHandler;
     std::unique_ptr<ZShortcutManager> shortcutManager;
     ZTerminal::Options options;
     QString title;

@@ -500,6 +500,11 @@ void ZWidget::grabKeyboard() {
     termp->setKeyboardGrab(this);
 }
 
+void ZWidget::grabKeyboard(Private::ZMoFunc<void(QEvent*)> handler) {
+    ZTerminalPrivate *termp = ZTerminalPrivate::get(tuiwidgets_impl()->findTerminal());
+    termp->setKeyboardGrab(this, std::move(handler));
+}
+
 void ZWidget::releaseKeyboard() {
     ZTerminalPrivate *termp = ZTerminalPrivate::get(tuiwidgets_impl()->findTerminal());
     if (termp->keyboardGrab() == this) {

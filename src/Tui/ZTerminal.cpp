@@ -72,9 +72,18 @@ ZWidget *ZTerminalPrivate::focus() {
 
 void ZTerminalPrivate::setKeyboardGrab(ZWidget *w) {
     keyboardGrabWidget = w;
+    keyboardGrabHandler = {};
+}
+
+void ZTerminalPrivate::setKeyboardGrab(ZWidget *w, Private::ZMoFunc<void(QEvent*)> handler) {
+    keyboardGrabWidget = w;
+    keyboardGrabHandler = std::move(handler);
 }
 
 ZWidget *ZTerminalPrivate::keyboardGrab() {
+    if (!keyboardGrabWidget && keyboardGrabHandler) {
+        keyboardGrabHandler = {};
+    }
     return keyboardGrabWidget;
 }
 
@@ -543,6 +552,7 @@ void ZTerminal::setMainWidget(ZWidget *w) {
         p->focusWidget = nullptr;
         p->focusHistory.clear();
         p->keyboardGrabWidget = nullptr;
+        p->keyboardGrabHandler = {};
         p->layoutPendingWidgets.clear();
         LayoutGenerationUpdaterScope generationUpdater(p->layoutGeneration);
     }
@@ -907,7 +917,11 @@ std::unique_ptr<ZKeyEvent> ZTerminal::translateKeyEvent(const ZTerminalNativeEve
 void ZTerminal::dispatchKeyboardEvent(ZKeyEvent &translated) {
     auto *const p = tuiwidgets_impl();
     if (p->keyboardGrabWidget) {
-        QCoreApplication::sendEvent(p->keyboardGrabWidget, &translated);
+        if (p->keyboardGrabHandler) {
+            p->keyboardGrabHandler(&translated);
+        } else {
+            QCoreApplication::sendEvent(p->keyboardGrabWidget, &translated);
+        }
     } else if (!p->shortcutManager || !p->shortcutManager->process(&translated)) {
         translated.accept();
         QPointer<ZWidget> w = tuiwidgets_impl()->focus();
@@ -924,7 +938,11 @@ void ZTerminal::dispatchKeyboardEvent(ZKeyEvent &translated) {
 void ZTerminal::dispatchPasteEvent(ZPasteEvent &translated) {
     auto *const p = tuiwidgets_impl();
     if (p->keyboardGrabWidget) {
-        QCoreApplication::sendEvent(p->keyboardGrabWidget, &translated);
+        if (p->keyboardGrabHandler) {
+            p->keyboardGrabHandler(&translated);
+        } else {
+            QCoreApplication::sendEvent(p->keyboardGrabWidget, &translated);
+        }
     } else {
         QPointer<ZWidget> w = tuiwidgets_impl()->focus();
         while (w) {
