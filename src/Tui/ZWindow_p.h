@@ -16,12 +16,18 @@ public:
 
 public:
     void ensureAutoPlacement();
+    void startInteractiveGeometry(ZWindow *pub);
+    void cancelInteractiveGeometry(ZWindow *pub);
+    void finalizeInteractiveGeometry(ZWindow *pub);
 
 public:
     ZWindow::Options options;
     QString windowTitle;
     Qt::Edges borders = Qt::TopEdge | Qt::RightEdge | Qt::BottomEdge | Qt::LeftEdge;
     std::unique_ptr<ZBasicWindowFacet> windowFacet;
+    bool interactiveMode = false;
+    QRect interactiveInitialGeometry;
+    bool interactiveInitialManuallyPlaced = false;
 };
 
 TUIWIDGETS_NS_END

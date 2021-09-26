@@ -23,6 +23,8 @@ ZWindow::ZWindow(ZWidget *parent) : ZWidget(parent, std::make_unique<ZWindowPriv
     setSizePolicyH(SizePolicy::Expanding);
     setSizePolicyV(SizePolicy::Expanding);
 
+    QObject::connect(new ZCommandNotifier("ZWindowInteractiveMove", this, Qt::WindowShortcut), &ZCommandNotifier::activated, this, &ZWindow::startInteractiveMove);
+    QObject::connect(new ZCommandNotifier("ZWindowInteractiveResize", this, Qt::WindowShortcut), &ZCommandNotifier::activated, this, &ZWindow::startInteractiveResize);
     QObject::connect(new ZCommandNotifier("ZWindowClose", this, Qt::WindowShortcut), &ZCommandNotifier::activated, this, &ZWindow::close);
 }
 
@@ -65,6 +67,66 @@ bool ZWindow::showSystemMenu() {
     } else {
         return false;
     }
+}
+
+void ZWindow::startInteractiveMove() {
+    auto *const p = tuiwidgets_impl();
+    p->startInteractiveGeometry(this);
+    grabKeyboard([this] (QEvent *event) {
+        auto *const p = tuiwidgets_impl();
+        if (event->type() == ZEventType::key()) {
+            auto *keyEvent = static_cast<ZKeyEvent*>(event);
+            if (keyEvent->key() == Qt::Key_Enter) {
+                p->finalizeInteractiveGeometry(this);
+            } else if (keyEvent->key() == Qt::Key_Escape) {
+                p->cancelInteractiveGeometry(this);
+            } else if (keyEvent->key() == Qt::Key_Left) {
+                QRect g = geometry();
+                setGeometry(g.translated(-1, 0));
+            } else if (keyEvent->key() == Qt::Key_Right) {
+                QRect g = geometry();
+                setGeometry(g.translated(1, 0));
+            } else if (keyEvent->key() == Qt::Key_Up) {
+                QRect g = geometry();
+                setGeometry(g.translated(0, -1));
+            } else if (keyEvent->key() == Qt::Key_Down) {
+                QRect g = geometry();
+                setGeometry(g.translated(0, 1));
+            }
+        }
+    });
+}
+
+void ZWindow::startInteractiveResize() {
+    auto *const p = tuiwidgets_impl();
+    p->startInteractiveGeometry(this);
+    grabKeyboard([this] (QEvent *event) {
+        auto *const p = tuiwidgets_impl();
+        if (event->type() == ZEventType::key()) {
+            auto *keyEvent = static_cast<ZKeyEvent*>(event);
+            if (keyEvent->key() == Qt::Key_Enter) {
+                p->finalizeInteractiveGeometry(this);
+            } else if (keyEvent->key() == Qt::Key_Escape) {
+                p->cancelInteractiveGeometry(this);
+            } else if (keyEvent->key() == Qt::Key_Left) {
+                QRect g = geometry();
+                g.setWidth(std::max(effectiveMinimumSize().width(), std::max(3, g.width() - 1)));
+                setGeometry(g);
+            } else if (keyEvent->key() == Qt::Key_Right) {
+                QRect g = geometry();
+                g.setWidth(std::min(maximumSize().width(), g.width() + 1));
+                setGeometry(g);
+            } else if (keyEvent->key() == Qt::Key_Up) {
+                QRect g = geometry();
+                g.setHeight(std::max(effectiveMinimumSize().height(), std::max(3, g.height() - 1)));
+                setGeometry(g);
+            } else if (keyEvent->key() == Qt::Key_Down) {
+                QRect g = geometry();
+                g.setHeight(std::min(maximumSize().height(), g.height() + 1));
+                setGeometry(g);
+            }
+        }
+    });
 }
 
 ZWindow::Options ZWindow::options() const {
@@ -185,8 +247,13 @@ void ZWindow::paintEvent(ZPaintEvent *event) {
     bool active = isInFocusPath();
 
     if (active) {
-        frameBg = getColor("window.frame.focused.bg");
-        frameFg = getColor("window.frame.focused.fg");
+        if (!p->interactiveMode) {
+            frameBg = getColor("window.frame.focused.bg");
+            frameFg = getColor("window.frame.focused.fg");
+        } else {
+            frameBg = getColor("window.frame.focused.control.bg");
+            frameFg = getColor("window.frame.focused.control.fg");
+        }
         buttonBg = getColor("window.frame.focused.control.bg");
         buttonFg = getColor("window.frame.focused.control.fg");
     } else {
@@ -275,6 +342,14 @@ QVector<ZMenuItem> ZWindow::systemMenu() {
 
     QVector<ZMenuItem> ret;
 
+    if (options() & MoveOption) {
+        ret.append(ZMenuItem{QStringLiteral("<m>M</m>ove"), QString(), QStringLiteral("ZWindowInteractiveMove"), {}});
+    }
+
+    if (options() & ResizeOption) {
+        ret.append(ZMenuItem{QStringLiteral("<m>R</m>esize"), QString(), QStringLiteral("ZWindowInteractiveResize"), {}});
+    }
+
     if (options() & CloseOption) {
         if (ret.size()) {
             ret.append(ZMenuItem{});
@@ -320,6 +395,33 @@ void ZWindowPrivate::ensureAutoPlacement() {
             }
         }
     }
+}
+
+void ZWindowPrivate::startInteractiveGeometry(ZWindow *pub) {
+    interactiveInitialGeometry = pub->geometry();
+    interactiveMode = true;
+    auto *windowFacet = qobject_cast<ZWindowFacet*>(pub->facet(ZWindowFacet::staticMetaObject));
+    if (windowFacet) {
+        interactiveInitialManuallyPlaced = windowFacet->isManuallyPlaced();
+        windowFacet->setManuallyPlaced(true);
+    }
+}
+
+void ZWindowPrivate::cancelInteractiveGeometry(ZWindow *pub) {
+    interactiveMode = false;
+    pub->releaseKeyboard();
+    pub->setGeometry(interactiveInitialGeometry);
+    auto *windowFacet = qobject_cast<ZWindowFacet*>(pub->facet(ZWindowFacet::staticMetaObject));
+    if (windowFacet) {
+        windowFacet->setManuallyPlaced(interactiveInitialManuallyPlaced);
+    }
+    pub->update();
+}
+
+void ZWindowPrivate::finalizeInteractiveGeometry(ZWindow *pub) {
+    interactiveMode = false;
+    pub->releaseKeyboard();
+    pub->update();
 }
 
 void ZWindow::close() {

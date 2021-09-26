@@ -35,6 +35,15 @@ protected:
     }
 };
 
+
+namespace {
+
+    class CustomWindowFacet : public Tui::ZWindowFacet {
+    };
+
+}
+
+
 TEST_CASE("window-base", "") {
 
     bool parent = GENERATE(false, true);
@@ -415,6 +424,60 @@ TEST_CASE("window-systemmenu", "") {
         CHECK(menu[0].subitems().isEmpty());
     }
 
+    SECTION("menu-move-option") {
+        TestWindow w;
+        w.setOptions({ Tui::ZWindow::MoveOption });
+        QVector<Tui::ZMenuItem> menu = w.retrieveSystemMenu();
+        REQUIRE(menu.size() == 1);
+        CHECK(menu[0].markup() == "<m>M</m>ove");
+        CHECK(menu[0].fakeShortcut() == "");
+        auto moveSym = TUISYM_LITERAL("ZWindowInteractiveMove");
+        CHECK(menu[0].command() == moveSym);
+        CHECK(menu[0].subitems().isEmpty());
+    }
+
+    SECTION("menu-resize-option") {
+        TestWindow w;
+        w.setOptions({ Tui::ZWindow::ResizeOption });
+        QVector<Tui::ZMenuItem> menu = w.retrieveSystemMenu();
+        REQUIRE(menu.size() == 1);
+        CHECK(menu[0].markup() == "<m>R</m>esize");
+        CHECK(menu[0].fakeShortcut() == "");
+        auto resizeSym = TUISYM_LITERAL("ZWindowInteractiveResize");
+        CHECK(menu[0].command() == resizeSym);
+        CHECK(menu[0].subitems().isEmpty());
+    }
+
+    SECTION("menu-all-options") {
+        TestWindow w;
+        w.setOptions({ Tui::ZWindow::MoveOption  | Tui::ZWindow::ResizeOption | Tui::ZWindow::CloseOption });
+        QVector<Tui::ZMenuItem> menu = w.retrieveSystemMenu();
+        REQUIRE(menu.size() == 4);
+
+        CHECK(menu[0].markup() == "<m>M</m>ove");
+        CHECK(menu[0].fakeShortcut() == "");
+        auto moveSym = TUISYM_LITERAL("ZWindowInteractiveMove");
+        CHECK(menu[0].command() == moveSym);
+        CHECK(menu[0].subitems().isEmpty());
+
+        CHECK(menu[1].markup() == "<m>R</m>esize");
+        CHECK(menu[1].fakeShortcut() == "");
+        auto resizeSym = TUISYM_LITERAL("ZWindowInteractiveResize");
+        CHECK(menu[1].command() == resizeSym);
+        CHECK(menu[1].subitems().isEmpty());
+
+        CHECK(menu[2].markup() == "");
+        CHECK(menu[2].fakeShortcut() == "");
+        CHECK(menu[2].command() == Tui::ZSymbol());
+        CHECK(menu[2].subitems().isEmpty());
+
+        CHECK(menu[3].markup() == "<m>C</m>lose");
+        CHECK(menu[3].fakeShortcut() == "");
+        auto closeSym = TUISYM_LITERAL("ZWindowClose");
+        CHECK(menu[3].command() == closeSym);
+        CHECK(menu[3].subitems().isEmpty());
+    }
+
     SECTION("show-empty") {
         TestWindow w(t.root);
         w.setFocus();
@@ -527,6 +590,393 @@ TEST_CASE("window-systemmenu", "") {
         CHECK(triggered == true);
     }
 
+}
+
+TEST_CASE("window-interactivegeometry", "") {
+    Testhelper t("window", "window-interactivegeometry", 25, 10);
+
+    Tui::ZCommandManager *const cmdMgr = t.root->ensureCommandManager();
+
+    class CustomWindow : public Tui::ZWindow {
+    public:
+        using Tui::ZWindow::ZWindow;
+
+        QObject *facet(const QMetaObject metaObject) override {
+            if (metaObject.className() == Tui::ZWindowFacet::staticMetaObject.className()) {
+                return &winFacet;
+            } else {
+                return Tui::ZWindow::facet(metaObject);
+            }
+        }
+
+        CustomWindowFacet winFacet;
+    };
+
+    bool useCustomWindowFacet = GENERATE(false, true);
+
+    Tui::ZWindow *w;
+    if (useCustomWindowFacet) {
+        w = new CustomWindow(t.root);
+    } else {
+        w = new Tui::ZWindow(t.root);
+    }
+
+    w->setWindowTitle("Some");
+    w->setFocus();
+    w->setGeometry({2, 1, 21, 8});
+    auto *windowFacet = qobject_cast<Tui::ZWindowFacet*>(w->facet(Tui::ZWindowFacet::staticMetaObject));
+
+    bool useCommand = GENERATE(false, true);
+    bool initialManually = GENERATE(false, true);
+    windowFacet->setManuallyPlaced(initialManually);
+
+    auto ensureAndTriggerCommand = [cmdMgr](Tui::ZSymbol sym) {
+        CHECK(cmdMgr->isCommandEnabled(sym));
+        cmdMgr->activateCommand(sym);
+    };
+
+    SECTION("move-activate-esc") {
+        if (!useCommand) {
+            w->startInteractiveMove();
+        } else {
+            ensureAndTriggerCommand(TUISYM_LITERAL("ZWindowInteractiveMove"));
+        }
+        CHECK(windowFacet->isManuallyPlaced() == true);
+        CHECK(t.terminal->keyboardGrabber() == w);
+
+        t.compare("base-interactive");
+        t.sendKey(Qt::Key_Escape);
+        t.compare("base-noninteractive");
+        CHECK(windowFacet->isManuallyPlaced() == initialManually);
+        CHECK(t.terminal->keyboardGrabber() == nullptr);
+    }
+
+    SECTION("move-left-up-esc") {
+        if (!useCommand) {
+            w->startInteractiveMove();
+        } else {
+            ensureAndTriggerCommand(TUISYM_LITERAL("ZWindowInteractiveMove"));
+        }
+        CHECK(windowFacet->isManuallyPlaced() == true);
+        CHECK(t.terminal->keyboardGrabber() == w);
+
+        t.compare("base-interactive");
+        t.sendKey(Qt::Key_Up);
+        t.sendKey(Qt::Key_Left);
+        t.compare("move-up-left");
+        t.sendKey(Qt::Key_Escape);
+        t.compare("base-noninteractive");
+        CHECK(windowFacet->isManuallyPlaced() == initialManually);
+        CHECK(t.terminal->keyboardGrabber() == nullptr);
+    }
+
+    SECTION("move-left-up-enter") {
+        if (!useCommand) {
+            w->startInteractiveMove();
+        } else {
+            ensureAndTriggerCommand(TUISYM_LITERAL("ZWindowInteractiveMove"));
+        }
+        CHECK(windowFacet->isManuallyPlaced() == true);
+        CHECK(t.terminal->keyboardGrabber() == w);
+
+        t.compare("base-interactive");
+        t.sendKey(Qt::Key_Up);
+        t.sendKey(Qt::Key_Left);
+        t.compare("move-up-left");
+        t.sendKey(Qt::Key_Enter);
+        t.compare("noninteractive-left-up");
+        CHECK(windowFacet->isManuallyPlaced() == true);
+        CHECK(t.terminal->keyboardGrabber() == nullptr);
+        CHECK(w->geometry() == QRect{1, 0, 21, 8});
+    }
+
+    SECTION("resize-activate-esc") {
+        if (!useCommand) {
+            w->startInteractiveResize();
+        } else {
+            ensureAndTriggerCommand(TUISYM_LITERAL("ZWindowInteractiveResize"));
+        }
+        CHECK(windowFacet->isManuallyPlaced() == true);
+        CHECK(t.terminal->keyboardGrabber() == w);
+
+        t.compare("base-interactive");
+        t.sendKey(Qt::Key_Escape);
+        t.compare("base-noninteractive");
+        CHECK(windowFacet->isManuallyPlaced() == initialManually);
+        CHECK(t.terminal->keyboardGrabber() == nullptr);
+    }
+
+    SECTION("resize-smaller-xy-esc") {
+        if (!useCommand) {
+            w->startInteractiveResize();
+        } else {
+            ensureAndTriggerCommand(TUISYM_LITERAL("ZWindowInteractiveResize"));
+        }
+        CHECK(windowFacet->isManuallyPlaced() == true);
+        CHECK(t.terminal->keyboardGrabber() == w);
+
+        t.compare("base-interactive");
+        t.sendKey(Qt::Key_Up);
+        t.sendKey(Qt::Key_Left);
+        t.compare("smaller-xy");
+        t.sendKey(Qt::Key_Escape);
+        t.compare("base-noninteractive");
+        CHECK(windowFacet->isManuallyPlaced() == initialManually);
+        CHECK(t.terminal->keyboardGrabber() == nullptr);
+    }
+
+    SECTION("resize-smaller-xy-enter") {
+        if (!useCommand) {
+            w->startInteractiveResize();
+        } else {
+            ensureAndTriggerCommand(TUISYM_LITERAL("ZWindowInteractiveResize"));
+        }
+        CHECK(windowFacet->isManuallyPlaced() == true);
+        CHECK(t.terminal->keyboardGrabber() == w);
+
+        t.compare("base-interactive");
+        t.sendKey(Qt::Key_Up);
+        t.sendKey(Qt::Key_Left);
+        t.compare("smaller-xy");
+        t.sendKey(Qt::Key_Enter);
+        t.compare("noninteractive-smaller-xy");
+        CHECK(windowFacet->isManuallyPlaced() == true);
+        CHECK(t.terminal->keyboardGrabber() == nullptr);
+        CHECK(w->geometry() == QRect{2, 1, 20, 7});
+    }
+
+    SECTION("move-keys-and-no-limits") {
+        if (!useCommand) {
+            w->startInteractiveMove();
+        } else {
+            ensureAndTriggerCommand(TUISYM_LITERAL("ZWindowInteractiveMove"));
+        }
+        CHECK(windowFacet->isManuallyPlaced() == true);
+        CHECK(t.terminal->keyboardGrabber() == w);
+
+        CHECK(w->geometry() == QRect{2, 1, 21, 8});
+        t.sendKey(Qt::Key_Left);
+        CHECK(w->geometry() == QRect{1, 1, 21, 8});
+        t.sendKey(Qt::Key_Left);
+        CHECK(w->geometry() == QRect{0, 1, 21, 8});
+
+        // now crossing into clipping
+        t.sendKey(Qt::Key_Left);
+        CHECK(w->geometry() == QRect{-1, 1, 21, 8});
+        t.sendKey(Qt::Key_Left);
+        CHECK(w->geometry() == QRect{-2, 1, 21, 8});
+        t.sendKey(Qt::Key_Right);
+        t.sendKey(Qt::Key_Right);
+        t.sendKey(Qt::Key_Right);
+        t.sendKey(Qt::Key_Right);
+        t.sendKey(Qt::Key_Right);
+        CHECK(w->geometry() == QRect{3, 1, 21, 8});
+        t.sendKey(Qt::Key_Right);
+        CHECK(w->geometry() == QRect{4, 1, 21, 8});
+
+        // now crossing into clipping
+        t.sendKey(Qt::Key_Right);
+        CHECK(w->geometry() == QRect{5, 1, 21, 8});
+        t.sendKey(Qt::Key_Right);
+        CHECK(w->geometry() == QRect{6, 1, 21, 8});
+
+        t.sendKey(Qt::Key_Left);
+        t.sendKey(Qt::Key_Left);
+        t.sendKey(Qt::Key_Left);
+        t.sendKey(Qt::Key_Left);
+        CHECK(w->geometry() == QRect{2, 1, 21, 8});
+
+        t.sendKey(Qt::Key_Up);
+        CHECK(w->geometry() == QRect{2, 0, 21, 8});
+
+        // now crossing into clipping
+        t.sendKey(Qt::Key_Up);
+        CHECK(w->geometry() == QRect{2, -1, 21, 8});
+        t.sendKey(Qt::Key_Up);
+        CHECK(w->geometry() == QRect{2, -2, 21, 8});
+
+        t.sendKey(Qt::Key_Down);
+        t.sendKey(Qt::Key_Down);
+        t.sendKey(Qt::Key_Down);
+
+        t.sendKey(Qt::Key_Down);
+        CHECK(w->geometry() == QRect{2, 2, 21, 8});
+
+        // now crossing into clipping
+        t.sendKey(Qt::Key_Down);
+        CHECK(w->geometry() == QRect{2, 3, 21, 8});
+        t.sendKey(Qt::Key_Down);
+        CHECK(w->geometry() == QRect{2, 4, 21, 8});
+
+        t.sendKey(Qt::Key_Escape);
+        CHECK(windowFacet->isManuallyPlaced() == initialManually);
+        CHECK(t.terminal->keyboardGrabber() == nullptr);
+    }
+
+    SECTION("resize-keys") {
+        if (!useCommand) {
+            w->startInteractiveResize();
+        } else {
+            ensureAndTriggerCommand(TUISYM_LITERAL("ZWindowInteractiveResize"));
+        }
+        CHECK(windowFacet->isManuallyPlaced() == true);
+        CHECK(t.terminal->keyboardGrabber() == w);
+
+        CHECK(w->geometry() == QRect{2, 1, 21, 8});
+
+        t.sendKey(Qt::Key_Left);
+        CHECK(w->geometry() == QRect{2, 1, 20, 8});
+        t.sendKey(Qt::Key_Left);
+        CHECK(w->geometry() == QRect{2, 1, 19, 8});
+
+        t.sendKey(Qt::Key_Right);
+        t.sendKey(Qt::Key_Right);
+
+        t.sendKey(Qt::Key_Up);
+        CHECK(w->geometry() == QRect{2, 1, 21, 7});
+        t.sendKey(Qt::Key_Up);
+        CHECK(w->geometry() == QRect{2, 1, 21, 6});
+
+        t.sendKey(Qt::Key_Down);
+        t.sendKey(Qt::Key_Down);
+
+        t.sendKey(Qt::Key_Down);
+        CHECK(w->geometry() == QRect{2, 1, 21, 9});
+
+        // now crossing into clipping
+        t.sendKey(Qt::Key_Down);
+        CHECK(w->geometry() == QRect{2, 1, 21, 10});
+        t.sendKey(Qt::Key_Down);
+        CHECK(w->geometry() == QRect{2, 1, 21, 11});
+        t.sendKey(Qt::Key_Down);
+        CHECK(w->geometry() == QRect{2, 1, 21, 12});
+
+        t.sendKey(Qt::Key_Right);
+        CHECK(w->geometry() == QRect{2, 1, 22, 12});
+        t.sendKey(Qt::Key_Right);
+        CHECK(w->geometry() == QRect{2, 1, 23, 12});
+        t.sendKey(Qt::Key_Right);
+        CHECK(w->geometry() == QRect{2, 1, 24, 12});
+        t.sendKey(Qt::Key_Right);
+        CHECK(w->geometry() == QRect{2, 1, 25, 12});
+
+        t.sendKey(Qt::Key_Escape);
+        CHECK(windowFacet->isManuallyPlaced() == initialManually);
+        CHECK(t.terminal->keyboardGrabber() == nullptr);
+    }
+
+    SECTION("resize-limit-3x3") {
+        w->setMinimumSize(1, 1);
+
+        // auto placement is potentially on here and might center w
+        w->setGeometry({10, 3, 5, 5});
+        REQUIRE(w->geometry() == QRect{10, 3, 5, 5});
+
+        if (!useCommand) {
+            w->startInteractiveResize();
+        } else {
+            ensureAndTriggerCommand(TUISYM_LITERAL("ZWindowInteractiveResize"));
+        }
+        CHECK(windowFacet->isManuallyPlaced() == true);
+        CHECK(t.terminal->keyboardGrabber() == w);
+
+        t.sendKey(Qt::Key_Left);
+        REQUIRE(w->geometry() == QRect{10, 3, 4, 5});
+
+        t.sendKey(Qt::Key_Left);
+        REQUIRE(w->geometry() == QRect{10, 3, 3, 5});
+
+        // Now at absolute minimum allowed width
+        t.sendKey(Qt::Key_Left);
+        REQUIRE(w->geometry() == QRect{10, 3, 3, 5});
+
+        t.sendKey(Qt::Key_Up);
+        REQUIRE(w->geometry() == QRect{10, 3, 3, 4});
+        t.sendKey(Qt::Key_Up);
+        REQUIRE(w->geometry() == QRect{10, 3, 3, 3});
+
+        // Now at absolute minimum allowed height
+        t.sendKey(Qt::Key_Up);
+        REQUIRE(w->geometry() == QRect{10, 3, 3, 3});
+
+        t.sendKey(Qt::Key_Escape);
+        CHECK(windowFacet->isManuallyPlaced() == initialManually);
+        CHECK(t.terminal->keyboardGrabber() == nullptr);
+    }
+
+    SECTION("resize-limit-miniumSize") {
+        w->setMinimumSize(5, 6);
+
+        // auto placement is potentially on here and might center w
+        w->setGeometry({9, 2, 7, 7});
+        REQUIRE(w->geometry() == QRect{9, 2, 7, 7});
+
+        if (!useCommand) {
+            w->startInteractiveResize();
+        } else {
+            ensureAndTriggerCommand(TUISYM_LITERAL("ZWindowInteractiveResize"));
+        }
+        CHECK(windowFacet->isManuallyPlaced() == true);
+        CHECK(t.terminal->keyboardGrabber() == w);
+
+        t.sendKey(Qt::Key_Left);
+        REQUIRE(w->geometry() == QRect{9, 2, 6, 7});
+
+        t.sendKey(Qt::Key_Left);
+        REQUIRE(w->geometry() == QRect{9, 2, 5, 7});
+
+        // Now at minimum allowed width
+        t.sendKey(Qt::Key_Left);
+        REQUIRE(w->geometry() == QRect{9, 2, 5, 7});
+
+        t.sendKey(Qt::Key_Up);
+        REQUIRE(w->geometry() == QRect{9, 2, 5, 6});
+
+        // Now at minimum allowed height
+        t.sendKey(Qt::Key_Up);
+        REQUIRE(w->geometry() == QRect{9, 2, 5, 6});
+
+        t.sendKey(Qt::Key_Escape);
+        CHECK(windowFacet->isManuallyPlaced() == initialManually);
+        CHECK(t.terminal->keyboardGrabber() == nullptr);
+    }
+
+    SECTION("resize-limit-maximumSize") {
+        w->setMaximumSize(9, 8);
+
+        // auto placement is potentially on here and might center w
+        w->setGeometry({9, 2, 7, 7});
+        REQUIRE(w->geometry() == QRect{9, 2, 7, 7});
+
+        if (!useCommand) {
+            w->startInteractiveResize();
+        } else {
+            ensureAndTriggerCommand(TUISYM_LITERAL("ZWindowInteractiveResize"));
+        }
+        CHECK(windowFacet->isManuallyPlaced() == true);
+        CHECK(t.terminal->keyboardGrabber() == w);
+
+        t.sendKey(Qt::Key_Right);
+        REQUIRE(w->geometry() == QRect{9, 2, 8, 7});
+
+        t.sendKey(Qt::Key_Right);
+        REQUIRE(w->geometry() == QRect{9, 2, 9, 7});
+
+        // Now at maximum allowed width
+        t.sendKey(Qt::Key_Right);
+        REQUIRE(w->geometry() == QRect{9, 2, 9, 7});
+
+        t.sendKey(Qt::Key_Down);
+        REQUIRE(w->geometry() == QRect{9, 2, 9, 8});
+
+        // Now at maximum allowed height
+        t.sendKey(Qt::Key_Down);
+        REQUIRE(w->geometry() == QRect{9, 2, 9, 8});
+
+        t.sendKey(Qt::Key_Escape);
+        CHECK(windowFacet->isManuallyPlaced() == initialManually);
+        CHECK(t.terminal->keyboardGrabber() == nullptr);
+    }
 }
 
 TEST_CASE("window-palette", "") {

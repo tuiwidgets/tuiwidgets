@@ -19,6 +19,8 @@ public:
     enum Option {
         CloseOption = (1 << 0),
         CloseButton = CloseOption,
+        MoveOption = (1 << 1),
+        ResizeOption = (1 << 2),
         DeleteOnClose = (1 << 5),
     };
     Q_DECLARE_FLAGS(Options, Option)
@@ -45,6 +47,8 @@ public:
 public Q_SLOTS:
     void setWindowTitle(const QString &title);
     bool showSystemMenu();
+    void startInteractiveMove();
+    void startInteractiveResize();
 
     void close();
     void closeSkipCheck(QStringList skipChecks);
