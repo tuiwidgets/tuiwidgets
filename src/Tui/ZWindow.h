@@ -4,6 +4,7 @@
 #include <QPoint>
 
 #include <Tui/ZWidget.h>
+#include <Tui/ZMenuItem.h>
 
 #include <Tui/tuiwidgets_internal.h>
 
@@ -42,6 +43,7 @@ public:
 
 public Q_SLOTS:
     void setWindowTitle(const QString &title);
+    bool showSystemMenu();
 
     void close();
     void closeSkipCheck(QStringList skipChecks);
@@ -53,6 +55,7 @@ protected:
     void paintEvent(ZPaintEvent *event) override;
     void keyEvent(ZKeyEvent *event) override;
     void resizeEvent(ZResizeEvent *event) override;
+    virtual QVector<ZMenuItem> systemMenu();
     virtual void closeEvent(ZCloseEvent *event);
 
 public:

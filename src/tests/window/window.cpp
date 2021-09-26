@@ -4,9 +4,11 @@
 
 #include <QPointer>
 #include <QRect>
+#include <QVector>
 
 #include <Tui/ZBasicWindowFacet.h>
 #include <Tui/ZColor.h>
+#include <Tui/ZCommandNotifier.h>
 #include <Tui/ZPainter.h>
 #include <Tui/ZPalette.h>
 #include <Tui/ZTerminal.h>
@@ -356,6 +358,145 @@ TEST_CASE("window-close") {
 
         delete w.data();
     }
+}
+
+TEST_CASE("window-systemmenu", "") {
+    class TestWindow : public Tui::ZWindow {
+    public:
+        using Tui::ZWindow::ZWindow;
+
+        QVector<Tui::ZMenuItem> retrieveSystemMenu() {
+            return ZWindow::systemMenu();
+        }
+
+        QVector<Tui::ZMenuItem> menuItems;
+
+    protected:
+        QVector<Tui::ZMenuItem> systemMenu() override {
+            return menuItems;
+        }
+    };
+
+    Testhelper t("window", "window-systemmenu", 25, 10);
+
+    SECTION("menu-empty-options") {
+        TestWindow w;
+        w.setOptions({});
+        CHECK(w.retrieveSystemMenu().size() == 0);
+    }
+
+    SECTION("show-empty") {
+        TestWindow w(t.root);
+        w.setFocus();
+        w.setGeometry({2, 0, 23, 10});
+
+        CHECK(w.showSystemMenu() == false);
+        t.compare();
+    }
+
+    SECTION("show-empty-seperator") {
+        TestWindow w(t.root);
+        w.setFocus();
+        w.setGeometry({2, 0, 23, 10});
+        w.menuItems = {
+            {},
+        };
+        CHECK(w.showSystemMenu() == false);
+        t.compare("show-empty");
+    }
+
+    SECTION("show-empty-key") {
+        TestWindow w(t.root);
+        w.setFocus();
+        w.setGeometry({2, 0, 23, 10});
+
+        FAIL_CHECK_VEC(t.checkCharEventBubbles("-", Qt::AltModifier));
+        t.compare("show-empty");
+    }
+
+    SECTION("show-empty-seperator-key") {
+        TestWindow w(t.root);
+        w.setFocus();
+        w.setGeometry({2, 0, 23, 10});
+        w.menuItems = {
+            {},
+        };
+        FAIL_CHECK_VEC(t.checkCharEventBubbles("-", Qt::AltModifier));
+        t.compare("show-empty");
+    }
+
+    SECTION("show-alpha") {
+        TestWindow w(t.root);
+        w.setFocus();
+        t.root->ensureCommandManager();
+        w.setGeometry({2, 0, 23, 10});
+        w.menuItems = {
+            { "<m>A</m>lpha", "Ctrl-A", "SomeCommand", {}},
+        };
+        bool triggered = false;
+        QObject::connect(new Tui::ZCommandNotifier("SomeCommand", &w), &Tui::ZCommandNotifier::activated,
+                         [&triggered] {
+            if (triggered) {
+                FAIL("Command triggered twice");
+            } else {
+                triggered = true;
+            }
+        });
+
+        CHECK(w.showSystemMenu() == true);
+        t.compare();
+        t.sendChar("a");
+        CHECK(triggered == true);
+    }
+
+    SECTION("show-alpha-key") {
+        TestWindow w(t.root);
+        w.setFocus();
+        t.root->ensureCommandManager();
+        w.setGeometry({2, 0, 23, 10});
+        w.menuItems = {
+            { "<m>A</m>lpha", "Ctrl-A", "SomeCommand", {}},
+        };
+        bool triggered = false;
+        QObject::connect(new Tui::ZCommandNotifier("SomeCommand", &w), &Tui::ZCommandNotifier::activated,
+                         [&triggered] {
+            if (triggered) {
+                FAIL("Command triggered twice");
+            } else {
+                triggered = true;
+            }
+        });
+
+        t.sendChar("-", Qt::AltModifier);
+        t.compare("show-alpha");
+        t.sendChar("a");
+        CHECK(triggered == true);
+    }
+
+    SECTION("show-alpha-beta") {
+        TestWindow w(t.root);
+        t.root->ensureCommandManager();
+        w.setGeometry({0, 0, 25, 10});
+        w.menuItems = {
+            { "<m>A</m>lpha", "Ctrl-A", "SomeCommand", {}},
+            { "<m>B</m>eta", "Ctrl-B", "SomeCommand2", {}},
+        };
+        bool triggered = false;
+        QObject::connect(new Tui::ZCommandNotifier("SomeCommand2", &w), &Tui::ZCommandNotifier::activated,
+                         [&triggered] {
+            if (triggered) {
+                FAIL("Command triggered twice");
+            } else {
+                triggered = true;
+            }
+        });
+
+        CHECK(w.showSystemMenu() == true);
+        t.compare();
+        t.sendChar("b");
+        CHECK(triggered == true);
+    }
+
 }
 
 TEST_CASE("window-palette", "") {

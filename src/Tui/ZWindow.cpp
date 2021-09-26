@@ -6,6 +6,7 @@
 
 #include <Tui/ZColor.h>
 #include <Tui/ZLayout.h>
+#include <Tui/ZMenu.h>
 #include <Tui/ZPainter.h>
 #include <Tui/ZSymbol.h>
 #include <Tui/ZTerminal.h>
@@ -41,6 +42,25 @@ void ZWindow::setWindowTitle(const QString &title) {
     if (p->windowTitle != title) {
         p->windowTitle = title;
         windowTitleChanged(title);
+    }
+}
+
+bool ZWindow::showSystemMenu() {
+    auto menuItems = systemMenu();
+    bool nonEmpty = false;
+    for (const auto &menuItem: menuItems) {
+        if (menuItem.markup().size()) {
+            nonEmpty = true;
+            break;
+        }
+    }
+    if (nonEmpty) {
+        Tui::ZMenu *menu = new Tui::ZMenu(parentWidget());
+        menu->setItems(menuItems);
+        menu->popup({geometry().x(), geometry().y() + 1});
+        return true;
+    } else {
+        return false;
     }
 }
 
@@ -247,6 +267,14 @@ void ZWindow::paintEvent(ZPaintEvent *event) {
     }
 }
 
+QVector<ZMenuItem> ZWindow::systemMenu() {
+    auto *const p = tuiwidgets_impl();
+
+    QVector<ZMenuItem> ret;
+
+    return ret;
+}
+
 void ZWindow::closeEvent(ZCloseEvent *event) {
     (void)event;
 }
@@ -263,6 +291,10 @@ void ZWindow::keyEvent(ZKeyEvent *event) {
                     f->nextFocusable()->setFocus();
                 }
             }
+        }
+    } else if (event->text() == QStringLiteral("-") && event->modifiers() == Qt::AltModifier) {
+        if (!showSystemMenu()) {
+            Tui::ZWidget::keyEvent(event);
         }
     } else {
         ZWidget::keyEvent(event);
