@@ -8,6 +8,9 @@ TUIWIDGETS_NS_START
 class ZWindowFacetPrivate {
 public:
     virtual ~ZWindowFacetPrivate();
+
+public:
+    bool manuallyPlaced = true;
 };
 
 TUIWIDGETS_NS_END

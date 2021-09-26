@@ -11,6 +11,7 @@ TUIWIDGETS_NS_START
 
 class ZBasicWindowFacetPrivate;
 class TUIWIDGETS_EXPORT ZBasicWindowFacet : public ZWindowFacet {
+    Q_OBJECT
 public:
     ZBasicWindowFacet();
     ~ZBasicWindowFacet();

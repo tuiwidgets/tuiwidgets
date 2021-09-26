@@ -17,6 +17,8 @@ public:
     virtual bool isManuallyPlaced() const;
     virtual void autoPlace(const QSize &available, ZWidget *self);
 
+    virtual void setManuallyPlaced(bool manual);
+
 protected:
     ZWindowFacet();
     ZWindowFacet(std::unique_ptr<ZWindowFacetPrivate> pimpl);
