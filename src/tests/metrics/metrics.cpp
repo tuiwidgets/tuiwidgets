@@ -242,7 +242,7 @@ TEST_CASE("metrics - nextCluster") {
     // check copy contruction
     Tui::ZTextMetrics tm2 = tm;
 
-    result = nextClusterWrapper(kind, tm, "test");
+    result = nextClusterWrapper(kind, tm2, "test");
     CHECK(result.columns == 1);
     CHECK(result.codeUnits == 1);
     CHECK(result.codePoints == 1);
@@ -251,7 +251,7 @@ TEST_CASE("metrics - nextCluster") {
     Tui::ZTextMetrics tm3 = Tui::ZTextMetricsPrivate::createForTesting(f2.surface);
     tm2 = tm3;
 
-    result = nextClusterWrapper(kind, tm, "test");
+    result = nextClusterWrapper(kind, tm3, "test");
     CHECK(result.columns == 1);
     CHECK(result.codeUnits == 1);
     CHECK(result.codePoints == 1);
@@ -286,7 +286,7 @@ TEST_CASE("metrics - splitByColumns") {
     // check copy contruction
     Tui::ZTextMetrics tm2 = tm;
 
-    result = splitByColumnsWrapper(kind, tm, testCase.text, testCase.splitAt);
+    result = splitByColumnsWrapper(kind, tm2, testCase.text, testCase.splitAt);
     CHECK(result.columns == testCase.columns);
     CHECK(result.codeUnits == nCodeUnits(kind, testCase.left));
     CHECK(result.codePoints == nCodePoints(testCase.left));
@@ -295,7 +295,7 @@ TEST_CASE("metrics - splitByColumns") {
     Tui::ZTextMetrics tm3 = Tui::ZTextMetricsPrivate::createForTesting(f2.surface);
     tm2 = tm3;
 
-    result = splitByColumnsWrapper(kind, tm, testCase.text, testCase.splitAt);
+    result = splitByColumnsWrapper(kind, tm3, testCase.text, testCase.splitAt);
     CHECK(result.columns == testCase.columns);
     CHECK(result.codeUnits == nCodeUnits(kind, testCase.left));
     CHECK(result.codePoints == nCodePoints(testCase.left));
