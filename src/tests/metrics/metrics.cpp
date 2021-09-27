@@ -5,12 +5,14 @@
 
 #include <termpaint.h>
 
+#include <QVector>
+
 #include "../termpaint_helpers.h"
 
 namespace {
 
 enum Kind {
-    KindQString, KindQChar, KindChar16, KindUtf, KindQStringView, KindU16StringView, KindStringView
+    KindQString, KindQChar, KindChar16, KindChar32, KindUtf, KindQStringView, KindU16StringView, KindStringView
 };
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0) && defined(TUIWIDGETS_ABI_FORCE_INLINE)
@@ -25,7 +27,7 @@ enum Kind {
 #define MAYBEKindStringView
 #endif
 
-#define ALLKINDS KindQString, KindQChar, KindChar16, KindUtf MAYBEKindQStringView MAYBEKindStringView
+#define ALLKINDS KindQString, KindQChar, KindChar16, KindChar32, KindUtf MAYBEKindQStringView MAYBEKindStringView
 
 Tui::ZTextMetrics::ClusterSize nextClusterWrapper(Kind kind, Tui::ZTextMetrics &tm, const QString &string) {
     switch (kind) {
@@ -43,6 +45,11 @@ Tui::ZTextMetrics::ClusterSize nextClusterWrapper(Kind kind, Tui::ZTextMetrics &
             break;
         case KindChar16:
             return tm.nextCluster(reinterpret_cast<const char16_t*>(string.data()), string.size());
+        case KindChar32:
+            {
+                auto utf32 = string.toUcs4();
+                return tm.nextCluster(reinterpret_cast<const char32_t*>(utf32.data()), utf32.size());
+            }
             break;
         case KindUtf:
             {
@@ -83,6 +90,11 @@ Tui::ZTextMetrics::ClusterSize splitByColumnsWrapper(Kind kind, Tui::ZTextMetric
             break;
         case KindChar16:
             return tm.splitByColumns(reinterpret_cast<const char16_t*>(string.data()), string.size(), maxWidth);
+        case KindChar32:
+            {
+                auto utf32 = string.toUcs4();
+                return tm.splitByColumns(reinterpret_cast<const char32_t*>(utf32.data()), utf32.size(), maxWidth);
+            }
             break;
         case KindUtf:
             {
@@ -124,6 +136,11 @@ int sizeInColumnsWrapper(Kind kind, Tui::ZTextMetrics &tm, const QString &string
             break;
         case KindChar16:
             return tm.sizeInColumns(reinterpret_cast<const char16_t*>(string.data()), string.size());
+        case KindChar32:
+            {
+                auto utf32 = string.toUcs4();
+                return tm.sizeInColumns(reinterpret_cast<const char32_t*>(utf32.data()), utf32.size());
+            }
             break;
         case KindUtf:
             {
@@ -166,6 +183,8 @@ int nCodeUnits(Kind kind, QString s) {
         case KindUtf:
         case KindStringView:
             return s.toUtf8().size();
+        case KindChar32:
+            return s.toUcs4().size();
             break;
     }
     FAIL("Unknown kind");
