@@ -12,7 +12,7 @@ ZTextMetrics::~ZTextMetrics() {
 }
 
 ZTextMetrics::ClusterSize ZTextMetrics::nextCluster(const QString &data, int offset) const {
-    return nextCluster(data.constData()+offset, data.size() - offset);
+    return nextCluster(data.constData() + offset, data.size() - offset);
 }
 
 ZTextMetrics::ClusterSize ZTextMetrics::nextCluster(const QChar *data, int size) const {
@@ -32,10 +32,11 @@ ZTextMetrics::ClusterSize ZTextMetrics::nextCluster(const char32_t *data, int si
     termpaint_text_measurement_free(tm);
     return result;
 }
+
 ZTextMetrics::ClusterSize ZTextMetrics::nextCluster(const char16_t *data, int size) const {
-    const auto* p = tuiwidgets_impl();
+    const auto *p = tuiwidgets_impl();
     // TODO have some kind of pool
-    termpaint_text_measurement* tm = termpaint_text_measurement_new(p->surface);
+    termpaint_text_measurement *tm = termpaint_text_measurement_new(p->surface);
     termpaint_text_measurement_set_limit_clusters(tm, 1);
     termpaint_text_measurement_feed_utf16(tm, reinterpret_cast<const uint16_t*>(data), size, true);
     ClusterSize result;
@@ -47,9 +48,9 @@ ZTextMetrics::ClusterSize ZTextMetrics::nextCluster(const char16_t *data, int si
 }
 
 ZTextMetrics::ClusterSize ZTextMetrics::nextCluster(const char *stringUtf8, int utf8CodeUnits) const {
-    const auto* p = tuiwidgets_impl();
+    const auto *p = tuiwidgets_impl();
     // TODO have some kind of pool
-    termpaint_text_measurement* tm = termpaint_text_measurement_new(p->surface);
+    termpaint_text_measurement *tm = termpaint_text_measurement_new(p->surface);
     termpaint_text_measurement_set_limit_clusters(tm, 1);
     termpaint_text_measurement_feed_utf8(tm, stringUtf8, utf8CodeUnits, true);
     ClusterSize result;
@@ -83,8 +84,8 @@ ZTextMetrics::ClusterSize ZTextMetrics::splitByColumns(const char32_t *data, int
 }
 
 ZTextMetrics::ClusterSize ZTextMetrics::splitByColumns(const char16_t *data, int size, int maxWidth) const {
-    const auto* p = tuiwidgets_impl();
-    termpaint_text_measurement* tm = termpaint_text_measurement_new(p->surface);
+    const auto *p = tuiwidgets_impl();
+    termpaint_text_measurement *tm = termpaint_text_measurement_new(p->surface);
     termpaint_text_measurement_set_limit_width(tm, maxWidth);
     termpaint_text_measurement_feed_utf16(tm, reinterpret_cast<const uint16_t*>(data), size, true);
 
@@ -97,8 +98,8 @@ ZTextMetrics::ClusterSize ZTextMetrics::splitByColumns(const char16_t *data, int
 }
 
 ZTextMetrics::ClusterSize ZTextMetrics::splitByColumns(const char *stringUtf8, int utf8CodeUnits, int maxWidth) const {
-    const auto* p = tuiwidgets_impl();
-    termpaint_text_measurement* tm = termpaint_text_measurement_new(p->surface);
+    const auto *p = tuiwidgets_impl();
+    termpaint_text_measurement *tm = termpaint_text_measurement_new(p->surface);
     termpaint_text_measurement_set_limit_width(tm, maxWidth);
     termpaint_text_measurement_feed_utf8(tm, stringUtf8, utf8CodeUnits, true);
 
@@ -129,8 +130,8 @@ int ZTextMetrics::sizeInColumns(const char32_t *data, int size) const {
 }
 
 int ZTextMetrics::sizeInColumns(const char16_t *data, int size) const {
-    const auto* p = tuiwidgets_impl();
-    termpaint_text_measurement* tm = termpaint_text_measurement_new(p->surface);
+    const auto *p = tuiwidgets_impl();
+    termpaint_text_measurement *tm = termpaint_text_measurement_new(p->surface);
     termpaint_text_measurement_feed_utf16(tm, reinterpret_cast<const uint16_t*>(data), size, true);
 
     int res = termpaint_text_measurement_last_width(tm);
@@ -140,7 +141,7 @@ int ZTextMetrics::sizeInColumns(const char16_t *data, int size) const {
 
 int ZTextMetrics::sizeInColumns(const char *stringUtf8, int utf8CodeUnits) const {
     const auto* p = tuiwidgets_impl();
-    termpaint_text_measurement* tm = termpaint_text_measurement_new(p->surface);
+    termpaint_text_measurement *tm = termpaint_text_measurement_new(p->surface);
     termpaint_text_measurement_feed_utf8(tm, stringUtf8, utf8CodeUnits, true);
 
     int res = termpaint_text_measurement_last_width(tm);

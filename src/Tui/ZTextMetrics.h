@@ -32,11 +32,11 @@ public:
     ClusterSize nextCluster(const char32_t *data, int size) const;
     ClusterSize nextCluster(const char16_t *data, int size) const;
     ClusterSize nextCluster(const char *stringUtf8, int utf8CodeUnits) const;
-    ZTextMetrics::ClusterSize splitByColumns(const QString &data, int maxWidth) const;
-    ZTextMetrics::ClusterSize splitByColumns(const QChar *data, int size, int maxWidth) const;
-    ZTextMetrics::ClusterSize splitByColumns(const char16_t *data, int size, int maxWidth) const;
-    ZTextMetrics::ClusterSize splitByColumns(const char *stringUtf8, int utf8CodeUnits, int maxWidth) const;
+    ClusterSize splitByColumns(const QString &data, int maxWidth) const;
+    ClusterSize splitByColumns(const QChar *data, int size, int maxWidth) const;
     ClusterSize splitByColumns(const char32_t *data, int size, int maxWidth) const;
+    ClusterSize splitByColumns(const char16_t *data, int size, int maxWidth) const;
+    ClusterSize splitByColumns(const char *stringUtf8, int utf8CodeUnits, int maxWidth) const;
     int sizeInColumns(const QString &data) const;
     int sizeInColumns(const QChar *data, int size) const;
     int sizeInColumns(const char32_t *data, int size) const;
@@ -88,7 +88,6 @@ public:
 #endif
 
     ZTextMetrics &operator=(const ZTextMetrics&);
-
 
 private:
     friend class ZTerminal;

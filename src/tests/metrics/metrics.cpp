@@ -39,10 +39,8 @@ Tui::ZTextMetrics::ClusterSize nextClusterWrapper(Kind kind, Tui::ZTextMetrics &
                 QString s = padding + string;
                 return tm.nextCluster(s, padding.size());
             }
-            break;
         case KindQChar:
             return tm.nextCluster(string.data(), string.size());
-            break;
         case KindChar16:
             return tm.nextCluster(reinterpret_cast<const char16_t*>(string.data()), string.size());
         case KindChar32:
@@ -50,23 +48,21 @@ Tui::ZTextMetrics::ClusterSize nextClusterWrapper(Kind kind, Tui::ZTextMetrics &
                 auto utf32 = string.toUcs4();
                 return tm.nextCluster(reinterpret_cast<const char32_t*>(utf32.data()), utf32.size());
             }
-            break;
         case KindUtf:
             {
                 QByteArray utf8 = string.toUtf8();
                 return tm.nextCluster(utf8.data(), utf8.size());
             }
-            break;
         case KindQStringView:
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0) && defined(TUIWIDGETS_ABI_FORCE_INLINE)
             return tm.nextCluster(QStringView{string});
 #endif
-            break;
+            FAIL("KindQStringView: unexpected");
         case KindU16StringView:
 #if defined(__cpp_lib_string_view) && defined(TUIWIDGETS_ABI_FORCE_INLINE)
             return tm.nextCluster(std::u16string_view(reinterpret_cast<const char16_t*>(string.data()), string.size()));
 #endif
-            break;
+            FAIL("KindU16StringView: unexpected");
         case KindStringView:
 #if defined(__cpp_lib_string_view) && defined(TUIWIDGETS_ABI_FORCE_INLINE)
             {
@@ -74,7 +70,7 @@ Tui::ZTextMetrics::ClusterSize nextClusterWrapper(Kind kind, Tui::ZTextMetrics &
                 return tm.nextCluster(std::string_view(utf8.data(), utf8.size()));
             }
 #endif
-            break;
+            FAIL("KindStringView: unexpected");
     }
     FAIL("Unknown kind");
     return {};
@@ -84,10 +80,8 @@ Tui::ZTextMetrics::ClusterSize splitByColumnsWrapper(Kind kind, Tui::ZTextMetric
     switch (kind) {
         case KindQString:
             return tm.splitByColumns(string, maxWidth);
-            break;
         case KindQChar:
             return tm.splitByColumns(string.data(), string.size(), maxWidth);
-            break;
         case KindChar16:
             return tm.splitByColumns(reinterpret_cast<const char16_t*>(string.data()), string.size(), maxWidth);
         case KindChar32:
@@ -95,23 +89,21 @@ Tui::ZTextMetrics::ClusterSize splitByColumnsWrapper(Kind kind, Tui::ZTextMetric
                 auto utf32 = string.toUcs4();
                 return tm.splitByColumns(reinterpret_cast<const char32_t*>(utf32.data()), utf32.size(), maxWidth);
             }
-            break;
         case KindUtf:
             {
                 QByteArray utf8 = string.toUtf8();
                 return tm.splitByColumns(utf8.data(), utf8.size(), maxWidth);
             }
-            break;
         case KindQStringView:
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0) && defined(TUIWIDGETS_ABI_FORCE_INLINE)
             return tm.splitByColumns(QStringView{string}, maxWidth);
 #endif
-            break;
+            FAIL("KindQStringView: unexpected");
         case KindU16StringView:
 #if defined(__cpp_lib_string_view) && defined(TUIWIDGETS_ABI_FORCE_INLINE)
             return tm.splitByColumns(std::u16string_view(reinterpret_cast<const char16_t*>(string.data()), string.size()), maxWidth);
 #endif
-            break;
+            FAIL("KindU16StringView: unexpected");
         case KindStringView:
 #if defined(__cpp_lib_string_view) && defined(TUIWIDGETS_ABI_FORCE_INLINE)
             {
@@ -119,7 +111,7 @@ Tui::ZTextMetrics::ClusterSize splitByColumnsWrapper(Kind kind, Tui::ZTextMetric
                 return tm.splitByColumns(std::string_view(utf8.data(), utf8.size()), maxWidth);
             }
 #endif
-            break;
+            FAIL("KindStringView: unexpected");
     }
     FAIL("Unknown kind");
     return {};
@@ -130,10 +122,8 @@ int sizeInColumnsWrapper(Kind kind, Tui::ZTextMetrics &tm, const QString &string
     switch (kind) {
         case KindQString:
             return tm.sizeInColumns(string);
-            break;
         case KindQChar:
             return tm.sizeInColumns(string.data(), string.size());
-            break;
         case KindChar16:
             return tm.sizeInColumns(reinterpret_cast<const char16_t*>(string.data()), string.size());
         case KindChar32:
@@ -141,23 +131,21 @@ int sizeInColumnsWrapper(Kind kind, Tui::ZTextMetrics &tm, const QString &string
                 auto utf32 = string.toUcs4();
                 return tm.sizeInColumns(reinterpret_cast<const char32_t*>(utf32.data()), utf32.size());
             }
-            break;
         case KindUtf:
             {
                 QByteArray utf8 = string.toUtf8();
                 return tm.sizeInColumns(utf8.data(), utf8.size());
             }
-            break;
         case KindQStringView:
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0) && defined(TUIWIDGETS_ABI_FORCE_INLINE)
             return tm.sizeInColumns(QStringView{string});
 #endif
-            break;
+            FAIL("KindQStringView: unexpected");
         case KindU16StringView:
 #if defined(__cpp_lib_string_view) && defined(TUIWIDGETS_ABI_FORCE_INLINE)
             return tm.sizeInColumns(std::u16string_view(reinterpret_cast<const char16_t*>(string.data()), string.size()));
 #endif
-            break;
+            FAIL("KindU16StringView: unexpected");
         case KindStringView:
 #if defined(__cpp_lib_string_view) && defined(TUIWIDGETS_ABI_FORCE_INLINE)
             {
@@ -165,7 +153,7 @@ int sizeInColumnsWrapper(Kind kind, Tui::ZTextMetrics &tm, const QString &string
                 return tm.sizeInColumns(std::string_view(utf8.data(), utf8.size()));
             }
 #endif
-            break;
+            FAIL("KindStringView: unexpected");
     }
     FAIL("Unknown kind");
     return 0;
@@ -179,13 +167,11 @@ int nCodeUnits(Kind kind, QString s) {
         case KindQStringView:
         case KindU16StringView:
             return s.size();
-            break;
         case KindUtf:
         case KindStringView:
             return s.toUtf8().size();
         case KindChar32:
             return s.toUcs4().size();
-            break;
     }
     FAIL("Unknown kind");
     return 0;
