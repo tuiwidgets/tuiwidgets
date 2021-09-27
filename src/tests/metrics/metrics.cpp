@@ -34,7 +34,7 @@ Tui::ZTextMetrics::ClusterSize nextClusterWrapper(Kind kind, Tui::ZTextMetrics &
         case KindQString:
             {
                 QString padding = GENERATE(QString(""), QString("a"), QString("ab"),
-                                           QString("はい"), QString("はい"), QString("😇"));
+                                           QString("はい"), QString("はい"), QString("😇"), QString("\n"), QString("\t") );
                 UNSCOPED_INFO("padding: " << padding.toStdString());
                 QString s = padding + string;
                 return tm.nextCluster(s, padding.size());
@@ -209,7 +209,13 @@ TEST_CASE("metrics - nextCluster") {
                 TestCase{ "はa", 2, "は" },
                 TestCase{ "はい", 2, "は" },
                 TestCase{ "😇bc", 2, "😇" },
-                TestCase{"a\xcc\x88\xcc\xa4\x62\x63", 1, "a\xcc\x88\xcc\xa4"}
+                TestCase{"a\xcc\x88\xcc\xa4\x62\x63", 1, "a\xcc\x88\xcc\xa4"},
+                TestCase{ "\n😇NewLine", 1, "\n" },
+                TestCase{ "\tTab", 1, "\t" },
+                TestCase{ "¹1", 1, "¹" },
+                TestCase{ QString(1, QChar(0)) + "null", 1,  QString(1, QChar(0)) },
+                TestCase{ "\x1b\x1b", 1, "\033" },
+                TestCase{ "", 0, "" }
     );
 
     CAPTURE(kind);
@@ -249,15 +255,28 @@ TEST_CASE("metrics - splitByColumns") {
 
     struct TestCase { QString text; int splitAt; int columns; QString left; };
     const auto testCase = GENERATE(
-                TestCase{ "test", 2, 2, "te" },
                 TestCase{ "test", 1, 1, "t" },
+                TestCase{ "test", 2, 2, "te" },
                 TestCase{ "test", 4, 4, "test" },
+                TestCase{ "test", 10, 4, "test" },
                 TestCase{ "はい", 2, 2, "は" },
                 TestCase{ "はい", 3, 2, "は" },
                 TestCase{ "はい", 4, 4, "はい" },
                 TestCase{ "😇bc", 2, 2, "😇" },
-                TestCase{"a\xcc\x88\xcc\xa4\x62\x63", 1, 1, "a\xcc\x88\xcc\xa4"}
+                TestCase{ "😇bc", 1, 0, "" },
+                TestCase{ "😇😇", 3, 2, "😇" },
+                TestCase{"a\xcc\x88\xcc\xa4\x62\x63", 1, 1, "a\xcc\x88\xcc\xa4"},
+                TestCase{ "\n😇NewLine", 1, 1, "\n" },
+                TestCase{ "\tTab", 1, 1, "\t" },
+                TestCase{ "¹1", 1,1, "¹" },
+                TestCase{ QString(1, QChar(0)) + "null", 1, 1, QString(1, QChar(0)) },
+                TestCase{ "\x1b\x1b", 1,1, "\033" },
+                TestCase{ "", 0,0, "" },
+                TestCase{ "", 2,0, "" }
     );
+
+    CAPTURE(kind);
+    CAPTURE(testCase.text.toStdString());
 
     TermpaintFixture f, f2;
 
@@ -295,8 +314,19 @@ TEST_CASE("metrics - sizeInColumns") {
                 TestCase{ "test", 4 },
                 TestCase{ "はい", 4 },
                 TestCase{ "😇bc", 4 },
-                TestCase{"a\xcc\x88\xcc\xa4\x62\x63", 3}
+                TestCase{"a\xcc\x88\xcc\xa4\x62\x63", 3},
+                TestCase{ "😇a😇", 5 },
+                TestCase{ "\n😇", 3},
+                TestCase{ "\tTab", 4},
+                TestCase{ "¹1", 2},
+                TestCase{ QString(1, QChar(0)) + "null", 5},
+                TestCase{ "null" + QString(1, QChar(0)), 5},
+                TestCase{ "\x1b\x1b", 2 },
+                TestCase{ "", 0}
     );
+
+    CAPTURE(kind);
+    CAPTURE(testCase.text.toStdString());
 
     TermpaintFixture f, f2;
 
