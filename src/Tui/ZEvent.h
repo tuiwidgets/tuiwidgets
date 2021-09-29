@@ -4,6 +4,7 @@
 #include <memory>
 
 #include <QEvent>
+#include <QStringList>
 
 #include <Tui/tuiwidgets_internal.h>
 
@@ -24,6 +25,7 @@ class ZPasteEventPrivate;
 class ZFocusEventPrivate;
 class ZMoveEventPrivate;
 class ZResizeEventPrivate;
+class ZCloseEventPrivate;
 class ZOtherChangeEventPrivate;
 
 namespace ZEventType {
@@ -38,6 +40,7 @@ namespace ZEventType {
     QEvent::Type otherChange();
     QEvent::Type show();
     QEvent::Type hide();
+    QEvent::Type close();
 
     QEvent::Type updateRequest();
     QEvent::Type terminalNativeEvent();
@@ -157,6 +160,17 @@ public:
 
 private:
     TUIWIDGETS_DECLARE_PRIVATE(ZMoveEvent)
+};
+
+class TUIWIDGETS_EXPORT ZCloseEvent : public ZEvent {
+public:
+    ZCloseEvent(QStringList skipChecks);
+
+public:
+    QStringList skipChecks() const;
+
+private:
+    TUIWIDGETS_DECLARE_PRIVATE(ZCloseEvent)
 };
 
 class TUIWIDGETS_EXPORT ZOtherChangeEvent : public ZEvent {

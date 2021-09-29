@@ -16,7 +16,8 @@ class TUIWIDGETS_EXPORT ZWindow : public ZWidget {
 
 public:
     enum Option {
-        CloseButton = 0x1,
+        CloseButton = (1 << 0),
+        DeleteOnClose = (1 << 5),
     };
     Q_DECLARE_FLAGS(Options, Option)
 public:
@@ -42,6 +43,9 @@ public:
 public Q_SLOTS:
     void setWindowTitle(const QString &title);
 
+    void close();
+    void closeSkipCheck(QStringList skipChecks);
+
 Q_SIGNALS:
     void windowTitleChanged(const QString &title);
 
@@ -49,6 +53,7 @@ protected:
     void paintEvent(ZPaintEvent *event) override;
     void keyEvent(ZKeyEvent *event) override;
     void resizeEvent(ZResizeEvent *event) override;
+    virtual void closeEvent(ZCloseEvent *event);
 
 public:
     // public virtuals from base classes: override everything for later ABI compatibility

@@ -1,6 +1,7 @@
 #include "ZWindow.h"
 #include "ZWindow_p.h"
 
+#include <QCoreApplication>
 #include <QSize>
 
 #include <Tui/ZColor.h>
@@ -246,6 +247,10 @@ void ZWindow::paintEvent(ZPaintEvent *event) {
     }
 }
 
+void ZWindow::closeEvent(ZCloseEvent *event) {
+    (void)event;
+}
+
 void ZWindow::keyEvent(ZKeyEvent *event) {
     if (event->key() == Qt::Key_Tab && (event->modifiers() == 0 || event->modifiers() == Qt::ShiftModifier)) {
         ZTerminal *term = terminal();
@@ -275,6 +280,22 @@ void ZWindowPrivate::ensureAutoPlacement() {
     }
 }
 
+void ZWindow::close() {
+    closeSkipCheck({});
+}
+
+void ZWindow::closeSkipCheck(QStringList skipChecks) {
+    ZCloseEvent event(skipChecks);
+    event.setAccepted(true);
+    QCoreApplication::sendEvent(this, &event);
+    if (event.isAccepted()) {
+        setVisible(false);
+        if (options() & DeleteOnClose) {
+            deleteLater();
+        }
+    }
+}
+
 void ZWindow::resizeEvent(ZResizeEvent *event) {
     auto *const p = tuiwidgets_impl();
 
@@ -288,9 +309,10 @@ bool ZWindow::event(QEvent *event) {
 
     if (event->type() == QEvent::ParentChange) {
         p->ensureAutoPlacement();
-    }
-    if (event->type() == QEvent::ShowToParent) {
+    } else if (event->type() == QEvent::ShowToParent) {
         p->ensureAutoPlacement();
+    } else if (event->type() == ZEventType::close()) {
+        closeEvent(static_cast<ZCloseEvent*>(event));
     }
 
     return ZWidget::event(event);

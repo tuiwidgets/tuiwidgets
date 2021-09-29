@@ -82,6 +82,14 @@ public:
     QPoint oldPos;
 };
 
+class ZCloseEventPrivate : public ZEventPrivate {
+public:
+    ZCloseEventPrivate(QStringList skipChecks);
+
+public:
+    QStringList skipChecks;
+};
+
 class ZOtherChangeEventPrivate : public ZEventPrivate {
 public:
     ZOtherChangeEventPrivate(QSet<ZSymbol> unchanged);

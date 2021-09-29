@@ -2,6 +2,7 @@
 
 #include <../../third-party/catch.hpp>
 
+#include <QPointer>
 #include <QRect>
 
 #include <Tui/ZBasicWindowFacet.h>
@@ -132,6 +133,228 @@ TEST_CASE("window-signals", "") {
         expectedTitleParameter = "";
         w.setWindowTitle("");
         CHECK(expectedTitleParameter == inactive);
+    }
+}
+
+TEST_CASE("window-close") {
+    class TestApp : public QCoreApplication {
+    public:
+        using QCoreApplication::QCoreApplication;
+
+        bool notify(QObject *o, QEvent *e) override {
+            if (fBefore) {
+                fBefore(o, e);
+            }
+            bool ret = QCoreApplication::notify(o, e);
+            if (fAfter) {
+                fAfter(o, e);
+            }
+            return ret;
+        }
+
+        std::function<void(QObject*, QEvent*)> fBefore, fAfter;
+    };
+
+    class TestWindow : public Tui::ZWindow {
+    public:
+        using Tui::ZWindow::ZWindow;
+
+        bool ignoreInSpecificEvent = false;
+        bool ignoreInGenericEvent = false;
+        QStringList expectedSkipChecks;
+
+    protected:
+        bool event(QEvent *event) override {
+            if (ignoreInGenericEvent) {
+                if (event->type() == Tui::ZEventType::close()) {
+                    event->ignore();
+                }
+            }
+            // always calling base class, should not change anything
+            return ZWindow::event(event);
+        }
+
+        void closeEvent(Tui::ZCloseEvent *event) override {
+            CHECK(event->skipChecks() == expectedSkipChecks);
+            if (ignoreInSpecificEvent) {
+                event->ignore();
+            } else {
+                Tui::ZWindow::closeEvent(event);
+            }
+        }
+    };
+
+    static char prgname[] = "test";
+    static char *argv[] = {prgname, nullptr};
+    int argc = 1;
+    TestApp app(argc, argv);
+
+    SECTION("without-skip") {
+        bool useSkipCheck = GENERATE(false, true);
+
+        SECTION("close-hides") {
+            QPointer<TestWindow> w = new TestWindow();
+
+            w->setOptions(w->options() & ~Tui::ZWindow::DeleteOnClose);
+            CHECK(w->isVisible());
+            if (!useSkipCheck) {
+                w->close();
+            } else {
+                w->closeSkipCheck({});
+            }
+            CHECK(!w->isVisible());
+
+            delete w.data();
+        }
+        SECTION("close-deletes") {
+            QPointer<TestWindow> w = new TestWindow();
+
+            w->setOptions(w->options() | Tui::ZWindow::DeleteOnClose);
+            if (!useSkipCheck) {
+                w->close();
+            } else {
+                w->closeSkipCheck({});
+            }
+            QCoreApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
+            CHECK(w == nullptr);
+
+            delete w.data();
+        }
+
+        SECTION("close-uses-event") {
+            QPointer<TestWindow> w = new TestWindow();
+            w->setOptions(w->options() & ~Tui::ZWindow::DeleteOnClose);
+
+            enum State {
+                Start, GotEvent
+            } state = Start;
+
+            app.fBefore = [&state, wCopy = w.data()] (QObject *o, QEvent *e) {
+                if (o == wCopy) {
+                    if (e->type() == Tui::ZEventType::close()) {
+                        if (state == Start) {
+                            state = GotEvent;
+                        } else {
+                            FAIL("duplicate event");
+                        }
+                    }
+                }
+            };
+            if (!useSkipCheck) {
+                w->close();
+            } else {
+                w->closeSkipCheck({});
+            }
+            CHECK(state == GotEvent);
+
+            delete w.data();
+        }
+
+        SECTION("close-default-accepted") {
+            QPointer<TestWindow> w = new TestWindow();
+            w->setOptions(w->options() & ~Tui::ZWindow::DeleteOnClose);
+
+            enum State {
+                Start, GotEvent
+            } state = Start;
+
+            app.fAfter = [&state, wCopy = w.data()] (QObject *o, QEvent *e) {
+                if (o == wCopy) {
+                    if (e->type() == Tui::ZEventType::close()) {
+                        if (state == Start) {
+                            state = GotEvent;
+                            CHECK(static_cast<Tui::ZCloseEvent*>(e)->isAccepted() == true);
+                        } else {
+                            FAIL("duplicate event");
+                        }
+                    }
+                }
+            };
+            if (!useSkipCheck) {
+                w->close();
+            } else {
+                w->closeSkipCheck({});
+            }
+            CHECK(state == GotEvent);
+
+            delete w.data();
+        }
+
+        SECTION("close-ignore-in-notify-blocks-close") {
+            // this checks that the event is properly dispatched. Should covery notify and event filters
+            QPointer<TestWindow> w = new TestWindow();
+            w->setOptions(w->options() & ~Tui::ZWindow::DeleteOnClose);
+
+            enum State {
+                Start, GotEvent
+            } state = Start;
+
+            app.fAfter = [&state, wCopy = w.data()] (QObject *o, QEvent *e) {
+                if (o == wCopy) {
+                    if (e->type() == Tui::ZEventType::close()) {
+                        if (state == Start) {
+                            state = GotEvent;
+                            e->ignore();
+                        } else {
+                            FAIL("duplicate event");
+                        }
+                    }
+                }
+            };
+            CHECK(w->isVisible());
+            if (!useSkipCheck) {
+                w->close();
+            } else {
+                w->closeSkipCheck({});
+            }
+            CHECK(w->isVisible());
+            CHECK(state == GotEvent);
+
+            delete w.data();
+        }
+
+        SECTION("close-ignore-event-specific-event-handler") {
+            QPointer<TestWindow> w = new TestWindow();
+            w->setOptions(w->options() & ~Tui::ZWindow::DeleteOnClose);
+
+            CHECK(w->isVisible());
+            w->ignoreInSpecificEvent = true;
+            if (!useSkipCheck) {
+                w->close();
+            } else {
+                w->closeSkipCheck({});
+            }
+            CHECK(w->isVisible());
+
+            delete w.data();
+        }
+
+        SECTION("close-ignore-event-generic-event-handler") {
+            QPointer<TestWindow> w = new TestWindow();
+            w->setOptions(w->options() & ~Tui::ZWindow::DeleteOnClose);
+
+            CHECK(w->isVisible());
+            w->ignoreInGenericEvent = true;
+            if (!useSkipCheck) {
+                w->close();
+            } else {
+                w->closeSkipCheck({});
+            }
+            CHECK(w->isVisible());
+
+            delete w.data();
+        }
+
+    }
+
+    SECTION("close-skipChecks") {
+        QPointer<TestWindow> w = new TestWindow();
+        w->setOptions(w->options() & ~Tui::ZWindow::DeleteOnClose);
+
+        w->expectedSkipChecks = QStringList{ "one", "two" };
+        w->closeSkipCheck({ "one", "two" });
+
+        delete w.data();
     }
 }
 

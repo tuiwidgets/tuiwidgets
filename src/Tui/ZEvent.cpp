@@ -57,6 +57,10 @@ TUIWIDGETS_EXPORT QEvent::Type ZEventType::hide() {
     CALL_ONCE_REGISTEREVENTTYPE;
 }
 
+TUIWIDGETS_EXPORT QEvent::Type ZEventType::close() {
+    CALL_ONCE_REGISTEREVENTTYPE;
+}
+
 TUIWIDGETS_EXPORT QEvent::Type ZEventType::updateRequest() {
     CALL_ONCE_REGISTEREVENTTYPE;
 }
@@ -224,6 +228,18 @@ QPoint ZMoveEvent::pos() const {
 
 QPoint ZMoveEvent::oldPos() const {
     return tuiwidgets_impl()->oldPos;
+}
+
+ZCloseEvent::ZCloseEvent(QStringList skipChecks)
+    : ZEvent(ZEventType::close(), std::make_unique<ZCloseEventPrivate>(skipChecks))
+{
+}
+
+QStringList ZCloseEvent::skipChecks() const {
+    return tuiwidgets_impl()->skipChecks;
+}
+
+ZCloseEventPrivate::ZCloseEventPrivate(QStringList skipChecks) : skipChecks(skipChecks) {
 }
 
 ZOtherChangeEvent::ZOtherChangeEvent(QSet<ZSymbol> unchanged)
