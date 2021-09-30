@@ -17,7 +17,8 @@ class TUIWIDGETS_EXPORT ZWindow : public ZWidget {
 
 public:
     enum Option {
-        CloseButton = (1 << 0),
+        CloseOption = (1 << 0),
+        CloseButton = CloseOption,
         DeleteOnClose = (1 << 5),
     };
     Q_DECLARE_FLAGS(Options, Option)

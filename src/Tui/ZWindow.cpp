@@ -5,6 +5,7 @@
 #include <QSize>
 
 #include <Tui/ZColor.h>
+#include <Tui/ZCommandNotifier.h>
 #include <Tui/ZLayout.h>
 #include <Tui/ZMenu.h>
 #include <Tui/ZPainter.h>
@@ -21,6 +22,8 @@ ZWindow::ZWindow(ZWidget *parent) : ZWidget(parent, std::make_unique<ZWindowPriv
     addPaletteClass(QStringLiteral("window"));
     setSizePolicyH(SizePolicy::Expanding);
     setSizePolicyV(SizePolicy::Expanding);
+
+    QObject::connect(new Tui::ZCommandNotifier("ZWindowClose", this, Qt::WindowShortcut), &Tui::ZCommandNotifier::activated, this, &ZWindow::close);
 }
 
 ZWindow::ZWindow(const QString &title, ZWidget *parent)
@@ -271,6 +274,13 @@ QVector<ZMenuItem> ZWindow::systemMenu() {
     auto *const p = tuiwidgets_impl();
 
     QVector<ZMenuItem> ret;
+
+    if (options() & CloseOption) {
+        if (ret.size()) {
+            ret.append(ZMenuItem{});
+        }
+        ret.append(ZMenuItem{QStringLiteral("<m>C</m>lose"), QString(), QStringLiteral("ZWindowClose"), {}});
+    }
 
     return ret;
 }

@@ -8,6 +8,7 @@
 
 #include <Tui/ZBasicWindowFacet.h>
 #include <Tui/ZColor.h>
+#include <Tui/ZCommandManager.h>
 #include <Tui/ZCommandNotifier.h>
 #include <Tui/ZPainter.h>
 #include <Tui/ZPalette.h>
@@ -358,6 +359,23 @@ TEST_CASE("window-close") {
 
         delete w.data();
     }
+
+    SECTION("close-command") {
+        Tui::ZTerminal terminal(Tui::ZTerminal::OffScreen{10, 10});
+        Tui::ZRoot root;
+        terminal.setMainWidget(&root);
+        Tui::ZCommandManager *const cmdMgr = root.ensureCommandManager();
+        QPointer<TestWindow> w = new TestWindow(&root);
+        w->setFocus();
+        w->setOptions(w->options() & ~Tui::ZWindow::DeleteOnClose);
+        auto closeSym = TUISYM_LITERAL("ZWindowClose");
+        CHECK(cmdMgr->isCommandEnabled(closeSym));
+        cmdMgr->activateCommand(closeSym);
+        CHECK(!w->isVisible());
+
+        delete w.data();
+    }
+
 }
 
 TEST_CASE("window-systemmenu", "") {
@@ -383,6 +401,18 @@ TEST_CASE("window-systemmenu", "") {
         TestWindow w;
         w.setOptions({});
         CHECK(w.retrieveSystemMenu().size() == 0);
+    }
+
+    SECTION("menu-close-option") {
+        TestWindow w;
+        w.setOptions({ Tui::ZWindow::CloseOption });
+        QVector<Tui::ZMenuItem> menu = w.retrieveSystemMenu();
+        REQUIRE(menu.size() == 1);
+        CHECK(menu[0].markup() == "<m>C</m>lose");
+        CHECK(menu[0].fakeShortcut() == "");
+        auto closeSym = TUISYM_LITERAL("ZWindowClose");
+        CHECK(menu[0].command() == closeSym);
+        CHECK(menu[0].subitems().isEmpty());
     }
 
     SECTION("show-empty") {
