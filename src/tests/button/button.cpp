@@ -483,9 +483,9 @@ TEST_CASE("button-behavior", "") {
         }
 
         SECTION("enter-with-modifier") {
-            t.sendKey(Qt::Key_Enter, Qt::KeyboardModifier::AltModifier);
-            t.sendKey(Qt::Key_Enter, Qt::KeyboardModifier::ShiftModifier);
-            t.sendKey(Qt::Key_Enter, Qt::KeyboardModifier::ControlModifier);
+            FAIL_CHECK_VEC(t.checkKeyEventBubbles(Qt::Key_Enter, Qt::KeyboardModifier::AltModifier));
+            FAIL_CHECK_VEC(t.checkKeyEventBubbles(Qt::Key_Enter, Qt::KeyboardModifier::ShiftModifier));
+            FAIL_CHECK_VEC(t.checkKeyEventBubbles(Qt::Key_Enter, Qt::KeyboardModifier::ControlModifier));
         }
 
         SECTION("enter-on-disabled") {
@@ -504,9 +504,9 @@ TEST_CASE("button-behavior", "") {
         }
 
         SECTION("space-with-modifier") {
-            t.sendKey(Qt::Key_Space, Qt::KeyboardModifier::AltModifier);
-            t.sendKey(Qt::Key_Space, Qt::KeyboardModifier::ShiftModifier);
-            t.sendKey(Qt::Key_Space, Qt::KeyboardModifier::ControlModifier);
+            FAIL_CHECK_VEC(t.checkCharEventBubbles(" ", Qt::KeyboardModifier::AltModifier));
+            FAIL_CHECK_VEC(t.checkCharEventBubbles(" ", Qt::KeyboardModifier::ShiftModifier));
+            FAIL_CHECK_VEC(t.checkCharEventBubbles(" ", Qt::KeyboardModifier::ControlModifier));
         }
 
         SECTION("space-on-disabled") {
@@ -555,13 +555,13 @@ TEST_CASE("button-behavior", "") {
         SECTION("mnemonic-via-markup-reset-via-text") {
             button->setMarkup("<m>O</m>K");
             button->setText("OK");
-            t.sendChar("o", Qt::AltModifier);
+            FAIL_CHECK_VEC(t.checkCharEventBubbles("o", Qt::AltModifier));
         }
 
         SECTION("mnemonic-via-markup-reset-via-markup") {
             button->setMarkup("<m>O</m>K");
             button->setMarkup("OK");
-            t.sendChar("o", Qt::AltModifier);
+            FAIL_CHECK_VEC(t.checkCharEventBubbles("o", Qt::AltModifier));
         }
 
     }

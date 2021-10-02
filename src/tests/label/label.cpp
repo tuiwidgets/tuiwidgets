@@ -202,7 +202,7 @@ TEST_CASE("label-visual", "") {
         l->setGeometry({1, 1, 3, 1});
         l->setBuddy(sw1);
         l->setEnabled(false);
-        t.sendChar("l", Qt::AltModifier);
+        FAIL_CHECK_VEC(t.checkCharEventBubbles("l", Qt::AltModifier));
         CHECK(sw1->focus() == false);
         t.compare("buddy-disable-label");
     }
@@ -214,13 +214,15 @@ TEST_CASE("label-visual", "") {
         l->setMarkup("<m>L</m>1");
         l->setGeometry({1, 1, 3, 1});
         l->setBuddy(sw1);
-        t.sendChar("l", Qt::AltModifier);
+        FAIL_CHECK_VEC(t.checkCharEventBubbles("l", Qt::AltModifier));
         CHECK(sw1->focus() == false);
         t.compare("buddy-disable-label");
     }
 
     SECTION("sendchar-without-buddy") {
         l->setMarkup("<m>L</m>1");
+        // this one is accepted by the label to avoid an
+        // unrelated shortcut triggering an unexpected action.
         t.sendChar("l", Qt::AltModifier);
     }
 
@@ -231,7 +233,7 @@ TEST_CASE("label-visual", "") {
         l->setText("L1");
         l->setGeometry({1, 1, 3, 1});
         l->setBuddy(sw1);
-        t.sendChar("l", Qt::AltModifier);
+        FAIL_CHECK_VEC(t.checkCharEventBubbles("l", Qt::AltModifier));
         CHECK(sw1->focus() == false);
     }
 
@@ -242,7 +244,7 @@ TEST_CASE("label-visual", "") {
         l->setMarkup("L1");
         l->setGeometry({1, 1, 3, 1});
         l->setBuddy(sw1);
-        t.sendChar("l", Qt::AltModifier);
+        FAIL_CHECK_VEC(t.checkCharEventBubbles("l", Qt::AltModifier));
         CHECK(sw1->focus() == false);
     }
 }

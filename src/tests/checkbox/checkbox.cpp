@@ -173,7 +173,7 @@ TEST_CASE("checkbox", "") {
 
     SECTION("single-enter") {
         cb->setFocus();
-        t.sendKey(Qt::Key_Enter);
+        FAIL_CHECK_VEC(t.checkKeyEventBubbles(Qt::Key_Enter));
         CHECK(cb->checkState() == Qt::CheckState::Unchecked);
     }
 
@@ -300,15 +300,15 @@ TEST_CASE("checkbox-withMarkup", "") {
         CHECK(cb1->checkState() == Qt::CheckState::Unchecked);
         CHECK(cb2->checkState() == Qt::CheckState::Unchecked);
         CHECK(cb3->checkState() == Qt::CheckState::Unchecked);
-        t.sendChar("c", Qt::AltModifier);
+        FAIL_CHECK_VEC(t.checkCharEventBubbles("c", Qt::AltModifier));
         CHECK(cb1->checkState() == Qt::CheckState::Unchecked);
         CHECK(cb2->checkState() == Qt::CheckState::Unchecked);
         CHECK(cb3->checkState() == Qt::CheckState::Unchecked);
-        t.sendChar("B", Qt::AltModifier | Qt::ControlModifier);
+        FAIL_CHECK_VEC(t.checkCharEventBubbles("B", Qt::AltModifier | Qt::ControlModifier));
         CHECK(cb1->checkState() == Qt::CheckState::Unchecked);
         CHECK(cb2->checkState() == Qt::CheckState::Unchecked);
         CHECK(cb3->checkState() == Qt::CheckState::Unchecked);
-        t.sendChar("2");
+        FAIL_CHECK_VEC(t.checkCharEventBubbles("2"));
         CHECK(cb1->checkState() == Qt::CheckState::Unchecked);
         CHECK(cb2->checkState() == Qt::CheckState::Unchecked);
         CHECK(cb3->checkState() == Qt::CheckState::Unchecked);
@@ -322,7 +322,7 @@ TEST_CASE("checkbox-withMarkup", "") {
         cb1->setGeometry({1, 1, 13, 1});
 
         CHECK(cb1->checkState() == Qt::CheckState::Unchecked);
-        t.sendChar("c", Qt::AltModifier);
+        FAIL_CHECK_VEC(t.checkCharEventBubbles("c", Qt::AltModifier));
         CHECK(cb1->checkState() == Qt::CheckState::Unchecked);
     }
 
@@ -333,7 +333,7 @@ TEST_CASE("checkbox-withMarkup", "") {
         cb1->setGeometry({1, 1, 13, 1});
 
         CHECK(cb1->checkState() == Qt::CheckState::Unchecked);
-        t.sendChar("c", Qt::AltModifier);
+        FAIL_CHECK_VEC(t.checkCharEventBubbles("c", Qt::AltModifier));
         CHECK(cb1->checkState() == Qt::CheckState::Unchecked);
     }
 

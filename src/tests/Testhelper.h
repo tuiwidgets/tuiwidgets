@@ -18,6 +18,7 @@
 
 std::vector<std::string> getCurrentTestNames();
 
+class RootStub;
 
 class Testhelper : public QObject {
 public:
@@ -28,12 +29,17 @@ public:
 
 public:
     Testhelper(QString dir, QString namePrefix, int width, int height, Options options = {});
-    ~Testhelper() { delete root; }
+    ~Testhelper();
 
     void sendChar(QString ch, Qt::KeyboardModifiers modifiers = {});
     void sendKey(Qt::Key key, Qt::KeyboardModifiers modifiers = {});
     void sendKeyToWidget(Tui::ZWidget *w, Qt::Key key, Qt::KeyboardModifiers modifiers = {});
     void sendKeyToZTerminal(QString key);
+
+    [[nodiscard]]
+    std::vector<std::string> checkCharEventBubbles(QString ch, Qt::KeyboardModifiers modifiers = {});
+    [[nodiscard]]
+    std::vector<std::string> checkKeyEventBubbles(Qt::Key key, Qt::KeyboardModifiers modifiers = {});
 
     void compare();
     void compare(QString name);
@@ -44,7 +50,7 @@ public:
 
     std::unique_ptr<QCoreApplication> app;
     std::unique_ptr<Tui::ZTerminal> terminal;
-    Tui::ZRoot *root;
+    RootStub *root;
 
     std::unique_ptr<const Tui::ZImage> lastCapture;
     QString basePath();
@@ -113,6 +119,21 @@ public:
 
 protected:
     void paintEvent(Tui::ZPaintEvent *event) override;
+};
+
+class RootStub : public Tui::ZRoot {
+public:
+    using Tui::ZRoot::ZRoot;
+
+    std::function<void(QEvent*)> fEvent;
+
+protected:
+    bool event(QEvent *event) override {
+        if (fEvent) {
+            fEvent(event);
+        }
+        return Tui::ZRoot::event(event);
+    }
 };
 
 enum class DefaultException {

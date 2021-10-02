@@ -280,15 +280,15 @@ TEST_CASE("radiobutton-withMarkup", "") {
         CHECK(!rb1->checked());
         CHECK(!rb2->checked());
         CHECK(!rb3->checked());
-        t.sendChar("r", Qt::AltModifier);
+        FAIL_CHECK_VEC(t.checkCharEventBubbles("r", Qt::AltModifier));
         CHECK(!rb1->checked());
         CHECK(!rb2->checked());
         CHECK(!rb3->checked());
-        t.sendChar("B", Qt::AltModifier | Qt::ControlModifier);
+        FAIL_CHECK_VEC(t.checkCharEventBubbles("B", Qt::AltModifier | Qt::ControlModifier));
         CHECK(!rb1->checked());
         CHECK(!rb2->checked());
         CHECK(!rb3->checked());
-        t.sendChar("3");
+        FAIL_CHECK_VEC(t.checkCharEventBubbles("3"));
         CHECK(!rb1->checked());
         CHECK(!rb2->checked());
         CHECK(!rb3->checked());
@@ -395,13 +395,13 @@ TEST_CASE("radiobutton-emit", "") {
     SECTION("mnemonic-via-markup-reset-via-text") {
         rb1->setMarkup("<m>O</m>K");
         rb1->setText("OK");
-        t.sendChar("o", Qt::AltModifier);
+        FAIL_CHECK_VEC(t.checkCharEventBubbles("o", Qt::AltModifier));
     }
 
     SECTION("mnemonic-via-markup-reset-via-markup") {
         rb1->setMarkup("<m>O</m>K");
         rb1->setMarkup("OK");
-        t.sendChar("o", Qt::AltModifier);
+        FAIL_CHECK_VEC(t.checkCharEventBubbles("o", Qt::AltModifier));
     }
 }
 

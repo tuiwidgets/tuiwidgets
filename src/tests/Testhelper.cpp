@@ -27,9 +27,13 @@ Testhelper::Testhelper(QString dir, QString namePrefix, int width, int height, O
     }
 
     terminal = std::make_unique<Tui::ZTerminal>(init);
-    root = new Tui::ZRoot();
+    root = new RootStub();
     root->setMinimumSize(0, 0);
     terminal->setMainWidget(root);
+}
+
+Testhelper::~Testhelper() {
+    delete root;
 }
 
 void Testhelper::sendChar(QString ch, Qt::KeyboardModifiers modifiers) {
@@ -81,6 +85,55 @@ void Testhelper::sendKeyToZTerminal(QString key) {
     render();
 }
 
+std::vector<std::string> Testhelper::checkCharEventBubbles(QString ch, Qt::KeyboardModifiers modifiers) {
+    std::vector<std::string> problems;
+    auto fEventRestore = root->fEvent;
+
+    bool keyBubbled = false;
+    root->fEvent = [&keyBubbled, ch, modifiers](QEvent *event) {
+        if (event->type() == Tui::ZEventType::key()) {
+            auto keyEvent = static_cast<Tui::ZKeyEvent*>(event);
+            if (keyEvent->text() == ch && keyEvent->modifiers() == modifiers) {
+                CHECK(keyBubbled == false);
+                keyBubbled = true;
+            }
+        }
+    };
+    sendChar(ch, modifiers);
+
+    if (!keyBubbled) {
+        problems.push_back("Key event did not bubble as expected");
+    }
+
+    root->fEvent = fEventRestore;
+
+    return problems;
+}
+
+std::vector<std::string> Testhelper::checkKeyEventBubbles(Qt::Key key, Qt::KeyboardModifiers modifiers) {
+    std::vector<std::string> problems;
+    auto fEventRestore = root->fEvent;
+
+    bool keyBubbled = false;
+    root->fEvent = [&keyBubbled, key, modifiers](QEvent *event) {
+        if (event->type() == Tui::ZEventType::key()) {
+            auto keyEvent = static_cast<Tui::ZKeyEvent*>(event);
+            if (keyEvent->key() == key && keyEvent->modifiers() == modifiers) {
+                CHECK(keyBubbled == false);
+                keyBubbled = true;
+            }
+        }
+    };
+    sendKey(key, modifiers);
+
+    if (!keyBubbled) {
+        problems.push_back("Key event did not bubble as expected");
+    }
+
+    root->fEvent = fEventRestore;
+
+    return problems;
+}
 
 void Testhelper::compare(QString name) {
     QString fileNameOfTest = QString(basePath() + namePrefix + QStringLiteral("-") + name)
