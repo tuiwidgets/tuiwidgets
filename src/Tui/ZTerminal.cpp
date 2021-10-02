@@ -930,9 +930,9 @@ void ZTerminal::dispatchKeyboardEvent(ZKeyEvent &translated) {
             QCoreApplication::sendEvent(p->keyboardGrabWidget, &translated);
         }
     } else if (!p->shortcutManager || !p->shortcutManager->process(&translated)) {
-        translated.accept();
         QPointer<ZWidget> w = tuiwidgets_impl()->focus();
         while (w) {
+            translated.accept();
             bool processed = QCoreApplication::sendEvent(w, &translated);
             if ((processed && translated.isAccepted()) || !w) {
                 break;
