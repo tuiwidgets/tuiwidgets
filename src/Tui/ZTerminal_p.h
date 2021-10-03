@@ -109,9 +109,9 @@ public:
     std::unique_ptr<ZShortcutManager> shortcutManager;
     ZTerminal::Options options;
     QString title;
-    bool titleNeedsUpdate;
+    bool titleNeedsUpdate = false;
     QString iconTitle;
-    bool iconTitleNeedsUpdate;
+    bool iconTitleNeedsUpdate = false;
     QString pasteTemp;
 
     QList<QPointer<ZWidget>> layoutPendingWidgets;
