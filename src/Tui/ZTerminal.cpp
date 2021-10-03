@@ -414,22 +414,29 @@ void ZTerminalPrivate::initCommon() {
     termpaint_terminal_set_raw_input_filter_cb(terminal, raw_filter, pub());
     termpaint_terminal_set_event_cb(terminal, event_handler, pub());
 
-    if (!options.testFlag(ZTerminal::DisableAutoDetectTimeoutMessage)) {
-        autoDetectTimeoutTimer.reset(new QTimer(pub()));
-        autoDetectTimeoutTimer->setSingleShot(true);
-        autoDetectTimeoutTimer->start(10000);
-        QObject::connect(autoDetectTimeoutTimer.get(), &QTimer::timeout, pub(), [this] {
-            QByteArray utf8 = autoDetectTimeoutMessage.toUtf8();
-            if (externalConnection) {
-                externalConnection->delegate->write(utf8.data(), utf8.size());
-                externalConnection->delegate->flush();
-            } else {
-                internalConnection_integration_write(utf8.data(), utf8.size());
-                internalConnection_integration_flush();
-            }
-        });
-    }
-    termpaint_terminal_auto_detect(terminal);
+    // start terminal detection as soon as the event loop is active.
+    // Otherwise when the application has a long init time before reaching the
+    // event loop the time window where unrelated events in the terminal
+    // can break auto detection can be too large and the timeout can trigger
+    // too soon.
+    QTimer::singleShot(0, pub(), [this] {
+        if (!options.testFlag(ZTerminal::DisableAutoDetectTimeoutMessage)) {
+            autoDetectTimeoutTimer.reset(new QTimer(pub()));
+            autoDetectTimeoutTimer->setSingleShot(true);
+            autoDetectTimeoutTimer->start(10000);
+            QObject::connect(autoDetectTimeoutTimer.get(), &QTimer::timeout, pub(), [this] {
+                QByteArray utf8 = autoDetectTimeoutMessage.toUtf8();
+                if (externalConnection) {
+                    externalConnection->delegate->write(utf8.data(), utf8.size());
+                    externalConnection->delegate->flush();
+                } else {
+                    internalConnection_integration_write(utf8.data(), utf8.size());
+                    internalConnection_integration_flush();
+                }
+            });
+        }
+        termpaint_terminal_auto_detect(terminal);
+    });
 
     callbackTimer.setSingleShot(true);
     QObject::connect(&callbackTimer, &QTimer::timeout, pub(), [terminal=terminal] {
