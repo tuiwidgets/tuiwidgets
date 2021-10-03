@@ -1,6 +1,6 @@
 #include <Tui/ZWindow.h>
 
-#include <../../third-party/catch.hpp>
+#include "../catchwrapper.h"
 
 #include <QPointer>
 #include <QRect>

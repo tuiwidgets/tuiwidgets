@@ -1,7 +1,7 @@
 #include <Tui/ZMenu.h>
 #include <Tui/ZMenubar.h>
 
-#include <../../third-party/catch.hpp>
+#include "../catchwrapper.h"
 
 #include <QVector>
 

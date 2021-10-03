@@ -1,7 +1,6 @@
 #include <Tui/ZBasicWindowFacet.h>
 
-#include <../../third-party/catch.hpp>
-
+#include "../catchwrapper.h"
 
 #include "../Testhelper.h"
 

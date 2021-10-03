@@ -1,5 +1,5 @@
 #define CATCH_CONFIG_MAIN
-#include "../third-party/catch.hpp"
+#include "catchwrapper.h"
 
 #include <QString>
 

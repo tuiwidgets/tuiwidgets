@@ -13,7 +13,7 @@
 #include <Tui/ZTerminal.h>
 #include <Tui/ZWindow.h>
 
-#include "../third-party/catch.hpp"
+#include "catchwrapper.h"
 
 
 std::vector<std::string> getCurrentTestNames();

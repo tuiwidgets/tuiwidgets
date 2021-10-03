@@ -1,4 +1,4 @@
-#include <../../third-party/catch.hpp>
+#include "../catchwrapper.h"
 
 #include "../Testhelper.h"
 

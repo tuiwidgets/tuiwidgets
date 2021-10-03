@@ -1,6 +1,6 @@
 #include <Tui/ZRadioButton.h>
 
-#include <../../third-party/catch.hpp>
+#include "../catchwrapper.h"
 #include "../Testhelper.h"
 
 #include <Tui/ZPalette.h>

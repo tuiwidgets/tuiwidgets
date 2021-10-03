@@ -4,7 +4,7 @@
 
 #include <termpaint.h>
 
-#include "../../third-party/catch.hpp"
+#include "../catchwrapper.h"
 
 TEST_CASE("zcolor - base") {
     SECTION("default constructor") {
