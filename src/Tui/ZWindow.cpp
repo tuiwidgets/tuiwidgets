@@ -12,16 +12,16 @@
 
 TUIWIDGETS_NS_START
 
-static Tui::ZSymbol extendedCharset = TUISYM_LITERAL("extendedCharset");
+static ZSymbol extendedCharset = TUISYM_LITERAL("extendedCharset");
 
-ZWindow::ZWindow(Tui::ZWidget *parent) : ZWidget(parent, std::make_unique<ZWindowPrivate>(this)) {
-    setFocusMode(Tui::FocusContainerMode::Cycle);
+ZWindow::ZWindow(ZWidget *parent) : ZWidget(parent, std::make_unique<ZWindowPrivate>(this)) {
+    setFocusMode(FocusContainerMode::Cycle);
     addPaletteClass(QStringLiteral("window"));
-    setSizePolicyH(Tui::SizePolicy::Expanding);
-    setSizePolicyV(Tui::SizePolicy::Expanding);
+    setSizePolicyH(SizePolicy::Expanding);
+    setSizePolicyV(SizePolicy::Expanding);
 }
 
-ZWindow::ZWindow(const QString &title, Tui::ZWidget *parent)
+ZWindow::ZWindow(const QString &title, ZWidget *parent)
     : ZWindow(parent)
 {
     setWindowTitle(title);
@@ -154,10 +154,10 @@ const static struct {
     { "*", u'=', "*", "|", "*", "*", "#", "#", "#", "#" },
 };
 
-void ZWindow::paintEvent(Tui::ZPaintEvent *event) {
+void ZWindow::paintEvent(ZPaintEvent *event) {
     auto *const p = tuiwidgets_impl();
-    Tui::ZColor frameBg, frameFg;
-    Tui::ZColor buttonBg, buttonFg;
+    ZColor frameBg, frameFg;
+    ZColor buttonBg, buttonFg;
     bool active = isInFocusPath();
 
     if (active) {
@@ -171,7 +171,7 @@ void ZWindow::paintEvent(Tui::ZPaintEvent *event) {
     }
 
     auto *painter = event->painter();
-    Tui::ZTextMetrics metrics = painter->textMetrics();
+    ZTextMetrics metrics = painter->textMetrics();
     painter->clear(frameFg, frameBg);
     int w = geometry().width();
     int h = geometry().height();
@@ -246,9 +246,9 @@ void ZWindow::paintEvent(Tui::ZPaintEvent *event) {
     }
 }
 
-void ZWindow::keyEvent(Tui::ZKeyEvent *event) {
+void ZWindow::keyEvent(ZKeyEvent *event) {
     if (event->key() == Qt::Key_Tab && (event->modifiers() == 0 || event->modifiers() == Qt::ShiftModifier)) {
-        Tui::ZTerminal *term = terminal();
+        ZTerminal *term = terminal();
         if (term) {
             ZWidget *f = term->focusWidget();
             if (f && isAncestorOf(f)) {
@@ -260,7 +260,7 @@ void ZWindow::keyEvent(Tui::ZKeyEvent *event) {
             }
         }
     } else {
-        Tui::ZWidget::keyEvent(event);
+        ZWidget::keyEvent(event);
     }
 }
 
@@ -275,10 +275,10 @@ void ZWindowPrivate::ensureAutoPlacement() {
     }
 }
 
-void ZWindow::resizeEvent(Tui::ZResizeEvent *event) {
+void ZWindow::resizeEvent(ZResizeEvent *event) {
     auto *const p = tuiwidgets_impl();
 
-    Tui::ZWidget::resizeEvent(event);
+    ZWidget::resizeEvent(event);
 
     p->ensureAutoPlacement();
 }
@@ -293,47 +293,47 @@ bool ZWindow::event(QEvent *event) {
         p->ensureAutoPlacement();
     }
 
-    return Tui::ZWidget::event(event);
+    return ZWidget::event(event);
 }
 
 bool ZWindow::eventFilter(QObject *watched, QEvent *event) {
-    return Tui::ZWidget::eventFilter(watched, event);
+    return ZWidget::eventFilter(watched, event);
 }
 
 void ZWindow::timerEvent(QTimerEvent *event) {
-    Tui::ZWidget::timerEvent(event);
+    ZWidget::timerEvent(event);
 }
 
 void ZWindow::childEvent(QChildEvent *event) {
-    Tui::ZWidget::childEvent(event);
+    ZWidget::childEvent(event);
 }
 
 void ZWindow::customEvent(QEvent *event) {
-    Tui::ZWidget::customEvent(event);
+    ZWidget::customEvent(event);
 }
 
 void ZWindow::connectNotify(const QMetaMethod &signal) {
-    Tui::ZWidget::connectNotify(signal);
+    ZWidget::connectNotify(signal);
 }
 
 void ZWindow::disconnectNotify(const QMetaMethod &signal) {
-    Tui::ZWidget::disconnectNotify(signal);
+    ZWidget::disconnectNotify(signal);
 }
 
-void ZWindow::pasteEvent(Tui::ZPasteEvent *event) {
-    Tui::ZWidget::pasteEvent(event);
+void ZWindow::pasteEvent(ZPasteEvent *event) {
+    ZWidget::pasteEvent(event);
 }
 
-void ZWindow::focusInEvent(Tui::ZFocusEvent *event) {
-    Tui::ZWidget::focusInEvent(event);
+void ZWindow::focusInEvent(ZFocusEvent *event) {
+    ZWidget::focusInEvent(event);
 }
 
-void ZWindow::focusOutEvent(Tui::ZFocusEvent *event) {
-    Tui::ZWidget::focusOutEvent(event);
+void ZWindow::focusOutEvent(ZFocusEvent *event) {
+    ZWidget::focusOutEvent(event);
 }
 
-void ZWindow::moveEvent(Tui::ZMoveEvent *event) {
-    Tui::ZWidget::moveEvent(event);
+void ZWindow::moveEvent(ZMoveEvent *event) {
+    ZWidget::moveEvent(event);
 }
 
 ZWindowPrivate::ZWindowPrivate(ZWidget *pub) : ZWidgetPrivate(pub) {
