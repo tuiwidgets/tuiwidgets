@@ -1044,7 +1044,7 @@ void ZWidgetPrivate::updateRequestEvent(ZPaintEvent *event)
     auto *painter = event->painter();
     // TODO think about mitigations about childs beeing deleted while in paint event
     {
-        Tui::ZPaintEvent nestedEvent(painter);
+        ZPaintEvent nestedEvent(painter);
         QCoreApplication::instance()->sendEvent(pub(), &nestedEvent);
     }
     for (QObject *childQObj : pub()->children()) {
@@ -1058,7 +1058,7 @@ void ZWidgetPrivate::updateRequestEvent(ZPaintEvent *event)
         const QRect &childRect = child->tuiwidgets_impl()->geometry;
         ZPainter transformedPainter = painter->translateAndClip(childRect);
         transformedPainter.setWidget(child);
-        Tui::ZPaintEvent nestedEvent(ZPaintEvent::update, &transformedPainter);
+        ZPaintEvent nestedEvent(ZPaintEvent::update, &transformedPainter);
         QCoreApplication::instance()->sendEvent(child, &nestedEvent);
     }
 }

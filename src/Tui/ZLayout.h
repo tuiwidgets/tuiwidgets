@@ -24,7 +24,7 @@ public:
 public:
     virtual void widgetEvent(QEvent *event);
 
-    ZWidget* widget();
+    ZWidget *widget();
 
     void setGeometry(QRect r) override = 0;
     QSize sizeHint() const  override;

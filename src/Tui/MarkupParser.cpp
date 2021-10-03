@@ -84,7 +84,7 @@ void MarkupTokenizer::storeAttribute()
     attrValue.clear();
 }
 
-static uint32_t hash_fnv1a(const unsigned char* text) {
+static uint32_t hash_fnv1a(const unsigned char *text) {
     uint32_t hash = 2166136261;
     for (; *text; ++text) {
             hash = hash ^ *text;

@@ -393,7 +393,7 @@ bool ZTerminalPrivate::commonInitForInternalConnection(ZTerminal::Options option
 
             // The initial restore sequence update was in termpaint_terminal_new, we missed that
             // because systemRestoreFd was not set yet, trigger update again
-            const char* tmp = termpaint_terminal_restore_sequence(terminal);
+            const char *tmp = termpaint_terminal_restore_sequence(terminal);
             internalConnection_integration_restore_sequence_updated(tmp, static_cast<int>(strlen(tmp)), true);
 
             // After this the signal handler pay attention to the just setup state
@@ -618,13 +618,13 @@ void ZTerminalPrivate::internalConnection_integration_restore_sequence_updated(c
 
 void ZTerminalPrivate::initIntegrationForInternalConnection() {
     memset(&integration, 0, sizeof(integration));
-    auto free = [] (termpaint_integration* ptr) {
+    auto free = [] (termpaint_integration *ptr) {
         container_of(ptr, ZTerminalPrivate, integration)->internalConnection_integration_free();
     };
-    auto write = [] (termpaint_integration* ptr, const char *data, int length) {
+    auto write = [] (termpaint_integration *ptr, const char *data, int length) {
         container_of(ptr, ZTerminalPrivate, integration)->internalConnection_integration_write(data, length);
     };
-    auto flush = [] (termpaint_integration* ptr) {
+    auto flush = [] (termpaint_integration *ptr) {
         container_of(ptr, ZTerminalPrivate, integration)->internalConnection_integration_flush();
     };
 
@@ -632,10 +632,10 @@ void ZTerminalPrivate::initIntegrationForInternalConnection() {
 
     initIntegrationCommon();
 
-    termpaint_integration_set_is_bad(&integration, [] (termpaint_integration* ptr) {
+    termpaint_integration_set_is_bad(&integration, [] (termpaint_integration *ptr) {
             return container_of(ptr, ZTerminalPrivate, integration)->internalConnection_integration_is_bad();
     });
-    termpaint_integration_set_restore_sequence_updated(&integration, [] (termpaint_integration* ptr, const char *data, int length) {
+    termpaint_integration_set_restore_sequence_updated(&integration, [] (termpaint_integration *ptr, const char *data, int length) {
         container_of(ptr, ZTerminalPrivate, integration)->internalConnection_integration_restore_sequence_updated(data, length, false);
     });
 }

@@ -27,7 +27,7 @@ public:
         }
     }
 
-    void appendOrMoveToLast(T* e) {
+    void appendOrMoveToLast(T *e) {
         constexpr auto nodeOffset = ListTrait<Tag>::offset;
         auto& node = e->*nodeOffset;
         if (last == e) {
@@ -47,7 +47,7 @@ public:
         }
     }
 
-    void remove(T* e) {
+    void remove(T *e) {
         constexpr auto nodeOffset = ListTrait<Tag>::offset;
         auto& node = e->*nodeOffset;
         if (e == first) {
@@ -66,16 +66,16 @@ public:
         node.next = nullptr;
     }
 
-    T* first = nullptr;
-    T* last = nullptr;
+    T *first = nullptr;
+    T *last = nullptr;
 };
 
 
 template <typename T>
 class ListNode {
 public:
-    T* prev = nullptr;
-    T* next = nullptr;
+    T *prev = nullptr;
+    T *next = nullptr;
 };
 
 TUIWIDGETS_NS_END

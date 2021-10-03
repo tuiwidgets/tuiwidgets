@@ -7,7 +7,6 @@
 #include <QMargins>
 
 #include <Tui/ZCommon.h>
-
 #include <Tui/ZEvent.h>
 #include <Tui/ZMoFunc_p.h>
 
@@ -129,24 +128,24 @@ public:
     QPoint mapFromTerminal(const QPoint& pos);
     QPoint mapToTerminal(const QPoint& pos);
 
-    ZWidget const* prevFocusable() const;
-    ZWidget* prevFocusable();
-    ZWidget const* nextFocusable() const;
-    ZWidget* nextFocusable();
+    ZWidget const *prevFocusable() const;
+    ZWidget *prevFocusable();
+    ZWidget const *nextFocusable() const;
+    ZWidget *nextFocusable();
     const ZWidget *placeFocus(bool last = false) const;
     ZWidget *placeFocus(bool last = false);
 
     virtual ZWidget *resolveSizeHintChain();
 
-    ZCommandManager* commandManager();
-    ZCommandManager* ensureCommandManager();
-    void setCommandManager(ZCommandManager* cmd);
+    ZCommandManager *commandManager();
+    ZCommandManager *ensureCommandManager();
+    void setCommandManager(ZCommandManager *cmd);
 
     template<typename T>
-    T* findFacet() {
+    T *findFacet() {
         ZWidget *w = this;
         while (w) {
-            T* t = static_cast<T*>(w->facet(T::staticMetaObject));
+            T *t = static_cast<T*>(w->facet(T::staticMetaObject));
             if (t) {
                 return t;
             }

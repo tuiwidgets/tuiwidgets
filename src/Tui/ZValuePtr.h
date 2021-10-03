@@ -51,8 +51,8 @@ public:
     }
 
 public:
-    T* get() { return data.get(); }
-    const T* get() const { return data.get(); }
+    T *get() { return data.get(); }
+    const T *get() const { return data.get(); }
 
     T& operator*() { return *data; }
     const T& operator*() const { return *data; }

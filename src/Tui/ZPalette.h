@@ -56,7 +56,7 @@ public:
     static ZPalette black();
 
 public:
-    ZColor getColor(Tui::ZWidget *targetWidget, ZImplicitSymbol x) const;
+    ZColor getColor(ZWidget *targetWidget, ZImplicitSymbol x) const;
 
     void setColors(QList<ColorDef> newColors);
     void addLocalAlias(QList<AliasDef> newAliases);

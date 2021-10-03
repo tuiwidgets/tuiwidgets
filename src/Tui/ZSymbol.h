@@ -50,7 +50,7 @@ public:
         return key.id;
     }
 
-    friend struct std::hash<Tui::ZSymbol>;
+    friend struct std::hash<ZSymbol>;
 
 private:
     static int lookup(QString str, bool create);

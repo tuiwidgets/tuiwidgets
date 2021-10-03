@@ -38,7 +38,7 @@ void ZRoot::raiseOnFocus(ZWidget *w) {
     if (!w->paletteClass().contains(QStringLiteral("dialog"))) {
         bool phase = false; // false -> looking for w, true -> looking for stack under widget
         for (QObject *childQObj : children()) {
-            ZWidget* child = qobject_cast<ZWidget*>(childQObj);
+            ZWidget *child = qobject_cast<ZWidget*>(childQObj);
             if (!child) {
                 continue;
             }
@@ -69,7 +69,7 @@ void ZRoot::focusWindowHelper(bool forward) {
     bool found = false;
 
     QList<ZWidget*> childWindows;
-    for (QObject* obj : p->windows) {
+    for (QObject *obj : p->windows) {
         auto childWidget = qobject_cast<ZWidget*>(obj);
         if (childWidget && childWidget->paletteClass().contains(QStringLiteral("window")) && childWidget->isVisible()) {
             childWindows.append(childWidget);
@@ -115,8 +115,8 @@ void ZRoot::keyEvent(ZKeyEvent *event) {
 }
 
 bool ZRoot::event(QEvent *event) {
-    if (event->type() == Tui::ZEventType::otherChange()) {
-        if (!static_cast<Tui::ZOtherChangeEvent*>(event)->unchanged().contains(TUISYM_LITERAL("terminal"))) {
+    if (event->type() == ZEventType::otherChange()) {
+        if (!static_cast<ZOtherChangeEvent*>(event)->unchanged().contains(TUISYM_LITERAL("terminal"))) {
             terminalChanged();
         }
     }
@@ -230,7 +230,7 @@ void ZRoot::pasteEvent(ZPasteEvent *event) {
     ZWidget::pasteEvent(event);
 }
 
-Tui::ZRootPrivate::ZRootPrivate(ZRoot *pub) : ZWidgetPrivate(pub) {
+ZRootPrivate::ZRootPrivate(ZRoot *pub) : ZWidgetPrivate(pub) {
 
 }
 

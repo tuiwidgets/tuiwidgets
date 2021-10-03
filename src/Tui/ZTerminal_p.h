@@ -41,7 +41,7 @@ public:
     void setKeyboardGrab(ZWidget *w, Private::ZMoFunc<void(QEvent*)> handler);
     ZWidget *keyboardGrab();
 
-    ZShortcutManager* ensureShortcutManager();
+    ZShortcutManager *ensureShortcutManager();
 
     void sendOtherChangeEvent(QSet<ZSymbol> unchanged);
 
@@ -153,7 +153,7 @@ public:
     std::unique_ptr<QTimer> autoDetectTimeoutTimer;
     // ^^
 
-    ZTerminal* pub_ptr;
+    ZTerminal *pub_ptr;
 
     TUIWIDGETS_DECLARE_PUBLIC(ZTerminal)
 };
@@ -168,8 +168,8 @@ public:
     QMap<ZSymbol, bool> capabilities;
 
     // back door
-    static OffScreenData* get(ZTerminal::OffScreen *data) { return data->tuiwidgets_pimpl_ptr.get(); }
-    static const OffScreenData* get(const ZTerminal::OffScreen *data) { return data->tuiwidgets_pimpl_ptr.get(); }
+    static OffScreenData *get(ZTerminal::OffScreen *data) { return data->tuiwidgets_pimpl_ptr.get(); }
+    static const OffScreenData *get(const ZTerminal::OffScreen *data) { return data->tuiwidgets_pimpl_ptr.get(); }
 };
 
 TUIWIDGETS_NS_END

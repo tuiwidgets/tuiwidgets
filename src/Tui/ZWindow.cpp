@@ -23,7 +23,7 @@ ZWindow::ZWindow(ZWidget *parent) : ZWidget(parent, std::make_unique<ZWindowPriv
     setSizePolicyH(SizePolicy::Expanding);
     setSizePolicyV(SizePolicy::Expanding);
 
-    QObject::connect(new Tui::ZCommandNotifier("ZWindowClose", this, Qt::WindowShortcut), &Tui::ZCommandNotifier::activated, this, &ZWindow::close);
+    QObject::connect(new ZCommandNotifier("ZWindowClose", this, Qt::WindowShortcut), &ZCommandNotifier::activated, this, &ZWindow::close);
 }
 
 ZWindow::ZWindow(const QString &title, ZWidget *parent)
@@ -58,7 +58,7 @@ bool ZWindow::showSystemMenu() {
         }
     }
     if (nonEmpty) {
-        Tui::ZMenu *menu = new Tui::ZMenu(parentWidget());
+        ZMenu *menu = new ZMenu(parentWidget());
         menu->setItems(menuItems);
         menu->popup({geometry().x(), geometry().y() + 1});
         return true;
@@ -304,7 +304,7 @@ void ZWindow::keyEvent(ZKeyEvent *event) {
         }
     } else if (event->text() == QStringLiteral("-") && event->modifiers() == Qt::AltModifier) {
         if (!showSystemMenu()) {
-            Tui::ZWidget::keyEvent(event);
+            ZWidget::keyEvent(event);
         }
     } else {
         ZWidget::keyEvent(event);

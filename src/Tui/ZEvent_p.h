@@ -28,7 +28,7 @@ public:
 class ZTerminalNativeEventPrivate : public ZEventPrivate {
 public:
     ZTerminalNativeEventPrivate(void *native);
-    void* native;
+    void *native;
 };
 
 class ZPaintEventPrivate : public ZEventPrivate {

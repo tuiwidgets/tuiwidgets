@@ -83,18 +83,18 @@ public:
     ZTerminal *terminal = nullptr;
     ListNode<ZWidgetPrivate> focusHistory;
 
-    ZCommandManager* commandManager = nullptr;
+    ZCommandManager *commandManager = nullptr;
 
     // scratch storage for ZTerminal::doLayout
     int doLayoutScratchDepth;
 
     // back door
-    static ZWidgetPrivate* get(ZWidget *widget) { return widget->tuiwidgets_impl(); }
-    static const ZWidgetPrivate* get(const ZWidget *widget) { return widget->tuiwidgets_impl(); }
+    static ZWidgetPrivate *get(ZWidget *widget) { return widget->tuiwidgets_impl(); }
+    static const ZWidgetPrivate *get(const ZWidget *widget) { return widget->tuiwidgets_impl(); }
 
     // internal
     const unsigned int tui_magic = tui_magic_v0;
-    ZWidget* pub_ptr;
+    ZWidget *pub_ptr;
     TUIWIDGETS_DECLARE_PUBLIC(ZWidget)
 };
 

@@ -18,7 +18,7 @@ public:
     QHash<ZSymbol, ZSymbol> localAlias;
     QList<ZPalette::RuleDef> rules;
 
-    ZPalette* pub_ptr;
+    ZPalette *pub_ptr;
     TUIWIDGETS_DECLARE_PUBLIC(ZPalette)
 };
 

@@ -55,7 +55,7 @@ void ZCommandNotifierPrivate::connectToTerminal(ZCommandNotifier *pub) {
     }
 }
 
-void ZCommandNotifierPrivate::updateContextSatisfied(Tui::ZCommandNotifier *pub) {
+void ZCommandNotifierPrivate::updateContextSatisfied(ZCommandNotifier *pub) {
     const bool effective = enabled && contextSatisfied;
     ZWidget *par = qobject_cast<ZWidget*>(pub->parent());
     if (!par) {
@@ -153,7 +153,7 @@ bool ZCommandNotifier::isContextSatisfied() {
 }
 
 void ZCommandNotifier::probeParents() {
-    ZWidget* w = qobject_cast<ZWidget*>(parent());
+    ZWidget *w = qobject_cast<ZWidget*>(parent());
     while (w) {
         if (w->commandManager()) {
             w->commandManager()->registerCommandNotifier(this);
@@ -164,8 +164,8 @@ void ZCommandNotifier::probeParents() {
 
 bool ZCommandNotifier::event(QEvent *event) {
     auto *const p = tuiwidgets_impl();
-    if (event->type() == Tui::ZEventType::otherChange()) {
-        if (!static_cast<Tui::ZOtherChangeEvent*>(event)->unchanged().contains(TUISYM_LITERAL("terminal"))) {
+    if (event->type() == ZEventType::otherChange()) {
+        if (!static_cast<ZOtherChangeEvent*>(event)->unchanged().contains(TUISYM_LITERAL("terminal"))) {
             p->connectToTerminal(this);
         }
     }

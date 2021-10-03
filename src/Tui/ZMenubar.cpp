@@ -134,7 +134,7 @@ void ZMenubar::commandStateChanged(ZSymbol command) {
     if (p->shortcuts.contains(command)) {
         update();
         ZCommandManager *const cmdMgr = parentWidget()->ensureCommandManager();
-        for (ZShortcut * const s: p->shortcuts[command]) {
+        for (ZShortcut *const s: p->shortcuts[command]) {
             s->setEnabled(cmdMgr->isCommandEnabled(command));
         }
     }

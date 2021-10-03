@@ -13,9 +13,9 @@ class ZButtonPrivate;
 class TUIWIDGETS_EXPORT ZButton : public ZWidget {
     Q_OBJECT
 public:
-    explicit ZButton(Tui::ZWidget *parent=nullptr);
-    explicit ZButton(const QString &text, Tui::ZWidget *parent=nullptr);
-    explicit ZButton(Tui::WithMarkupTag, const QString &markup, Tui::ZWidget *parent=nullptr);
+    explicit ZButton(ZWidget *parent=nullptr);
+    explicit ZButton(const QString &text, ZWidget *parent=nullptr);
+    explicit ZButton(WithMarkupTag, const QString &markup, ZWidget *parent=nullptr);
     ~ZButton();
 
 public:
@@ -25,7 +25,7 @@ public:
     QString markup() const;
     void setMarkup(QString m);
 
-    void setShortcut(const Tui::ZKeySequence &key);
+    void setShortcut(const ZKeySequence &key);
 
     void setDefault(bool d);
     bool isDefault();
@@ -40,8 +40,8 @@ public Q_SLOTS:
     void click();
 
 protected:
-    void paintEvent(Tui::ZPaintEvent *event) override;
-    void keyEvent(Tui::ZKeyEvent *event) override;
+    void paintEvent(ZPaintEvent *event) override;
+    void keyEvent(ZKeyEvent *event) override;
 
 private:
     void removeShortcut();

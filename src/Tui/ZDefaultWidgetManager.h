@@ -13,8 +13,8 @@ class TUIWIDGETS_EXPORT ZDefaultWidgetManager : public QObject {
     Q_OBJECT
 
 public:
-    virtual void setDefaultWidget(Tui::ZWidget *w) = 0;
-    virtual Tui::ZWidget *defaultWidget() = 0;
+    virtual void setDefaultWidget(ZWidget *w) = 0;
+    virtual ZWidget *defaultWidget() = 0;
     virtual bool isDefaultWidgetActive() = 0;
 
 protected:

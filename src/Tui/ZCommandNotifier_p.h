@@ -9,10 +9,10 @@ TUIWIDGETS_NS_START
 
 class ZCommandNotifierPrivate {
 public:
-    void connectToTerminal(Tui::ZCommandNotifier *pub);
-    void updateContextSatisfied(Tui::ZCommandNotifier *pub);
+    void connectToTerminal(ZCommandNotifier *pub);
+    void updateContextSatisfied(ZCommandNotifier *pub);
 
-    Tui::ZSymbol command;
+    ZSymbol command;
     bool enabled = true;
     bool contextSatisfied = true;
     Qt::ShortcutContext context = Qt::ApplicationShortcut;

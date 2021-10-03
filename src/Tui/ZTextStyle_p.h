@@ -9,9 +9,9 @@ TUIWIDGETS_NS_START
 
 class ZTextStylePrivate {
 public:
-    Tui::ZColor foregroundColor = Tui::ZColor::defaultColor();
-    Tui::ZColor backgroundColor = Tui::ZColor::defaultColor();
-    Tui::ZTextAttributes attributes = {};
+    ZColor foregroundColor = ZColor::defaultColor();
+    ZColor backgroundColor = ZColor::defaultColor();
+    ZTextAttributes attributes = {};
 };
 
 TUIWIDGETS_NS_END

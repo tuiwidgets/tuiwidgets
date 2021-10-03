@@ -7,13 +7,13 @@
 
 // Uses reinterpret_cast instead of static_cast, because it needs to work with incomplete types.
 #define TUIWIDGETS_DECLARE_PRIVATE(Class) \
-    inline Class##Private* tuiwidgets_impl() { return reinterpret_cast<Class##Private *>(tuiwidgets_pimpl_ptr.get()); } \
-    inline const Class##Private* tuiwidgets_impl() const { return reinterpret_cast<const Class##Private *>(tuiwidgets_pimpl_ptr.get()); } \
+    inline Class##Private *tuiwidgets_impl() { return reinterpret_cast<Class##Private *>(tuiwidgets_pimpl_ptr.get()); } \
+    inline const Class##Private *tuiwidgets_impl() const { return reinterpret_cast<const Class##Private *>(tuiwidgets_pimpl_ptr.get()); } \
     friend class Class##Private;
 
 #define TUIWIDGETS_DECLARE_PUBLIC(Class) \
-    inline Class* pub() { return static_cast<Class *>(pub_ptr); } \
-    inline const Class* pub() const { return static_cast<const Class *>(pub_ptr); } \
+    inline Class *pub() { return static_cast<Class *>(pub_ptr); } \
+    inline const Class *pub() const { return static_cast<const Class *>(pub_ptr); } \
     friend class Class;
 
 #define TUIWIDGETS_NS_INLINE v0

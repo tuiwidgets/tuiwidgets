@@ -27,10 +27,10 @@ public:
     QPointer<ZWidget> widget;
 
     // back door
-    static ZPainterPrivate* get(ZPainter *painter) { return painter->tuiwidgets_impl(); }
+    static ZPainterPrivate *get(ZPainter *painter) { return painter->tuiwidgets_impl(); }
     static ZPainter createForTesting(termpaint_surface *surface);
 
-    ZPainter* pub_ptr;
+    ZPainter *pub_ptr;
     TUIWIDGETS_DECLARE_PUBLIC(ZPainter)
 };
 

@@ -200,7 +200,7 @@ ZImageData::~ZImageData() {
 }
 
 ZImage ZImageData::createForTesting(termpaint_terminal *terminal, int width, int height) {
-    return ZImage{QSharedDataPointer<Tui::ZImageData>(new Tui::ZImageData(terminal, width, height))};
+    return ZImage{QSharedDataPointer<ZImageData>(new ZImageData(terminal, width, height))};
 }
 
 TUIWIDGETS_NS_END

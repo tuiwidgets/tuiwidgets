@@ -15,7 +15,7 @@ public:
     ZButtonPrivate(ZWidget *pub);
 
 public:
-    Tui::ZStyledTextLine styledText;
+    ZStyledTextLine styledText;
 };
 
 TUIWIDGETS_NS_END

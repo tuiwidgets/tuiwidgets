@@ -12,17 +12,17 @@ TUIWIDGETS_NS_START
 namespace ZTest {
 
     TUIWIDGETS_EXPORT void sendText(ZTerminal *terminal, QString text, Qt::KeyboardModifiers modifiers) {
-        Tui::ZKeyEvent event(Qt::Key_unknown, modifiers, text);
+        ZKeyEvent event(Qt::Key_unknown, modifiers, text);
         terminal->dispatchKeyboardEvent(event);
     }
 
     TUIWIDGETS_EXPORT void sendKey(ZTerminal *terminal, Qt::Key key, Qt::KeyboardModifiers modifiers) {
-        Tui::ZKeyEvent event(key, modifiers, {});
+        ZKeyEvent event(key, modifiers, {});
         terminal->dispatchKeyboardEvent(event);
     }
 
-    TUIWIDGETS_EXPORT void sendKeyToWidget(Tui::ZWidget *w, Qt::Key key, Qt::KeyboardModifiers modifiers) {
-        Tui::ZKeyEvent event(key, modifiers, {});
+    TUIWIDGETS_EXPORT void sendKeyToWidget(ZWidget *w, Qt::Key key, Qt::KeyboardModifiers modifiers) {
+        ZKeyEvent event(key, modifiers, {});
         w->event(&event);
     }
 
@@ -31,7 +31,7 @@ namespace ZTest {
         std::unique_ptr<ZImage> result;
 
         QMetaObject::Connection connection =
-                QObject::connect(terminal, &Tui::ZTerminal::afterRendering, terminal,
+                QObject::connect(terminal, &ZTerminal::afterRendering, terminal,
                                  [&result, terminal] {
             result = std::make_unique<ZImage>(terminal->grabCurrentImage());
         });

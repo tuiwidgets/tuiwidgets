@@ -140,7 +140,7 @@ int ZTextMetrics::sizeInColumns(const char16_t *data, int size) const {
 }
 
 int ZTextMetrics::sizeInColumns(const char *stringUtf8, int utf8CodeUnits) const {
-    const auto* p = tuiwidgets_impl();
+    const auto *p = tuiwidgets_impl();
     termpaint_text_measurement *tm = termpaint_text_measurement_new(p->surface);
     termpaint_text_measurement_feed_utf8(tm, stringUtf8, utf8CodeUnits, true);
 
@@ -155,7 +155,7 @@ ZTextMetrics::ZTextMetrics(std::shared_ptr<ZTextMetricsPrivate> impl) : tuiwidge
 {
 }
 
-Tui::ZTextMetricsPrivate::ZTextMetricsPrivate(termpaint_surface *surface) : surface(surface)
+ZTextMetricsPrivate::ZTextMetricsPrivate(termpaint_surface *surface) : surface(surface)
 {
 }
 

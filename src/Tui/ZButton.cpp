@@ -7,17 +7,17 @@
 
 TUIWIDGETS_NS_START
 
-ZButton::ZButton(Tui::ZWidget *parent) : Tui::ZWidget(parent, std::make_unique<ZButtonPrivate>(this)) {
+ZButton::ZButton(ZWidget *parent) : ZWidget(parent, std::make_unique<ZButtonPrivate>(this)) {
     setFocusPolicy(Qt::StrongFocus);
-    setSizePolicyV(Tui::SizePolicy::Fixed);
-    setSizePolicyH(Tui::SizePolicy::Minimum);
+    setSizePolicyV(SizePolicy::Fixed);
+    setSizePolicyH(SizePolicy::Minimum);
 }
 
-Tui::ZButton::ZButton(const QString &text, Tui::ZWidget *parent) : ZButton(parent) {
+ZButton::ZButton(const QString &text, ZWidget *parent) : ZButton(parent) {
     setText(text);
 }
 
-ZButton::ZButton(Tui::WithMarkupTag, const QString &markup, Tui::ZWidget *parent) : ZButton(parent) {
+ZButton::ZButton(WithMarkupTag, const QString &markup, ZWidget *parent) : ZButton(parent) {
     setMarkup(markup);
 }
 
@@ -44,7 +44,7 @@ void ZButton::setMarkup(QString m) {
     auto *p = tuiwidgets_impl();
     p->styledText.setMarkup(m);
     if (p->styledText.mnemonic().size()) {
-        setShortcut(Tui::ZKeySequence::forMnemonic(p->styledText.mnemonic()));
+        setShortcut(ZKeySequence::forMnemonic(p->styledText.mnemonic()));
     } else {
         removeShortcut();
     }
@@ -52,15 +52,15 @@ void ZButton::setMarkup(QString m) {
 }
 
 void ZButton::removeShortcut() {
-    for(Tui::ZShortcut *s : findChildren<Tui::ZShortcut*>(QString(), Qt::FindDirectChildrenOnly)) {
+    for(ZShortcut *s : findChildren<ZShortcut*>(QString(), Qt::FindDirectChildrenOnly)) {
         delete s;
     }
 }
 
-void ZButton::setShortcut(const Tui::ZKeySequence &key) {
+void ZButton::setShortcut(const ZKeySequence &key) {
     removeShortcut();
-    Tui::ZShortcut *s = new Tui::ZShortcut(key, this);
-    QObject::connect(s, &Tui::ZShortcut::activated, this, &ZButton::click);
+    ZShortcut *s = new ZShortcut(key, this);
+    QObject::connect(s, &ZShortcut::activated, this, &ZButton::click);
 }
 
 void ZButton::setDefault(bool d) {
@@ -85,13 +85,13 @@ bool ZButton::isDefault() {
 }
 
 bool ZButton::event(QEvent *event) {
-    if (event->type() == Tui::ZEventType::queryAcceptsEnter()) {
+    if (event->type() == ZEventType::queryAcceptsEnter()) {
         if (isEnabled()) {
             event->accept();
         }
         return true;
     } else {
-        return Tui::ZWidget::event(event);
+        return ZWidget::event(event);
     }
 }
 
@@ -105,13 +105,13 @@ QSize ZButton::sizeHint() const {
     return sh;
 }
 
-void ZButton::paintEvent(Tui::ZPaintEvent *event) {
+void ZButton::paintEvent(ZPaintEvent *event) {
     auto *p = tuiwidgets_impl();
-    Tui::ZTextStyle baseStyle;
-    Tui::ZTextStyle shortcut;
-    Tui::ZTextStyle markerStyle = {getColor("control.fg"), getColor("control.bg")};
+    ZTextStyle baseStyle;
+    ZTextStyle shortcut;
+    ZTextStyle markerStyle = {getColor("control.fg"), getColor("control.bg")};
     QRect r = contentsRect();
-    Tui::ZPainter painter = event->painter()->translateAndClip(r.left(), r.top(), r.width(), r.height());
+    ZPainter painter = event->painter()->translateAndClip(r.left(), r.top(), r.width(), r.height());
 
     if (!isEnabled()) {
         baseStyle = {getColor("button.disabled.fg"), getColor("button.disabled.bg")};
@@ -156,13 +156,13 @@ void ZButton::click() {
     clicked();
 }
 
-void ZButton::keyEvent(Tui::ZKeyEvent *event) {
+void ZButton::keyEvent(ZKeyEvent *event) {
     if(isEnabled() && (event->key() == Qt::Key_Space || event->key() == Qt::Key_Enter) && event->modifiers() == 0) {
         setFocus();
         event->accept();
         clicked();
     } else {
-        Tui::ZWidget::keyEvent(event);
+        ZWidget::keyEvent(event);
     }
 }
 

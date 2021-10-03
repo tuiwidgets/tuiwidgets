@@ -8,7 +8,7 @@
 
 TUIWIDGETS_NS_START
 
-Tui::ZPalettePrivate::ZPalettePrivate() {
+ZPalettePrivate::ZPalettePrivate() {
 
 }
 
@@ -54,7 +54,7 @@ ZColor ZPalette::getColor(ZWidget *targetWidget, ZImplicitSymbol x) const {
         }
 
         for (auto &rs : qAsConst(matchingRulesByLen)) {
-            for (const RuleDef* r : qAsConst(rs)) {
+            for (const RuleDef *r : qAsConst(rs)) {
                 for (const RuleCmd &cmd : r->cmds) {
                     if (cmd.type == Publish || w == targetWidget) {
                         if (defs.contains(cmd.reference)) {

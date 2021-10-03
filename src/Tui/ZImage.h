@@ -20,7 +20,7 @@ class ZImageData;
 
 class TUIWIDGETS_EXPORT ZImage {
 public:
-    ZImage(const ZTerminal* terminal, int width, int height);
+    ZImage(const ZTerminal *terminal, int width, int height);
     static std::unique_ptr<ZImage> fromFile(const ZTerminal *terminal, QString fileName);
     static std::unique_ptr<ZImage> fromByteArray(const ZTerminal *terminal, QByteArray data);
     ZImage(const ZImage& other);

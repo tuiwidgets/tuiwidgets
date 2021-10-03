@@ -15,7 +15,7 @@ namespace ZTest {
 
     TUIWIDGETS_EXPORT void sendText(ZTerminal *terminal, QString text, Qt::KeyboardModifiers modifiers);
     TUIWIDGETS_EXPORT void sendKey(ZTerminal *terminal, Qt::Key key, Qt::KeyboardModifiers modifiers);
-    TUIWIDGETS_EXPORT void sendKeyToWidget(Tui::ZWidget *w, Qt::Key key, Qt::KeyboardModifiers modifiers);
+    TUIWIDGETS_EXPORT void sendKeyToWidget(ZWidget *w, Qt::Key key, Qt::KeyboardModifiers modifiers);
 
     TUIWIDGETS_EXPORT ZImage waitForNextRenderAndGetContents(ZTerminal *terminal);
 }

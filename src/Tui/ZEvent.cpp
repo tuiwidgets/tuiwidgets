@@ -104,7 +104,7 @@ QString ZRawSequenceEvent::sequence() const {
     return tuiwidgets_impl()->sequence;
 }
 
-Tui::ZRawSequenceEventPrivate::ZRawSequenceEventPrivate(QString seq)
+ZRawSequenceEventPrivate::ZRawSequenceEventPrivate(QString seq)
     : sequence(seq)
 {
 }

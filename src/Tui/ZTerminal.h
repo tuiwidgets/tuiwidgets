@@ -112,8 +112,8 @@ public:
 public:
     ZPainter painter();
     ZTextMetrics textMetrics() const;
-    ZWidget* mainWidget();
-    void setMainWidget(ZWidget* w);
+    ZWidget *mainWidget();
+    void setMainWidget(ZWidget *w);
 
     ZWidget *focusWidget();
     ZWidget *keyboardGrabber();

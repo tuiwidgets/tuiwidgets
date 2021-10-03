@@ -24,7 +24,7 @@ TUIWIDGETS_NS_START
 
 class ZTerminal::TerminalConnectionPrivate {
 public:
-    static TerminalConnectionPrivate* get(ZTerminal::TerminalConnection *data) { return data->tuiwidgets_pimpl_ptr.get(); }
+    static TerminalConnectionPrivate *get(ZTerminal::TerminalConnection *data) { return data->tuiwidgets_pimpl_ptr.get(); }
 
     bool backspaceIsX08 = false;
     int width = 0;
@@ -380,22 +380,22 @@ ZTerminal::ZTerminal(ZTerminal::TerminalConnection *connection, Options options,
 }
 
 
-bool ZTerminalPrivate::initTerminal(ZTerminal::Options options, ZTerminal::FileDescriptor* fd) {
+bool ZTerminalPrivate::initTerminal(ZTerminal::Options options, ZTerminal::FileDescriptor *fd) {
     return setupInternalConnection(options, fd);
 }
 
 void ZTerminalPrivate::initOffscreen(const ZTerminal::OffScreen &offscreen) {
     auto *const offscreenData = ZTerminal::OffScreenData::get(&offscreen);
 
-    auto free = [] (termpaint_integration* ptr) {
+    auto free = [] (termpaint_integration *ptr) {
         termpaint_integration_deinit(ptr);
     };
-    auto write = [] (termpaint_integration* ptr, const char *data, int length) {
+    auto write = [] (termpaint_integration *ptr, const char *data, int length) {
         Q_UNUSED(ptr);
         Q_UNUSED(data);
         Q_UNUSED(length);
     };
-    auto flush = [] (termpaint_integration* ptr) {
+    auto flush = [] (termpaint_integration *ptr) {
         Q_UNUSED(ptr);
     };
     termpaint_integration_init(&integration, free, write, flush);
@@ -501,14 +501,14 @@ void ZTerminal::TerminalConnection::terminalInput(const char *data, int length) 
 
 _Bool ZTerminalPrivate::raw_filter(void *user_data, const char *data, unsigned length, _Bool overflow) {
     // TODO what to do about _overflow?
-    ZTerminal* that = static_cast<ZTerminal*>(user_data);
+    ZTerminal *that = static_cast<ZTerminal*>(user_data);
     QString rawSequence = QString::fromUtf8(data, length);
     ZRawSequenceEvent event{rawSequence};
     return QCoreApplication::sendEvent(that, &event);
 }
 
 void ZTerminalPrivate::event_handler(void *user_data, termpaint_event *event) {
-    ZTerminal* that = static_cast<ZTerminal*>(user_data);
+    ZTerminal *that = static_cast<ZTerminal*>(user_data);
     ZTerminalNativeEvent tuiEvent{event};
     QCoreApplication::sendEvent(that, &tuiEvent);
 }
@@ -780,7 +780,7 @@ bool ZTerminal::isPaused() {
 }
 
 std::unique_ptr<ZKeyEvent> ZTerminal::translateKeyEvent(const ZTerminalNativeEvent &nativeEvent) {
-    termpaint_event* native = static_cast<termpaint_event*>(nativeEvent.nativeEventPointer());
+    termpaint_event *native = static_cast<termpaint_event*>(nativeEvent.nativeEventPointer());
 
     Qt::KeyboardModifiers modifiers = {};
     unsigned nativeModifier = 0;
@@ -1000,9 +1000,9 @@ bool ZTerminal::event(QEvent *event) {
         return false;
     }
     if (event->type() == ZEventType::terminalNativeEvent()) {
-        termpaint_event* native = static_cast<termpaint_event*>(static_cast<Tui::ZTerminalNativeEvent*>(event)->nativeEventPointer());
+        termpaint_event *native = static_cast<termpaint_event*>(static_cast<ZTerminalNativeEvent*>(event)->nativeEventPointer());
         if (native->type == TERMPAINT_EV_CHAR || native->type == TERMPAINT_EV_KEY) {
-            std::unique_ptr<ZKeyEvent> translated = translateKeyEvent(*static_cast<Tui::ZTerminalNativeEvent*>(event));
+            std::unique_ptr<ZKeyEvent> translated = translateKeyEvent(*static_cast<ZTerminalNativeEvent*>(event));
             if (translated) {
                 if (!p->viewportKeyEvent(translated.get())) {
                     dispatchKeyboardEvent(*translated);
@@ -1193,10 +1193,10 @@ void ZTerminal::TerminalConnection::setSize(int width, int height) {
 #define container_of(ptr, type, member) (reinterpret_cast<type *>(reinterpret_cast<char *>(ptr) - offsetof(type, member)))
 
 void ZTerminalPrivate::initIntegrationCommon() {
-    termpaint_integration_set_request_callback(&integration, [] (termpaint_integration* ptr) {
+    termpaint_integration_set_request_callback(&integration, [] (termpaint_integration *ptr) {
         container_of(ptr, ZTerminalPrivate, integration)->integration_request_callback();
     });
-    termpaint_integration_set_awaiting_response(&integration, [] (termpaint_integration* ptr) {
+    termpaint_integration_set_awaiting_response(&integration, [] (termpaint_integration *ptr) {
         container_of(ptr, ZTerminalPrivate, integration)->integration_awaiting_response();
     });
 }
@@ -1214,21 +1214,21 @@ void ZTerminalPrivate::initExternal(ZTerminal::TerminalConnectionPrivate *connec
     backspaceIsX08 = connection->backspaceIsX08;
 
     memset(&integration, 0, sizeof(integration));
-    auto free = [] (termpaint_integration* ptr) {
+    auto free = [] (termpaint_integration *ptr) {
         (void)ptr;
         // this does not really free, because ZTerminalPrivate which contains the integration struct is externally owned
     };
-    auto write = [] (termpaint_integration* ptr, const char *data, int length) {
+    auto write = [] (termpaint_integration *ptr, const char *data, int length) {
         container_of(ptr, ZTerminalPrivate, integration)->externalConnection->delegate->write(data, length);
     };
-    auto flush = [] (termpaint_integration* ptr) {
+    auto flush = [] (termpaint_integration *ptr) {
         container_of(ptr, ZTerminalPrivate, integration)->externalConnection->delegate->flush();
     };
     termpaint_integration_init(&integration, free, write, flush);
 
     initIntegrationCommon();
 
-    termpaint_integration_set_restore_sequence_updated(&integration, [] (termpaint_integration* ptr, const char *data, int length) {
+    termpaint_integration_set_restore_sequence_updated(&integration, [] (termpaint_integration *ptr, const char *data, int length) {
         container_of(ptr, ZTerminalPrivate, integration)->externalConnection->delegate->restoreSequenceUpdated(data, length);
     });
 

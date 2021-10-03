@@ -125,7 +125,7 @@ void ZStyledTextLinePrivate::ensureCache() const {
             while (!done && !error) {
                 p.nextEvent();
                 p.visit(overload(
-                    [&](const MarkupParser::Error &) {
+                    [&](const MarkupParser::Error&) {
                         //qDebug() << "error";
                         error = true;
                     },
@@ -161,7 +161,7 @@ void ZStyledTextLinePrivate::ensureCache() const {
                             maybeMnemonic.append(ev.asString());
                         }
                     },
-                    [&](const MarkupParser::DocumentEnd &) {
+                    [&](const MarkupParser::DocumentEnd&) {
                         //qDebug() << "the end";
                         done = true;
                     }
@@ -188,6 +188,5 @@ void ZStyledTextLinePrivate::ensureCache() const {
         }
     }
 }
-
 
 TUIWIDGETS_NS_END
