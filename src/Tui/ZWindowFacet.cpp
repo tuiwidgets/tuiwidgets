@@ -3,7 +3,7 @@
 
 TUIWIDGETS_NS_START
 
-ZWindowFacet::ZWindowFacet() {
+ZWindowFacet::ZWindowFacet() : tuiwidgets_pimpl_ptr(std::make_unique<ZWindowFacetPrivate>()) {
 }
 
 ZWindowFacet::ZWindowFacet(std::unique_ptr<ZWindowFacetPrivate> pimpl)
