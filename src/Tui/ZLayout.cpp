@@ -34,17 +34,19 @@ void ZLayout::widgetEvent(QEvent *event) {
         }
     } else if (event->type() == QEvent::LayoutRequest) {
         ZWidget *w = widget();
+        ZTerminal *term = w->terminal();
         ZWidget *chainRoot = w->resolveSizeHintChain();
 
         // ensure that the root of the layout chain gets to layout first
-        if (chainRoot != w) {
+        if (chainRoot != w && !ZLayoutPrivate::alreadyLayoutedInThisGeneration(term, w)) {
+            // will be marked as done in the chainRoot's event handler before doing much else,
+            // given that that chainRoot->resolveSizeHintChain() == chainRoot
             QEvent request(QEvent::LayoutRequest);
             QCoreApplication::sendEvent(chainRoot, &request);
         }
         // if this layout is still pending now, layout locally by doing an additional layout starting here.
         // This could happen if i.e. if sizeHint does not change but positions need to be updated
         // i.e. one widget was replaced with a widget of the same size
-        ZTerminal *term = w->terminal();
         if (!ZLayoutPrivate::alreadyLayoutedInThisGeneration(term, w)) {
             ZLayoutPrivate::markAsAlreadyLayouted(term, w);
             setGeometry(w->layoutArea());
