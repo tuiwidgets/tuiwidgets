@@ -154,6 +154,7 @@ bool ZLayoutPrivate::ensureLayoutGenData(ZTerminal *term) {
     auto& lgd = layoutGenData[term];
     if (lgd.lastSeenLayoutGeneration != term->currentLayoutGeneration()) {
         lgd.reset();
+        lgd.lastSeenLayoutGeneration = term->currentLayoutGeneration();
     }
 
     return true;
