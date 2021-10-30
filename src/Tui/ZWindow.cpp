@@ -404,7 +404,7 @@ void ZWindowPrivate::ensureAutoPlacement() {
     if (pub()->parentWidget()) {
         ZWindowFacet *windowFacet = static_cast<ZWindowFacet*>(pub()->facet(ZWindowFacet::staticMetaObject));
         if (windowFacet) {
-            if (!windowFacet->isManuallyPlaced()) {
+            if (!windowFacet->isManuallyPlaced() && !windowFacet->container()) {
                 windowFacet->autoPlace(pub()->parentWidget()->geometry().size(), pub());
             }
         }

@@ -439,6 +439,13 @@ TEST_CASE("window-set-automatic-placement") {
         CHECK(w->geometry() == QRect{2, 2, 21, 8});
     }
 
+    SECTION("method-container") {
+        // should be no-op when container is set.
+        Tui::ZWindowContainer container;
+        windowFacet->setContainer(&container);
+        w->setAutomaticPlacement();
+        CHECK(w->geometry() == QRect{0, 0, 21, 8});
+    }
 }
 
 TEST_CASE("window-systemmenu", "") {
@@ -1510,18 +1517,15 @@ TEST_CASE("window-auto-placement", "") {
 
     SECTION("setup") {
         w->setDefaultPlacement(Qt::AlignCenter);
-        CHECK(w->geometry().x() == 46);
-        CHECK(w->geometry().y() == 14);
+        CHECK(w->geometry() == QRect{46, 14, 10, 4});
     }
 
     SECTION("resize") {
         w->setDefaultPlacement(Qt::AlignCenter);
-        CHECK(w->geometry().x() == 46);
-        CHECK(w->geometry().y() == 14);
+        CHECK(w->geometry() == QRect{46, 14, 10, 4});
 
         w->setGeometry({46, 14, 20, 6});
-        CHECK(w->geometry().x() == 41);
-        CHECK(w->geometry().y() == 13);
+        CHECK(w->geometry() == QRect{41, 13, 20, 6});
     }
 
     SECTION("reparented") {
@@ -1531,8 +1535,7 @@ TEST_CASE("window-auto-placement", "") {
         w->setDefaultPlacement(Qt::AlignCenter);
 
         w->setParent(&testParent);
-        CHECK(w->geometry().x() == 16);
-        CHECK(w->geometry().y() == 19);
+        CHECK(w->geometry() == QRect{16, 19, 10, 4});
     }
 
     SECTION("newly visible") {
@@ -1543,8 +1546,51 @@ TEST_CASE("window-auto-placement", "") {
         w->setGeometry({0, 0, 10, 4});
 
         w->setVisible(true);
-        CHECK(w->geometry().x() == 46);
-        CHECK(w->geometry().y() == 14);
+        CHECK(w->geometry() == QRect{46, 14, 10, 4});
+    }
+}
+
+TEST_CASE("window-auto-placement-container", "") {
+    // with container set auto placement is no longer done by ZWindow.
+    Testhelper t("window", "unused", 100, 30);
+    Tui::ZWindow *w = new Tui::ZWindow(t.root);
+    Tui::ZWindowContainer container;
+    auto *windowFacet = qobject_cast<Tui::ZWindowFacet*>(w->facet(Tui::ZWindowFacet::staticMetaObject));
+    windowFacet->setContainer(&container);
+    w->setGeometry({0, 0, 10, 4});
+
+    SECTION("setup") {
+        w->setDefaultPlacement(Qt::AlignCenter);
+        CHECK(w->geometry() == QRect{0, 0, 10, 4});
+    }
+
+    SECTION("resize") {
+        w->setDefaultPlacement(Qt::AlignCenter);
+        CHECK(w->geometry() == QRect{0, 0, 10, 4});
+
+        w->setGeometry({46, 14, 20, 6});
+        CHECK(w->geometry() == QRect{46, 14, 20, 6});
+    }
+
+    SECTION("reparented") {
+        Tui::ZWidget testParent;
+        testParent.setGeometry({0, 0, 40, 40});
+
+        w->setDefaultPlacement(Qt::AlignCenter);
+
+        w->setParent(&testParent);
+        CHECK(w->geometry() == QRect{0, 0, 10, 4});
+    }
+
+    SECTION("newly visible") {
+        w->setDefaultPlacement(Qt::AlignCenter);
+
+        w->setVisible(false);
+
+        w->setGeometry({0, 0, 10, 4});
+
+        w->setVisible(true);
+        CHECK(w->geometry() == QRect{0, 0, 10, 4});
     }
 }
 
