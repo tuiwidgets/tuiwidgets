@@ -41,6 +41,21 @@ namespace {
     class CustomWindowFacet : public Tui::ZWindowFacet {
     };
 
+    class CustomWindow : public Tui::ZWindow {
+    public:
+        using Tui::ZWindow::ZWindow;
+
+        QObject *facet(const QMetaObject metaObject) override {
+            if (metaObject.className() == Tui::ZWindowFacet::staticMetaObject.className()) {
+                return &winFacet;
+            } else {
+                return Tui::ZWindow::facet(metaObject);
+            }
+        }
+
+        CustomWindowFacet winFacet;
+    };
+
 }
 
 
@@ -387,6 +402,45 @@ TEST_CASE("window-close") {
 
 }
 
+TEST_CASE("window-set-automatic-placement") {
+    Testhelper t("window", "window-set-automatic-placement", 25, 10);
+    Tui::ZCommandManager *const cmdMgr = t.root->ensureCommandManager();
+
+    bool useCustomWindowFacet = GENERATE(false, true);
+
+    Tui::ZWindow *w;
+    if (useCustomWindowFacet) {
+        w = new CustomWindow(t.root);
+    } else {
+        w = new Tui::ZWindow(t.root);
+    }
+
+    w->setFocus();
+    w->setGeometry({0, 0, 21, 8});
+
+    auto *windowFacet = qobject_cast<Tui::ZWindowFacet*>(w->facet(Tui::ZWindowFacet::staticMetaObject));
+    windowFacet->setManuallyPlaced(true);
+
+    auto ensureAndTriggerCommand = [cmdMgr](Tui::ZSymbol sym) {
+        CHECK(cmdMgr->isCommandEnabled(sym));
+        cmdMgr->activateCommand(sym);
+    };
+
+    CHECK(w->geometry() == QRect{0, 0, 21, 8});
+
+
+    SECTION("method") {
+        w->setAutomaticPlacement();
+        CHECK(w->geometry() == QRect{2, 2, 21, 8});
+    }
+
+    SECTION("command") {
+        ensureAndTriggerCommand(TUISYM_LITERAL("ZWindowAutomaticPlacement"));
+        CHECK(w->geometry() == QRect{2, 2, 21, 8});
+    }
+
+}
+
 TEST_CASE("window-systemmenu", "") {
     class TestWindow : public Tui::ZWindow {
     public:
@@ -448,11 +502,24 @@ TEST_CASE("window-systemmenu", "") {
         CHECK(menu[0].subitems().isEmpty());
     }
 
+    SECTION("menu-automatic-option") {
+        TestWindow w;
+        w.setOptions({ Tui::ZWindow::AutomaticOption });
+        QVector<Tui::ZMenuItem> menu = w.retrieveSystemMenu();
+        REQUIRE(menu.size() == 1);
+        CHECK(menu[0].markup() == "<m>A</m>utomatic");
+        CHECK(menu[0].fakeShortcut() == "");
+        auto automaticSym = TUISYM_LITERAL("ZWindowAutomaticPlacement");
+        CHECK(menu[0].command() == automaticSym);
+        CHECK(menu[0].subitems().isEmpty());
+    }
+
     SECTION("menu-all-options") {
         TestWindow w;
-        w.setOptions({ Tui::ZWindow::MoveOption  | Tui::ZWindow::ResizeOption | Tui::ZWindow::CloseOption });
+        w.setOptions({ Tui::ZWindow::MoveOption  | Tui::ZWindow::ResizeOption | Tui::ZWindow::CloseOption
+                     | Tui::ZWindow::AutomaticOption });
         QVector<Tui::ZMenuItem> menu = w.retrieveSystemMenu();
-        REQUIRE(menu.size() == 4);
+        REQUIRE(menu.size() == 5);
 
         CHECK(menu[0].markup() == "<m>M</m>ove");
         CHECK(menu[0].fakeShortcut() == "");
@@ -466,16 +533,22 @@ TEST_CASE("window-systemmenu", "") {
         CHECK(menu[1].command() == resizeSym);
         CHECK(menu[1].subitems().isEmpty());
 
-        CHECK(menu[2].markup() == "");
+        CHECK(menu[2].markup() == "<m>A</m>utomatic");
         CHECK(menu[2].fakeShortcut() == "");
-        CHECK(menu[2].command() == Tui::ZSymbol());
+        auto automaticSym = TUISYM_LITERAL("ZWindowAutomaticPlacement");
+        CHECK(menu[2].command() == automaticSym);
         CHECK(menu[2].subitems().isEmpty());
 
-        CHECK(menu[3].markup() == "<m>C</m>lose");
+        CHECK(menu[3].markup() == "");
         CHECK(menu[3].fakeShortcut() == "");
-        auto closeSym = TUISYM_LITERAL("ZWindowClose");
-        CHECK(menu[3].command() == closeSym);
+        CHECK(menu[3].command() == Tui::ZSymbol());
         CHECK(menu[3].subitems().isEmpty());
+
+        CHECK(menu[4].markup() == "<m>C</m>lose");
+        CHECK(menu[4].fakeShortcut() == "");
+        auto closeSym = TUISYM_LITERAL("ZWindowClose");
+        CHECK(menu[4].command() == closeSym);
+        CHECK(menu[4].subitems().isEmpty());
     }
 
     SECTION("show-empty") {
@@ -596,21 +669,6 @@ TEST_CASE("window-interactivegeometry", "") {
     Testhelper t("window", "window-interactivegeometry", 25, 10);
 
     Tui::ZCommandManager *const cmdMgr = t.root->ensureCommandManager();
-
-    class CustomWindow : public Tui::ZWindow {
-    public:
-        using Tui::ZWindow::ZWindow;
-
-        QObject *facet(const QMetaObject metaObject) override {
-            if (metaObject.className() == Tui::ZWindowFacet::staticMetaObject.className()) {
-                return &winFacet;
-            } else {
-                return Tui::ZWindow::facet(metaObject);
-            }
-        }
-
-        CustomWindowFacet winFacet;
-    };
 
     bool useCustomWindowFacet = GENERATE(false, true);
 

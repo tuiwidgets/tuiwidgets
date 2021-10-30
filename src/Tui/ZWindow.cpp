@@ -25,6 +25,7 @@ ZWindow::ZWindow(ZWidget *parent) : ZWidget(parent, std::make_unique<ZWindowPriv
 
     QObject::connect(new ZCommandNotifier("ZWindowInteractiveMove", this, Qt::WindowShortcut), &ZCommandNotifier::activated, this, &ZWindow::startInteractiveMove);
     QObject::connect(new ZCommandNotifier("ZWindowInteractiveResize", this, Qt::WindowShortcut), &ZCommandNotifier::activated, this, &ZWindow::startInteractiveResize);
+    QObject::connect(new ZCommandNotifier("ZWindowAutomaticPlacement", this, Qt::WindowShortcut), &ZCommandNotifier::activated, this, &ZWindow::setAutomaticPlacement);
     QObject::connect(new ZCommandNotifier("ZWindowClose", this, Qt::WindowShortcut), &ZCommandNotifier::activated, this, &ZWindow::close);
 }
 
@@ -157,6 +158,15 @@ void ZWindow::setDefaultPlacement(Qt::Alignment align, QPoint displace) {
         p->ensureAutoPlacement();
     } else {
         qWarning("ZWindow::setDefaultPlacement calls with overriden WindowFacet do nothing.");
+    }
+}
+
+void ZWindow::setAutomaticPlacement() {
+    auto *windowFacet = qobject_cast<ZWindowFacet*>(facet(ZWindowFacet::staticMetaObject));
+    if (windowFacet) {
+        windowFacet->setManuallyPlaced(false);
+        auto *const p = tuiwidgets_impl();
+        p->ensureAutoPlacement();
     }
 }
 
@@ -348,6 +358,10 @@ QVector<ZMenuItem> ZWindow::systemMenu() {
 
     if (options() & ResizeOption) {
         ret.append(ZMenuItem{QStringLiteral("<m>R</m>esize"), QString(), QStringLiteral("ZWindowInteractiveResize"), {}});
+    }
+
+    if (options() & AutomaticOption) {
+        ret.append(ZMenuItem{QStringLiteral("<m>A</m>utomatic"), QString(), QStringLiteral("ZWindowAutomaticPlacement"), {}});
     }
 
     if (options() & CloseOption) {

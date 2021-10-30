@@ -21,6 +21,7 @@ public:
         CloseButton = CloseOption,
         MoveOption = (1 << 1),
         ResizeOption = (1 << 2),
+        AutomaticOption = (1 << 3),
         DeleteOnClose = (1 << 5),
     };
     Q_DECLARE_FLAGS(Options, Option)
@@ -38,6 +39,7 @@ public:
     void setBorderEdges(Qt::Edges borders);
 
     void setDefaultPlacement(Qt::Alignment align, QPoint displace = {0, 0});
+    void setAutomaticPlacement();
 
     QSize sizeHint() const override;
     QRect layoutArea() const override;
