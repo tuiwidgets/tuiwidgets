@@ -149,7 +149,7 @@ void ZTerminal::requestLayout(ZWidget *w) {
     auto *const p = tuiwidgets_impl();
 
     if (p->layoutGeneration > 0) {
-        // doLayout is runnig, so do synchronous layout
+        // doLayout is running, so do synchronous layout
         QEvent request(QEvent::LayoutRequest);
         QCoreApplication::sendEvent(w, &request);
     } else {
