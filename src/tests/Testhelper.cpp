@@ -136,10 +136,28 @@ std::vector<std::string> Testhelper::checkKeyEventBubbles(Qt::Key key, Qt::Keybo
 }
 
 void Testhelper::compare(QString name) {
-    QString fileNameOfTest = QString(basePath() + namePrefix + QStringLiteral("-") + name)
-            .replace(QStringLiteral(" "), QStringLiteral("-"));
     terminal->update();
     Tui::ZImage actual = Tui::ZTest::waitForNextRenderAndGetContents(terminal.get());
+    compare(name, actual);
+}
+
+void Testhelper::compare(Tui::ZImage actual) {
+    std::string name;
+    std::vector<std::string> names = getCurrentTestNames();
+    for (size_t i = 1; i < names.size(); i++) {
+        if (name.size()) {
+            name += "-";
+        }
+        name += names[i];
+    }
+
+    compare(QString::fromStdString(name), actual);
+}
+
+void Testhelper::compare(QString name, Tui::ZImage actual) {
+    QString fileNameOfTest = QString(basePath() + namePrefix + QStringLiteral("-") + name)
+            .replace(QStringLiteral(" "), QStringLiteral("-"));
+
     lastCapture = std::make_unique<Tui::ZImage>(actual);
     QFileInfo fi(fileNameOfTest + QStringLiteral(".tpi"));
     if (!fi.exists()) {
@@ -192,16 +210,9 @@ void Testhelper::crossCheckWithMask(std::vector<std::string> overrideNames,
 }
 
 void Testhelper::compare() {
-    std::string name;
-    std::vector<std::string> names = getCurrentTestNames();
-    for (size_t i = 1; i < names.size(); i++) {
-        if (name.size()) {
-            name += "-";
-        }
-        name += names[i];
-    }
-
-    compare(QString::fromStdString(name));
+    terminal->update();
+    Tui::ZImage actual = Tui::ZTest::waitForNextRenderAndGetContents(terminal.get());
+    compare(actual);
 }
 
 void Testhelper::render() {

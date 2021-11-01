@@ -43,6 +43,8 @@ public:
 
     void compare();
     void compare(QString name);
+    void compare(Tui::ZImage actual);
+    void compare(QString name, Tui::ZImage actual);
     void crossCheckWithMask(std::vector<std::string> overrideNames, std::vector<QPoint> ignore);
     void render();
 
@@ -54,6 +56,7 @@ public:
 
     std::unique_ptr<const Tui::ZImage> lastCapture;
     QString basePath();
+
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Testhelper::Options)
