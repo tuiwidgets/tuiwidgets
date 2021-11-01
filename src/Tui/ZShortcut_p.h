@@ -20,6 +20,14 @@ public:
     QPointer<ZTerminal> terminal;
 };
 
+class ZKeySequencePrivate {
+public:
+    QString forMnemonic;
+    QString forShortcut;
+    Qt::KeyboardModifiers modifiers = {};
+    int forKey = 0;
+};
+
 TUIWIDGETS_NS_END
 
 #endif // TUIWIDGETS_ZSHORTCUT_P_INCLUDED

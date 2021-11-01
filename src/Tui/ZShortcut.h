@@ -6,6 +6,7 @@
 #include <QObject>
 
 #include <Tui/ZMoFunc_p.h>
+#include <Tui/ZValuePtr.h>
 
 #include <Tui/tuiwidgets_internal.h>
 
@@ -14,21 +15,24 @@ TUIWIDGETS_NS_START
 class ZWidget;
 class ZKeyEvent;
 
+class ZKeySequencePrivate;
 class TUIWIDGETS_EXPORT ZKeySequence {
 public:
-    // FIXME Massive changes needed
     ZKeySequence();
+    ~ZKeySequence();
+
+public:
+    // FIXME Massive changes needed
     static ZKeySequence forMnemonic(const QString &c);
     static ZKeySequence forKey(int key, Qt::KeyboardModifiers modifiers = {});
     static ZKeySequence forShortcut(const QString &c, Qt::KeyboardModifiers modifiers = Qt::ControlModifier);
 
+protected:
+    ZValuePtr<ZKeySequencePrivate> tuiwidgets_pimpl_ptr;
+
 private:
-    // FIXME pimpl
     friend class ZShortcut;
-    QString _forMnemonic;
-    QString _forShortcut;
-    Qt::KeyboardModifiers _modifiers = {};
-    int _forKey = 0;
+    TUIWIDGETS_DECLARE_PRIVATE(ZKeySequence)
 };
 
 class ZShortcutPrivate;

@@ -59,16 +59,17 @@ bool ZShortcut::matches(ZWidget *focusWidget, const ZKeyEvent *event) {
     auto *const p = tuiwidgets_impl();
     if (!isEnabled()) return false;
     bool keyMatches = false;
-    if (p->key._forMnemonic.size()) {
-        if (event->modifiers() == Qt::AltModifier && event->text().toLower() == p->key._forMnemonic.toLower()) {
+    auto *const kp = p->key.tuiwidgets_impl();
+    if (kp->forMnemonic.size()) {
+        if (event->modifiers() == Qt::AltModifier && event->text().toLower() == kp->forMnemonic.toLower()) {
             keyMatches = true;
         }
-    } else if (p->key._forKey != 0) {
-        if (event->modifiers() == p->key._modifiers && event->key() == p->key._forKey) {
+    } else if (kp->forKey != 0) {
+        if (event->modifiers() == kp->modifiers && event->key() == kp->forKey) {
             keyMatches = true;
         }
-    } else if (p->key._forShortcut.size()) {
-        if (event->modifiers() == p->key._modifiers && event->text() == p->key._forShortcut) {
+    } else if (kp->forShortcut.size()) {
+        if (event->modifiers() == kp->modifiers && event->text() == kp->forShortcut) {
             keyMatches = true;
         }
     }
@@ -162,26 +163,30 @@ void ZShortcut::disconnectNotify(const QMetaMethod &signal) {
     QObject::disconnectNotify(signal);
 }
 
-ZKeySequence::ZKeySequence() {
-}
+ZKeySequence::ZKeySequence() = default;
+
+ZKeySequence::~ZKeySequence() = default;
 
 ZKeySequence ZKeySequence::forMnemonic(const QString &c) {
     ZKeySequence s;
-    s._forMnemonic = c;
+    auto *const p = s.tuiwidgets_impl();
+    p->forMnemonic = c;
     return s;
 }
 
 ZKeySequence ZKeySequence::forKey(int key, Qt::KeyboardModifiers modifiers) {
     ZKeySequence s;
-    s._forKey = key;
-    s._modifiers = modifiers;
+    auto *const p = s.tuiwidgets_impl();
+    p->forKey = key;
+    p->modifiers = modifiers;
     return s;
 }
 
 ZKeySequence ZKeySequence::forShortcut(const QString &c, Qt::KeyboardModifiers modifiers) {
     ZKeySequence s;
-    s._forShortcut = c;
-    s._modifiers = modifiers;
+    auto *const p = s.tuiwidgets_impl();
+    p->forShortcut = c;
+    p->modifiers = modifiers;
     return s;
 }
 
