@@ -140,6 +140,11 @@ void ZTerminal::setCursorColor(int cursorColorR, int cursorColorG, int cursorCol
     }
 }
 
+void ZTerminal::registerPendingKeySequenceCallbacks(const ZPendingKeySequenceCallbacks &callbacks) {
+    auto *const p = tuiwidgets_impl();
+    p->ensureShortcutManager()->registerPendingKeySequenceCallbacks(callbacks);
+}
+
 void ZTerminal::maybeRequestLayout(ZWidget *w) {
     // TODO ignore calls when the neighborhood of w does not do automatic layout
     requestLayout(w);

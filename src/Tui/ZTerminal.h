@@ -13,6 +13,7 @@ TUIWIDGETS_NS_START
 
 class ZKeyEvent;
 class ZPasteEvent;
+class ZPendingKeySequenceCallbacks;
 class ZSymbol;
 class ZPainter;
 class ZTerminalNativeEvent;
@@ -151,6 +152,8 @@ public:
     void setCursorStyle(CursorStyle style);
     void setCursorPosition(QPoint cursorPosition);
     void setCursorColor(int cursorColorR, int cursorColorG, int cursorColorB);
+
+    void registerPendingKeySequenceCallbacks(const ZPendingKeySequenceCallbacks &callbacks);
 
     void maybeRequestLayout(ZWidget *w);
     void requestLayout(ZWidget *w);

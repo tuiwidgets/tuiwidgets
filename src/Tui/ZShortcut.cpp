@@ -10,6 +10,14 @@
 
 TUIWIDGETS_NS_START
 
+ZShortcutPrivate *ZShortcutPrivate::get(ZShortcut *shortcut) {
+    return shortcut->tuiwidgets_impl();
+}
+
+const ZShortcutPrivate *ZShortcutPrivate::get(const ZShortcut *shortcut) {
+    return shortcut->tuiwidgets_impl();
+}
+
 ZShortcut::ZShortcut(const ZKeySequence &key, ZWidget *parent, Qt::ShortcutContext context)
     : QObject(parent), tuiwidgets_pimpl_ptr(std::make_unique<ZShortcutPrivate>())
 {
@@ -167,6 +175,14 @@ void ZShortcut::disconnectNotify(const QMetaMethod &signal) {
     QObject::disconnectNotify(signal);
 }
 
+ZKeySequencePrivate *ZKeySequencePrivate::get(ZKeySequence *keyseq) {
+    return keyseq->tuiwidgets_impl();
+}
+
+const ZKeySequencePrivate *ZKeySequencePrivate::get(const ZKeySequence *keyseq) {
+    return keyseq->tuiwidgets_impl();
+}
+
 ZKeySequence::ZKeySequence() = default;
 
 ZKeySequence::~ZKeySequence() = default;
@@ -192,6 +208,49 @@ ZKeySequence ZKeySequence::forShortcut(const QString &c, Qt::KeyboardModifiers m
     p->forShortcut = c;
     p->modifiers = modifiers;
     return s;
+}
+
+ZKeySequence ZKeySequence::forShortcutSequence(const QString &c, Qt::KeyboardModifiers modifiers, const QString &c2, Qt::KeyboardModifiers modifiers2) {
+    ZKeySequence s;
+    auto *const p = s.tuiwidgets_impl();
+    p->forShortcut = c;
+    p->modifiers = modifiers;
+    p->forShortcut2 = c2;
+    p->modifiers2 = modifiers2;
+    return s;
+}
+
+ZKeySequence ZKeySequence::forShortcutSequence(const QString &c, Qt::KeyboardModifiers modifiers, int key2, Qt::KeyboardModifiers modifiers2) {
+    ZKeySequence s;
+    auto *const p = s.tuiwidgets_impl();
+    p->forShortcut = c;
+    p->modifiers = modifiers;
+    p->forKey2 = key2;
+    p->modifiers2 = modifiers2;
+    return s;
+}
+
+
+ZPendingKeySequenceCallbacksPrivate *ZPendingKeySequenceCallbacksPrivate::get(ZPendingKeySequenceCallbacks *callbacks) {
+    return callbacks->tuiwidgets_impl();
+}
+
+const ZPendingKeySequenceCallbacksPrivate *ZPendingKeySequenceCallbacksPrivate::get(const ZPendingKeySequenceCallbacks *callbacks) {
+    return callbacks->tuiwidgets_impl();
+}
+
+ZPendingKeySequenceCallbacks::ZPendingKeySequenceCallbacks() = default;
+
+ZPendingKeySequenceCallbacks::~ZPendingKeySequenceCallbacks() = default;
+
+void ZPendingKeySequenceCallbacks::setPendingSequenceStarted(std::function<void ()> callback) {
+    auto *const p = tuiwidgets_impl();
+    p->started = callback;
+}
+
+void ZPendingKeySequenceCallbacks::setPendingSequenceFinished(std::function<void ()> callback) {
+    auto *const p = tuiwidgets_impl();
+    p->finished = callback;
 }
 
 TUIWIDGETS_NS_END

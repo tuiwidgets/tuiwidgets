@@ -170,6 +170,7 @@ testinternal_files += [
   'Tui/MarkupParser.cpp',
   'Tui/ZImage.cpp',
   'Tui/ZPainter.cpp',
+  'Tui/ZShortcut.cpp',
   'Tui/ZShortcutManager.cpp',
   'Tui/ZTerminal.cpp',
   'Tui/ZTerminal_linux.cpp',

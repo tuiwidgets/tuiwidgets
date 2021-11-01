@@ -1,6 +1,7 @@
 #ifndef TUIWIDGETS_ZSHORTCUT_INCLUDED
 #define TUIWIDGETS_ZSHORTCUT_INCLUDED
 
+#include <functional>
 #include <memory>
 
 #include <QObject>
@@ -15,6 +16,23 @@ TUIWIDGETS_NS_START
 class ZWidget;
 class ZKeyEvent;
 
+class ZPendingKeySequenceCallbacksPrivate;
+class TUIWIDGETS_EXPORT ZPendingKeySequenceCallbacks {
+public:
+    ZPendingKeySequenceCallbacks();
+    ~ZPendingKeySequenceCallbacks();
+
+public:
+    void setPendingSequenceStarted(std::function<void()> callback);
+    void setPendingSequenceFinished(std::function<void()> callback);
+
+protected:
+    ZValuePtr<ZPendingKeySequenceCallbacksPrivate> tuiwidgets_pimpl_ptr;
+
+private:
+    TUIWIDGETS_DECLARE_PRIVATE(ZPendingKeySequenceCallbacks)
+};
+
 class ZKeySequencePrivate;
 class TUIWIDGETS_EXPORT ZKeySequence {
 public:
@@ -26,6 +44,10 @@ public:
     static ZKeySequence forMnemonic(const QString &c);
     static ZKeySequence forKey(int key, Qt::KeyboardModifiers modifiers = {});
     static ZKeySequence forShortcut(const QString &c, Qt::KeyboardModifiers modifiers = Qt::ControlModifier);
+    static ZKeySequence forShortcutSequence(const QString &c, Qt::KeyboardModifiers modifiers,
+                                            const QString &c2, Qt::KeyboardModifiers modifiers2);
+    static ZKeySequence forShortcutSequence(const QString &c, Qt::KeyboardModifiers modifiers,
+                                            int key2, Qt::KeyboardModifiers modifiers2);
 
 protected:
     ZValuePtr<ZKeySequencePrivate> tuiwidgets_pimpl_ptr;
