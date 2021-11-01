@@ -55,29 +55,8 @@ void ZShortcut::setEnabledDelegate(Private::ZMoFunc<bool()>&& delegate) {
     p->enabledDelegate = std::move(delegate);
 }
 
-bool ZShortcut::matches(ZWidget *focusWidget, const ZKeyEvent *event) {
-    auto *const p = tuiwidgets_impl();
-    if (!isEnabled()) return false;
-    bool keyMatches = false;
-    auto *const kp = p->key.tuiwidgets_impl();
-    if (kp->forMnemonic.size()) {
-        if (event->modifiers() == Qt::AltModifier && event->text().toLower() == kp->forMnemonic.toLower()) {
-            keyMatches = true;
-        }
-    } else if (kp->forKey != 0) {
-        if (event->modifiers() == kp->modifiers && event->key() == kp->forKey) {
-            keyMatches = true;
-        }
-    } else if (kp->forShortcut.size()) {
-        if (event->modifiers() == kp->modifiers && event->text() == kp->forShortcut) {
-            keyMatches = true;
-        }
-    }
-    if (!keyMatches) {
-        return false;
-    }
-    QObject *par = parent();
-    switch (p->context) {
+bool ZShortcutPrivate::isContextActive(QObject *par, ZWidget *focusWidget) {
+    switch (context) {
         case Qt::WidgetShortcut:
             return focusWidget == par;
             break;
@@ -118,6 +97,31 @@ bool ZShortcut::matches(ZWidget *focusWidget, const ZKeyEvent *event) {
             break;
     }
     return false;
+}
+
+bool ZShortcut::matches(ZWidget *focusWidget, const ZKeyEvent *event) {
+    auto *const p = tuiwidgets_impl();
+    if (!isEnabled()) return false;
+    bool keyMatches = false;
+    auto *const kp = p->key.tuiwidgets_impl();
+    if (kp->forMnemonic.size()) {
+        if (event->modifiers() == Qt::AltModifier && event->text().toLower() == kp->forMnemonic.toLower()) {
+            keyMatches = true;
+        }
+    } else if (kp->forKey != 0) {
+        if (event->modifiers() == kp->modifiers && event->key() == kp->forKey) {
+            keyMatches = true;
+        }
+    } else if (kp->forShortcut.size()) {
+        if (event->modifiers() == kp->modifiers && event->text() == kp->forShortcut) {
+            keyMatches = true;
+        }
+    }
+    if (!keyMatches) {
+        return false;
+    }
+    QObject *par = parent();
+    return p->isContextActive(par, focusWidget);
 }
 
 bool ZShortcut::event(QEvent *event) {

@@ -11,6 +11,9 @@ class ZTerminal;
 
 class ZShortcutPrivate {
 public:
+    bool isContextActive(QObject *par, ZWidget *focusWidget);
+
+public:
     Qt::ShortcutContext context;
     ZKeySequence key;
     bool enabled = true;
