@@ -492,25 +492,25 @@ TEST_CASE("ZPainter: translateAndClip") {
     bool useQRect = GENERATE(false, true);
 
     Tui::ZPainter painterUnclipped = Tui::ZPainterPrivate::createForTesting(f.surface);
-    Tui::ZPainter painter = useQRect ? painterUnclipped.translateAndClip({2, 3, 1, 1})
-                                     : painterUnclipped.translateAndClip(2, 3, 1, 1);
+    Tui::ZPainter painter1x1 = useQRect ? painterUnclipped.translateAndClip({2, 3, 1, 1})
+                                        : painterUnclipped.translateAndClip(2, 3, 1, 1);
 
     SECTION("setForeground, setBackground and setSoftwrap outside") {
-        painter.setSoftwrapMarker(1, 1);
-        painter.setBackground(2, 2, Tui::TerminalColor::green);
-        painter.setForeground(3, 1, Tui::TerminalColor::yellow);
+        painter1x1.setSoftwrapMarker(1, 1);
+        painter1x1.setBackground(2, 2, Tui::TerminalColor::green);
+        painter1x1.setForeground(3, 1, Tui::TerminalColor::yellow);
         checkEmptyPlusSome(f.surface, {});
     }
 
     SECTION("clear") {
-        painter.clear(Tui::TerminalColor::black, Tui::TerminalColor::red);
+        painter1x1.clear(Tui::TerminalColor::black, Tui::TerminalColor::red);
         checkEmptyPlusSome(f.surface, {
                            {{2, 3}, singleWideChar(TERMPAINT_ERASED).withFg(TERMPAINT_COLOR_BLACK).withBg(TERMPAINT_COLOR_RED)}
                         });
     }
 
     SECTION("clearWithChar") {
-        painter.clearWithChar(Tui::TerminalColor::black, Tui::TerminalColor::red, '#');
+        painter1x1.clearWithChar(Tui::TerminalColor::black, Tui::TerminalColor::red, '#');
         checkEmptyPlusSome(f.surface, {
                            {{2, 3}, singleWideChar("#").withFg(TERMPAINT_COLOR_BLACK).withBg(TERMPAINT_COLOR_RED)}
                         });
@@ -518,13 +518,13 @@ TEST_CASE("ZPainter: translateAndClip") {
 
 
     SECTION("clearRect") {
-        painter.clearRect(0, 0, 10, 10, Tui::TerminalColor::black, Tui::TerminalColor::red);
+        painter1x1.clearRect(0, 0, 10, 10, Tui::TerminalColor::black, Tui::TerminalColor::red);
         checkEmptyPlusSome(f.surface, {
                            {{2, 3}, singleWideChar(TERMPAINT_ERASED).withFg(TERMPAINT_COLOR_BLACK).withBg(TERMPAINT_COLOR_RED)}
                         });
     }
     SECTION("clearRect-negativ") {
-        painter.clearRect(-10, -10, 11, 11, Tui::TerminalColor::black, Tui::TerminalColor::red);
+        painter1x1.clearRect(-10, -10, 11, 11, Tui::TerminalColor::black, Tui::TerminalColor::red);
         checkEmptyPlusSome(f.surface, {
                            {{2, 3}, singleWideChar(TERMPAINT_ERASED).withFg(TERMPAINT_COLOR_BLACK).withBg(TERMPAINT_COLOR_RED)}
                         });
@@ -551,7 +551,7 @@ TEST_CASE("ZPainter: translateAndClip") {
 
 
     SECTION("clearRectWithChar") {
-        painter.clearRectWithChar(0, 0, 10, 10, Tui::TerminalColor::black, Tui::TerminalColor::red, '#');
+        painter1x1.clearRectWithChar(0, 0, 10, 10, Tui::TerminalColor::black, Tui::TerminalColor::red, '#');
         checkEmptyPlusSome(f.surface, {
                            {{2, 3}, singleWideChar("#").withFg(TERMPAINT_COLOR_BLACK).withBg(TERMPAINT_COLOR_RED)}
                         });
@@ -577,7 +577,7 @@ TEST_CASE("ZPainter: translateAndClip") {
     }
 
     SECTION("clearRectWithChar-negativ") {
-        painter.clearRectWithChar(-10, -10, 11, 11, Tui::TerminalColor::black, Tui::TerminalColor::red, '#');
+        painter1x1.clearRectWithChar(-10, -10, 11, 11, Tui::TerminalColor::black, Tui::TerminalColor::red, '#');
         checkEmptyPlusSome(f.surface, {
                            {{2, 3}, singleWideChar("#").withFg(TERMPAINT_COLOR_BLACK).withBg(TERMPAINT_COLOR_RED)}
                         });
@@ -597,7 +597,7 @@ TEST_CASE("ZPainter: translateAndClip") {
 
         for (int x = -2; x <= 3; x++) {
             for (int y = -2; y <= 3; y++) {
-                painter.clearSoftwrapMarker(x, y);
+                painter1x1.clearSoftwrapMarker(x, y);
             }
         }
         expected[{2, 3}] = singleWideChar(TERMPAINT_ERASED);
@@ -658,7 +658,7 @@ TEST_CASE("ZPainter: translateAndClip") {
         Tui::ZImage image = Tui::ZImageData::createForTesting(f.terminal, 10, 10);
         image.painter().clear(Tui::TerminalColor::cyan, Tui::TerminalColor::green);
         image.painter().setBackground(2, 2, Tui::TerminalColor::blue);
-        painter.drawImage(-2, -2, image);
+        painter1x1.drawImage(-2, -2, image);
         checkEmptyPlusSome(f.surface, {
                                {{2, 3}, singleWideChar(TERMPAINT_ERASED).withBg(TERMPAINT_COLOR_BLUE).withFg(TERMPAINT_COLOR_CYAN)}
                            });
