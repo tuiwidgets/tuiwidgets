@@ -22,7 +22,10 @@ public:
 
     std::shared_ptr<char> token;
     termpaint_surface *surface;
-    int x, y, width, height;
+    // Clip rect and origin for translation
+    int x = 0, y = 0, width = 0, height = 0;
+    // Translation relative to top-left corner of clipping rect
+    int offsetX = 0, offsetY = 0;
 
     QPointer<ZWidget> widget;
 

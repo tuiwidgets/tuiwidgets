@@ -20,14 +20,12 @@ namespace {
 }
 
 ZPainterPrivate::ZPainterPrivate(termpaint_surface *surface, int width, int height, std::shared_ptr<char> token)
-    : token(token), surface(surface), x(0), y(0), width(width), height(height)
+    : token(token), surface(surface), x(0), y(0), width(width), height(height), offsetX(0), offsetY(0)
 {
-
 }
 
 ZPainterPrivate::~ZPainterPrivate()
 {
-
 }
 
 ZPainter::ZPainter(std::unique_ptr<ZPainterPrivate> impl)
@@ -49,22 +47,23 @@ ZPainter ZPainter::translateAndClip(QRect transform) {
 }
 
 ZPainter ZPainter::translateAndClip(int x, int y, int width, int height) {
-    x = std::max(0, x);
-    y = std::max(0, y);
-
     ZPainter ret = *this;
-
     auto *const pimpl = ret.tuiwidgets_impl();
 
-    // translate
-    pimpl->width -= x;
-    pimpl->height -= y;
-    pimpl->x += x;
-    pimpl->y += y;
+    QRect startingClip = {pimpl->x, pimpl->y, pimpl->width, pimpl->height};
 
-    // clip
-    pimpl->width = std::max(std::min(pimpl->width, width), 0);
-    pimpl->height = std::max(std::min(pimpl->height, height), 0);
+    QPoint offset = {pimpl->x + pimpl->offsetX, pimpl->y + pimpl->offsetY};
+    offset += {x, y};
+
+    QRect effectiveClip = startingClip.intersected({offset, QSize{std::max(width, 0), std::max(height, 0)}});
+    pimpl->x = effectiveClip.x();
+    pimpl->y = effectiveClip.y();
+    pimpl->width = effectiveClip.width();
+    pimpl->height = effectiveClip.height();
+
+    offset -= QPoint{pimpl->x, pimpl->y};
+    pimpl->offsetX = offset.x();
+    pimpl->offsetY = offset.y();
 
     return ret;
 }
@@ -76,6 +75,10 @@ void ZPainter::writeWithColors(int x, int y, const QString &string, ZColor fg, Z
 
 void ZPainter::writeWithColors(int x, int y, const char *stringUtf8, int utf8CodeUnits, ZColor fg, ZColor bg) {
     auto *const pimpl = tuiwidgets_impl();
+
+    x += pimpl->offsetX;
+    y += pimpl->offsetY;
+
     if (y >= pimpl->height || y < 0) return;
 
     termpaint_surface_write_with_len_colors_clipped(pimpl->surface,
@@ -102,6 +105,10 @@ void ZPainter::writeWithAttributes(int x, int y, const QString &string, ZColor f
 
 void ZPainter::writeWithAttributes(int x, int y, const char *stringUtf8, int utf8CodeUnits, ZColor fg, ZColor bg, Attributes attr) {
     auto *const pimpl = tuiwidgets_impl();
+
+    x += pimpl->offsetX;
+    y += pimpl->offsetY;
+
     if (y >= pimpl->height || y < 0) return;
 
     termpaint_attr *termpaintAttr = termpaint_attr_new(toTermPaintColor(fg), toTermPaintColor(bg));
@@ -140,6 +147,10 @@ void ZPainter::clearWithChar(ZColor fg, ZColor bg, int fillChar, Attributes attr
 
 void ZPainter::clearRectWithChar(int x, int y, int width, int height, ZColor fg, ZColor bg, int fillChar, Attributes attr) {
     auto *const pimpl = tuiwidgets_impl();
+
+    x += pimpl->offsetX;
+    y += pimpl->offsetY;
+
     if (x < 0) {
         width += x;
         x = 0;
@@ -171,6 +182,10 @@ void ZPainter::clearRect(int x, int y, int width, int height, ZColor fg, ZColor 
 
 void ZPainter::setSoftwrapMarker(int x, int y) {
     auto *const pimpl = tuiwidgets_impl();
+
+    x += pimpl->offsetX;
+    y += pimpl->offsetY;
+
     if (x < 0) return;
     if (y < 0) return;
     if (x >= pimpl->width) return;
@@ -180,6 +195,10 @@ void ZPainter::setSoftwrapMarker(int x, int y) {
 
 void ZPainter::clearSoftwrapMarker(int x, int y) {
     auto *const pimpl = tuiwidgets_impl();
+
+    x += pimpl->offsetX;
+    y += pimpl->offsetY;
+
     if (x < 0) return;
     if (y < 0) return;
     if (x >= pimpl->width) return;
@@ -189,6 +208,9 @@ void ZPainter::clearSoftwrapMarker(int x, int y) {
 
 void ZPainter::drawImage(int x, int y, const ZImage &sourceImage, int sourceX, int sourceY, int width, int height) {
     auto *const pimpl = tuiwidgets_impl();
+
+    x += pimpl->offsetX;
+    y += pimpl->offsetY;
 
     if (width == -1) {
         width = sourceImage.width();
@@ -222,6 +244,10 @@ void ZPainter::drawImage(int x, int y, const ZImage &sourceImage, int sourceX, i
 
 void ZPainter::setForeground(int x, int y, ZColor fg) {
     auto *const pimpl = tuiwidgets_impl();
+
+    x += pimpl->offsetX;
+    y += pimpl->offsetY;
+
     if (x < 0) return;
     if (y < 0) return;
     if (x >= pimpl->width) return;
@@ -231,6 +257,10 @@ void ZPainter::setForeground(int x, int y, ZColor fg) {
 
 void ZPainter::setBackground(int x, int y, ZColor bg) {
     auto *const pimpl = tuiwidgets_impl();
+
+    x += pimpl->offsetX;
+    y += pimpl->offsetY;
+
     if (x < 0) return;
     if (y < 0) return;
     if (x >= pimpl->width) return;
@@ -240,6 +270,9 @@ void ZPainter::setBackground(int x, int y, ZColor bg) {
 
 void ZPainter::setCursor(int x, int y) {
     auto *const pimpl = tuiwidgets_impl();
+
+    x += pimpl->offsetX;
+    y += pimpl->offsetY;
 
     if (pimpl->widget) {
         if (x >= 0 && x <= pimpl->width && y >= 0 && y <= pimpl->height) {

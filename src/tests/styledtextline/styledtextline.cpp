@@ -319,6 +319,19 @@ TEST_CASE("styledtextline-visual", "") {
         stl->setText("456");
         t.compare();
     }
+    SECTION("write-2-0") {
+        w->x = -2;
+        w->y = 0;
+        stl->setText("456");
+        t.compare();
+    }
+    SECTION("write-0-1") {
+        w->x = 0;
+        w->y = -1;
+        stl->setText("456");
+        t.compare("write-10-10");
+    }
+
     SECTION("write-6-1") {
         w->x = 6;
         w->y = 1;
