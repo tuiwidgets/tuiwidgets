@@ -403,6 +403,7 @@ void ZTerminalPrivate::initOffscreen(const ZTerminal::OffScreen &offscreen) {
     auto flush = [] (termpaint_integration *ptr) {
         Q_UNUSED(ptr);
     };
+    memset(&integration, 0, sizeof(integration));
     termpaint_integration_init(&integration, free, write, flush);
 
     callbackRequested = false;
@@ -413,6 +414,7 @@ void ZTerminalPrivate::initOffscreen(const ZTerminal::OffScreen &offscreen) {
     surface = termpaint_terminal_get_surface(terminal);
     termpaint_surface_resize(surface, offscreenData->width, offscreenData->height);
     termpaint_terminal_set_event_cb(terminal, [](void *, termpaint_event *) {}, nullptr);
+    initState = ZTerminalPrivate::InitState::Ready;
 }
 
 void ZTerminalPrivate::initCommon() {
