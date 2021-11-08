@@ -46,6 +46,7 @@ public:
     ZColor peekForground(int x, int y);
     ZColor peekBackground(int x, int y);
     ZColor peekDecoration(int x, int y);
+    bool peekSoftwrapMarker(int x, int y);
     ZTextAttributes peekAttributes(int x, int y);
 
     ZPainter painter();

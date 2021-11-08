@@ -139,6 +139,11 @@ ZColor ZImage::peekDecoration(int x, int y) {
     return color;
 }
 
+bool ZImage::peekSoftwrapMarker(int x, int y) {
+    auto *surface = tuiwidgets_pimpl_ptr->surface;
+    return termpaint_surface_peek_softwrap_marker(surface, x, y);
+}
+
 ZTextAttributes ZImage::peekAttributes(int x, int y) {
     auto *surface = tuiwidgets_pimpl_ptr->surface;
     return (ZTextAttributes)termpaint_surface_peek_style(surface, x, y);
