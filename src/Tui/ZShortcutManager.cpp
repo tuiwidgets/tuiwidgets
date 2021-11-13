@@ -99,7 +99,7 @@ void ZShortcutManager::activateTwoPart(const Key &prefix) {
                 // TODO ambiguous
             }
             for (auto &callbacks : pendingCallbacks) {
-                ZPendingKeySequenceCallbacksPrivate::get(&callbacks)->finished();
+                ZPendingKeySequenceCallbacksPrivate::get(&callbacks)->finished(matching.size() == 1);
             }
         }
     });

@@ -50,7 +50,7 @@ public:
 
 public:
     std::function<void()> started;
-    std::function<void()> finished;
+    std::function<void(bool matched)> finished;
 };
 
 TUIWIDGETS_NS_END

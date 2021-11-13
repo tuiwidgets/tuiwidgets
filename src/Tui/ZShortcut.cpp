@@ -248,7 +248,7 @@ void ZPendingKeySequenceCallbacks::setPendingSequenceStarted(std::function<void 
     p->started = callback;
 }
 
-void ZPendingKeySequenceCallbacks::setPendingSequenceFinished(std::function<void ()> callback) {
+void ZPendingKeySequenceCallbacks::setPendingSequenceFinished(std::function<void(bool)> callback) {
     auto *const p = tuiwidgets_impl();
     p->finished = callback;
 }
