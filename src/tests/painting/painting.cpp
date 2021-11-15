@@ -9,6 +9,7 @@
 #include <limits>
 
 #include <QRect>
+#include <QVector>
 
 #include "../catchwrapper.h"
 
@@ -17,6 +18,28 @@
 #include "../termpaint_helpers.h"
 
 namespace {
+
+struct TermpaintFixtureImg : public TermpaintFixture {
+    TermpaintFixtureImg(int width, int height, bool useImage) : TermpaintFixture(width, height) {
+        _useImage = useImage;
+        if (useImage) {
+            _img = std::make_unique<Tui::ZImage>(Tui::ZImageData::createForTesting(terminal.get(), width, height));
+            surface = Tui::ZImageData::get(_img.get())->surface;
+        }
+    }
+
+    Tui::ZPainter testPainter() {
+        if (_useImage) {
+            return _img->painter();
+        } else {
+            return Tui::ZPainterPrivate::createForTesting(surface);
+        }
+    }
+
+private:
+    std::unique_ptr<Tui::ZImage> _img;
+    bool _useImage = false;
+};
 
 class Cell {
 public:
@@ -258,10 +281,12 @@ TEST_CASE("ZPainter: simple text") {
     auto kind = GENERATE(ALLKINDS);
     CAPTURE(kind);
 
-    TermpaintFixture f{80, 6};
+    bool useImage = GENERATE(false, true);
+    CAPTURE(useImage);
+    TermpaintFixtureImg f{80, 6, useImage};
     termpaint_surface_clear(f.surface, TERMPAINT_DEFAULT_COLOR, TERMPAINT_DEFAULT_COLOR);
 
-    Tui::ZPainter painter = Tui::ZPainterPrivate::createForTesting(f.surface);
+    Tui::ZPainter painter = f.testPainter();
 
     writeWithColorsWrapper(kind, painter, 10, 3, "Sample", Tui::ZColor::defaultColor(), Tui::ZColor::defaultColor());
 
@@ -279,10 +304,12 @@ TEST_CASE("ZPainter: text with colors") {
     auto kind = GENERATE(ALLKINDS);
     CAPTURE(kind);
 
-    TermpaintFixture f{80, 6};
+    bool useImage = GENERATE(false, true);
+    CAPTURE(useImage);
+    TermpaintFixtureImg f{80, 6, useImage};
     termpaint_surface_clear(f.surface, TERMPAINT_DEFAULT_COLOR, TERMPAINT_DEFAULT_COLOR);
 
-    Tui::ZPainter painter = Tui::ZPainterPrivate::createForTesting(f.surface);
+    Tui::ZPainter painter = f.testPainter();
 
     struct Testcase {
         Tui::TerminalColor tuifg;
@@ -321,10 +348,12 @@ TEST_CASE("ZPainter: text with attributes") {
     auto kind = GENERATE(ALLKINDS);
     CAPTURE(kind);
 
-    TermpaintFixture f{80, 6};
+    bool useImage = GENERATE(false, true);
+    CAPTURE(useImage);
+    TermpaintFixtureImg f{80, 6, useImage};
     termpaint_surface_clear(f.surface, TERMPAINT_DEFAULT_COLOR, TERMPAINT_DEFAULT_COLOR);
 
-    Tui::ZPainter painter = Tui::ZPainterPrivate::createForTesting(f.surface);
+    Tui::ZPainter painter = f.testPainter();
 
     struct Testcase {
         Tui::ZTextAttribute attr;
@@ -362,10 +391,12 @@ TEST_CASE("ZPainter: text with attributes") {
 }
 
 TEST_CASE("ZPainter: clear") {
-    TermpaintFixture f{80, 6};
+    bool useImage = GENERATE(false, true);
+    CAPTURE(useImage);
+    TermpaintFixtureImg f{80, 6, useImage};
     termpaint_surface_clear(f.surface, TERMPAINT_DEFAULT_COLOR, TERMPAINT_DEFAULT_COLOR);
 
-    Tui::ZPainter painter = Tui::ZPainterPrivate::createForTesting(f.surface);
+    Tui::ZPainter painter = f.testPainter();
 
     painter.clear(Tui::TerminalColor::black, Tui::TerminalColor::red);
     checkEmptyPlusSome(f.surface, {}, singleWideChar(TERMPAINT_ERASED).withFg(TERMPAINT_COLOR_BLACK).withBg(TERMPAINT_COLOR_RED));
@@ -393,19 +424,23 @@ TEST_CASE("ZPainter: clear") {
 }
 
 TEST_CASE("ZPainter: clear default") {
-    TermpaintFixture f{80, 6};
+    bool useImage = GENERATE(false, true);
+    CAPTURE(useImage);
+    TermpaintFixtureImg f{80, 6, useImage};
     termpaint_surface_clear(f.surface, TERMPAINT_COLOR_RED, TERMPAINT_COLOR_BLUE);
 
-    Tui::ZPainter painter = Tui::ZPainterPrivate::createForTesting(f.surface);
+    Tui::ZPainter painter = f.testPainter();
     painter.clear(Tui::ZColor::defaultColor(), Tui::ZColor::defaultColor());
     checkEmptyPlusSome(f.surface, {});
 }
 
 TEST_CASE("ZPainter: clearWithChar") {
-    TermpaintFixture f{80, 6};
+    bool useImage = GENERATE(false, true);
+    CAPTURE(useImage);
+    TermpaintFixtureImg f{80, 6, useImage};
     termpaint_surface_clear(f.surface, TERMPAINT_DEFAULT_COLOR, TERMPAINT_DEFAULT_COLOR);
 
-    Tui::ZPainter painter = Tui::ZPainterPrivate::createForTesting(f.surface);
+    Tui::ZPainter painter = f.testPainter();
 
     painter.clearWithChar(Tui::TerminalColor::black, Tui::TerminalColor::red, (int)'#', {});
     checkEmptyPlusSome(f.surface, {}, singleWideChar("#").withFg(TERMPAINT_COLOR_BLACK).withBg(TERMPAINT_COLOR_RED));
@@ -413,10 +448,12 @@ TEST_CASE("ZPainter: clearWithChar") {
 }
 
 TEST_CASE("ZPainter: clearRect") {
-    TermpaintFixture f{80, 6};
+    bool useImage = GENERATE(false, true);
+    CAPTURE(useImage);
+    TermpaintFixtureImg f{80, 6, useImage};
     termpaint_surface_clear(f.surface, TERMPAINT_DEFAULT_COLOR, TERMPAINT_DEFAULT_COLOR);
 
-    Tui::ZPainter painter = Tui::ZPainterPrivate::createForTesting(f.surface);
+    Tui::ZPainter painter = f.testPainter();
 
     painter.clearRect(4, 1, 3, 2, Tui::TerminalColor::black, Tui::TerminalColor::red);
     checkEmptyPlusSome(f.surface, {
@@ -459,10 +496,12 @@ TEST_CASE("ZPainter: clearRect") {
 }
 
 TEST_CASE("ZPainter: clearRectWithChar") {
-    TermpaintFixture f{80, 6};
+    bool useImage = GENERATE(false, true);
+    CAPTURE(useImage);
+    TermpaintFixtureImg f{80, 6, useImage};
     termpaint_surface_clear(f.surface, TERMPAINT_DEFAULT_COLOR, TERMPAINT_DEFAULT_COLOR);
 
-    Tui::ZPainter painter = Tui::ZPainterPrivate::createForTesting(f.surface);
+    Tui::ZPainter painter = f.testPainter();
 
     painter.clearRectWithChar(1, 1, 2, 2, Tui::TerminalColor::black, Tui::TerminalColor::red, (int)'#', {});
     checkEmptyPlusSome(f.surface, {
@@ -474,10 +513,12 @@ TEST_CASE("ZPainter: clearRectWithChar") {
 }
 
 TEST_CASE("ZPainter: clearRectWithChar U+1D160") {
-    TermpaintFixture f{80, 6};
+    bool useImage = GENERATE(false, true);
+    CAPTURE(useImage);
+    TermpaintFixtureImg f{80, 6, useImage};
     termpaint_surface_clear(f.surface, TERMPAINT_DEFAULT_COLOR, TERMPAINT_DEFAULT_COLOR);
 
-    Tui::ZPainter painter = Tui::ZPainterPrivate::createForTesting(f.surface);
+    Tui::ZPainter painter = f.testPainter();
 
     painter.clearRectWithChar(1, 1, 2, 2, Tui::TerminalColor::black, Tui::TerminalColor::red, (int)0x1D160, {});
     checkEmptyPlusSome(f.surface, {
@@ -489,12 +530,14 @@ TEST_CASE("ZPainter: clearRectWithChar U+1D160") {
 }
 
 TEST_CASE("ZPainter: translateAndClip") {
-    TermpaintFixture f{80, 6};
+    bool useImage = GENERATE(false, true);
+    CAPTURE(useImage);
+    TermpaintFixtureImg f{80, 6, useImage};
     termpaint_surface_clear(f.surface, TERMPAINT_DEFAULT_COLOR, TERMPAINT_DEFAULT_COLOR);
     bool useQRect = GENERATE(false, true);
     CAPTURE(useQRect);
 
-    Tui::ZPainter painterUnclipped = Tui::ZPainterPrivate::createForTesting(f.surface);
+    Tui::ZPainter painterUnclipped = f.testPainter();
     Tui::ZPainter painter1x1 = useQRect ? painterUnclipped.translateAndClip({2, 3, 1, 1})
                                         : painterUnclipped.translateAndClip(2, 3, 1, 1);
 
@@ -808,10 +851,12 @@ TEST_CASE("ZPainter: translateAndClip") {
 }
 
 TEST_CASE("ZPainter: translateAndClip private") {
+    bool useImage = GENERATE(false, true);
+    CAPTURE(useImage);
     SECTION("extend") {
         // translateAndClip can't make the clipping area extend
-        TermpaintFixture f{80, 24};
-        Tui::ZPainter painterUnclipped = Tui::ZPainterPrivate::createForTesting(f.surface);
+        TermpaintFixtureImg f{80, 24, useImage};
+        Tui::ZPainter painterUnclipped = f.testPainter();
         Tui::ZPainter painter = painterUnclipped.translateAndClip({-1, -1, 1000, 1000});
         CHECK(Tui::ZPainterPrivate::get(&painter)->x == 0);
         CHECK(Tui::ZPainterPrivate::get(&painter)->y == 0);
@@ -821,8 +866,8 @@ TEST_CASE("ZPainter: translateAndClip private") {
         CHECK(Tui::ZPainterPrivate::get(&painter)->offsetY == -1);
     }
     SECTION("nestedclip") {
-        TermpaintFixture f{80, 24};
-        Tui::ZPainter painterUnclipped = Tui::ZPainterPrivate::createForTesting(f.surface);
+        TermpaintFixtureImg f{80, 24, useImage};
+        Tui::ZPainter painterUnclipped = f.testPainter();
         Tui::ZPainter painter = painterUnclipped.translateAndClip({2, 4, 78, 20}).translateAndClip(6, 8, 71, 12);
         CHECK(Tui::ZPainterPrivate::get(&painter)->x == 8);
         CHECK(Tui::ZPainterPrivate::get(&painter)->y == 12);
@@ -832,8 +877,8 @@ TEST_CASE("ZPainter: translateAndClip private") {
         CHECK(Tui::ZPainterPrivate::get(&painter)->offsetY == 0);
     }
     SECTION("top-left") {
-        TermpaintFixture f{80, 24};
-        Tui::ZPainter painterUnclipped = Tui::ZPainterPrivate::createForTesting(f.surface);
+        TermpaintFixtureImg f{80, 24, useImage};
+        Tui::ZPainter painterUnclipped = f.testPainter();
         Tui::ZPainter painter = painterUnclipped.translateAndClip({2, 5, 1000, 1000});
         CHECK(Tui::ZPainterPrivate::get(&painter)->x == 2);
         CHECK(Tui::ZPainterPrivate::get(&painter)->y == 5);
@@ -843,8 +888,8 @@ TEST_CASE("ZPainter: translateAndClip private") {
         CHECK(Tui::ZPainterPrivate::get(&painter)->offsetY == 0);
     }
     SECTION("bottom-right") {
-        TermpaintFixture f{80, 24};
-        Tui::ZPainter painterUnclipped = Tui::ZPainterPrivate::createForTesting(f.surface);
+        TermpaintFixtureImg f{80, 24, useImage};
+        Tui::ZPainter painterUnclipped = f.testPainter();
         Tui::ZPainter painter = painterUnclipped.translateAndClip({0, 0, 79, 23});
         CHECK(Tui::ZPainterPrivate::get(&painter)->x == 0);
         CHECK(Tui::ZPainterPrivate::get(&painter)->y == 0);
@@ -854,8 +899,8 @@ TEST_CASE("ZPainter: translateAndClip private") {
         CHECK(Tui::ZPainterPrivate::get(&painter)->offsetY == 0);
     }
     SECTION("top-left-bottom-right") {
-        TermpaintFixture f{80, 24};
-        Tui::ZPainter painterUnclipped = Tui::ZPainterPrivate::createForTesting(f.surface);
+        TermpaintFixtureImg f{80, 24, useImage};
+        Tui::ZPainter painterUnclipped = f.testPainter();
         Tui::ZPainter painter = painterUnclipped.translateAndClip({2, 5, 77, 18});
         CHECK(Tui::ZPainterPrivate::get(&painter)->x == 2);
         CHECK(Tui::ZPainterPrivate::get(&painter)->y == 5);
@@ -865,8 +910,8 @@ TEST_CASE("ZPainter: translateAndClip private") {
         CHECK(Tui::ZPainterPrivate::get(&painter)->offsetY == 0);
     }
     SECTION("negativ-size") {
-        TermpaintFixture f{80, 24};
-        Tui::ZPainter painterUnclipped = Tui::ZPainterPrivate::createForTesting(f.surface);
+        TermpaintFixtureImg f{80, 24, useImage};
+        Tui::ZPainter painterUnclipped = f.testPainter();
         Tui::ZPainter painter = painterUnclipped.translateAndClip({10, 10, -2, -2});
         CHECK(Tui::ZPainterPrivate::get(&painter)->x == 0);
         CHECK(Tui::ZPainterPrivate::get(&painter)->y == 0);
@@ -876,8 +921,8 @@ TEST_CASE("ZPainter: translateAndClip private") {
         CHECK(Tui::ZPainterPrivate::get(&painter)->offsetY == 10);
     }
     SECTION("negativ-size-offset") {
-        TermpaintFixture f{80, 24};
-        Tui::ZPainter painterUnclipped = Tui::ZPainterPrivate::createForTesting(f.surface);
+        TermpaintFixtureImg f{80, 24, useImage};
+        Tui::ZPainter painterUnclipped = f.testPainter();
         Tui::ZPainter painter = painterUnclipped.translateAndClip({-1, -1, -2, -2}).translateAndClip(0, 0, 10, 10);
         CHECK(Tui::ZPainterPrivate::get(&painter)->x == 0);
         CHECK(Tui::ZPainterPrivate::get(&painter)->y == 0);
@@ -888,8 +933,8 @@ TEST_CASE("ZPainter: translateAndClip private") {
     }
     SECTION("negativ-offset") {
         // negative translation reduces size of clipping area and adjusts offset
-        TermpaintFixture f{80, 24};
-        Tui::ZPainter painterUnclipped = Tui::ZPainterPrivate::createForTesting(f.surface);
+        TermpaintFixtureImg f{80, 24, useImage};
+        Tui::ZPainter painterUnclipped = f.testPainter();
         Tui::ZPainter painter = painterUnclipped.translateAndClip({15, 10, 26, 20}).translateAndClip(-1, -1, 3, 3);
         CHECK(Tui::ZPainterPrivate::get(&painter)->x == 15);
         CHECK(Tui::ZPainterPrivate::get(&painter)->y == 10);
@@ -900,16 +945,16 @@ TEST_CASE("ZPainter: translateAndClip private") {
     }
     SECTION("negativ-offset-2times") {
         // negative translation reduces size of clipping area and adjusts offset
-        TermpaintFixture f{80, 24};
-        Tui::ZPainter painterUnclipped = Tui::ZPainterPrivate::createForTesting(f.surface);
+        TermpaintFixtureImg f{80, 24, useImage};
+        Tui::ZPainter painterUnclipped = f.testPainter();
         Tui::ZPainter painter = painterUnclipped.translateAndClip({15, 10, 26, 20})
                 .translateAndClip({-2, -2, 3, 1}).translateAndClip(-2, -2, 3, 1);
         CHECK(Tui::ZPainterPrivate::get(&painter)->width == 0);
         CHECK(Tui::ZPainterPrivate::get(&painter)->height == 0);
     }
     SECTION("negativ-balanced") {
-        TermpaintFixture f{80, 24};
-        Tui::ZPainter painterUnclipped = Tui::ZPainterPrivate::createForTesting(f.surface);
+        TermpaintFixtureImg f{80, 24, useImage};
+        Tui::ZPainter painterUnclipped = f.testPainter();
         Tui::ZPainter painter = painterUnclipped.translateAndClip({15, 10, 26, 20})
                 .translateAndClip({-2, -2, 20, 20}).translateAndClip(2, 2, 10, 10);
         CHECK(Tui::ZPainterPrivate::get(&painter)->x == 15);
@@ -920,8 +965,8 @@ TEST_CASE("ZPainter: translateAndClip private") {
         CHECK(Tui::ZPainterPrivate::get(&painter)->offsetY == 0);
     }
     SECTION("negativ-less") {
-        TermpaintFixture f{80, 24};
-        Tui::ZPainter painterUnclipped = Tui::ZPainterPrivate::createForTesting(f.surface);
+        TermpaintFixtureImg f{80, 24, useImage};
+        Tui::ZPainter painterUnclipped = f.testPainter();
         Tui::ZPainter painter = painterUnclipped.translateAndClip({15, 10, 26, 20})
                 .translateAndClip({-2, -2, 20, 20}).translateAndClip(1, 1, 10, 10);
         CHECK(Tui::ZPainterPrivate::get(&painter)->x == 15);
@@ -932,8 +977,8 @@ TEST_CASE("ZPainter: translateAndClip private") {
         CHECK(Tui::ZPainterPrivate::get(&painter)->offsetY == -1);
     }
     SECTION("negativ-more") {
-        TermpaintFixture f{80, 24};
-        Tui::ZPainter painterUnclipped = Tui::ZPainterPrivate::createForTesting(f.surface);
+        TermpaintFixtureImg f{80, 24, useImage};
+        Tui::ZPainter painterUnclipped = f.testPainter();
         Tui::ZPainter painter = painterUnclipped.translateAndClip({15, 10, 26, 20})
                 .translateAndClip({-2, -2, 20, 20}).translateAndClip(3, 3, 10, 10);
         CHECK(Tui::ZPainterPrivate::get(&painter)->x == 16);
@@ -944,8 +989,8 @@ TEST_CASE("ZPainter: translateAndClip private") {
         CHECK(Tui::ZPainterPrivate::get(&painter)->offsetY == 0);
     }
     SECTION("negativ-more-clip") {
-        TermpaintFixture f{80, 24};
-        Tui::ZPainter painterUnclipped = Tui::ZPainterPrivate::createForTesting(f.surface);
+        TermpaintFixtureImg f{80, 24, useImage};
+        Tui::ZPainter painterUnclipped = f.testPainter();
         Tui::ZPainter painter = painterUnclipped.translateAndClip({15, 10, 26, 20})
                 .translateAndClip({-2, -2, 12, 12}).translateAndClip(3, 3, 10, 10);
         CHECK(Tui::ZPainterPrivate::get(&painter)->x == 16);
@@ -959,10 +1004,12 @@ TEST_CASE("ZPainter: translateAndClip private") {
 
 
 TEST_CASE("ZPainter: SoftwrapMarker") {
-    TermpaintFixture f{80, 6};
+    bool useImage = GENERATE(false, true);
+    CAPTURE(useImage);
+    TermpaintFixtureImg f{80, 6, useImage};
     termpaint_surface_clear(f.surface, TERMPAINT_DEFAULT_COLOR, TERMPAINT_DEFAULT_COLOR);
 
-    Tui::ZPainter painter = Tui::ZPainterPrivate::createForTesting(f.surface);
+    Tui::ZPainter painter = f.testPainter();
     painter.setSoftwrapMarker(79, 1);
     checkEmptyPlusSome(f.surface, {
                            {{79, 1}, singleWideChar(TERMPAINT_ERASED).withSoftWrapMarker()}
@@ -970,20 +1017,24 @@ TEST_CASE("ZPainter: SoftwrapMarker") {
 }
 
 TEST_CASE("ZPainter: SoftwrapMarker clear") {
-    TermpaintFixture f{80, 6};
+    bool useImage = GENERATE(false, true);
+    CAPTURE(useImage);
+    TermpaintFixtureImg f{80, 6, useImage};
     termpaint_surface_clear(f.surface, TERMPAINT_DEFAULT_COLOR, TERMPAINT_DEFAULT_COLOR);
 
-    Tui::ZPainter painter = Tui::ZPainterPrivate::createForTesting(f.surface);
+    Tui::ZPainter painter = f.testPainter();
     painter.setSoftwrapMarker(79, 1);
     painter.clear(Tui::TerminalColor::black, Tui::TerminalColor::red);
     checkEmptyPlusSome(f.surface, {}, singleWideChar(TERMPAINT_ERASED).withFg(TERMPAINT_COLOR_BLACK).withBg(TERMPAINT_COLOR_RED));
 }
 
 TEST_CASE("ZPainter: clearSoftwrapMarker") {
-    TermpaintFixture f{80, 6};
+    bool useImage = GENERATE(false, true);
+    CAPTURE(useImage);
+    TermpaintFixtureImg f{80, 6, useImage};
     termpaint_surface_clear(f.surface, TERMPAINT_DEFAULT_COLOR, TERMPAINT_DEFAULT_COLOR);
 
-    Tui::ZPainter painter = Tui::ZPainterPrivate::createForTesting(f.surface);
+    Tui::ZPainter painter = f.testPainter();
     painter.setSoftwrapMarker(79, 1);
     painter.clearSoftwrapMarker(79, 1);
     checkEmptyPlusSome(f.surface, {
@@ -992,10 +1043,12 @@ TEST_CASE("ZPainter: clearSoftwrapMarker") {
 }
 
 TEST_CASE("ZPainter: drawImage") {
-    TermpaintFixture f{80, 6};
+    bool useImage = GENERATE(false, true);
+    CAPTURE(useImage);
+    TermpaintFixtureImg f{80, 6, useImage};
     termpaint_surface_clear(f.surface, TERMPAINT_DEFAULT_COLOR, TERMPAINT_DEFAULT_COLOR);
 
-    Tui::ZPainter painter = Tui::ZPainterPrivate::createForTesting(f.surface);
+    Tui::ZPainter painter = f.testPainter();
     Tui::ZImage image = Tui::ZImageData::createForTesting(f.terminal, 1, 1);
     image.painter().setBackground(0, 0, Tui::TerminalColor::blue);
     painter.drawImage(0, 0, image);
@@ -1043,20 +1096,24 @@ TEST_CASE("ZPainter: drawImage") {
 }
 
 TEST_CASE("ZPainter: setForeground") {
-    TermpaintFixture f{80, 6};
+    bool useImage = GENERATE(false, true);
+    CAPTURE(useImage);
+    TermpaintFixtureImg f{80, 6, useImage};
     termpaint_surface_clear(f.surface, TERMPAINT_DEFAULT_COLOR, TERMPAINT_DEFAULT_COLOR);
 
-    Tui::ZPainter painter = Tui::ZPainterPrivate::createForTesting(f.surface);
+    Tui::ZPainter painter = f.testPainter();
     painter.setForeground(0, 0, Tui::TerminalColor::brightWhite);
     checkEmptyPlusSome(f.surface, {
                            {{0, 0}, singleWideChar(TERMPAINT_ERASED).withFg(TERMPAINT_COLOR_WHITE)}
                        });
 }
 TEST_CASE("ZPainter: write text with setForeground") {
-    TermpaintFixture f{80, 6};
+    bool useImage = GENERATE(false, true);
+    CAPTURE(useImage);
+    TermpaintFixtureImg f{80, 6, useImage};
     termpaint_surface_clear(f.surface, TERMPAINT_DEFAULT_COLOR, TERMPAINT_DEFAULT_COLOR);
 
-    Tui::ZPainter painter = Tui::ZPainterPrivate::createForTesting(f.surface);
+    Tui::ZPainter painter = f.testPainter();
     painter.writeWithAttributes(0, 0, "B", Tui::TerminalColor::red, Tui::TerminalColor::blue, Tui::ZTextAttribute::Bold);
     painter.setForeground(0, 0, Tui::TerminalColor::brightWhite);
     checkEmptyPlusSome(f.surface, {
@@ -1065,10 +1122,12 @@ TEST_CASE("ZPainter: write text with setForeground") {
 }
 
 TEST_CASE("ZPainter: setBackground") {
-    TermpaintFixture f{80, 6};
+    bool useImage = GENERATE(false, true);
+    CAPTURE(useImage);
+    TermpaintFixtureImg f{80, 6, useImage};
     termpaint_surface_clear(f.surface, TERMPAINT_DEFAULT_COLOR, TERMPAINT_DEFAULT_COLOR);
 
-    Tui::ZPainter painter = Tui::ZPainterPrivate::createForTesting(f.surface);
+    Tui::ZPainter painter = f.testPainter();
     painter.setBackground(0, 0, Tui::TerminalColor::red);
     checkEmptyPlusSome(f.surface, {
                            {{0, 0}, singleWideChar(TERMPAINT_ERASED).withBg(TERMPAINT_COLOR_RED)}
@@ -1076,10 +1135,12 @@ TEST_CASE("ZPainter: setBackground") {
 }
 
 TEST_CASE("ZPainter: write text with setBackground") {
-    TermpaintFixture f{80, 6};
+    bool useImage = GENERATE(false, true);
+    CAPTURE(useImage);
+    TermpaintFixtureImg f{80, 6, useImage};
     termpaint_surface_clear(f.surface, TERMPAINT_DEFAULT_COLOR, TERMPAINT_DEFAULT_COLOR);
 
-    Tui::ZPainter painter = Tui::ZPainterPrivate::createForTesting(f.surface);
+    Tui::ZPainter painter = f.testPainter();
     painter.writeWithAttributes(0, 0, "B", Tui::TerminalColor::cyan, Tui::TerminalColor::blue, Tui::ZTextAttribute::Bold);
     painter.setBackground(0, 0, Tui::TerminalColor::red);
     checkEmptyPlusSome(f.surface, {
@@ -1088,14 +1149,17 @@ TEST_CASE("ZPainter: write text with setBackground") {
 }
 
 TEST_CASE("ZPainter: translateAndClip write") {
+    bool useImage = GENERATE(false, true);
+    CAPTURE(useImage);
+
     auto kind = GENERATE(ALLKINDS);
     CAPTURE(kind);
 
-    TermpaintFixture f{80, 6};
+    TermpaintFixtureImg f{80, 6, useImage};
     termpaint_surface_clear(f.surface, TERMPAINT_DEFAULT_COLOR, TERMPAINT_DEFAULT_COLOR);
 
     SECTION("writeWithColors") {
-        Tui::ZPainter painter = Tui::ZPainterPrivate::createForTesting(f.surface).translateAndClip({2, 3, 1, 1});
+        Tui::ZPainter painter = f.testPainter().translateAndClip({2, 3, 1, 1});
 
         writeWithColorsWrapper(kind, painter, 0, -1, "blub", Tui::TerminalColor::cyan, Tui::TerminalColor::green);
         checkEmptyPlusSome(f.surface, {});
@@ -1127,7 +1191,7 @@ TEST_CASE("ZPainter: translateAndClip write") {
                        });
     }
     SECTION("writeWithColors-inside") {
-        Tui::ZPainter painter = Tui::ZPainterPrivate::createForTesting(f.surface).translateAndClip({1, 2, 21, 11});
+        Tui::ZPainter painter = f.testPainter().translateAndClip({1, 2, 21, 11});
         writeWithColorsWrapper(kind, painter, 4, 3, "01234", Tui::TerminalColor::cyan, Tui::TerminalColor::green);
         checkEmptyPlusSome(f.surface, {
                                {{5, 5}, singleWideChar("0").withFg(TERMPAINT_COLOR_CYAN).withBg(TERMPAINT_COLOR_GREEN)},
@@ -1139,14 +1203,14 @@ TEST_CASE("ZPainter: translateAndClip write") {
     }
 
     SECTION("writeWithColors-utf8") {
-        Tui::ZPainter painter = Tui::ZPainterPrivate::createForTesting(f.surface).translateAndClip({2, 3, 2, 1});
+        Tui::ZPainter painter = f.testPainter().translateAndClip({2, 3, 2, 1});
         writeWithColorsWrapper(kind, painter, 0, 0, "😎", Tui::TerminalColor::cyan, Tui::TerminalColor::green);
         checkEmptyPlusSome(f.surface, {
                                {{2, 3}, doubleWideChar("😎").withFg(TERMPAINT_COLOR_CYAN).withBg(TERMPAINT_COLOR_GREEN)}
                            });
     }
     SECTION("writeWithColors-utf8-cut") {
-        Tui::ZPainter painter = Tui::ZPainterPrivate::createForTesting(f.surface).translateAndClip({2, 3, 1, 1});
+        Tui::ZPainter painter = f.testPainter().translateAndClip({2, 3, 1, 1});
         writeWithColorsWrapper(kind, painter, 0, 0, "😎", Tui::TerminalColor::cyan, Tui::TerminalColor::green);
         checkEmptyPlusSome(f.surface, {
                                {{2, 3}, singleWideChar(" ").withFg(TERMPAINT_COLOR_CYAN).withBg(TERMPAINT_COLOR_GREEN)}
@@ -1154,7 +1218,7 @@ TEST_CASE("ZPainter: translateAndClip write") {
     }
 
     SECTION("writeWithAttributes") {
-        Tui::ZPainter painter = Tui::ZPainterPrivate::createForTesting(f.surface).translateAndClip({2, 3, 1, 1});
+        Tui::ZPainter painter = f.testPainter().translateAndClip({2, 3, 1, 1});
 
         for (int y = -2; y <= 3; y++) {
             for (int x = -2; x <= 3; x++) {
@@ -1184,7 +1248,7 @@ TEST_CASE("ZPainter: translateAndClip write") {
     }
 
     SECTION("writeWithAttributes-inside") {
-        Tui::ZPainter painter = Tui::ZPainterPrivate::createForTesting(f.surface).translateAndClip({1, 2, 21, 11});
+        Tui::ZPainter painter = f.testPainter().translateAndClip({1, 2, 21, 11});
         writeWithAttributesWrapper(kind, painter, 4, 3, "01234", Tui::TerminalColor::cyan, Tui::TerminalColor::green, Tui::ZTextAttribute::Bold);
         checkEmptyPlusSome(f.surface, {
                                {{5, 5}, singleWideChar("0").withFg(TERMPAINT_COLOR_CYAN).withBg(TERMPAINT_COLOR_GREEN).withStyle(TERMPAINT_STYLE_BOLD)},
@@ -1197,7 +1261,7 @@ TEST_CASE("ZPainter: translateAndClip write") {
 
 
     SECTION("writeWithAttributes-utf8") {
-        Tui::ZPainter painter = Tui::ZPainterPrivate::createForTesting(f.surface).translateAndClip({2, 3, 2, 1});
+        Tui::ZPainter painter = f.testPainter().translateAndClip({2, 3, 2, 1});
         writeWithAttributesWrapper(kind, painter, 0, 0, "😎", Tui::TerminalColor::cyan, Tui::TerminalColor::green, Tui::ZTextAttribute::Bold);
 
         checkEmptyPlusSome(f.surface, {
@@ -1205,7 +1269,7 @@ TEST_CASE("ZPainter: translateAndClip write") {
                            });
     }
     SECTION("writeWithAttributes-utf8-cut") {
-        Tui::ZPainter painter = Tui::ZPainterPrivate::createForTesting(f.surface).translateAndClip({2, 3, 1, 1});
+        Tui::ZPainter painter = f.testPainter().translateAndClip({2, 3, 1, 1});
         writeWithAttributesWrapper(kind, painter, 0, 0, "😎", Tui::TerminalColor::cyan, Tui::TerminalColor::green, Tui::ZTextAttribute::Bold);
 
         checkEmptyPlusSome(f.surface, {
@@ -1216,7 +1280,7 @@ TEST_CASE("ZPainter: translateAndClip write") {
     SECTION("writeWithColors-utf8-negativ-short") {
         // translateAndClip with negativ offsets displaces written text as if negative coordinates have
         // been used when calling writeText...
-        Tui::ZPainter painterUnclipped = Tui::ZPainterPrivate::createForTesting(f.surface);
+        Tui::ZPainter painterUnclipped = f.testPainter();
         Tui::ZPainter painter = painterUnclipped.translateAndClip({-1, 0, 3, 1});
         writeWithColorsWrapper(kind, painter, 0, 0, "😎😎", Tui::TerminalColor::cyan, Tui::TerminalColor::green);
         checkEmptyPlusSome(f.surface, {
@@ -1228,7 +1292,7 @@ TEST_CASE("ZPainter: translateAndClip write") {
     SECTION("writeWithColors-utf8-negativ") {
         // translateAndClip with negativ offsets displaces written text as if negative coordinates have
         // been used when calling writeText...
-        Tui::ZPainter painterUnclipped = Tui::ZPainterPrivate::createForTesting(f.surface);
+        Tui::ZPainter painterUnclipped = f.testPainter();
         Tui::ZPainter painter = painterUnclipped.translateAndClip({-1, 0, 4, 1});
         writeWithColorsWrapper(kind, painter, 0, 0, "😎😎", Tui::TerminalColor::cyan, Tui::TerminalColor::green);
         checkEmptyPlusSome(f.surface, {
@@ -1240,7 +1304,7 @@ TEST_CASE("ZPainter: translateAndClip write") {
     SECTION("writeWithColors-double-translateAndClip-negativ") {
         // translateAndClip with negativ offsets displaces written text as if negative coordinates have
         // been used when calling writeText...
-        Tui::ZPainter painterUnclipped = Tui::ZPainterPrivate::createForTesting(f.surface);
+        Tui::ZPainter painterUnclipped = f.testPainter();
         Tui::ZPainter painter = painterUnclipped.translateAndClip({3, 0, 30, 1}).translateAndClip(-1, 0, 30, 1);
         writeWithColorsWrapper(kind, painter, 0, 0, "😎😎", Tui::TerminalColor::cyan, Tui::TerminalColor::green);
         checkEmptyPlusSome(f.surface, {
@@ -1251,7 +1315,7 @@ TEST_CASE("ZPainter: translateAndClip write") {
     }
 
     SECTION("writeWithColors-double-translateAndClip") {
-        Tui::ZPainter painterUnclipped = Tui::ZPainterPrivate::createForTesting(f.surface);
+        Tui::ZPainter painterUnclipped = f.testPainter();
         Tui::ZPainter painter = painterUnclipped.translateAndClip({3, 1, 30, 5}).translateAndClip(3, 2, 30, 1);
         writeWithColorsWrapper(kind, painter, 0, 0, "😎😎", Tui::TerminalColor::cyan, Tui::TerminalColor::green);
         checkEmptyPlusSome(f.surface, {
@@ -1261,7 +1325,7 @@ TEST_CASE("ZPainter: translateAndClip write") {
     }
 
     SECTION("writeWithColors-translateAndClip-negativ-y") {
-        Tui::ZPainter painterUnclipped = Tui::ZPainterPrivate::createForTesting(f.surface);
+        Tui::ZPainter painterUnclipped = f.testPainter();
         Tui::ZPainter painter = painterUnclipped.translateAndClip({3, -2, 30, 5});
         writeWithColorsWrapper(kind, painter, 0, 0, "😎😎", Tui::TerminalColor::cyan, Tui::TerminalColor::green);
         checkEmptyPlusSome(f.surface, {
@@ -1269,7 +1333,7 @@ TEST_CASE("ZPainter: translateAndClip write") {
     }
 
     SECTION("writeWithColors-translateAndClip-negativ-y-tight") {
-        Tui::ZPainter painterUnclipped = Tui::ZPainterPrivate::createForTesting(f.surface);
+        Tui::ZPainter painterUnclipped = f.testPainter();
         Tui::ZPainter painter = painterUnclipped.translateAndClip({3, -2, 30, 3});
         writeWithColorsWrapper(kind, painter, 0, 2, "😎😎", Tui::TerminalColor::cyan, Tui::TerminalColor::green);
         checkEmptyPlusSome(f.surface, {
