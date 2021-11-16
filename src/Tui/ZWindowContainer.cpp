@@ -1,6 +1,8 @@
 #include "ZWindowContainer.h"
 #include "ZWindowContainer_p.h"
 
+#include <QVector>
+
 TUIWIDGETS_NS_START
 
 ZWindowContainer::ZWindowContainer() {
@@ -12,6 +14,10 @@ ZWindowContainer::ZWindowContainer(std::unique_ptr<ZWindowContainerPrivate> pimp
 }
 
 ZWindowContainer::~ZWindowContainer() {
+}
+
+QVector<ZMenuItem> ZWindowContainer::containerMenuItems() {
+    return {};
 }
 
 ZWindowContainerPrivate::~ZWindowContainerPrivate() = default;

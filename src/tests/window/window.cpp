@@ -56,6 +56,13 @@ namespace {
         CustomWindowFacet winFacet;
     };
 
+    class CustomWindowContainer : public Tui::ZWindowContainer {
+    public:
+        QVector<Tui::ZMenuItem> containerMenuItems() override {
+            return {{ QStringLiteral("SomeContainerStuff"), QString(), QStringLiteral("ContainerStuff"), {}}};
+        }
+    };
+
 }
 
 
@@ -524,9 +531,14 @@ TEST_CASE("window-systemmenu", "") {
     SECTION("menu-all-options") {
         TestWindow w;
         w.setOptions({ Tui::ZWindow::MoveOption  | Tui::ZWindow::ResizeOption | Tui::ZWindow::CloseOption
-                     | Tui::ZWindow::AutomaticOption });
+                     | Tui::ZWindow::AutomaticOption | Tui::ZWindow::ContainerOptions });
+
+        CustomWindowContainer container;
+        auto *windowFacet = qobject_cast<Tui::ZWindowFacet*>(w.facet(Tui::ZWindowFacet::staticMetaObject));
+        windowFacet->setContainer(&container);
+
         QVector<Tui::ZMenuItem> menu = w.retrieveSystemMenu();
-        REQUIRE(menu.size() == 5);
+        REQUIRE(menu.size() == 6);
 
         CHECK(menu[0].markup() == "<m>M</m>ove");
         CHECK(menu[0].fakeShortcut() == "");
@@ -546,16 +558,22 @@ TEST_CASE("window-systemmenu", "") {
         CHECK(menu[2].command() == automaticSym);
         CHECK(menu[2].subitems().isEmpty());
 
-        CHECK(menu[3].markup() == "");
+        CHECK(menu[3].markup() == "SomeContainerStuff");
         CHECK(menu[3].fakeShortcut() == "");
-        CHECK(menu[3].command() == Tui::ZSymbol());
+        auto containerSym = TUISYM_LITERAL("ContainerStuff");
+        CHECK(menu[3].command() == containerSym);
         CHECK(menu[3].subitems().isEmpty());
 
-        CHECK(menu[4].markup() == "<m>C</m>lose");
+        CHECK(menu[4].markup() == "");
         CHECK(menu[4].fakeShortcut() == "");
-        auto closeSym = TUISYM_LITERAL("ZWindowClose");
-        CHECK(menu[4].command() == closeSym);
+        CHECK(menu[4].command() == Tui::ZSymbol());
         CHECK(menu[4].subitems().isEmpty());
+
+        CHECK(menu[5].markup() == "<m>C</m>lose");
+        CHECK(menu[5].fakeShortcut() == "");
+        auto closeSym = TUISYM_LITERAL("ZWindowClose");
+        CHECK(menu[5].command() == closeSym);
+        CHECK(menu[5].subitems().isEmpty());
     }
 
     SECTION("show-empty") {

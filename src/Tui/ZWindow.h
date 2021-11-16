@@ -22,6 +22,7 @@ public:
         MoveOption = (1 << 1),
         ResizeOption = (1 << 2),
         AutomaticOption = (1 << 3),
+        ContainerOptions = (1 << 4),
         DeleteOnClose = (1 << 5),
     };
     Q_DECLARE_FLAGS(Options, Option)

@@ -3,6 +3,7 @@
 
 #include <QObject>
 
+#include <Tui/ZMenuItem.h>
 #include <Tui/ZWidget.h>
 
 #include <Tui/tuiwidgets_internal.h>
@@ -15,6 +16,9 @@ class TUIWIDGETS_EXPORT ZWindowContainer : public QObject {
 public:
     ZWindowContainer();
     ~ZWindowContainer() override;
+
+public:
+    virtual QVector<ZMenuItem> containerMenuItems();
 
 protected:
     ZWindowContainer(std::unique_ptr<ZWindowContainerPrivate> pimpl);

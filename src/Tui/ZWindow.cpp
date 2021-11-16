@@ -372,6 +372,13 @@ QVector<ZMenuItem> ZWindow::systemMenu() {
         ret.append(ZMenuItem{QStringLiteral("<m>A</m>utomatic"), QString(), QStringLiteral("ZWindowAutomaticPlacement"), {}});
     }
 
+    if (options() & ContainerOptions) {
+        auto *windowFacet = qobject_cast<ZWindowFacet*>(facet(ZWindowFacet::staticMetaObject));
+        if (windowFacet->container()) {
+            ret.append(windowFacet->container()->containerMenuItems());
+        }
+    }
+
     if (options() & CloseOption) {
         if (ret.size()) {
             ret.append(ZMenuItem{});
