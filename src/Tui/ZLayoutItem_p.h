@@ -1,6 +1,8 @@
 #ifndef TUIWIDGETS_ZLAYOUTITEM_P_INCLUDED
 #define TUIWIDGETS_ZLAYOUTITEM_P_INCLUDED
 
+#include <QPointer>
+
 #include <Tui/ZLayoutItem.h>
 
 TUIWIDGETS_NS_START
@@ -18,7 +20,7 @@ public:
     bool isVisible() const override;
 
 private:
-    ZWidget *widget;
+    QPointer<ZWidget> widget;
 };
 
 TUIWIDGETS_NS_END

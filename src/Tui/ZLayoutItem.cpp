@@ -21,23 +21,41 @@ ZWidgetLayoutItem::~ZWidgetLayoutItem() {
 }
 
 void ZWidgetLayoutItem::setGeometry(QRect r) {
-    widget->setGeometry(r);
+    if (widget) {
+        widget->setGeometry(r);
+    }
 }
 
 QSize ZWidgetLayoutItem::sizeHint() const {
-    return widget->effectiveSizeHint();
+    if (widget) {
+        return widget->effectiveSizeHint();
+    } else {
+        return {};
+    }
 }
 
 SizePolicy ZWidgetLayoutItem::sizePolicyH() const {
-    return widget->sizePolicyH();
+    if (widget) {
+        return widget->sizePolicyH();
+    } else {
+        return SizePolicy::Fixed;
+    }
 }
 
 SizePolicy ZWidgetLayoutItem::sizePolicyV() const {
-    return widget->sizePolicyV();
+    if (widget) {
+        return widget->sizePolicyV();
+    } else {
+        return SizePolicy::Fixed;
+    }
 }
 
 bool ZWidgetLayoutItem::isVisible() const {
-    return widget->isLocallyVisible();
+    if (widget) {
+        return widget->isLocallyVisible();
+    } else {
+        return false;
+    }
 }
 
 TUIWIDGETS_NS_END
