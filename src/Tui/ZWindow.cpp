@@ -148,7 +148,14 @@ Qt::Edges ZWindow::borderEdges() const {
 
 void ZWindow::setBorderEdges(Qt::Edges borders) {
     auto *const p = tuiwidgets_impl();
+    if (p->borders == borders) {
+        return;
+    }
     p->borders = borders;
+    update();
+    if (terminal() && layout()) {
+        terminal()->requestLayout(this);
+    }
 }
 
 void ZWindow::setDefaultPlacement(Qt::Alignment align, QPoint displace) {
