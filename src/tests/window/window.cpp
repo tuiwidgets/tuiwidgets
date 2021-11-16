@@ -45,7 +45,7 @@ namespace {
     public:
         using Tui::ZWindow::ZWindow;
 
-        QObject *facet(const QMetaObject metaObject) override {
+        QObject *facet(const QMetaObject &metaObject) override {
             if (metaObject.className() == Tui::ZWindowFacet::staticMetaObject.className()) {
                 return &winFacet;
             } else {
@@ -1600,7 +1600,7 @@ namespace {
         using Tui::ZWindow::ZWindow;
 
     public:
-        QObject *facet(const QMetaObject metaObject) override {
+        QObject *facet(const QMetaObject &metaObject) override {
             if (metaObject.className() == Tui::ZWindowFacet::staticMetaObject.className()) {
                 return &f;
             } else {

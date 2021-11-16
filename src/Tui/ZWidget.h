@@ -154,7 +154,7 @@ public:
         return nullptr;
     }
 
-    virtual QObject *facet(const QMetaObject metaObject);
+    virtual QObject *facet(const QMetaObject &metaObject);
 
     // public virtuals from base class override everything for later ABI compatibility
     bool event(QEvent *event) override;

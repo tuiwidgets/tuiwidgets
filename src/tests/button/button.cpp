@@ -40,7 +40,7 @@ namespace {
     public:
         explicit TestBackgroundWithDlgManager(Tui::ZWidget *parent) : TestBackground(parent) {}
 
-        QObject *facet(const QMetaObject metaObject) override {
+        QObject *facet(const QMetaObject &metaObject) override {
             if (hasDefaultManager && (metaObject.className()  == Tui::ZDefaultWidgetManager::staticMetaObject.className())) {
                 return &defaultWidgetManager;
             } else {

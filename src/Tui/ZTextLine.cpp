@@ -81,7 +81,7 @@ QRect ZTextLine::layoutArea() const {
     return ZWidget::layoutArea();
 }
 
-QObject *ZTextLine::facet(const QMetaObject metaObject) {
+QObject *ZTextLine::facet(const QMetaObject &metaObject) {
     return ZWidget::facet(metaObject);
 }
 

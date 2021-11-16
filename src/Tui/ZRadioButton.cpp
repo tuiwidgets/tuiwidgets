@@ -165,7 +165,7 @@ QRect ZRadioButton::layoutArea() const {
     return ZWidget::layoutArea();
 }
 
-QObject *ZRadioButton::facet(const QMetaObject metaObject) {
+QObject *ZRadioButton::facet(const QMetaObject &metaObject) {
     return ZWidget::facet(metaObject);
 }
 

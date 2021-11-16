@@ -43,7 +43,7 @@ public:
 
     QSize sizeHint() const override;
     QRect layoutArea() const override;
-    QObject *facet(const QMetaObject metaObject) override;
+    QObject *facet(const QMetaObject &metaObject) override;
     bool event(QEvent *event) override;
 
 public Q_SLOTS:

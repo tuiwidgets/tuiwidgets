@@ -49,7 +49,7 @@ public:
     bool eventFilter(QObject *watched, QEvent *event) override;
     QSize minimumSizeHint() const override;
     QRect layoutArea() const override;
-    QObject *facet(const QMetaObject metaObject) override;
+    QObject *facet(const QMetaObject &metaObject) override;
 
 protected:
     // protected virtuals from base class override everything for later ABI compatibility

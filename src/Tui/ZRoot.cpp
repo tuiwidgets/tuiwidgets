@@ -206,7 +206,7 @@ void ZRoot::disconnectNotify(const QMetaMethod &signal) {
     ZWidget::disconnectNotify(signal);
 }
 
-QObject *ZRoot::facet(const QMetaObject metaObject) {
+QObject *ZRoot::facet(const QMetaObject &metaObject) {
     return ZWidget::facet(metaObject);
 }
 

@@ -177,7 +177,7 @@ QRect ZCheckBox::layoutArea() const {
     return ZWidget::layoutArea();
 }
 
-QObject *ZCheckBox::facet(const QMetaObject metaObject) {
+QObject *ZCheckBox::facet(const QMetaObject &metaObject) {
     return ZWidget::facet(metaObject);
 }
 
