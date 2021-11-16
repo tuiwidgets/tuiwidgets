@@ -63,6 +63,7 @@ bool ZWindow::showSystemMenu() {
     if (nonEmpty) {
         ZMenu *menu = new ZMenu(parentWidget());
         menu->setItems(menuItems);
+        QObject::connect(menu, &ZMenu::aboutToHide, menu, &QObject::deleteLater);
         menu->popup({geometry().x(), geometry().y() + 1});
         return true;
     } else {
