@@ -153,7 +153,7 @@ QSize ZRoot::minimumSizeHint() const {
     QSize hint;
     for (QObject *o: children()) {
         auto childWidget = qobject_cast<ZWidget*>(o);
-        if (childWidget) {
+        if (childWidget && childWidget->isVisible()) {
             ZWindowFacet *windowFacet = static_cast<ZWindowFacet*>(childWidget->facet(ZWindowFacet::staticMetaObject));
             if (windowFacet) {
                 if (windowFacet->isExtendViewport()) {
