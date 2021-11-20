@@ -202,6 +202,7 @@ test_files = [
   'tests/textstyle.cpp',
   'tests/viewport/moveviewport.cpp',
   'tests/window/window.cpp',
+  'tests/windowcontainer.cpp',
   'tests/windowfacet.cpp',
 ]
 
