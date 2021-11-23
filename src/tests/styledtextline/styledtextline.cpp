@@ -390,3 +390,48 @@ TEST_CASE("styledtextline-visual", "") {
         t.compare("rewrite-AB");
     }
 }
+
+TEST_CASE("styledtextline-ascii+latin", "") {
+    Testhelper t("styledtextline", "styledtextline-ascii+latin", 80, 11);
+
+    // We want to know if generating with ZImage or TestWidget the ZStyledTextLine gives the same results.
+    // In particular, we want to check if a selection of characters is displayed correctly.
+    SECTION("withZImage") {
+        Tui::ZImage zi{t.terminal.get(), 80, 11};
+        zi.painter().clear({0x80, 0x80, 0x80}, Tui::Color::black);
+        Tui::ZStyledTextLine stl;
+        int ii = -2;
+        for (int i = 0; i <= 0x2af; i++ ) {
+            if (i % 75 == 0) {
+                ii++;
+                auto tpainter = zi.painter();
+                stl.write(&tpainter, 1, ii, 78);
+                stl.setText("");
+            }
+            stl.setText(stl.text() + QString(QChar(i)));
+        }
+        auto tpainter = zi.painter();
+        stl.write(&tpainter, 1, ++ii, 78);
+        t.compare(zi);
+    }
+
+    SECTION("withTestWidget") {
+        std::vector<std::unique_ptr<TestWidget>> w;
+        std::vector<std::unique_ptr<Tui::ZStyledTextLine>> stl;
+        int ii = -1;
+        for (int i = 0; i <= 0x2af; i++ ) {
+            if (i % 75 == 0) {
+                ii++;
+                w.push_back(std::make_unique<TestWidget>(t.root));
+                w[ii]->w = 78;
+                w[ii]->setGeometry({1, ii, 78, 1});
+
+                stl.push_back(std::make_unique<Tui::ZStyledTextLine>());
+                w[ii]->stl = stl[ii].get();
+            }
+            stl[ii]->setText(stl[ii]->text() + QString(QChar(i)));
+        }
+        t.compare("withZImage");
+    }
+
+}
