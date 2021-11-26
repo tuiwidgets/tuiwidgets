@@ -9,7 +9,7 @@
 
 #include <QRect>
 
-#include <../../third-party/catch.hpp>
+#include "../catchwrapper.h"
 
 #include <termpaint.h>
 

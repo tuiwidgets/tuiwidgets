@@ -1,7 +1,7 @@
 #include <Tui/ZTextMetrics.h>
 #include <Tui/ZTextMetrics_p.h>
 
-#include <../../third-party/catch.hpp>
+#include "../catchwrapper.h"
 
 #include <termpaint.h>
 
