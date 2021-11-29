@@ -154,7 +154,8 @@ enum class DefaultException {
     Palette = 1 << 11,
     PaletteClass = 1 << 12,
     CursorStyle = 1 << 13,
-    Focus = 1 << 14
+    Focus = 1 << 14,
+    StackingLayer = 1 << 15
 };
 
 Q_DECLARE_FLAGS(DefaultExceptions, DefaultException)

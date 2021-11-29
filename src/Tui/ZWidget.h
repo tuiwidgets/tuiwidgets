@@ -64,7 +64,10 @@ public:
     bool isVisible() const; // includes visible state of parents
     bool isLocallyVisible() const;
     void setVisible(bool v);
+    void setStackingLayer(int layer);
+    int stackingLayer() const;
     void raise();
+    void lower();
     void stackUnder(ZWidget *w);
 
     QSize minimumSize() const;

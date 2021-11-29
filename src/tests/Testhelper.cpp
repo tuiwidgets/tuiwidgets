@@ -355,5 +355,9 @@ std::vector<std::string> checkWidgetsDefaultsExcept(const Tui::ZWidget *w, Defau
         errors.push_back("has focus");
     }
 
+    if (!exceptions.testFlag(DefaultException::StackingLayer) && w->stackingLayer() != 0) {
+        errors.push_back("stackingLayer() != 0");
+    }
+
     return errors;
 }

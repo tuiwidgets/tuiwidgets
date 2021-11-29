@@ -40,6 +40,13 @@ ZWidget::ZWidget(ZWidget *parent, std::unique_ptr<ZWidgetPrivate> pimpl)
         auto *const pp = ZWidgetPrivate::get(parent);
         p->effectivelyEnabled = pp->effectivelyEnabled;
         p->effectivelyVisible = pp->effectivelyVisible;
+
+        // to apply stacking layer
+        QList<QObject*>& list = parentWidget()->d_ptr->children;
+        if (list.size() > 1) {
+            list.move(list.indexOf(this), 0);
+            raise();
+        }
     }
     // ??? maybe delay parenting to after some code here was run?
     // ??? should there be a posted event after creation? Could be useful for two phase init, but could be to late anyway
@@ -76,6 +83,14 @@ void ZWidget::setParent(ZWidget *newParent) {
     QCoreApplication::sendEvent(this, &e1);
     // TODO care about focus
     QObject::setParent(newParent);
+
+    // to apply stacking layer
+    QList<QObject*>& list = parentWidget()->d_ptr->children;
+    if (list.size() > 1) {
+        list.move(list.indexOf(this), 0);
+        raise();
+    }
+
     // TODO care about caches for everything (e.g. visibiltiy, enabled, etc)
     p->updateEffectivelyEnabledRecursively();
     p->updateEffectivelyVisibleRecursively();
@@ -193,6 +208,27 @@ void ZWidget::setVisible(bool v) {
     update();
 }
 
+void ZWidget::setStackingLayer(int layer) {
+    auto *const p = tuiwidgets_impl();
+    if (p->stackingLayer == layer) {
+        return;
+    }
+    const int prevLayer = p->stackingLayer;
+    p->stackingLayer = layer;
+    if (prevLayer > layer) {
+        // when lowering the layer this widget should end up as the top of the target layer, so raise just works.
+        raise();
+    } else {
+        // when raising the layer this widget should end up as the bottom of the target layer.
+        lower();
+    }
+}
+
+int ZWidget::stackingLayer() const {
+    auto *const p = tuiwidgets_impl();
+    return p->stackingLayer;
+}
+
 void ZWidgetPrivate::updateEffectivelyVisibleRecursively() {
     bool newEffectiveValue;
     if (pub()->parentWidget()) {
@@ -226,7 +262,30 @@ void ZWidgetPrivate::updateEffectivelyVisibleRecursively() {
 void ZWidget::raise() {
     QList<QObject*>& list = parentWidget()->d_ptr->children;
     if (list.size() <= 1) return;
-    list.move(list.indexOf(this), list.size() - 1);
+    int to = list.size() - 1;
+    while (to > 0) {
+        ZWidget *const candidate = qobject_cast<ZWidget*>(list.at(to));
+        if (candidate && candidate->stackingLayer() <= stackingLayer()) {
+            break;
+        }
+        --to;
+    }
+    list.move(list.indexOf(this), to);
+    update();
+}
+
+void ZWidget::lower() {
+    QList<QObject*>& list = parentWidget()->d_ptr->children;
+    if (list.size() <= 1) return;
+    int to = 0;
+    while (to < list.size() - 1) {
+        ZWidget *const candidate = qobject_cast<ZWidget*>(list.at(to));
+        if (candidate && candidate->stackingLayer() >= stackingLayer()) {
+            break;
+        }
+        ++to;
+    }
+    list.move(list.indexOf(this), to);
     update();
 }
 
@@ -235,7 +294,15 @@ void ZWidget::stackUnder(ZWidget *w) {
     if (list.size() <= 1) return;
     int to = list.indexOf(w);
     if (to < 1) return;
-    list.move(list.indexOf(this), to - 1);
+    --to;
+    while (to > 0) {
+        ZWidget *const candidate = qobject_cast<ZWidget*>(list.at(to));
+        if (candidate->stackingLayer() <= stackingLayer()) {
+            break;
+        }
+        --to;
+    }
+    list.move(list.indexOf(this), to);
     update();
 }
 

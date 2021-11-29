@@ -59,6 +59,7 @@ public:
     Qt::FocusPolicy focusPolicy = Qt::NoFocus;
     FocusContainerMode focusMode = FocusContainerMode::None;
     int focusOrder = 0;
+    int stackingLayer = 0;
 
     bool enabled = true;
     bool visible = true;
