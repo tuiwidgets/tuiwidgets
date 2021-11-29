@@ -46,7 +46,7 @@ public:
     ~ZWidget();
 
 protected:
-    explicit ZWidget(QObject *parent, std::unique_ptr<ZWidgetPrivate> pimpl);
+    explicit ZWidget(ZWidget *parent, std::unique_ptr<ZWidgetPrivate> pimpl);
 
 protected:
     std::unique_ptr<ZWidgetPrivate> tuiwidgets_pimpl_ptr;
