@@ -409,6 +409,7 @@ TEST_CASE("radiobutton-color", "") {
 
     Testhelper t("radiobutton", "radiobutton-color", 15, 5);
     Tui::ZWindow *w = new Tui::ZWindow(t.root);
+    w->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
     w->setGeometry({0, 0, 15, 5});
 
     SECTION("single-black") {

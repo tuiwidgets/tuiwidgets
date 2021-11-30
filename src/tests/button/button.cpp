@@ -192,6 +192,7 @@ TEST_CASE("button-display", "") {
     Testhelper t("button", "button-display", 15, 5);
 
     TestBackgroundWithDlgManager *w = new TestBackgroundWithDlgManager(t.root);
+    w->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
     w->hasDefaultManager = false;
 
     QString windowType = GENERATE(as<QString>(), "", "dialog", "cyan");

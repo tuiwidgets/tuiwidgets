@@ -188,6 +188,7 @@ TEST_CASE("textline-margin", "") {
 TEST_CASE("textline-palette", "") {
     Testhelper t("textline", "textline-palette", 10, 3);
     TestBackground *w = new TestBackground(t.root);
+    w->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
     w->setGeometry({0, 0, 10, 3});
     w->setFocus();
     Tui::ZTextLine *t1 = new Tui::ZTextLine(w);

@@ -279,6 +279,7 @@ TEST_CASE("label-margin", "") {
 TEST_CASE("label-palette", "") {
     Testhelper t("label", "label", 15, 3);
     TestBackground *w = new TestBackground(t.root);
+    w->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
     w->setGeometry({0, 0, 10, 3});
     w->setFocus();
     Tui::ZLabel *l = new Tui::ZLabel(w);

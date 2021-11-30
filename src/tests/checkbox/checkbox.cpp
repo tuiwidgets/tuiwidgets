@@ -445,6 +445,7 @@ TEST_CASE("checkbox-emit", "") {
 TEST_CASE("checkbox-color", "") {
     Testhelper t("checkbox", "checkbox-color", 15, 5);
     Tui::ZWindow *w = new TestBackground(t.root);
+    w->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
     w->setGeometry({0, 0, 15, 5});
 
     SECTION("single-black") {

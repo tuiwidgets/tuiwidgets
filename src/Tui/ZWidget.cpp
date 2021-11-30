@@ -182,7 +182,9 @@ void ZWidget::setEnabled(bool e) {
     auto *const p = tuiwidgets_impl();
     if (p->enabled == e) return;
     p->enabled = e;
-    // TODO care about focus
+    if (!e && isInFocusPath()) {
+        p->disperseFocus();
+    }
     // TODO cache effect in hierarchy
     p->updateEffectivelyEnabledRecursively();
     // TODO trigger repaint (qt does this in the specific virtual for the event)
