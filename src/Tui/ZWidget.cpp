@@ -139,6 +139,37 @@ QRect ZWidget::contentsRect() const {
     return rect() - p->contentsMargins;
 }
 
+void ZWidgetPrivate::disperseFocus() {
+    ZWidget *nextFocus = pub()->nextFocusable();
+    if (nextFocus == pub()) {
+        // focus just loops back to us.
+        nextFocus = nullptr;
+    } else if (nextFocus) {
+        if (pub()->isAncestorOf(nextFocus)) {
+            // can't disperse focus to our children, so continue searching
+            QSet<ZWidget*> alreadySeen;
+            alreadySeen.insert(nextFocus);
+            while (pub()->isAncestorOf(nextFocus)) {
+                nextFocus = nextFocus->nextFocusable();
+                if (alreadySeen.contains(nextFocus)) {
+                    // caught in a loop
+                    nextFocus = nullptr;
+                    break;
+                }
+            }
+        }
+    }
+    if (nextFocus) {
+        nextFocus->setFocus();
+    } else {
+        auto *const term = pub()->terminal();
+        if (terminal) {
+            auto *const terminal_priv = ZTerminalPrivate::get(term);
+            terminal_priv->setFocus(nullptr);
+        }
+    }
+}
+
 bool ZWidget::isEnabled() const {
     return tuiwidgets_impl()->effectivelyEnabled;
 }
@@ -193,7 +224,9 @@ void ZWidget::setVisible(bool v) {
     auto *const p = tuiwidgets_impl();
     if (p->visible == v) return;
     p->visible = v;
-    // TODO care about focus
+    if (!v && isInFocusPath()) {
+        p->disperseFocus();
+    }
     // TODO cache effect in hierarchy
     p->updateEffectivelyVisibleRecursively();
     // TODO send events (QShowEvent  QHideEvent? QEvent::HideToParent? QEvent::ShowToParent?)

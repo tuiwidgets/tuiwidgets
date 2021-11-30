@@ -49,10 +49,12 @@ public:
     void unsetTerminal();
     void setManagingTerminal(ZTerminal *terminal);
 
-    bool isFocusable() const { return enabled && focusPolicy != Qt::FocusPolicy::NoFocus; }
+    bool isFocusable() const { return effectivelyEnabled && effectivelyVisible && focusPolicy != Qt::FocusPolicy::NoFocus; }
 
     void updateEffectivelyEnabledRecursively();
     void updateEffectivelyVisibleRecursively();
+
+    void disperseFocus();
 
     // variables
     QRect geometry;
