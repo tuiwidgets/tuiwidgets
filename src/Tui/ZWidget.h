@@ -71,9 +71,12 @@ public:
     void stackUnder(ZWidget *w);
 
     QSize minimumSize() const;
+    void setMinimumSize(QSize s);
     void setMinimumSize(int w, int h);
     QSize maximumSize() const;
+    void setMaximumSize(QSize s);
     void setMaximumSize(int w, int h);
+    void setFixedSize(QSize s);
     void setFixedSize(int w, int h);
     SizePolicy sizePolicyH() const;
     void setSizePolicyH(SizePolicy policy);

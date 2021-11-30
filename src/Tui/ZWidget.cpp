@@ -311,9 +311,13 @@ QSize ZWidget::minimumSize() const {
     return p->minimumSize;
 }
 
-void ZWidget::setMinimumSize(int w, int h) {
+void ZWidget::setMinimumSize(QSize s) {
     auto *const p = tuiwidgets_impl();
-    p->minimumSize = {w, h};
+    p->minimumSize = s;
+}
+
+void ZWidget::setMinimumSize(int w, int h) {
+    setMinimumSize({w, h});
 }
 
 QSize ZWidget::maximumSize() const {
@@ -321,14 +325,22 @@ QSize ZWidget::maximumSize() const {
     return p->maximumSize;
 }
 
-void ZWidget::setMaximumSize(int w, int h) {
+void ZWidget::setMaximumSize(QSize s) {
     auto *const p = tuiwidgets_impl();
-    p->maximumSize = {w, h};
+    p->maximumSize = s;
+}
+
+void ZWidget::setMaximumSize(int w, int h) {
+    setMaximumSize({w, h});
+}
+
+void ZWidget::setFixedSize(QSize s) {
+    setMinimumSize(s);
+    setMaximumSize(s);
 }
 
 void ZWidget::setFixedSize(int w, int h) {
-    setMinimumSize(w, h);
-    setMaximumSize(w, h);
+    setFixedSize(w, h);
 }
 
 SizePolicy ZWidget::sizePolicyH() const {
