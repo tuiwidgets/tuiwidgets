@@ -557,6 +557,12 @@ void ZWidget::setFocus(Qt::FocusReason reason) {
         qDebug("ZWidget::setFocus called without terminal");
         return;
     }
+
+    if (!isVisible() || !isEnabled()) {
+        // bail out if this is disabled or invisible because then we can't take focus
+        return;
+    }
+
     ZTerminalPrivate *termp = ZTerminalPrivate::get(tuiwidgets_impl()->findTerminal());
     QPointer<ZWidget> previousFocus = termp->focus();
     if (this == previousFocus) {
