@@ -81,7 +81,33 @@ void ZWidget::setParent(ZWidget *newParent) {
     auto prevTerminal = terminal();
     QEvent e1{QEvent::ParentAboutToChange};
     QCoreApplication::sendEvent(this, &e1);
-    // TODO care about focus
+    if (newParent && p->terminal) {
+        p->terminal = nullptr;
+    }
+    if (prevTerminal && prevTerminal != newParent->terminal()) {
+        auto *const terminal_priv = ZTerminalPrivate::get(prevTerminal);
+
+        if (isInFocusPath()) {
+            p->disperseFocus();
+        }
+
+        ZWidget *const grabber = terminal_priv->keyboardGrab();
+
+        auto f = [&](QObject *o) {
+            ZWidget *w = qobject_cast<ZWidget*>(o);
+            if (!w) return; // as continue
+            terminal_priv->focusHistory.remove(ZWidgetPrivate::get(w));
+            if (grabber == w) {
+                terminal_priv->setKeyboardGrab(nullptr);
+            }
+            terminal_priv->layoutPendingWidgets.removeAll(w);
+        };
+
+        f(this);
+        zwidgetForEachDescendant(this, f);
+
+        // shortcut manager is handled by ZShortcut
+    }
     QObject::setParent(newParent);
 
     // to apply stacking layer
@@ -94,6 +120,9 @@ void ZWidget::setParent(ZWidget *newParent) {
     // TODO care about caches for everything (e.g. visibiltiy, enabled, etc)
     p->updateEffectivelyEnabledRecursively();
     p->updateEffectivelyVisibleRecursively();
+    if (isInFocusPath() && (!p->effectivelyEnabled || !p->effectivelyVisible)) {
+        p->disperseFocus();
+    }
     QEvent e2{QEvent::ParentChange};
     QCoreApplication::sendEvent(this, &e2);
     if (prevTerminal != terminal()) {
@@ -105,7 +134,6 @@ void ZWidget::setParent(ZWidget *newParent) {
         };
 
         f(this);
-
         zwidgetForEachDescendant(this, f);
     }
 }
