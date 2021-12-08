@@ -191,7 +191,7 @@ void ZWidgetPrivate::disperseFocus() {
         nextFocus->setFocus();
     } else {
         auto *const term = pub()->terminal();
-        if (terminal) {
+        if (term) {
             auto *const terminal_priv = ZTerminalPrivate::get(term);
             terminal_priv->setFocus(nullptr);
         }
