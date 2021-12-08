@@ -164,6 +164,8 @@ void ZPalette::setDefaultRules(ZPalette &p) {
              { p.Publish, "lineedit.fg", "window.default.lineedit.fg" },
              { p.Publish, "lineedit.focused.bg", "window.default.lineedit.focused.bg" },
              { p.Publish, "lineedit.focused.fg", "window.default.lineedit.focused.fg" },
+             { p.Publish, "lineedit.disabled.bg", "window.default.lineedit.disabled.bg" },
+             { p.Publish, "lineedit.disabled.fg", "window.default.lineedit.disabled.fg" },
         }},
 
         {{ QStringLiteral("window"), QStringLiteral("dialog") }, {
@@ -222,6 +224,8 @@ void ZPalette::setDefaultRules(ZPalette &p) {
              { p.Publish, "lineedit.fg", "window.gray.lineedit.fg" },
              { p.Publish, "lineedit.focused.bg", "window.gray.lineedit.focused.bg" },
              { p.Publish, "lineedit.focused.fg", "window.gray.lineedit.focused.fg" },
+             { p.Publish, "lineedit.disabled.bg", "window.gray.lineedit.disabled.bg" },
+             { p.Publish, "lineedit.disabled.fg", "window.gray.lineedit.disabled.fg" },
        }},
 
        {{ QStringLiteral("window"), QStringLiteral("cyan") }, {
@@ -280,6 +284,8 @@ void ZPalette::setDefaultRules(ZPalette &p) {
             { p.Publish, "lineedit.fg", "window.cyan.lineedit.fg" },
             { p.Publish, "lineedit.focused.bg", "window.cyan.lineedit.focused.bg" },
             { p.Publish, "lineedit.focused.fg", "window.cyan.lineedit.focused.fg" },
+            { p.Publish, "lineedit.disabled.bg", "window.cyan.lineedit.disabled.bg" },
+            { p.Publish, "lineedit.disabled.fg", "window.cyan.lineedit.disabled.fg" },
        }},
 
     });
@@ -348,6 +354,8 @@ ZPalette ZPalette::classic() {
         { "window.default.lineedit.fg", Colors::black},
         { "window.default.lineedit.focused.bg", Colors::lightGray},
         { "window.default.lineedit.focused.fg", Colors::brightWhite},
+        { "window.default.lineedit.disabled.bg", Colors::darkGray},
+        { "window.default.lineedit.disabled.fg", Colors::lightGray},
 
         { "window.gray.bg", Colors::lightGray},
         { "window.gray.frame.focused.fg", Colors::brightWhite},
@@ -393,6 +401,8 @@ ZPalette ZPalette::classic() {
         { "window.gray.lineedit.fg", Colors::brightWhite},
         { "window.gray.lineedit.focused.bg", Colors::green},
         { "window.gray.lineedit.focused.fg", Colors::brightWhite},
+        { "window.gray.lineedit.disabled.bg", Colors::darkGray},
+        { "window.gray.lineedit.disabled.fg", Colors::lightGray},
 
         { "window.cyan.bg", Colors::cyan},
         { "window.cyan.frame.focused.fg", Colors::brightWhite},
@@ -438,6 +448,8 @@ ZPalette ZPalette::classic() {
         { "window.cyan.lineedit.fg", Colors::brightWhite},
         { "window.cyan.lineedit.focused.bg", Colors::green},
         { "window.cyan.lineedit.focused.fg", Colors::brightWhite},
+        { "window.cyan.lineedit.disabled.bg", Colors::darkGray},
+        { "window.cyan.lineedit.disabled.fg", Colors::lightGray},
 
     });
 
@@ -508,6 +520,8 @@ ZPalette ZPalette::black() {
         { "window.default.lineedit.fg", Colors::black},
         { "window.default.lineedit.focused.bg", Colors::lightGray},
         { "window.default.lineedit.focused.fg", Colors::brightWhite},
+        { "window.default.lineedit.disabled.bg", Colors::darkGray},
+        { "window.default.lineedit.disabled.fg", Colors::lightGray},
 
         { "window.gray.bg", Colors::lightGray},
         { "window.gray.frame.focused.fg", Colors::brightWhite},
@@ -553,6 +567,8 @@ ZPalette ZPalette::black() {
         { "window.gray.lineedit.fg", Colors::brightWhite},
         { "window.gray.lineedit.focused.bg", Colors::green},
         { "window.gray.lineedit.focused.fg", Colors::brightWhite},
+        { "window.gray.lineedit.disabled.bg", Colors::darkGray},
+        { "window.gray.lineedit.disabled.fg", Colors::lightGray},
 
         { "window.cyan.bg", Colors::cyan},
         { "window.cyan.frame.focused.fg", Colors::brightWhite},
@@ -598,6 +614,8 @@ ZPalette ZPalette::black() {
         { "window.cyan.lineedit.fg", Colors::brightWhite},
         { "window.cyan.lineedit.focused.bg", Colors::green},
         { "window.cyan.lineedit.focused.fg", Colors::brightWhite},
+        { "window.cyan.lineedit.disabled.bg", Colors::darkGray},
+        { "window.cyan.lineedit.disabled.fg", Colors::lightGray},
 
     });
 
