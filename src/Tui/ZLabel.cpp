@@ -22,19 +22,19 @@ ZLabel::ZLabel(WithMarkupTag, const QString &markup, ZWidget *parent) : ZLabel(p
 ZLabel::~ZLabel() = default;
 
 QString ZLabel::text() const {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     return p->styledText.text();
 }
 
 void ZLabel::setText(const QString &text) {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     p->styledText.setText(text);
     removeShortcut();
     update();
 }
 
 QString ZLabel::markup() const {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     return p->styledText.markup();
 }
 
@@ -45,7 +45,7 @@ void ZLabel::removeShortcut() {
 }
 
 void ZLabel::setMarkup(const QString &markup) {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     p->styledText.setMarkup(markup);
     if (p->styledText.mnemonic().size()) {
         removeShortcut();
@@ -67,12 +67,12 @@ void ZLabel::setMarkup(const QString &markup) {
 }
 
 ZWidget *ZLabel::buddy() const {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     return p->buddy;
 }
 
 void ZLabel::setBuddy(ZWidget *buddy) {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     if (p->buddy == buddy) return;
 
     auto *term = terminal();
@@ -83,7 +83,7 @@ void ZLabel::setBuddy(ZWidget *buddy) {
 }
 
 QSize ZLabel::sizeHint() const {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     auto *term = terminal();
     if (!term) return {};
     auto cm = contentsMargins();
@@ -93,7 +93,7 @@ QSize ZLabel::sizeHint() const {
 }
 
 void ZLabel::paintEvent(ZPaintEvent *event) {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     ZTextStyle baseStyle;
     ZTextStyle shortcut;
 

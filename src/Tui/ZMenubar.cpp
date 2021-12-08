@@ -8,7 +8,7 @@
 TUIWIDGETS_NS_START
 
 ZMenubar::ZMenubar(ZWidget *parent) : ZWidget(parent, std::make_unique<ZMenubarPrivate>(this)) {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
 
     setSizePolicyV(SizePolicy::Fixed);
     setSizePolicyH(SizePolicy::Expanding);
@@ -20,12 +20,12 @@ ZMenubar::ZMenubar(ZWidget *parent) : ZWidget(parent, std::make_unique<ZMenubarP
 }
 
 ZMenubar::~ZMenubar() {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     disconnect(p->commandStateChangedConnection);
 }
 
 bool ZMenubar::event(QEvent *event) {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     if (!parent())
         return ZWidget::event(event);
 
@@ -54,12 +54,12 @@ bool ZMenubar::event(QEvent *event) {
 }
 
 QVector<ZMenuItem> ZMenubar::items() const {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     return p->items;
 }
 
 void ZMenubar::setItems(QVector<ZMenuItem> items) {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     p->items = items;
     p->selected = 0;
     update();
@@ -74,7 +74,7 @@ void ZMenubar::setItems(QVector<ZMenuItem> items) {
 }
 
 void ZMenubar::updateCacheAndRegrabKeys() {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     if (!parentWidget()) {
         return;
     }
@@ -88,7 +88,7 @@ void ZMenubar::updateCacheAndRegrabKeys() {
 
     ZShortcut *s = new ZShortcut(ZKeySequence::forKey(Qt::Key_F10), this, Qt::ApplicationShortcut);
     connect(s, &ZShortcut::activated, this, [this] () {
-        auto *p = tuiwidgets_impl();
+        auto *const p = tuiwidgets_impl();
         grabKeyboard();
         p->active = true;
         respawnMenu();
@@ -117,7 +117,7 @@ void ZMenubar::updateCacheAndRegrabKeys() {
                 p->shortcuts[item.command()].append(s);
             } else if (item.hasSubitems()) {
                 connect(s, &ZShortcut::activated, this, [this, idx=i] () {
-                    auto *p = tuiwidgets_impl();
+                    auto *const p = tuiwidgets_impl();
                     grabKeyboard();
                     p->active = true;
                     p->selected = idx;
@@ -130,7 +130,7 @@ void ZMenubar::updateCacheAndRegrabKeys() {
 }
 
 void ZMenubar::commandStateChanged(ZSymbol command) {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     if (p->shortcuts.contains(command)) {
         update();
         ZCommandManager *const cmdMgr = parentWidget()->ensureCommandManager();
@@ -141,7 +141,7 @@ void ZMenubar::commandStateChanged(ZSymbol command) {
 }
 
 void ZMenubar::respawnMenu() {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     delete p->activeMenu;
     if (qAsConst(p->items)[p->selected].hasSubitems()) {
         p->activeMenu = new ZMenu(parentWidget());
@@ -163,7 +163,7 @@ void ZMenubar::respawnMenu() {
 }
 
 void ZMenubar::left() {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     if (!parentWidget() || p->items.isEmpty()) {
         return;
     }
@@ -177,7 +177,7 @@ void ZMenubar::left() {
 }
 
 void ZMenubar::right() {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     if (!parentWidget() || p->items.isEmpty()) {
         return;
     }
@@ -191,7 +191,7 @@ void ZMenubar::right() {
 }
 
 void ZMenubar::close() {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     if (!parentWidget() || p->items.isEmpty()) {
         return;
     }
@@ -205,7 +205,7 @@ void ZMenubar::close() {
 }
 
 void ZMenubar::paintEvent(ZPaintEvent *event) {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     auto *painter = event->painter();
     ZTextStyle baseStyle = {getColor("menu.fg"), getColor("menu.bg")};
     ZTextStyle shortcut = {getColor("menu.shortcut.fg"), getColor("menu.shortcut.bg"), ZPainter::Attribute::Underline};
@@ -248,7 +248,7 @@ void ZMenubar::paintEvent(ZPaintEvent *event) {
 }
 
 void ZMenubar::keyActivate(ZKeyEvent *event) {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     ZCommandManager *const cmdMgr = parentWidget()->ensureCommandManager();
     for (int i = 0; i < p->items.size(); i++) {
         const auto &item = qAsConst(p->items)[i];
@@ -269,12 +269,12 @@ void ZMenubar::keyActivate(ZKeyEvent *event) {
 }
 
 QSize ZMenubar::sizeHint() const {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     return { p->width, 1 };
 }
 
 void ZMenubar::keyEvent(ZKeyEvent *event) {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     if (event->key() == Qt::Key_Left && event->modifiers() == 0) {
         left();
     } else if (event->key() == Qt::Key_Right && event->modifiers() == 0) {

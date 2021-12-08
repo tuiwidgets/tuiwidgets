@@ -61,7 +61,7 @@ private:
 
 QDebug operator<<(QDebug dbg, const ZSymbol &message);
 
-#define TUISYM_LITERAL(x) ([] { static ::Tui::ZSymbol m{QString::fromUtf8(x)}; return m;}())
+#define TUISYM_LITERAL(x) ([] { static ::Tui::ZSymbol m{QString::fromUtf8(x)}; return m; }())
 
 class TUIWIDGETS_EXPORT ZImplicitSymbol : public ZSymbol {
 public:

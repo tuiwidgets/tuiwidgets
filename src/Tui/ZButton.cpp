@@ -137,10 +137,10 @@ void ZButton::paintEvent(ZPaintEvent *event) {
         p->styledText.setMnemonicStyle(baseStyle, shortcut);
         painter.writeWithColors(1, 0, QStringLiteral("[ "), baseStyle.foregroundColor(), baseStyle.backgroundColor());
         painter.writeWithColors(r.width() - 3, 0, QStringLiteral(" ]"), baseStyle.foregroundColor(), baseStyle.backgroundColor());
-        if (p->styledText.width(painter.textMetrics()) > r.width()-5) {
-            p->styledText.write(&painter, 2, 0, r.width()-4);
+        if (p->styledText.width(painter.textMetrics()) > r.width() - 5) {
+            p->styledText.write(&painter, 2, 0, r.width() - 4);
         } else {
-            p->styledText.write(&painter, 3, 0, r.width()-5);
+            p->styledText.write(&painter, 3, 0, r.width() - 5);
         }
     } else {
         painter.writeWithColors(r.width() >= 3 ? 1 : 0, 0, QStringLiteral("[]"), baseStyle.foregroundColor(), baseStyle.backgroundColor());
@@ -157,7 +157,7 @@ void ZButton::click() {
 }
 
 void ZButton::keyEvent(ZKeyEvent *event) {
-    if(isEnabled() && (event->key() == Qt::Key_Space || event->key() == Qt::Key_Enter) && event->modifiers() == 0) {
+    if (isEnabled() && (event->key() == Qt::Key_Space || event->key() == Qt::Key_Enter) && event->modifiers() == 0) {
         setFocus();
         event->accept();
         clicked();

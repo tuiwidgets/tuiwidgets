@@ -19,7 +19,7 @@ class ZMoFunc<ReturnType(Args...)> {
 public:
     ZMoFunc() {}
     ZMoFunc(std::nullptr_t) {}
-    ZMoFunc(ZMoFunc&& other) : _impl(move(other._impl)) {}
+    ZMoFunc(ZMoFunc &&other) : _impl(move(other._impl)) {}
     ZMoFunc(const ZMoFunc&) = delete;
 
     template <typename F>
@@ -29,8 +29,8 @@ public:
     }
 
 public:
-    void operator=(const ZMoFunc& other) = delete;
-    void operator=(ZMoFunc&& other) {
+    void operator=(const ZMoFunc &other) = delete;
+    void operator=(ZMoFunc &&other) {
         if (this == &other) return;
         _impl = move(other._impl);
     }
@@ -84,10 +84,10 @@ private:
 
     template <typename F>
     struct Impl : public Base {
-        Impl(const F& f) : _f(f) {
+        Impl(const F &f) : _f(f) {
         }
 
-        Impl(F&& f) : _f(std::move(f)) {
+        Impl(F &&f) : _f(std::move(f)) {
         }
 
         virtual ReturnType operator()(Args... args) override {

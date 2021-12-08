@@ -23,24 +23,24 @@ ZRadioButton::ZRadioButton(WithMarkupTag, const QString &markup, ZWidget *parent
 ZRadioButton::~ZRadioButton() = default;
 
 QString ZRadioButton::text() const {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     return p->styledText.text();
 }
 
 void ZRadioButton::setText(const QString &text) {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     p->styledText.setText(text);
     removeShortcut();
     update();
 }
 
 QString ZRadioButton::markup() const {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     return p->styledText.markup();
 }
 
 void ZRadioButton::setMarkup(const QString &markup) {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     p->styledText.setMarkup(markup);
     if (p->styledText.mnemonic().size()) {
         setShortcut(ZKeySequence::forMnemonic(p->styledText.mnemonic()));
@@ -51,12 +51,12 @@ void ZRadioButton::setMarkup(const QString &markup) {
 }
 
 bool ZRadioButton::checked() const {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     return p->checked;
 }
 
 void ZRadioButton::setChecked(bool state) {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     p->checked = state;
     update();
 }
@@ -74,7 +74,7 @@ void ZRadioButton::setShortcut(const ZKeySequence &key) {
 }
 
 QSize ZRadioButton::sizeHint() const {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     auto *term = terminal();
     if (!term) return {};
 
@@ -94,7 +94,7 @@ void ZRadioButton::click() {
 }
 
 void ZRadioButton::toggle() {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     if(!p->checked) {
         if(parent()) {
             for(ZRadioButton *rb : parent()->findChildren<ZRadioButton*>(QString(), Qt::FindDirectChildrenOnly)) {
@@ -111,7 +111,7 @@ void ZRadioButton::toggle() {
 }
 
 void ZRadioButton::paintEvent(ZPaintEvent *event) {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     auto cm = contentsMargins();
     QString focusIndicator = QStringLiteral(" ");
     ZTextStyle baseStyle;

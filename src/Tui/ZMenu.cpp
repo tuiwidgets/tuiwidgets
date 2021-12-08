@@ -14,7 +14,7 @@ ZMenu::ZMenu(ZWidget *parent) : ZWidget(parent, std::make_unique<ZMenuPrivate>(t
 ZMenu::~ZMenu() = default;
 
 void ZMenu::setItems(QVector<ZMenuItem> items) {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     p->items = items;
     p->selected = 0;
     int width = 0;
@@ -41,12 +41,12 @@ void ZMenu::setItems(QVector<ZMenuItem> items) {
 }
 
 QVector<ZMenuItem> ZMenu::items() const {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     return p->items;
 }
 
 void ZMenu::setParentMenu(ZMenubar *menu) {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     p->parentMenu = menu;
 }
 
@@ -70,7 +70,7 @@ QSize ZMenu::sizeHint() const {
 }
 
 QSize ZMenu::minimumSizeHint() const {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     int width = p->textWidth;
     if (p->shortcutWidth) {
         width += 1 + p->shortcutWidth;
@@ -81,7 +81,7 @@ QSize ZMenu::minimumSizeHint() const {
 }
 
 QObject *ZMenu::facet(const QMetaObject &metaObject) {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     if (metaObject.className() == ZWindowFacet::staticMetaObject.className()) {
         return &p->windowFacet;
     } else {
@@ -90,7 +90,7 @@ QObject *ZMenu::facet(const QMetaObject &metaObject) {
 }
 
 void ZMenu::paintEvent(ZPaintEvent *event) {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     auto *painter = event->painter();
     ZTextStyle baseStyle = {getColor("menu.fg"), getColor("menu.bg")};
     ZTextStyle shortcut = {getColor("menu.shortcut.fg"), getColor("menu.shortcut.bg"), ZPainter::Attribute::Underline};
@@ -153,7 +153,7 @@ void ZMenu::paintEvent(ZPaintEvent *event) {
 }
 
 void ZMenu::keyEvent(ZKeyEvent *event) {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     if (event->key() == Qt::Key_Left && event->modifiers() == 0) {
         if (p->parentMenu) {
             p->parentMenu->left();

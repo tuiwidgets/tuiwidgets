@@ -22,42 +22,42 @@ ZTextLine::ZTextLine(WithMarkupTag, const QString &markup, ZWidget *parent) : ZT
 ZTextLine::~ZTextLine() = default;
 
 QString ZTextLine::text() const {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     return p->styledText.text();
 }
 
 void ZTextLine::setText(const QString &text) {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     p->styledText.setText(text);
     update();
 }
 
 QString ZTextLine::markup() const {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     return p->styledText.markup();
 }
 
 void ZTextLine::setMarkup(const QString &markup) {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     p->styledText.setMarkup(markup);
     update();
 }
 
 QSize ZTextLine::sizeHint() const {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     auto *term = terminal();
     if (!term) return {};
     auto cm = contentsMargins();
     QSize sh = { p->styledText.width(term->textMetrics()) + cm.left() + cm.right(),
-             1 + cm.top() + cm.bottom() };
+                 1 + cm.top() + cm.bottom() };
     return sh;
 }
 
 void ZTextLine::paintEvent(ZPaintEvent *event) {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     ZTextStyle style = {getColor("control.fg"), getColor("control.bg")};
 
-    auto *painter = event->painter();
+    auto *const painter = event->painter();
     painter->clear(style.foregroundColor(), style.backgroundColor());
 
     QRect r = contentsRect();

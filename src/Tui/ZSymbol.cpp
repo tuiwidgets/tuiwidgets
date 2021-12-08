@@ -7,11 +7,11 @@
 
 TUIWIDGETS_NS_START
 
-static QHash<QString, int>& ZSymbol_table() {
+static QHash<QString, int> &ZSymbol_table() {
     static QHash<QString, int> data;
     return data;
 }
-static QList<QString>& ZSymbol_reverse() {
+static QList<QString> &ZSymbol_reverse() {
     static QList<QString> data;
     return data;
 }
@@ -31,7 +31,7 @@ int ZSymbol::lookup(QString str, bool create) {
 
     std::lock_guard<std::mutex> g(mut);
 
-    auto& table = ZSymbol_table();
+    auto &table = ZSymbol_table();
     auto it = table.find(str);
     if (it != table.end()) {
         return it.value();

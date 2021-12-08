@@ -189,11 +189,11 @@ test('testtoolkitinternal',
 
 #ide:editable-filelist
 test_files = [
+  'tests/Testhelper.cpp',
   'tests/basicwindowfacet/basicwindowfacet.cpp',
+  'tests/button/button.cpp',
   'tests/checkbox/checkbox.cpp',
   'tests/color/color.cpp',
-  'tests/Testhelper.cpp',
-  'tests/button/button.cpp',
   'tests/label/label.cpp',
   'tests/menu/menu.cpp',
   'tests/radiobutton/radiobutton.cpp',

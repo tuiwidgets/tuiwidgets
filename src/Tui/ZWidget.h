@@ -131,8 +131,8 @@ public:
     bool focus() const;
     bool isInFocusPath() const;
 
-    QPoint mapFromTerminal(const QPoint& pos);
-    QPoint mapToTerminal(const QPoint& pos);
+    QPoint mapFromTerminal(const QPoint &pos);
+    QPoint mapToTerminal(const QPoint &pos);
 
     ZWidget const *prevFocusable() const;
     ZWidget *prevFocusable();

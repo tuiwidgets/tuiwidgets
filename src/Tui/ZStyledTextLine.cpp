@@ -83,8 +83,8 @@ void ZStyledTextLine::write(ZPainter *painter, int x, int y, int width) const {
             QString part = p->textFromMarkup.mid(lastIdx, p->styles[i].startIndex - lastIdx);
             localPainter.writeWithAttributes(x, 0,
                                              part,
-                                             p->styles[i-1].style.foregroundColor(), p->styles[i-1].style.backgroundColor(),
-                                             p->styles[i-1].style.attributes());
+                                             p->styles[i - 1].style.foregroundColor(), p->styles[i - 1].style.backgroundColor(),
+                                             p->styles[i - 1].style.attributes());
             x += textMetrics.sizeInColumns(part);
             lastIdx = p->styles[i].startIndex;
         }

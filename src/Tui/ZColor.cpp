@@ -162,7 +162,7 @@ int ZColor::greenOrGuess() const {
                 } else if (idx >= 232) {
                     return guessGrey[idx - 232];
                 } else {
-                    return guessCube[((idx-16) / 6) % 6];
+                    return guessCube[((idx - 16) / 6) % 6];
                 }
             }
             [[fallthrough]];
@@ -186,7 +186,7 @@ int ZColor::blueOrGuess() const {
                 } else if (idx >= 232) {
                     return guessGrey[idx - 232];
                 } else {
-                    return guessCube[(idx-16) % 6];
+                    return guessCube[(idx - 16) % 6];
                 }
             }
             [[fallthrough]];

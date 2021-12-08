@@ -32,8 +32,8 @@ Q_SIGNALS:
     void enabledChanged(bool s);
 
 public:
-    // public virtuals from base class override everything for later ABI compatibility
     bool event(QEvent *event) override;
+    // public virtuals from base class override everything for later ABI compatibility
     bool eventFilter(QObject *watched, QEvent *event) override;
 
 protected:

@@ -9,11 +9,9 @@ TUIWIDGETS_NS_START
 ZCommandManager::ZCommandManager(QObject *parent) :
     QObject(parent), tuiwidgets_pimpl_ptr(std::make_unique<ZCommandManagerPrivate>())
 {
-
 }
 
 ZCommandManager::~ZCommandManager() {
-
 }
 
 void ZCommandManager::registerCommandNotifier(ZCommandNotifier *notifier) {

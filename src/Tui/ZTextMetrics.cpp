@@ -20,7 +20,7 @@ ZTextMetrics::ClusterSize ZTextMetrics::nextCluster(const QChar *data, int size)
 }
 
 ZTextMetrics::ClusterSize ZTextMetrics::nextCluster(const char32_t *data, int size) const {
-    const auto *p = tuiwidgets_impl();
+    const auto *const p = tuiwidgets_impl();
     // TODO have some kind of pool
     termpaint_text_measurement *tm = termpaint_text_measurement_new(p->surface);
     termpaint_text_measurement_set_limit_clusters(tm, 1);
@@ -34,7 +34,7 @@ ZTextMetrics::ClusterSize ZTextMetrics::nextCluster(const char32_t *data, int si
 }
 
 ZTextMetrics::ClusterSize ZTextMetrics::nextCluster(const char16_t *data, int size) const {
-    const auto *p = tuiwidgets_impl();
+    const auto *const p = tuiwidgets_impl();
     // TODO have some kind of pool
     termpaint_text_measurement *tm = termpaint_text_measurement_new(p->surface);
     termpaint_text_measurement_set_limit_clusters(tm, 1);
@@ -48,7 +48,7 @@ ZTextMetrics::ClusterSize ZTextMetrics::nextCluster(const char16_t *data, int si
 }
 
 ZTextMetrics::ClusterSize ZTextMetrics::nextCluster(const char *stringUtf8, int utf8CodeUnits) const {
-    const auto *p = tuiwidgets_impl();
+    const auto *const p = tuiwidgets_impl();
     // TODO have some kind of pool
     termpaint_text_measurement *tm = termpaint_text_measurement_new(p->surface);
     termpaint_text_measurement_set_limit_clusters(tm, 1);
@@ -70,7 +70,7 @@ ZTextMetrics::ClusterSize ZTextMetrics::splitByColumns(const QChar *data, int si
 }
 
 ZTextMetrics::ClusterSize ZTextMetrics::splitByColumns(const char32_t *data, int size, int maxWidth) const {
-    const auto *p = tuiwidgets_impl();
+    const auto *const p = tuiwidgets_impl();
     termpaint_text_measurement *tm = termpaint_text_measurement_new(p->surface);
     termpaint_text_measurement_set_limit_width(tm, maxWidth);
     termpaint_text_measurement_feed_utf32(tm, reinterpret_cast<const uint32_t*>(data), size, true);
@@ -84,7 +84,7 @@ ZTextMetrics::ClusterSize ZTextMetrics::splitByColumns(const char32_t *data, int
 }
 
 ZTextMetrics::ClusterSize ZTextMetrics::splitByColumns(const char16_t *data, int size, int maxWidth) const {
-    const auto *p = tuiwidgets_impl();
+    const auto *const p = tuiwidgets_impl();
     termpaint_text_measurement *tm = termpaint_text_measurement_new(p->surface);
     termpaint_text_measurement_set_limit_width(tm, maxWidth);
     termpaint_text_measurement_feed_utf16(tm, reinterpret_cast<const uint16_t*>(data), size, true);
@@ -98,7 +98,7 @@ ZTextMetrics::ClusterSize ZTextMetrics::splitByColumns(const char16_t *data, int
 }
 
 ZTextMetrics::ClusterSize ZTextMetrics::splitByColumns(const char *stringUtf8, int utf8CodeUnits, int maxWidth) const {
-    const auto *p = tuiwidgets_impl();
+    const auto *const p = tuiwidgets_impl();
     termpaint_text_measurement *tm = termpaint_text_measurement_new(p->surface);
     termpaint_text_measurement_set_limit_width(tm, maxWidth);
     termpaint_text_measurement_feed_utf8(tm, stringUtf8, utf8CodeUnits, true);
@@ -120,7 +120,7 @@ int ZTextMetrics::sizeInColumns(const QChar *data, int size) const {
 }
 
 int ZTextMetrics::sizeInColumns(const char32_t *data, int size) const {
-    const auto *p = tuiwidgets_impl();
+    const auto *const p = tuiwidgets_impl();
     termpaint_text_measurement *tm = termpaint_text_measurement_new(p->surface);
     termpaint_text_measurement_feed_utf32(tm, reinterpret_cast<const uint32_t*>(data), size, true);
 
@@ -130,7 +130,7 @@ int ZTextMetrics::sizeInColumns(const char32_t *data, int size) const {
 }
 
 int ZTextMetrics::sizeInColumns(const char16_t *data, int size) const {
-    const auto *p = tuiwidgets_impl();
+    const auto *const p = tuiwidgets_impl();
     termpaint_text_measurement *tm = termpaint_text_measurement_new(p->surface);
     termpaint_text_measurement_feed_utf16(tm, reinterpret_cast<const uint16_t*>(data), size, true);
 
@@ -140,7 +140,7 @@ int ZTextMetrics::sizeInColumns(const char16_t *data, int size) const {
 }
 
 int ZTextMetrics::sizeInColumns(const char *stringUtf8, int utf8CodeUnits) const {
-    const auto *p = tuiwidgets_impl();
+    const auto *const p = tuiwidgets_impl();
     termpaint_text_measurement *tm = termpaint_text_measurement_new(p->surface);
     termpaint_text_measurement_feed_utf8(tm, stringUtf8, utf8CodeUnits, true);
 

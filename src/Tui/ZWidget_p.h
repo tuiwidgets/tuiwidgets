@@ -22,7 +22,7 @@ class ZTerminal;
 struct FocusHistoryTag;
 
 template <typename CALLABLE>
-void zwidgetForEachDescendant(ZWidget *start, CALLABLE&& callable) {
+void zwidgetForEachDescendant(ZWidget *start, CALLABLE &&callable) {
     QVector<QPointer<QObject>> todo;
     for (QObject *x : start->children()) {
         todo.append(x);

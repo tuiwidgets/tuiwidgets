@@ -23,24 +23,24 @@ ZCheckBox::ZCheckBox(WithMarkupTag, const QString &markup, ZWidget *parent) : ZC
 ZCheckBox::~ZCheckBox() = default;
 
 QString ZCheckBox::text() const {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     return p->styledText.text();
 }
 
 void ZCheckBox::setText(const QString &text) {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     p->styledText.setText(text);
     removeShortcut();
     update();
 }
 
 QString ZCheckBox::markup() const {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     return p->styledText.markup();
 }
 
 void ZCheckBox::setMarkup(const QString &markup) {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     p->styledText.setMarkup(markup);
     if (p->styledText.mnemonic().size()) {
         setShortcut(ZKeySequence::forMnemonic(p->styledText.mnemonic()));
@@ -51,28 +51,28 @@ void ZCheckBox::setMarkup(const QString &markup) {
 }
 
 void ZCheckBox::setCheckState(Qt::CheckState state) {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     p->state = state;
     update();
 }
 
 Qt::CheckState ZCheckBox::checkState() const {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     return p->state;
 }
 
 bool ZCheckBox::isTristate() const {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     return p->tristate;
 }
 
 void ZCheckBox::setTristate(bool tristate) {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     p->tristate = tristate;
 }
 
 void ZCheckBox::paintEvent(ZPaintEvent *event) {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     auto cm = contentsMargins();
     QString focusIndicator = QStringLiteral(" ");
     ZTextStyle baseStyle;
@@ -102,11 +102,11 @@ void ZCheckBox::paintEvent(ZPaintEvent *event) {
         painter->writeWithColors(cm.left(), cm.top(), focusIndicator + QStringLiteral("[#] "), baseStyle.foregroundColor(), baseStyle.backgroundColor());
     }
     p->styledText.setMnemonicStyle(baseStyle, shortcut);
-    p->styledText.write(painter, cm.left() + 5, cm.top(), geometry().width() - cm.left()  - cm.right() - 4);
+    p->styledText.write(painter, cm.left() + 5, cm.top(), geometry().width() - cm.left() - cm.right() - 4);
 }
 
 void ZCheckBox::toggle() {
-    auto *p = tuiwidgets_impl();
+    auto *const p = tuiwidgets_impl();
     if (p->state == Qt::Unchecked) {
         p->state = Qt::Checked;
     } else if (p->state == Qt::Checked) {
@@ -152,8 +152,8 @@ void ZCheckBox::setShortcut(const ZKeySequence &key) {
 }
 
 QSize ZCheckBox::sizeHint() const {
-    auto *p = tuiwidgets_impl();
-    auto *term = terminal();
+    auto *const p = tuiwidgets_impl();
+    auto *const term = terminal();
     if (!term) return {};
     auto cm = contentsMargins();
     QSize sh = { p->styledText.width(term->textMetrics()) + 5 + cm.left() + cm.right(),

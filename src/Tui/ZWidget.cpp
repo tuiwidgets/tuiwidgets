@@ -42,7 +42,7 @@ ZWidget::ZWidget(ZWidget *parent, std::unique_ptr<ZWidgetPrivate> pimpl)
         p->effectivelyVisible = pp->effectivelyVisible;
 
         // to apply stacking layer
-        QList<QObject*>& list = parentWidget()->d_ptr->children;
+        QList<QObject*> &list = parentWidget()->d_ptr->children;
         if (list.size() > 1) {
             list.move(list.indexOf(this), 0);
             raise();
@@ -323,7 +323,7 @@ void ZWidgetPrivate::updateEffectivelyVisibleRecursively() {
 }
 
 void ZWidget::raise() {
-    QList<QObject*>& list = parentWidget()->d_ptr->children;
+    QList<QObject*> &list = parentWidget()->d_ptr->children;
     if (list.size() <= 1) return;
     int to = list.size() - 1;
     while (to > 0) {
@@ -338,7 +338,7 @@ void ZWidget::raise() {
 }
 
 void ZWidget::lower() {
-    QList<QObject*>& list = parentWidget()->d_ptr->children;
+    QList<QObject*> &list = parentWidget()->d_ptr->children;
     if (list.size() <= 1) return;
     int to = 0;
     while (to < list.size() - 1) {
@@ -353,7 +353,7 @@ void ZWidget::lower() {
 }
 
 void ZWidget::stackUnder(ZWidget *w) {
-    QList<QObject*>& list = parentWidget()->d_ptr->children;
+    QList<QObject*> &list = parentWidget()->d_ptr->children;
     if (list.size() <= 1) return;
     int to = list.indexOf(w);
     if (to < 1) return;
@@ -988,7 +988,7 @@ ZWidget const *ZWidget::nextFocusable() const {
 }
 
 ZWidget *ZWidget::nextFocusable() {
-    return const_cast<ZWidget *>(static_cast<ZWidget const *>(this)->nextFocusable());
+    return const_cast<ZWidget*>(static_cast<ZWidget const*>(this)->nextFocusable());
 }
 
 ZWidget const *ZWidget::placeFocus(bool last) const {

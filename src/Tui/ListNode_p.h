@@ -49,7 +49,7 @@ public:
 
     void remove(T *e) {
         constexpr auto nodeOffset = ListTrait<Tag>::offset;
-        auto& node = e->*nodeOffset;
+        auto &node = e->*nodeOffset;
         if (e == first) {
             first = node.next;
         }
