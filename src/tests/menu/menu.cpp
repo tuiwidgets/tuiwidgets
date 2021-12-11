@@ -969,7 +969,8 @@ TEST_CASE("popupmenu", "") {
     auto *menu = new Tui::ZMenu(t.root);
 
     SECTION("defaults") {
-        FAIL_CHECK_VEC(checkWidgetsDefaultsExcept(menu, {}));
+        FAIL_CHECK_VEC(checkWidgetsDefaultsExcept(menu, {DefaultException::StackingLayer}));
+        CHECK(menu->stackingLayer() == 20000);
     }
 
     SECTION("menu-window-facet-configuration") {

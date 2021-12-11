@@ -9,6 +9,7 @@ TUIWIDGETS_NS_START
 
 
 ZMenu::ZMenu(ZWidget *parent) : ZWidget(parent, std::make_unique<ZMenuPrivate>(this)) {
+    setStackingLayer(20000);
 }
 
 ZMenu::~ZMenu() = default;
