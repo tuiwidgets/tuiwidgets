@@ -485,10 +485,25 @@ void ZWidget::showCursor(QPoint position) {
     if (term) {
         ZWidget *grabber = ZTerminalPrivate::get(term)->keyboardGrab();
         if (term->focusWidget() == this && (!grabber || grabber == this)) {
+            QPoint posTerminal = mapToTerminal(position);
+
+            bool visible = true;
+
+            ZWidget *w = this;
+
+            // check that the position is inside the clipping region of this widget and all parents
+            while (w) {
+                QPoint posLocal = w->mapFromTerminal(posTerminal);
+                if (!(posLocal.x() >= 0 && posLocal.x() < w->geometry().width()
+                      && posLocal.y() >= 0 && posLocal.y() < w->geometry().height())) {
+                    visible = false;
+                }
+                w = w->parentWidget();
+            }
+
             ZTerminalPrivate *termp = ZTerminalPrivate::get(term);
-            if (position.x() >= 0 && position.x() < geometry().width()
-             && position.y() >= 0 && position.y() < geometry().height()) {
-                termp->cursorPosition = mapToTerminal(position);
+            if (visible) {
+                termp->cursorPosition = posTerminal;
             } else {
                 termp->cursorPosition = QPoint{-1, -1};
             }
