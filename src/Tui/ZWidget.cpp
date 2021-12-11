@@ -278,12 +278,17 @@ void ZWidget::setStackingLayer(int layer) {
     }
     const int prevLayer = p->stackingLayer;
     p->stackingLayer = layer;
-    if (prevLayer > layer) {
-        // when lowering the layer this widget should end up as the top of the target layer, so raise just works.
-        raise();
-    } else {
-        // when raising the layer this widget should end up as the bottom of the target layer.
-        lower();
+    QList<QObject*> &list = parentWidget()->d_ptr->children;
+    if (list.size() > 1) {
+        if (prevLayer > layer) {
+            // when lowering the layer this widget should end up as the top of the target layer, so raise just works.
+            list.move(list.indexOf(this), 0);
+            raise();
+        } else {
+            // when raising the layer this widget should end up as the bottom of the target layer.
+            list.move(list.indexOf(this), list.size() - 1);
+            lower();
+        }
     }
 }
 
