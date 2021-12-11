@@ -275,7 +275,7 @@ void ZPainter::setCursor(int x, int y) {
     y += pimpl->offsetY;
 
     if (pimpl->widget) {
-        if (x >= 0 && x <= pimpl->width && y >= 0 && y <= pimpl->height) {
+        if (x >= 0 && x < pimpl->width && y >= 0 && y < pimpl->height) {
             QPoint widgetRelative = pimpl->widget->mapFromTerminal({pimpl->x + x, pimpl->y + y});
             pimpl->widget->showCursor(widgetRelative);
         }
