@@ -671,6 +671,7 @@ void ZTerminal::resize(int width, int height) {
         const QSize minSize = p->mainWidget->minimumSize().expandedTo(p->mainWidget->minimumSizeHint());
         p->mainWidget->setGeometry({0, 0, std::max(minSize.width(), termpaint_surface_width(p->surface)),
                                     std::max(minSize.height(), termpaint_surface_height(p->surface))});
+        requestLayout(p->mainWidget);
     }
     forceRepaint();
 }
