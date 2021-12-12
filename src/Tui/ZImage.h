@@ -29,8 +29,8 @@ public:
     ZImage& operator=(ZImage&& other);
     virtual ~ZImage();
 
-    bool operator==(const ZImage& other);
-    bool operator!=(const ZImage& other);
+    bool operator==(const ZImage& other) const;
+    bool operator!=(const ZImage& other) const;
 
     void swap(ZImage &other);
 

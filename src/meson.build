@@ -194,6 +194,7 @@ test_files = [
   'tests/button/button.cpp',
   'tests/checkbox/checkbox.cpp',
   'tests/color/color.cpp',
+  'tests/image/image.cpp',
   'tests/label/label.cpp',
   'tests/menu/menu.cpp',
   'tests/radiobutton/radiobutton.cpp',

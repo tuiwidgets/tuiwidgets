@@ -67,12 +67,12 @@ ZImage &ZImage::operator=(ZImage && other) {
 ZImage::~ZImage() {
 }
 
-bool ZImage::operator==(const ZImage &other) {
+bool ZImage::operator==(const ZImage &other) const {
     auto *const p = tuiwidgets_pimpl_ptr.data();
     return termpaint_surface_same_contents(p->surface, other.tuiwidgets_pimpl_ptr.data()->surface);
 }
 
-bool ZImage::operator!=(const ZImage &other) {
+bool ZImage::operator!=(const ZImage &other) const {
     return !(*this == other);
 }
 
