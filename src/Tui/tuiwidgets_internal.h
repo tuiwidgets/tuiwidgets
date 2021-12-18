@@ -51,6 +51,18 @@
 #define TUIWIDGETS_ABI_FORCE_INLINE __forceinline
 #endif
 
+#ifdef __has_cpp_attribute
+#if __has_cpp_attribute(nodiscard) >= 201907L
+#define TUIWIDGETS_NODISCARD(x) [[nodiscard(x)]]
+#elif __has_cpp_attribute(nodiscard) >= 201603L
+#define TUIWIDGETS_NODISCARD(x) [[nodiscard]]
+#else
+#define TUIWIDGETS_NODISCARD(x)
+#endif
+#else
+#define TUIWIDGETS_NODISCARD(x)
+#endif
+
 TUIWIDGETS_NS_START
 namespace Private {
 template <typename TOCONTRAINT, typename EXPECTEDTYPE>
