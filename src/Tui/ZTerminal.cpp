@@ -342,7 +342,7 @@ void ZTerminal::dispatcherIsAboutToBlock() {
         bool focusWasSet = false;
         ZWidgetPrivate *w = p->focusHistory.last;
         while (w) {
-            if (w->enabled && w->pub()->isVisibleTo(p->mainWidget.data())) {
+            if (w->effectivelyEnabled && w->pub()->isVisibleTo(p->mainWidget.data())) {
                 w->pub()->setFocus();
                 focusWasSet = true;
                 break;
