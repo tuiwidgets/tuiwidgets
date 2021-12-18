@@ -38,7 +38,7 @@ void ZLayout::widgetEvent(QEvent *event) {
         ZWidget *chainRoot = w->resolveSizeHintChain();
 
         // ensure that the root of the layout chain gets to layout first
-        if (chainRoot != w && !ZLayoutPrivate::alreadyLayoutedInThisGeneration(term, w)) {
+        if (chainRoot != w && !ZLayoutPrivate::alreadyLayoutedInThisGeneration(term, chainRoot)) {
             // will be marked as done in the chainRoot's event handler before doing much else,
             // given that that chainRoot->resolveSizeHintChain() == chainRoot
             QEvent request(QEvent::LayoutRequest);
