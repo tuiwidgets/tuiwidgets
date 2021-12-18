@@ -42,12 +42,12 @@ public:
     bool save(const QString &fileName) const;
     QByteArray saveToByteArray() const;
 
-    QString peekText(int x, int y, int *left, int *right);
-    ZColor peekForground(int x, int y);
-    ZColor peekBackground(int x, int y);
-    ZColor peekDecoration(int x, int y);
-    bool peekSoftwrapMarker(int x, int y);
-    ZTextAttributes peekAttributes(int x, int y);
+    QString peekText(int x, int y, int *left, int *right) const;
+    ZColor peekForground(int x, int y) const;
+    ZColor peekBackground(int x, int y) const;
+    ZColor peekDecoration(int x, int y) const;
+    bool peekSoftwrapMarker(int x, int y) const;
+    ZTextAttributes peekAttributes(int x, int y) const;
 
     ZPainter painter();
 
