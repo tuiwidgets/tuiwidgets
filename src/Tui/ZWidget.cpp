@@ -84,7 +84,7 @@ void ZWidget::setParent(ZWidget *newParent) {
     if (newParent && p->terminal) {
         p->terminal = nullptr;
     }
-    if (prevTerminal && prevTerminal != newParent->terminal()) {
+    if (prevTerminal && (!newParent || prevTerminal != newParent->terminal())) {
         auto *const terminal_priv = ZTerminalPrivate::get(prevTerminal);
 
         if (isInFocusPath()) {
@@ -111,10 +111,12 @@ void ZWidget::setParent(ZWidget *newParent) {
     QObject::setParent(newParent);
 
     // to apply stacking layer
-    QList<QObject*>& list = parentWidget()->d_ptr->children;
-    if (list.size() > 1) {
-        list.move(list.indexOf(this), 0);
-        raise();
+    if (newParent) {
+        QList<QObject*>& list = parentWidget()->d_ptr->children;
+        if (list.size() > 1) {
+            list.move(list.indexOf(this), 0);
+            raise();
+        }
     }
 
     // TODO care about caches for everything (e.g. visibiltiy, enabled, etc)
