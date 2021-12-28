@@ -153,6 +153,10 @@ void ZTerminal::maybeRequestLayout(ZWidget *w) {
 void ZTerminal::requestLayout(ZWidget *w) {
     auto *const p = tuiwidgets_impl();
 
+    if (p->testingLayoutRequestTrackingClosure) {
+        p->testingLayoutRequestTrackingClosure(w);
+    }
+
     if (p->layoutGeneration > 0) {
         // doLayout is running, so do synchronous layout
         QEvent request(QEvent::LayoutRequest);
@@ -251,6 +255,18 @@ int ZTerminal::currentLayoutGeneration() {
         // inside doLayout, the value is stable
         return p->layoutGeneration;
     }
+}
+
+bool ZTerminalPrivate::setTestLayoutRequestTracker(std::function<void (ZWidget *)> closure) {
+    if (testingLayoutRequestTrackingClosure) {
+        return false;
+    }
+    testingLayoutRequestTrackingClosure = closure;
+    return true;
+}
+
+void ZTerminalPrivate::resetTestLayoutRequestTracker() {
+    testingLayoutRequestTrackingClosure = {};
 }
 
 void ZTerminalPrivate::processPaintingAndUpdateOutput(bool fullRepaint) {

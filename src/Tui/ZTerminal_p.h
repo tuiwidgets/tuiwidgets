@@ -51,6 +51,9 @@ public:
     void processPaintingAndUpdateOutput(bool fullRepaint);
     void updateNativeTerminalState();
 
+    bool setTestLayoutRequestTracker(std::function<void(ZWidget *)> closure);
+    void resetTestLayoutRequestTracker();
+
     bool initTerminal(ZTerminal::Options options, ZTerminal::FileDescriptor *fd);
     void initOffscreen(const ZTerminal::OffScreen &offscreen);
     void initExternal(ZTerminal::TerminalConnectionPrivate *connection, ZTerminal::Options options);
@@ -117,6 +120,7 @@ public:
     QList<QPointer<ZWidget>> layoutPendingWidgets;
     bool layoutRequested = false;
     int layoutGeneration = -1;
+    std::function<void(ZWidget *)> testingLayoutRequestTrackingClosure;
 
     bool viewportActive = false;
     bool viewportUI = false;

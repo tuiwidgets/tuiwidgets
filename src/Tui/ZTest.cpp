@@ -1,7 +1,10 @@
 #include "ZTest.h"
 
+#include <QSet>
+
 #include <Tui/ZEvent.h>
 #include <Tui/ZTerminal.h>
+#include <Tui/ZTerminal_p.h>
 #include <Tui/ZWidget.h>
 #include <Tui/ZImage.h>
 
@@ -42,6 +45,21 @@ namespace ZTest {
 
         QObject::disconnect(connection);
         return std::move(*result);
+    }
+
+    TUIWIDGETS_EXPORT void withLayoutRequestTracking(ZTerminal *terminal, std::function<void (QSet<ZWidget*>*)> closure) {
+        auto *const p = ZTerminalPrivate::get(terminal);
+        QSet<ZWidget*> layoutRequested;
+        if (!p->setTestLayoutRequestTracker([&layoutRequested](ZWidget *w) { layoutRequested.insert(w);})) {
+            qWarning("nested layout request tracking not supported");
+            return;
+        }
+        try {
+            closure(&layoutRequested);
+        } catch (...) {
+            p->resetTestLayoutRequestTracker();
+            throw;
+        }
     }
 
 }
