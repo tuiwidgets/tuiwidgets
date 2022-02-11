@@ -536,6 +536,17 @@ TEST_CASE("textlayout", "") {
         t.compare(zi);
     }
 
+    SECTION("wrap-visible-spaces-width-0") {
+        Tui::ZTextOption to;
+        to.setFlags(Tui::ZTextOption::ShowTabsAndSpaces);
+        to.setWrapMode(Tui::ZTextOption::WrapAnywhere);
+        layout->setTextOption(to);
+        layout->setText("testtext  amet");
+        layout->doLayout(0);
+
+        layout->draw(zi.painter(), {1, 1}, styleBWhiteBlue);
+    }
+
     SECTION("trailing-spaces") {
         Tui::ZTextOption to;
         to.setFlags(Tui::ZTextOption::Flag::ShowTabsAndSpacesWithColors);

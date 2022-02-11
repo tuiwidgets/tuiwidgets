@@ -494,7 +494,7 @@ void ZTextLayout::layoutLine(int index, int width) {
             // find offset that is after the spaces run
             while (offset < p->text.size() && p->text[offset] == u' ' && cs.codePoints == 1) {
                 if (textOptionWrapMode != ZTextOption::NoWrap) {
-                    if (column >= width) {
+                    if (column && column >= width) { // but always consume at least one cluster
                         break;
                     }
                 }
