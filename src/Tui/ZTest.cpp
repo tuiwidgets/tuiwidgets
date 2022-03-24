@@ -29,6 +29,11 @@ namespace ZTest {
         w->event(&event);
     }
 
+    void sendPaste(ZTerminal *terminal, const QString &text) {
+        ZPasteEvent event(text);
+        terminal->dispatchPasteEvent(event);
+    }
+
     TUIWIDGETS_EXPORT ZImage waitForNextRenderAndGetContents(ZTerminal *terminal) {
 
         std::unique_ptr<ZImage> result;
