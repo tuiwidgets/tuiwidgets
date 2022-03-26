@@ -149,6 +149,44 @@ int ZTextMetrics::sizeInColumns(const char *stringUtf8, int utf8CodeUnits) const
     return res;
 }
 
+int ZTextMetrics::sizeInClusters(const QString &data) const {
+    return sizeInClusters(data.constData(), data.size());
+}
+
+int ZTextMetrics::sizeInClusters(const QChar *data, int size) const {
+    return sizeInClusters(reinterpret_cast<const char16_t*>(data), size);
+}
+
+int ZTextMetrics::sizeInClusters(const char32_t *data, int size) const {
+    const auto *const p = tuiwidgets_impl();
+    termpaint_text_measurement *tm = termpaint_text_measurement_new(p->surface);
+    termpaint_text_measurement_feed_utf32(tm, reinterpret_cast<const uint32_t*>(data), size, true);
+
+    int res = termpaint_text_measurement_last_clusters(tm);
+    termpaint_text_measurement_free(tm);
+    return res;
+}
+
+int ZTextMetrics::sizeInClusters(const char16_t *data, int size) const {
+    const auto *const p = tuiwidgets_impl();
+    termpaint_text_measurement *tm = termpaint_text_measurement_new(p->surface);
+    termpaint_text_measurement_feed_utf16(tm, reinterpret_cast<const uint16_t*>(data), size, true);
+
+    int res = termpaint_text_measurement_last_clusters(tm);
+    termpaint_text_measurement_free(tm);
+    return res;
+}
+
+int ZTextMetrics::sizeInClusters(const char *stringUtf8, int utf8CodeUnits) const {
+    const auto *const p = tuiwidgets_impl();
+    termpaint_text_measurement *tm = termpaint_text_measurement_new(p->surface);
+    termpaint_text_measurement_feed_utf8(tm, stringUtf8, utf8CodeUnits, true);
+
+    int res = termpaint_text_measurement_last_clusters(tm);
+    termpaint_text_measurement_free(tm);
+    return res;
+}
+
 ZTextMetrics &ZTextMetrics::operator=(const ZTextMetrics&) = default;
 
 ZTextMetrics::ZTextMetrics(std::shared_ptr<ZTextMetricsPrivate> impl) : tuiwidgets_pimpl_ptr(impl)

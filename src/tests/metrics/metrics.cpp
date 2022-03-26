@@ -159,6 +159,47 @@ int sizeInColumnsWrapper(Kind kind, Tui::ZTextMetrics &tm, const QString &string
     return 0;
 }
 
+int sizeInClustersWrapper(Kind kind, Tui::ZTextMetrics &tm, const QString &string) {
+    switch (kind) {
+        case KindQString:
+            return tm.sizeInClusters(string);
+        case KindQChar:
+            return tm.sizeInClusters(string.data(), string.size());
+        case KindChar16:
+            return tm.sizeInClusters(reinterpret_cast<const char16_t*>(string.data()), string.size());
+        case KindChar32:
+            {
+                auto utf32 = string.toUcs4();
+                return tm.sizeInClusters(reinterpret_cast<const char32_t*>(utf32.data()), utf32.size());
+            }
+        case KindUtf:
+            {
+                QByteArray utf8 = string.toUtf8();
+                return tm.sizeInClusters(utf8.data(), utf8.size());
+            }
+        case KindQStringView:
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0) && defined(TUIWIDGETS_ABI_FORCE_INLINE)
+            return tm.sizeInClusters(QStringView{string});
+#endif
+            FAIL("KindQStringView: unexpected");
+        case KindU16StringView:
+#if defined(__cpp_lib_string_view) && defined(TUIWIDGETS_ABI_FORCE_INLINE)
+            return tm.sizeInClusters(std::u16string_view(reinterpret_cast<const char16_t*>(string.data()), string.size()));
+#endif
+            FAIL("KindU16StringView: unexpected");
+        case KindStringView:
+#if defined(__cpp_lib_string_view) && defined(TUIWIDGETS_ABI_FORCE_INLINE)
+            {
+                QByteArray utf8 = string.toUtf8();
+                return tm.sizeInClusters(std::string_view(utf8.data(), utf8.size()));
+            }
+#endif
+            FAIL("KindStringView: unexpected");
+    }
+    FAIL("Unknown kind");
+    return 0;
+}
+
 int nCodeUnits(Kind kind, QString s) {
     switch (kind) {
         case KindQString:
@@ -306,23 +347,23 @@ TEST_CASE("metrics - splitByColumns") {
     CHECK(result.codePoints == nCodePoints(testCase.left));
 }
 
-TEST_CASE("metrics - sizeInColumns") {
+TEST_CASE("metrics - sizeInXXX") {
     auto kind = GENERATE(ALLKINDS);
 
-    struct TestCase { QString text; int columns; };
+    struct TestCase { QString text; int columns; int clusters; };
     const auto testCase = GENERATE(
-                TestCase{ "test", 4 },
-                TestCase{ "はい", 4 },
-                TestCase{ "😇bc", 4 },
-                TestCase{"a\xcc\x88\xcc\xa4\x62\x63", 3},
-                TestCase{ "😇a😇", 5 },
-                TestCase{ "\n😇", 3},
-                TestCase{ "\tTab", 4},
-                TestCase{ "¹1", 2},
-                TestCase{ QString(1, QChar(0)) + "null", 5},
-                TestCase{ "null" + QString(1, QChar(0)), 5},
-                TestCase{ "\x1b\x1b", 2 },
-                TestCase{ "", 0}
+                TestCase{ "test", 4, 4},
+                TestCase{ "はい", 4, 2},
+                TestCase{ "😇bc", 4, 3},
+                TestCase{"a\xcc\x88\xcc\xa4\x62\x63", 3, 3},
+                TestCase{ "😇a😇", 5, 3},
+                TestCase{ "\n😇", 3, 2},
+                TestCase{ "\tTab", 4, 4},
+                TestCase{ "¹1", 2, 2},
+                TestCase{ QString(1, QChar(0)) + "null", 5, 5},
+                TestCase{ "null" + QString(1, QChar(0)), 5, 5},
+                TestCase{ "\x1b\x1b", 2, 2},
+                TestCase{ "", 0, 0}
     );
 
     CAPTURE(kind);
@@ -333,16 +374,19 @@ TEST_CASE("metrics - sizeInColumns") {
     Tui::ZTextMetrics tm = Tui::ZTextMetricsPrivate::createForTesting(f.surface);
 
     CHECK(sizeInColumnsWrapper(kind, tm, testCase.text) == testCase.columns);
+    CHECK(sizeInClustersWrapper(kind, tm, testCase.text) == testCase.clusters);
 
     // check copy contruction
     Tui::ZTextMetrics tm2 = tm;
 
     CHECK(sizeInColumnsWrapper(kind, tm2, testCase.text) == testCase.columns);
+    CHECK(sizeInClustersWrapper(kind, tm2, testCase.text) == testCase.clusters);
 
     // check assignment does not break trivially
     Tui::ZTextMetrics tm3 = Tui::ZTextMetricsPrivate::createForTesting(f2.surface);
     tm2 = tm3;
 
     CHECK(sizeInColumnsWrapper(kind, tm3, testCase.text) == testCase.columns);
+    CHECK(sizeInClustersWrapper(kind, tm3, testCase.text) == testCase.clusters);
 }
 

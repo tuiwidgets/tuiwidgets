@@ -42,6 +42,11 @@ public:
     int sizeInColumns(const char32_t *data, int size) const;
     int sizeInColumns(const char16_t *data, int size) const;
     int sizeInColumns(const char *stringUtf8, int utf8CodeUnits) const;
+    int sizeInClusters(const QString &data) const;
+    int sizeInClusters(const QChar *data, int size) const;
+    int sizeInClusters(const char32_t *data, int size) const;
+    int sizeInClusters(const char16_t *data, int size) const;
+    int sizeInClusters(const char *stringUtf8, int utf8CodeUnits) const;
 
     // Wrappers for more modern types:
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0) && defined(TUIWIDGETS_ABI_FORCE_INLINE)
@@ -57,6 +62,10 @@ public:
     TUIWIDGETS_ABI_FORCE_INLINE int sizeInColumns(QSTRINGVIEW data) const {
         return sizeInColumns(data.data(), data.size());
     }
+    template <typename QSTRINGVIEW, Private::enable_if_same_remove_cvref<QSTRINGVIEW, QStringView> = 0>
+    TUIWIDGETS_ABI_FORCE_INLINE int sizeInClusters(QSTRINGVIEW data) const {
+        return sizeInClusters(data.data(), data.size());
+    }
 #endif
 #if defined(__cpp_lib_string_view) && defined(TUIWIDGETS_ABI_FORCE_INLINE)
     template <typename U16STRINGVIEW, Private::enable_if_same_remove_cvref<U16STRINGVIEW, std::u16string_view> = 0>
@@ -71,6 +80,10 @@ public:
     TUIWIDGETS_ABI_FORCE_INLINE int sizeInColumns(U16STRINGVIEW data) {
         return sizeInColumns(data.data(), data.size());
     }
+    template <typename U16STRINGVIEW, Private::enable_if_same_remove_cvref<U16STRINGVIEW, std::u16string_view> = 0>
+    TUIWIDGETS_ABI_FORCE_INLINE int sizeInClusters(U16STRINGVIEW data) {
+        return sizeInClusters(data.data(), data.size());
+    }
 
     // Assumes utf8 in string_view
     template <typename STRINGVIEW, Private::enable_if_same_remove_cvref<STRINGVIEW, std::string_view> = 0>
@@ -84,6 +97,10 @@ public:
     template <typename STRINGVIEW, Private::enable_if_same_remove_cvref<STRINGVIEW, std::string_view> = 0>
     TUIWIDGETS_ABI_FORCE_INLINE int sizeInColumns(STRINGVIEW data) {
         return sizeInColumns(data.data(), data.size());
+    }
+    template <typename STRINGVIEW, Private::enable_if_same_remove_cvref<STRINGVIEW, std::string_view> = 0>
+    TUIWIDGETS_ABI_FORCE_INLINE int sizeInClusters(STRINGVIEW data) {
+        return sizeInClusters(data.data(), data.size());
     }
 #endif
 
