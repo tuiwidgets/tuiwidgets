@@ -505,9 +505,9 @@ TEST_CASE("button-behavior", "") {
         }
 
         SECTION("space-with-modifier") {
-            FAIL_CHECK_VEC(t.checkCharEventBubbles(" ", Qt::KeyboardModifier::AltModifier));
-            FAIL_CHECK_VEC(t.checkCharEventBubbles(" ", Qt::KeyboardModifier::ShiftModifier));
-            FAIL_CHECK_VEC(t.checkCharEventBubbles(" ", Qt::KeyboardModifier::ControlModifier));
+            FAIL_CHECK_VEC(t.checkKeyEventBubbles(Qt::Key_Space, Qt::KeyboardModifier::AltModifier));
+            FAIL_CHECK_VEC(t.checkKeyEventBubbles(Qt::Key_Space, Qt::KeyboardModifier::ShiftModifier));
+            FAIL_CHECK_VEC(t.checkKeyEventBubbles(Qt::Key_Space, Qt::KeyboardModifier::ControlModifier));
         }
 
         SECTION("space-on-disabled") {
