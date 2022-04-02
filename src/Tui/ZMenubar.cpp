@@ -26,8 +26,9 @@ ZMenubar::~ZMenubar() {
 
 bool ZMenubar::event(QEvent *event) {
     auto *const p = tuiwidgets_impl();
-    if (!parent())
+    if (!parent()) {
         return ZWidget::event(event);
+    }
 
     switch (event->type()) {
         case QEvent::ParentChange: {
