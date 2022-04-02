@@ -938,8 +938,12 @@ std::unique_ptr<ZKeyEvent> ZTerminal::translateKeyEvent(const ZTerminalNativeEve
         }
         return std::unique_ptr<ZKeyEvent>{ new ZKeyEvent(key, modifiers, QString()) };
     } else if (native->type == TERMPAINT_EV_CHAR) {
+        const QString text = QString::fromUtf8(native->c.string, native->c.length);
+        if (text == QStringLiteral(" ")) {
+            return std::unique_ptr<ZKeyEvent>{ new ZKeyEvent(Qt::Key_Space, modifiers, QString()) };
+        }
         int key = Qt::Key_unknown;
-        return std::unique_ptr<ZKeyEvent>{ new ZKeyEvent(key, modifiers, QString::fromUtf8(native->c.string, native->c.length)) };
+        return std::unique_ptr<ZKeyEvent>{ new ZKeyEvent(key, modifiers, text) };
     }
 
     return nullptr;
