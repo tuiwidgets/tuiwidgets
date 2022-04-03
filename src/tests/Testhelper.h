@@ -41,6 +41,8 @@ public:
     std::vector<std::string> checkCharEventBubbles(QString ch, Qt::KeyboardModifiers modifiers = {});
     [[nodiscard]]
     std::vector<std::string> checkKeyEventBubbles(Qt::Key key, Qt::KeyboardModifiers modifiers = {});
+    [[nodiscard]]
+    std::vector<std::string> checkKeyEventBubblesToParent(Qt::Key key, Qt::KeyboardModifiers modifiers = {});
 
     void compare();
     void compare(QString name);

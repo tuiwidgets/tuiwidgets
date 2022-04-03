@@ -139,6 +139,54 @@ std::vector<std::string> Testhelper::checkKeyEventBubbles(Qt::Key key, Qt::Keybo
     return problems;
 }
 
+namespace {
+    class BubbleEventCheckFilter : public QObject {
+    public:
+        std::function<bool(QObject *obj, QEvent*)> fEvent;
+
+        bool eventFilter(QObject *obj, QEvent *event) override {
+            return fEvent(obj, event);
+        }
+    };
+}
+
+std::vector<std::string> Testhelper::checkKeyEventBubblesToParent(Qt::Key key, Qt::KeyboardModifiers modifiers) {
+    std::vector<std::string> problems;
+
+    bool keyBubbled = false;
+    BubbleEventCheckFilter filter;
+    filter.fEvent = [&keyBubbled, key, modifiers](QObject*, QEvent *event) {
+        if (event->type() == Tui::ZEventType::key()) {
+            auto keyEvent = static_cast<Tui::ZKeyEvent*>(event);
+            if (keyEvent->key() == key && keyEvent->modifiers() == modifiers) {
+                CHECK(keyBubbled == false);
+                keyBubbled = true;
+            }
+        }
+        return false;
+    };
+
+    if (!terminal->focusWidget()) {
+        problems.push_back("No focused widget to test");
+        return problems;
+    }
+
+    if (!terminal->focusWidget()->parentWidget()) {
+        problems.push_back("Error: Focused widget is root.");
+        return problems;
+    }
+
+    terminal->focusWidget()->parentWidget()->installEventFilter(&filter);
+
+    sendKey(key, modifiers);
+
+    if (!keyBubbled) {
+        problems.push_back("Key event did not bubble as expected");
+    }
+
+    return problems;
+}
+
 void Testhelper::compare(QString name) {
     terminal->update();
     Tui::ZImage actual = Tui::ZTest::waitForNextRenderAndGetContents(terminal.get());
