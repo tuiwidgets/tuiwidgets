@@ -35,6 +35,7 @@ public:
     void sendKey(Qt::Key key, Qt::KeyboardModifiers modifiers = {});
     void sendKeyToWidget(Tui::ZWidget *w, Qt::Key key, Qt::KeyboardModifiers modifiers = {});
     void sendKeyToZTerminal(QString key);
+    void sendPaste(const QString &text);
 
     [[nodiscard]]
     std::vector<std::string> checkCharEventBubbles(QString ch, Qt::KeyboardModifiers modifiers = {});

@@ -85,6 +85,10 @@ void Testhelper::sendKeyToZTerminal(QString key) {
     render();
 }
 
+void Testhelper::sendPaste(const QString &text) {
+    Tui::ZTest::sendPaste(terminal.get(), text);
+}
+
 std::vector<std::string> Testhelper::checkCharEventBubbles(QString ch, Qt::KeyboardModifiers modifiers) {
     std::vector<std::string> problems;
     auto fEventRestore = root->fEvent;
