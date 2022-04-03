@@ -127,16 +127,36 @@ void ZWidget::setParent(ZWidget *newParent) {
     }
     QEvent e2{QEvent::ParentChange};
     QCoreApplication::sendEvent(this, &e2);
-    if (prevTerminal != terminal()) {
+    auto *const newTerminal = terminal();
+    if (prevTerminal != newTerminal) {
         ZOtherChangeEvent change(ZOtherChangeEvent::all().subtract({TUISYM_LITERAL("terminal")}));
+
+        QPointer<ZWidget> newFocus;
+        uint64_t highestFocus = 0;
 
         auto f = [&](QObject *w) {
             QCoreApplication::sendEvent(w, &change);
             change.setAccepted(true);
+
+            auto widget = qobject_cast<ZWidget*>(w);
+            if (widget) {
+                auto *const wPriv = ZWidgetPrivate::get(widget);
+                // isVisible and isEnabled are using already updated effectivly enabled/visible data from update above
+                if (highestFocus < wPriv->focusCount
+                        && widget->isVisible() && widget->isEnabled()) {
+                    newFocus = widget;
+                    highestFocus = wPriv->focusCount;
+                }
+            }
         };
 
         f(this);
         zwidgetForEachDescendant(this, f);
+
+        if (newFocus && newTerminal
+                && (!newTerminal->focusWidget() || highestFocus > ZWidgetPrivate::get(newTerminal->focusWidget())->focusCount)) {
+            newFocus->setFocus();
+        }
     }
 }
 
@@ -637,7 +657,9 @@ void ZWidget::setCursorColor(int r, int g, int b) {
 }
 
 void ZWidget::setFocus(Qt::FocusReason reason) {
+    auto *const p = tuiwidgets_impl();
     auto *const term = terminal();
+    p->focusCount = ++ZTerminalPrivate::focusCounter;
     if (!term) {
         qDebug("ZWidget::setFocus called without terminal");
         return;
@@ -648,7 +670,7 @@ void ZWidget::setFocus(Qt::FocusReason reason) {
         return;
     }
 
-    ZTerminalPrivate *termp = ZTerminalPrivate::get(tuiwidgets_impl()->findTerminal());
+    ZTerminalPrivate *termp = ZTerminalPrivate::get(p->findTerminal());
     QPointer<ZWidget> previousFocus = termp->focus();
     if (this == previousFocus) {
         return;

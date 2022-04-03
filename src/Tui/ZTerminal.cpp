@@ -56,6 +56,10 @@ const ZTerminalPrivate *ZTerminalPrivate::get(const ZTerminal *terminal) {
     return terminal->tuiwidgets_impl();
 }
 
+bool ZTerminalPrivate::mainWidgetFullyAttached() {
+    return mainWidget.data() && ZWidgetPrivate::get(mainWidget.data())->terminal == this->pub();
+}
+
 void ZTerminalPrivate::setFocus(ZWidget *w) {
     if (!w) {
         focusWidget = nullptr;
@@ -270,7 +274,7 @@ void ZTerminalPrivate::resetTestLayoutRequestTracker() {
 }
 
 void ZTerminalPrivate::processPaintingAndUpdateOutput(bool fullRepaint) {
-    if (mainWidget.data()) {
+    if (mainWidgetFullyAttached()) {
         if (pub()->isLayoutPending()) {
             pub()->doLayout();
         }
@@ -354,19 +358,25 @@ void ZTerminalPrivate::processPaintingAndUpdateOutput(bool fullRepaint) {
 
 void ZTerminal::dispatcherIsAboutToBlock() {
     auto *const p = tuiwidgets_impl();
-    if (!p->focusWidget || !p->focusWidget->enabled || !p->focusWidget->pub()->isVisibleTo(p->mainWidget.data())) {
-        bool focusWasSet = false;
-        ZWidgetPrivate *w = p->focusHistory.last;
-        while (w) {
-            if (w->effectivelyEnabled && w->pub()->isVisibleTo(p->mainWidget.data())) {
-                w->pub()->setFocus();
-                focusWasSet = true;
-                break;
+    if (p->mainWidgetFullyAttached()) {
+        if (!p->focusWidget || !p->focusWidget->enabled || !p->focusWidget->pub()->isVisibleTo(p->mainWidget.data())) {
+            bool focusWasSet = false;
+            ZWidgetPrivate *w = p->focusHistory.last;
+            while (w) {
+                if (w->effectivelyEnabled && w->pub()->isVisibleTo(p->mainWidget.data())) {
+                    w->pub()->setFocus();
+                    focusWasSet = true;
+                    break;
+                }
+                w = w->focusHistory.prev;
             }
-            w = w->focusHistory.prev;
+            if (!focusWasSet) {
+                p->setFocus(p->mainWidget.data());
+            }
         }
-        if (!focusWasSet) {
-            p->setFocus(p->mainWidget.data());
+        if (p->focusWidget) {
+            // ensure that attaching widgets with focus can't steal focus across message loop interations
+            p->focusWidget->focusCount = p->focusCounter;
         }
     }
 }
@@ -431,6 +441,7 @@ void ZTerminalPrivate::initOffscreen(const ZTerminal::OffScreen &offscreen) {
     termpaint_surface_resize(surface, offscreenData->width, offscreenData->height);
     termpaint_terminal_set_event_cb(terminal, [](void *, termpaint_event *) {}, nullptr);
     initState = ZTerminalPrivate::InitState::Ready;
+    // There should be no way for main widget to already be set here. So no need to call attachMainWidgetStage2.
 }
 
 void ZTerminalPrivate::initCommon() {
@@ -545,7 +556,7 @@ void ZTerminalPrivate::integration_awaiting_response() {
 }
 
 ZTerminal::~ZTerminal() {
-    if (tuiwidgets_impl()->mainWidget) {
+    if (tuiwidgets_impl()->mainWidgetFullyAttached()) {
         ZWidgetPrivate::get(tuiwidgets_impl()->mainWidget.data())->unsetTerminal();
     }
 }
@@ -587,19 +598,46 @@ void ZTerminal::setMainWidget(ZWidget *w) {
         LayoutGenerationUpdaterScope generationUpdater(p->layoutGeneration);
     }
     tuiwidgets_impl()->mainWidget = w;
-    ZWidgetPrivate::get(w)->setManagingTerminal(this);
+    if (p->initState == ZTerminalPrivate::InitState::Ready || p->initState == ZTerminalPrivate::InitState::Paused) {
+        p->attachMainWidgetStage2();
+    }
+}
 
-    tuiwidgets_impl()->sendOtherChangeEvent(ZOtherChangeEvent::all().subtract({TUISYM_LITERAL("terminal")}));
+void ZTerminalPrivate::attachMainWidgetStage2() {
+    ZWidgetPrivate::get(mainWidget)->setManagingTerminal(pub());
+    sendOtherChangeEvent(ZOtherChangeEvent::all().subtract({TUISYM_LITERAL("terminal")}));
+
     // TODO respect minimal widget size and add system managed scrolling if terminal is too small
-    auto *surface = tuiwidgets_impl()->surface;
-    w->setGeometry({0, 0, termpaint_surface_width(surface), termpaint_surface_height(surface)});
+    mainWidget->setGeometry({0, 0, termpaint_surface_width(surface), termpaint_surface_height(surface)});
 
-    update();
+    QPointer<ZWidget> newFocus;
+    uint64_t highestFocus = 0;
+
+    auto f = [&](QObject *w) {
+        auto widget = qobject_cast<ZWidget*>(w);
+        if (widget) {
+            auto *const wPriv = ZWidgetPrivate::get(widget);
+            if (highestFocus < wPriv->focusCount
+                    && widget->isVisible() && widget->isEnabled()) {
+                newFocus = widget;
+                highestFocus = wPriv->focusCount;
+            }
+        }
+    };
+
+    f(mainWidget);
+    zwidgetForEachDescendant(mainWidget, f);
+
+    if (newFocus && (!pub()->focusWidget() || highestFocus > ZWidgetPrivate::get(pub()->focusWidget())->focusCount)) {
+        newFocus->setFocus();
+    }
+
+    pub()->update();
 }
 
 void ZTerminalPrivate::sendOtherChangeEvent(QSet<ZSymbol> unchanged) {
 
-    if (!mainWidget) return;
+    if (!mainWidgetFullyAttached()) return;
 
     ZOtherChangeEvent change(unchanged);
 
@@ -683,7 +721,7 @@ int ZTerminal::height() const {
 void ZTerminal::resize(int width, int height) {
     auto *const p = tuiwidgets_impl();
     termpaint_surface_resize(p->surface, width, height);
-    if (p->mainWidget) {
+    if (p->mainWidgetFullyAttached()) {
         const QSize minSize = p->mainWidget->minimumSize().expandedTo(p->mainWidget->minimumSizeHint());
         p->mainWidget->setGeometry({0, 0, std::max(minSize.width(), termpaint_surface_width(p->surface)),
                                     std::max(minSize.height(), termpaint_surface_height(p->surface))});
@@ -1083,6 +1121,10 @@ bool ZTerminal::event(QEvent *event) {
                 if (!(p->options & DisableTaggedPaste)) {
                     termpaint_terminal_request_tagged_paste(p->terminal, true);
                 }
+
+                if (p->mainWidget) {
+                    p->attachMainWidgetStage2();
+                }
             } else {
                 if (isSignalConnected(QMetaMethod::fromSignal(&ZTerminal::incompatibleTerminalDetected))) {
                     QPointer<ZTerminal> weak = this;
@@ -1267,5 +1309,7 @@ void ZTerminalPrivate::initExternal(ZTerminal::TerminalConnectionPrivate *connec
 
     initCommon();
 }
+
+thread_local uint64_t ZTerminalPrivate::focusCounter = 0;
 
 TUIWIDGETS_NS_END

@@ -88,6 +88,8 @@ public:
 
     ZCommandManager *commandManager = nullptr;
 
+    uint64_t focusCount = 0;
+
     // scratch storage for ZTerminal::doLayout
     int doLayoutScratchDepth;
 

@@ -34,6 +34,9 @@ public:
     static ZTerminalPrivate *get(ZTerminal *terminal);
     static const ZTerminalPrivate *get(const ZTerminal *terminal);
 
+    bool mainWidgetFullyAttached();
+    void attachMainWidgetStage2();
+
     void setFocus(ZWidget *w);
     ZWidget *focus();
 
@@ -121,6 +124,8 @@ public:
     bool layoutRequested = false;
     int layoutGeneration = -1;
     std::function<void(ZWidget *)> testingLayoutRequestTrackingClosure;
+
+    static thread_local uint64_t focusCounter;
 
     bool viewportActive = false;
     bool viewportUI = false;
