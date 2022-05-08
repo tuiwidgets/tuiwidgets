@@ -70,8 +70,9 @@ static bool terminal_is_disconnected(int fd) {
     return ret == 1 && info.revents & POLLHUP;
 }
 
-static void restoreSystemHandler(const siginfo_t *info, void *context) {
+static void restoreSystemHandler(void *data, const siginfo_t *info, void *context) {
     // !!! signal handler code, only use async-safe calls (see signal-safety(7)) , no Qt at all.
+    Q_UNUSED(data);
     Q_UNUSED(info);
     Q_UNUSED(context);
 
@@ -156,8 +157,9 @@ static void suspendHelper(bool tcattr) {
     }
 }
 
-static void hupHandler (PosixSignalFlags &flags, const siginfo_t *info, void *context) {
+static void hupHandler(void *data, PosixSignalFlags &flags, const siginfo_t *info, void *context) {
     // !!! signal handler code, only use async-safe calls (see signal-safety(7)) , no Qt at all.
+    Q_UNUSED(data);
     Q_UNUSED(info);
     Q_UNUSED(context);
 
@@ -193,8 +195,9 @@ static void hupHandler (PosixSignalFlags &flags, const siginfo_t *info, void *co
  * for next test either use a fresh terminal and prepare it or do echo -ne "\033[22t"; echo -ne "\033];test2\033\\"
  */
 
-static void suspendHandler(PosixSignalFlags &flags, const siginfo_t *info, void *context) {
+static void suspendHandler(void *data, PosixSignalFlags &flags, const siginfo_t *info, void *context) {
     // !!! signal handler code, only use async-safe calls (see signal-safety(7)) , no Qt at all.
+    Q_UNUSED(data);
     Q_UNUSED(info);
     Q_UNUSED(context);
 
@@ -205,8 +208,9 @@ static void suspendHandler(PosixSignalFlags &flags, const siginfo_t *info, void 
     flags.reraise();
 }
 
-static void resumeHandler(PosixSignalFlags &flags, const siginfo_t *info, void *context) {
+static void resumeHandler(void *data, PosixSignalFlags &flags, const siginfo_t *info, void *context) {
     // !!! signal handler code, only use async-safe calls (see signal-safety(7)) , no Qt at all.
+    Q_UNUSED(data);
     Q_UNUSED(info);
     Q_UNUSED(context);
 
@@ -404,15 +408,15 @@ bool ZTerminalPrivate::commonInitForInternalConnection(ZTerminal::Options option
 
             if (!systemRestoreInited) {
                 systemRestoreInited = true;
-                PosixSignalManager::instance()->addSyncTerminationHandler(restoreSystemHandler);
-                PosixSignalManager::instance()->addSyncCrashHandler(restoreSystemHandler);
-                PosixSignalManager::instance()->addSyncSignalHandler(SIGHUP, hupHandler);
-                PosixSignalManager::instance()->addSyncSignalHandler(SIGTSTP, suspendHandler);
-                PosixSignalManager::instance()->addSyncSignalHandler(SIGTTIN, suspendHandler);
-                PosixSignalManager::instance()->addSyncSignalHandler(SIGTTOU, suspendHandler);
+                PosixSignalManager::instance()->addSyncTerminationHandler(restoreSystemHandler, nullptr);
+                PosixSignalManager::instance()->addSyncCrashHandler(restoreSystemHandler, nullptr);
+                PosixSignalManager::instance()->addSyncSignalHandler(SIGHUP, hupHandler, nullptr);
+                PosixSignalManager::instance()->addSyncSignalHandler(SIGTSTP, suspendHandler, nullptr);
+                PosixSignalManager::instance()->addSyncSignalHandler(SIGTTIN, suspendHandler, nullptr);
+                PosixSignalManager::instance()->addSyncSignalHandler(SIGTTOU, suspendHandler, nullptr);
                 // resume is two step. A synchronous part which restores terminal mode
                 // and normalizes state in case suspendHandler was not called (SIGSTOP or manual SIGCONT)
-                PosixSignalManager::instance()->addSyncSignalHandler(SIGCONT, resumeHandler);
+                PosixSignalManager::instance()->addSyncSignalHandler(SIGCONT, resumeHandler, nullptr);
                 // and a notifier part that resends escape sequences and triggers
                 // repaint in the next main loop interation
                 systemTerminalResumeNotifier = std::unique_ptr<PosixSignalNotifier>(new PosixSignalNotifier(SIGCONT));
