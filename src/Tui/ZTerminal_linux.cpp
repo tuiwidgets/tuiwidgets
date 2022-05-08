@@ -158,7 +158,6 @@ static void suspendHelper(bool tcattr) {
 
 static void hupHandler (PosixSignalFlags &flags, const siginfo_t *info, void *context) {
     // !!! signal handler code, only use async-safe calls (see signal-safety(7)) , no Qt at all.
-    Q_UNUSED(flags);
     Q_UNUSED(info);
     Q_UNUSED(context);
 
@@ -175,6 +174,7 @@ static void hupHandler (PosixSignalFlags &flags, const siginfo_t *info, void *co
     // `flags.reraise();` if terminating behavior is wanted or an async handler if event loop based handling is wanted.
     //
     // Ignore the signal via an empty handler instead of using SIG_IGN to not mess with state inheritable through execve
+    flags.clearReraise();
 }
 
 /*
