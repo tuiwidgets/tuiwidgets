@@ -4,6 +4,7 @@
 #include <cstdint>
 
 #include <QtGlobal>
+#include <QMetaType>
 #include <Tui/tuiwidgets_internal.h>
 
 TUIWIDGETS_NS_START
@@ -147,5 +148,7 @@ namespace Colors {
 namespace Color = Colors;
 
 TUIWIDGETS_NS_END
+
+Q_DECLARE_METATYPE(TUIWIDGETS_NS_FULL::ZColor);
 
 #endif // TUIWIDGETS_ZCOLOR_INCLUDED
