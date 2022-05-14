@@ -85,7 +85,7 @@ private:
 
 class StubLayout : public Tui::ZLayout {
 public:
-    void setGeometry(QRect) override {};
+    void setGeometry(QRect g) override { stubGeometry = g; };
     QSize sizeHint() const override { return stubSizeHint; };
     Tui::SizePolicy sizePolicyH() const override { return stubSizePolicyH; };
     Tui::SizePolicy sizePolicyV() const override { return stubSizePolicyV; };
@@ -97,6 +97,7 @@ public:
     Tui::SizePolicy stubSizePolicyV = Tui::SizePolicy::Expanding;
     bool stubIsVisible = true;
     bool stubIsSpacer = false;
+    QRect stubGeometry;
 };
 
 
