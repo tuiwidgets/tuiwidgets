@@ -54,7 +54,7 @@ void ZLayout::widgetEvent(QEvent *event) {
     }
 }
 
-ZWidget *ZLayout::widget() {
+ZWidget *ZLayout::widget() const {
     QObject *p = parent();
     while (p) {
         ZWidget *w = qobject_cast<ZWidget*>(p);
