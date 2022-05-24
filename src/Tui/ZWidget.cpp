@@ -167,13 +167,14 @@ QRect ZWidget::geometry() const {
 void ZWidget::setGeometry(const QRect &rect) {
     auto *const p = tuiwidgets_impl();
     QRect oldGeometry = p->geometry;
-    p->geometry = rect;
-    if (oldGeometry.topLeft() != rect.topLeft()) {
-        ZMoveEvent e {rect.topLeft(), oldGeometry.topLeft()};
+    // don't allow negative size
+    p->geometry = QRect{rect.topLeft(), rect.size().expandedTo({0, 0})};
+    if (oldGeometry.topLeft() != p->geometry.topLeft()) {
+        ZMoveEvent e {p->geometry.topLeft(), oldGeometry.topLeft()};
         QCoreApplication::sendEvent(this, &e);
     }
-    if (oldGeometry.size() != rect.size()) {
-        ZResizeEvent e {rect.size(), oldGeometry.size()};
+    if (oldGeometry.size() != p->geometry.size()) {
+        ZResizeEvent e {p->geometry.size(), oldGeometry.size()};
         QCoreApplication::sendEvent(this, &e);
     }
     update();
