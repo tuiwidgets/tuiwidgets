@@ -41,6 +41,7 @@ public:
     bool isSpacer() const override;;
     bool event(QEvent *event) override;
     bool eventFilter(QObject *watched, QEvent *event) override;
+    void widgetEvent(QEvent *event) override;
 
 protected:
     // protected virtuals from base class override everything for later ABI compatibility

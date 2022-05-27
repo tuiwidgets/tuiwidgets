@@ -154,6 +154,10 @@ bool ZHBoxLayout::eventFilter(QObject *watched, QEvent *event) {
     return ZLayout::eventFilter(watched, event);
 }
 
+void ZHBoxLayout::widgetEvent(QEvent *event) {
+    ZLayout::widgetEvent(event);
+}
+
 void ZHBoxLayout::timerEvent(QTimerEvent *event) {
     return ZLayout::timerEvent(event);
 }
