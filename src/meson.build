@@ -27,6 +27,7 @@ tuiwidgets_moc_headers = [
   'Tui/ZWindow.h',
   'Tui/ZWindowContainer.h',
   'Tui/ZWindowFacet.h',
+  'Tui/ZWindowLayout.h',
 ]
 
 # find Tui -name "*.h" | grep -E -v -e "_p" -e "^Tui/[A-Y]" | sed -e "s/\\(.*\\)/  '\1',/" | sort
@@ -72,6 +73,7 @@ tuiwidgets_public_headers = [
   'Tui/ZWindow.h',
   'Tui/ZWindowContainer.h',
   'Tui/ZWindowFacet.h',
+  'Tui/ZWindowLayout.h',
   'Tui/tuiwidgets_internal.h',
   # not public, but needed until users are migrated from staging to toolkit proper
   'Tui/MarkupParser.h',
@@ -130,6 +132,7 @@ tuiwidgets_sources = [
   'Tui/ZWindow.cpp',
   'Tui/ZWindowContainer.cpp',
   'Tui/ZWindowFacet.cpp',
+  'Tui/ZWindowLayout.cpp',
 ]
 
 tuiwidgets_sources += [
@@ -227,6 +230,7 @@ test_files = [
   'tests/window/window.cpp',
   'tests/windowcontainer.cpp',
   'tests/windowfacet.cpp',
+  'tests/windowlayout.cpp',
 ]
 
 test('testtoolkit',
