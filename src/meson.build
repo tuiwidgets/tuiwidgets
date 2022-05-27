@@ -87,6 +87,7 @@ tuiwidgets_sources = [
   'Tui/ZBasicWindowFacet.cpp',
   'Tui/ListNode.cpp',
   'Tui/MarkupParser.cpp',
+  'Tui/Layout_p.cpp',
   'Tui/ZButton.cpp',
   'Tui/ZCheckBox.cpp',
   'Tui/ZColor.cpp',
