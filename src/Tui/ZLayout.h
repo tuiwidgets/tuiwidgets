@@ -49,6 +49,8 @@ protected:
     void disconnectNotify(const QMetaMethod &signal) override;
 
 protected:
+    ZLayout(QObject *parent, std::unique_ptr<ZLayoutPrivate> pimpl);
+
     std::unique_ptr<ZLayoutPrivate> tuiwidgets_pimpl_ptr;
 
 private:

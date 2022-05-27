@@ -10,6 +10,9 @@ TUIWIDGETS_NS_START
 
 class ZLayoutPrivate {
 public:
+    virtual ~ZLayoutPrivate();
+
+public:
     class LayoutGenData {
     public:
         int lastSeenLayoutGeneration = 0;

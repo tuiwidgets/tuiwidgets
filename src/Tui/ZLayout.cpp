@@ -15,9 +15,15 @@
 
 TUIWIDGETS_NS_START
 
-ZLayout::ZLayout(QObject *parent) : QObject(parent), tuiwidgets_pimpl_ptr(std::make_unique<ZLayoutPrivate>())
+ZLayout::ZLayout(QObject *parent) : ZLayout(parent, std::make_unique<ZLayoutPrivate>())
 {
 }
+
+ZLayout::ZLayout(QObject *parent, std::unique_ptr<ZLayoutPrivate> pimpl)
+    : QObject(parent), tuiwidgets_pimpl_ptr(std::move(pimpl))
+{
+}
+
 
 ZLayout::~ZLayout() {
 }
@@ -122,6 +128,9 @@ void ZLayout::disconnectNotify(const QMetaMethod &signal) {
 
 
 thread_local QHash<ZTerminal*, ZLayoutPrivate::LayoutGenData> ZLayoutPrivate::layoutGenData;
+
+ZLayoutPrivate::~ZLayoutPrivate() {
+}
 
 void ZLayoutPrivate::markAsAlreadyLayouted(ZTerminal *term, ZWidget *w) {
     if (!ensureLayoutGenData(term)) {
