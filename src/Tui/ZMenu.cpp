@@ -57,7 +57,7 @@ void ZMenu::popup(const QPoint &p) {
     QSize size = sizeHint();
     QRect rect = {p.x(), p.y(), size.width(), size.height()};
     if (rect.right() >= parentWidget()->geometry().width()) {
-        rect.moveRight(parentWidget()->geometry().width());
+        rect.moveRight(parentWidget()->geometry().width() - 1);
     }
     if (rect.left() < 0) {
         rect.moveLeft(0);

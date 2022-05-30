@@ -151,7 +151,7 @@ void ZMenubar::respawnMenu() {
         QSize submenuSize = p->activeMenu->sizeHint();
         QRect rect = {p->itemX[p->selected] - 1, 1, submenuSize.width(), submenuSize.height()};
         if (rect.right() >= geometry().width()) {
-            rect.moveRight(geometry().width());
+            rect.moveRight(geometry().width() - 1);
         }
         if (rect.left() < 0) {
             rect.moveLeft(0);
