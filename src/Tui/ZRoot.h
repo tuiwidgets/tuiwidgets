@@ -23,6 +23,8 @@ public:
     void focusPreviousWindow();
 
     virtual void raiseOnFocus(ZWidget *w);
+    QRect layoutArea() const override;
+    QSize minimumSizeHint() const override;
 
 protected:
 
@@ -31,8 +33,6 @@ protected:
     void childEvent(QChildEvent *event) override;
     void resizeEvent(ZResizeEvent *event) override;
     virtual void terminalChanged();
-    QSize minimumSizeHint() const override;
-    QRect layoutArea() const override;
 
 private:
     void focusWindowHelper(bool forward);
