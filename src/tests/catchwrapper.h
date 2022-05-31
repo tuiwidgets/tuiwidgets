@@ -37,6 +37,15 @@ namespace Catch {
     };
 
     template<>
+    struct StringMaker<QSize, void> {
+        static std::string convert(QSize const& value) {
+            return QStringLiteral("(width: %0, height: %1)").arg(
+                        QString::number(value.width()),
+                        QString::number(value.height())).toStdString();
+        }
+    };
+
+    template<>
     struct StringMaker<Tui::ZColor, void> {
         static std::string convert(Tui::ZColor const& value) {
             if (value.colorType() == Tui::ZColor::RGB) {
