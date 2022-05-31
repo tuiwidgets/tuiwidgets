@@ -150,7 +150,8 @@ QRect ZRoot::layoutArea() const {
         tmp = { {0, 0}, terminalSize.expandedTo(minimumSize()) };
     }
     tmp.moveTo(0, 0);
-    return tmp.marginsRemoved(contentsMargins());
+    tmp = tmp.marginsRemoved(contentsMargins());
+    return QRect(tmp.topLeft(), tmp.size().expandedTo({0, 0}));
 }
 
 void ZRoot::childEvent(QChildEvent *event) {
