@@ -157,7 +157,7 @@ QRect ZRoot::layoutArea() const {
 void ZRoot::childEvent(QChildEvent *event) {
     auto *const p = tuiwidgets_impl();
     if (event->added()) {
-        p->windows.prepend(event->child());
+        p->windows.append(event->child());
     }
     if (event->removed()) {
         p->windows.removeOne(event->child());
