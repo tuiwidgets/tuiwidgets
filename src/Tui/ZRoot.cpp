@@ -46,7 +46,7 @@ void ZRoot::focusWindowHelper(bool forward) {
     QList<ZWidget*> childWindows;
     for (QObject *obj : p->windows) {
         auto childWidget = qobject_cast<ZWidget*>(obj);
-        if (childWidget && childWidget->paletteClass().contains(QStringLiteral("window")) && childWidget->isVisible()) {
+        if (childWidget && childWidget->facet(ZWindowFacet::staticMetaObject) && childWidget->isVisible()) {
             childWindows.append(childWidget);
         }
     }
