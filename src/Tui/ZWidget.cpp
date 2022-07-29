@@ -351,6 +351,7 @@ void ZWidgetPrivate::updateEffectivelyVisibleRecursively() {
 }
 
 void ZWidget::raise() {
+    if (!parentWidget()) return;
     QList<QObject*> &list = parentWidget()->d_ptr->children;
     if (list.size() <= 1) return;
     int to = list.size() - 1;
@@ -366,6 +367,7 @@ void ZWidget::raise() {
 }
 
 void ZWidget::lower() {
+    if (!parentWidget()) return;
     QList<QObject*> &list = parentWidget()->d_ptr->children;
     if (list.size() <= 1) return;
     int to = 0;
@@ -381,6 +383,7 @@ void ZWidget::lower() {
 }
 
 void ZWidget::stackUnder(ZWidget *w) {
+    if (!parentWidget()) return;
     QList<QObject*> &list = parentWidget()->d_ptr->children;
     if (list.size() <= 1) return;
     int to = list.indexOf(w);
