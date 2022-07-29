@@ -220,6 +220,7 @@ test_files = [
   'tests/layoutinvalidation.cpp',
   'tests/menu/menu.cpp',
   'tests/radiobutton/radiobutton.cpp',
+  'tests/root/root.cpp',
   'tests/styledtextline/styledtextline.cpp',
   'tests/textlayout/formatrange.cpp',
   'tests/textlayout/textlayout.cpp',

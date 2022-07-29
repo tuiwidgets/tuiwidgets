@@ -12,9 +12,9 @@
 #include <Tui/ZRoot.h>
 #include <Tui/ZTerminal.h>
 #include <Tui/ZWindow.h>
+#include <Tui/ZWindowFacet.h>
 
 #include "catchwrapper.h"
-
 
 std::vector<std::string> getCurrentTestNames();
 
@@ -25,6 +25,7 @@ public:
     enum Option {
         ReducedCharset = (1 << 0),
     };
+
     Q_DECLARE_FLAGS(Options, Option)
 
 public:
@@ -41,6 +42,8 @@ public:
     std::vector<std::string> checkCharEventBubbles(QString ch, Qt::KeyboardModifiers modifiers = {});
     [[nodiscard]]
     std::vector<std::string> checkKeyEventBubbles(Qt::Key key, Qt::KeyboardModifiers modifiers = {});
+    [[nodiscard]]
+    std::vector<std::string> checkPasteEventBubbles(QString str);
     [[nodiscard]]
     std::vector<std::string> checkKeyEventBubblesToParent(Qt::Key key, Qt::KeyboardModifiers modifiers = {});
 
@@ -82,7 +85,6 @@ private:
     static thread_local bool active;
 };
 
-
 class StubLayout : public Tui::ZLayout {
 public:
     void setGeometry(QRect g) override { stubGeometry = g; };
@@ -99,7 +101,6 @@ public:
     bool stubIsSpacer = false;
     QRect stubGeometry;
 };
-
 
 class StubWidget : public Tui::ZWidget {
 public:
@@ -120,6 +121,24 @@ public:
     Tui::ZColor bg;
 };
 
+class TestZWindowFacet : public Tui::ZWindowFacet {
+public:
+    bool isExtendViewport() const override {
+        return extendViewport;
+    }
+
+    virtual void autoPlace(const QSize &available, Tui::ZWidget *self) {
+        geometry = available;
+        autoPlaceSelf = self;
+        autoPlaceCount += 1;
+    }
+
+    int autoPlaceCount = 0;
+    QSize geometry;
+    bool extendViewport = false;
+    Tui::ZWidget *autoPlaceSelf = nullptr;
+};
+
 class TestBackground : public Tui::ZWindow {
 public:
     explicit TestBackground(Tui::ZWidget *parent) : Tui::ZWindow(parent) {}
@@ -133,13 +152,29 @@ public:
     using Tui::ZRoot::ZRoot;
 
     std::function<void(QEvent*)> fEvent;
+    bool terminalChangedTrigger = false;
+    int raiseCount = 0;
+    ZWidget *raiseWidget = nullptr;
+    bool disableRaiseOnFocus = false;
 
 protected:
+    void terminalChanged() override {
+        terminalChangedTrigger = true;
+    }
+
     bool event(QEvent *event) override {
         if (fEvent) {
             fEvent(event);
         }
         return Tui::ZRoot::event(event);
+    }
+
+    void raiseOnFocus(ZWidget *w) {
+        raiseCount += 1;
+        raiseWidget = w;
+        if (!disableRaiseOnFocus) {
+            Tui::ZRoot::raiseOnFocus(w);
+        }
     }
 };
 

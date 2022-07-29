@@ -139,6 +139,31 @@ std::vector<std::string> Testhelper::checkKeyEventBubbles(Qt::Key key, Qt::Keybo
     return problems;
 }
 
+std::vector<std::string> Testhelper::checkPasteEventBubbles(QString str) {
+    std::vector<std::string> problems;
+    auto fEventRestore = root->fEvent;
+
+    bool pasteBubbled = false;
+    root->fEvent = [&pasteBubbled, str](QEvent *event) {
+        if (event->type() == Tui::ZEventType::paste()) {
+            auto pasteEvent = static_cast<Tui::ZPasteEvent*>(event);
+            if (pasteEvent->text() == str) {
+                CHECK(pasteBubbled == false);
+                pasteBubbled = true;
+            }
+        }
+    };
+    sendPaste(str);
+
+    if (!pasteBubbled) {
+        problems.push_back("Paste event did not bubble as expected");
+    }
+
+    root->fEvent = fEventRestore;
+
+    return problems;
+}
+
 namespace {
     class BubbleEventCheckFilter : public QObject {
     public:
