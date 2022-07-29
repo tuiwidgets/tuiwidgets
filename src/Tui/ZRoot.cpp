@@ -85,6 +85,8 @@ void ZRoot::paintEvent(ZPaintEvent *event) {
 void ZRoot::keyEvent(ZKeyEvent *event) {
     if (event->key() == Qt::Key_F6 && (event->modifiers() == 0 || event->modifiers() == Qt::Modifier::SHIFT)) {
         focusWindowHelper(event->modifiers() != Qt::Modifier::SHIFT);
+    } else {
+        ZWidget::keyEvent(event);
     }
 }
 
