@@ -91,9 +91,13 @@ void ZRoot::keyEvent(ZKeyEvent *event) {
 }
 
 bool ZRoot::event(QEvent *event) {
+    auto *const p = tuiwidgets_impl();
     if (event->type() == ZEventType::otherChange()) {
         if (!static_cast<ZOtherChangeEvent*>(event)->unchanged().contains(TUISYM_LITERAL("terminal"))) {
-            terminalChanged();
+            if (p->connectedTerminal != terminal()) {
+                p->connectedTerminal = terminal();
+                terminalChanged();
+            }
         }
     }
     return ZWidget::event(event);

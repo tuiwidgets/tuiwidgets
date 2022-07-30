@@ -436,32 +436,50 @@ TEST_CASE("root-terminalChanged") {
     Testhelper t("unsued", "unused", 15, 5);
     CHECK(t.root->terminalChangedTrigger == true);
 
-    SECTION("empty") {
+    SECTION("manual-event-empty") {
         t.root->terminalChangedTrigger = false;
         auto e = Tui::ZOtherChangeEvent(QSet<Tui::ZSymbol>());
         t.app->sendEvent(t.root, &e);
-        CHECK(t.root->terminalChangedTrigger == true);
+        CHECK(t.root->terminalChangedTrigger == false);
     }
 
-    SECTION("terminal") {
+    SECTION("manual-event-terminal") {
         t.root->terminalChangedTrigger = false;
         auto e = Tui::ZOtherChangeEvent({TUISYM_LITERAL("terminal")});
         t.app->sendEvent(t.root, &e);
         CHECK(t.root->terminalChangedTrigger == false);
     }
 
-    SECTION("window") {
+    SECTION("manual-event-window") {
         t.root->terminalChangedTrigger = false;
         auto e = Tui::ZOtherChangeEvent({TUISYM_LITERAL("window")});
         t.app->sendEvent(t.root, &e);
-        CHECK(t.root->terminalChangedTrigger == true);
+        CHECK(t.root->terminalChangedTrigger == false);
     }
 
-    SECTION("all") {
+    SECTION("manual-event-all") {
         t.root->terminalChangedTrigger = false;
         auto e = Tui::ZOtherChangeEvent(Tui::ZOtherChangeEvent::all());
         t.app->sendEvent(t.root, &e);
         CHECK(t.root->terminalChangedTrigger == false);
+    }
+
+    SECTION("switch to new terminal") {
+        auto terminal2 = std::make_unique<Tui::ZTerminal>(Tui::ZTerminal::OffScreen{2, 2});
+        t.root->terminalChangedTrigger = false;
+        terminal2->setMainWidget(t.root);
+        CHECK(t.root->terminalChangedTrigger == true);
+        t.root->terminalChangedTrigger = false;
+        terminal2->setMainWidget(t.root);
+        CHECK(t.root->terminalChangedTrigger == false);
+    }
+
+    SECTION("initial terminal") {
+        RootStub root2;
+        auto terminal2 = std::make_unique<Tui::ZTerminal>(Tui::ZTerminal::OffScreen{2, 2});
+        root2.terminalChangedTrigger = false;
+        terminal2->setMainWidget(&root2);
+        CHECK(root2.terminalChangedTrigger == true);
     }
 }
 

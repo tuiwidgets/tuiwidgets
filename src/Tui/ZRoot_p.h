@@ -18,6 +18,7 @@ public:
 public:
     int fillChar = Erased;
     QList<QObject*> windows;
+    QPointer<ZTerminal> connectedTerminal;
 };
 
 TUIWIDGETS_NS_END
