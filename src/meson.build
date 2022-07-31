@@ -206,6 +206,7 @@ test('testtoolkitinternal',
     dependencies: [qt5_dep, termpaint_dep, termpaint_image_dep, posixsignalmanager_dep],
     cpp_args: ['-fno-inline', silence_warnings]
   ),
+  timeout: 240,
   env: test_env
 )
 
@@ -244,5 +245,6 @@ test('testtoolkit',
     dependencies: [qt5_dep, termpaint_dep],
     cpp_args: ['-fno-inline', silence_warnings]
   ),
+  timeout: 240,
   env: test_env
 )
