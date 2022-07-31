@@ -86,8 +86,13 @@ tuiwidgets_public_headers += [
   'Tui/ZMoFunc_p.h',
 ]
 
+tuiwidgets_misc_public_headers = [
+  'Tui/Misc/AbstractTableModelTrackBy.h',
+]
+
 #ide:editable-filelist
 tuiwidgets_sources = [
+  'Tui/Misc/AbstractTableModelTrackBy.h',
   'Tui/ZBasicWindowFacet.cpp',
   'Tui/ListNode.cpp',
   'Tui/MarkupParser.cpp',
@@ -161,6 +166,7 @@ tuiwidgets = library('tuiwidgets', tuiwidgets_sources, tuiwidgets_generated,
 )
 
 install_headers(tuiwidgets_public_headers, subdir:'Tui')
+install_headers(tuiwidgets_misc_public_headers, subdir:'Tui/Misc')
 
 import('pkgconfig').generate(
   version: '0.0',
@@ -213,6 +219,7 @@ test('testtoolkitinternal',
 #ide:editable-filelist
 test_files = [
   'tests/Testhelper.cpp',
+  'tests/abstracttablemodeltrackby.cpp',
   'tests/basicwindowfacet/basicwindowfacet.cpp',
   'tests/boxlayout.cpp',
   'tests/button/button.cpp',
