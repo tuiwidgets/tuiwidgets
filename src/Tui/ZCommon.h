@@ -6,6 +6,14 @@
 
 TUIWIDGETS_NS_START
 
+enum ZItemDataRole : int {
+    TUI_ITEM_ROLE_BASE = 0x854374,
+    LeftDecorationRole = (TUI_ITEM_ROLE_BASE + 0),
+    LeftDecorationFgRole = (TUI_ITEM_ROLE_BASE + 1),
+    LeftDecorationBgRole = (TUI_ITEM_ROLE_BASE + 2),
+    LeftDecorationSpaceRole = (TUI_ITEM_ROLE_BASE + 3),
+};
+
 enum class CursorStyle {
     Unset = -1,
     Block = 0,
