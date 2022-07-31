@@ -92,11 +92,13 @@ tuiwidgets_public_headers += [
 
 tuiwidgets_misc_public_headers = [
   'Tui/Misc/AbstractTableModelTrackBy.h',
+  'Tui/Misc/SurrogateEscape.h',
 ]
 
 #ide:editable-filelist
 tuiwidgets_sources = [
   'Tui/Misc/AbstractTableModelTrackBy.h',
+  'Tui/Misc/SurrogateEscape.cpp',
   'Tui/ZBasicDefaultWidgetManager.cpp',
   'Tui/ZBasicWindowFacet.cpp',
   'Tui/ListNode.cpp',
@@ -242,6 +244,7 @@ test_files = [
   'tests/radiobutton/radiobutton.cpp',
   'tests/root/root.cpp',
   'tests/styledtextline/styledtextline.cpp',
+  'tests/surrogateescape.cpp',
   'tests/textlayout/formatrange.cpp',
   'tests/textlayout/textlayout.cpp',
   'tests/textlayout/textoption.cpp',
