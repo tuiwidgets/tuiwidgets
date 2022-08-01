@@ -18,7 +18,7 @@ public:
     ~ZWindowContainer() override;
 
 public:
-    virtual QVector<ZMenuItem> containerMenuItems();
+    virtual QVector<ZMenuItem> containerMenuItems() const;
 
 protected:
     ZWindowContainer(std::unique_ptr<ZWindowContainerPrivate> pimpl);

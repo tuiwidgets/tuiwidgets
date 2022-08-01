@@ -63,7 +63,7 @@ void ZShortcut::setEnabledDelegate(Private::ZMoFunc<bool()>&& delegate) {
     p->enabledDelegate = std::move(delegate);
 }
 
-bool ZShortcutPrivate::isContextActive(QObject *par, ZWidget *focusWidget) {
+bool ZShortcutPrivate::isContextActive(QObject *par, ZWidget *focusWidget) const {
     switch (context) {
         case Qt::WidgetShortcut:
             return focusWidget == par;
@@ -107,7 +107,7 @@ bool ZShortcutPrivate::isContextActive(QObject *par, ZWidget *focusWidget) {
     return false;
 }
 
-bool ZShortcut::matches(ZWidget *focusWidget, const ZKeyEvent *event) {
+bool ZShortcut::matches(ZWidget *focusWidget, const ZKeyEvent *event) const {
     auto *const p = tuiwidgets_impl();
     if (!isEnabled()) return false;
     bool keyMatches = false;

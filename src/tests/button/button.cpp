@@ -20,11 +20,11 @@ namespace {
             expectedNewDefault = nullptr;
         }
 
-        Tui::ZWidget *defaultWidget() override {
+        Tui::ZWidget *defaultWidget() const override {
             return defaultWidgetValue;
         }
 
-        bool isDefaultWidgetActive() override {
+        bool isDefaultWidgetActive() const override {
             return defaultWidgetActiveValue;
         }
 
@@ -40,7 +40,7 @@ namespace {
     public:
         explicit TestBackgroundWithDlgManager(Tui::ZWidget *parent) : TestBackground(parent) {}
 
-        QObject *facet(const QMetaObject &metaObject) override {
+        QObject *facet(const QMetaObject &metaObject) const override {
             if (hasDefaultManager && (metaObject.className()  == Tui::ZDefaultWidgetManager::staticMetaObject.className())) {
                 return &defaultWidgetManager;
             } else {
@@ -50,7 +50,7 @@ namespace {
         bool hasDefaultManager = true;
 
     public:
-        StubDefaultWidgetManager defaultWidgetManager;
+        mutable StubDefaultWidgetManager defaultWidgetManager;
     };
 }
 

@@ -142,7 +142,7 @@ QRect ZLabel::layoutArea() const {
     return ZWidget::layoutArea();
 }
 
-QObject *ZLabel::facet(const QMetaObject &metaObject) {
+QObject *ZLabel::facet(const QMetaObject &metaObject) const {
     return ZWidget::facet(metaObject);
 }
 

@@ -113,11 +113,11 @@ public:
 public:
     ZPainter painter();
     ZTextMetrics textMetrics() const;
-    ZWidget *mainWidget();
+    ZWidget *mainWidget() const;
     void setMainWidget(ZWidget *w);
 
-    ZWidget *focusWidget();
-    ZWidget *keyboardGrabber();
+    ZWidget *focusWidget() const;
+    ZWidget *keyboardGrabber() const;
 
     void update();
     void forceRepaint();
@@ -143,11 +143,11 @@ public:
     void setAutoDetectTimeoutMessage(const QString& message);
     QString autoDetectTimeoutMessage() const;
 
-    bool hasCapability(ZSymbol cap);
+    bool hasCapability(ZSymbol cap) const;
 
     void pauseOperation();
     void unpauseOperation();
-    bool isPaused();
+    bool isPaused() const;
 
     void setCursorStyle(CursorStyle style);
     void setCursorPosition(QPoint cursorPosition);
@@ -157,7 +157,7 @@ public:
 
     void maybeRequestLayout(ZWidget *w);
     void requestLayout(ZWidget *w);
-    bool isLayoutPending();
+    bool isLayoutPending() const;
     void doLayout();
     int currentLayoutGeneration();
 

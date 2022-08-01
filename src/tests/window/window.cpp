@@ -45,7 +45,7 @@ namespace {
     public:
         using Tui::ZWindow::ZWindow;
 
-        QObject *facet(const QMetaObject &metaObject) override {
+        QObject *facet(const QMetaObject &metaObject) const override {
             if (metaObject.className() == Tui::ZWindowFacet::staticMetaObject.className()) {
                 return &winFacet;
             } else {
@@ -53,12 +53,12 @@ namespace {
             }
         }
 
-        CustomWindowFacet winFacet;
+        mutable CustomWindowFacet winFacet;
     };
 
     class CustomWindowContainer : public Tui::ZWindowContainer {
     public:
-        QVector<Tui::ZMenuItem> containerMenuItems() override {
+        QVector<Tui::ZMenuItem> containerMenuItems() const override {
             return {{ QStringLiteral("SomeContainerStuff"), QString(), QStringLiteral("ContainerStuff"), {}}};
         }
     };
@@ -1618,14 +1618,15 @@ namespace {
         using Tui::ZWindow::ZWindow;
 
     public:
-        QObject *facet(const QMetaObject &metaObject) override {
+        QObject *facet(const QMetaObject &metaObject) const override {
             if (metaObject.className() == Tui::ZWindowFacet::staticMetaObject.className()) {
                 return &f;
             } else {
                 return Tui::ZWindow::facet(metaObject);
             }
         }
-        Tui::ZBasicWindowFacet f;
+
+        mutable Tui::ZBasicWindowFacet f;
     };
 }
 

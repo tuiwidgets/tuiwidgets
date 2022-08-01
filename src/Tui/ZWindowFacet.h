@@ -17,7 +17,7 @@ public:
     virtual bool isExtendViewport() const;
     virtual bool isManuallyPlaced() const;
     virtual void autoPlace(const QSize &available, ZWidget *self);
-    virtual ZWindowContainer *container();
+    virtual ZWindowContainer *container() const;
     virtual void setContainer(ZWindowContainer *container);
 
     virtual void setManuallyPlaced(bool manual);

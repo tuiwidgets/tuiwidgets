@@ -94,7 +94,7 @@ public:
 
     void setWidget(ZWidget *widget);
 
-    ZTextMetrics textMetrics();
+    ZTextMetrics textMetrics() const;
 
 private:
     friend class ZTerminal;

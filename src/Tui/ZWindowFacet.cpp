@@ -40,7 +40,7 @@ void ZWindowFacet::setManuallyPlaced(bool manual) {
     p->manuallyPlaced = manual;
 }
 
-ZWindowContainer *ZWindowFacet::container() {
+ZWindowContainer *ZWindowFacet::container() const {
     auto *const p = tuiwidgets_impl();
     return p->container;
 }

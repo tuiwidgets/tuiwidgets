@@ -44,7 +44,7 @@ void ZCommandManager::compact(ZSymbol command) {
     }
 }
 
-bool ZCommandManager::isCommandEnabled(ZSymbol command) {
+bool ZCommandManager::isCommandEnabled(ZSymbol command) const {
     auto *const p = tuiwidgets_impl();
     bool enabled = false;
     if (p->commandNotifiers.contains(command)) {

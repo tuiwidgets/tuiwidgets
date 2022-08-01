@@ -28,7 +28,7 @@ public:
 
     QSize sizeHint() const override;
     QSize minimumSizeHint() const override;
-    QObject *facet(const QMetaObject &metaObject) override;
+    QObject *facet(const QMetaObject &metaObject) const override;
 
 Q_SIGNALS:
     void aboutToHide();

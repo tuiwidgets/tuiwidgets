@@ -72,7 +72,7 @@ public:
 
     void setEnabledDelegate(Private::ZMoFunc<bool()>&& delegate);
 
-    bool matches(ZWidget *focusWidget, const ZKeyEvent *event);
+    bool matches(ZWidget *focusWidget, const ZKeyEvent *event) const;
 
 Q_SIGNALS:
     void activated();

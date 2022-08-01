@@ -399,7 +399,7 @@ QRect ZListView::layoutArea() const {
     return ZWidget::layoutArea();
 }
 
-QObject *ZListView::facet(const QMetaObject &metaObject) {
+QObject *ZListView::facet(const QMetaObject &metaObject) const {
     return ZWidget::facet(metaObject);
 }
 

@@ -84,7 +84,7 @@ void ZTerminalPrivate::setKeyboardGrab(ZWidget *w, Private::ZMoFunc<void(QEvent*
     keyboardGrabHandler = std::move(handler);
 }
 
-ZWidget *ZTerminalPrivate::keyboardGrab() {
+ZWidget *ZTerminalPrivate::keyboardGrab() const {
     if (!keyboardGrabWidget && keyboardGrabHandler) {
         keyboardGrabHandler = {};
     }
@@ -177,7 +177,7 @@ void ZTerminal::requestLayout(ZWidget *w) {
     }
 }
 
-bool ZTerminal::isLayoutPending() {
+bool ZTerminal::isLayoutPending() const {
     auto *const p = tuiwidgets_impl();
     return p->layoutPendingWidgets.size() > 0;
 }
@@ -577,7 +577,7 @@ ZTextMetrics ZTerminal::textMetrics() const {
     return ZTextMetrics(std::make_shared<ZTextMetricsPrivate>(surface));
 }
 
-ZWidget *ZTerminal::mainWidget() {
+ZWidget *ZTerminal::mainWidget() const {
     return tuiwidgets_impl()->mainWidget.data();
 }
 
@@ -650,7 +650,7 @@ void ZTerminalPrivate::sendOtherChangeEvent(QSet<ZSymbol> unchanged) {
     zwidgetForEachDescendant(mainWidget.data(), f);
 }
 
-ZWidget *ZTerminal::focusWidget() {
+ZWidget *ZTerminal::focusWidget() const {
     if (tuiwidgets_impl()->focusWidget) {
         return tuiwidgets_impl()->focusWidget->pub();
     } else {
@@ -658,7 +658,7 @@ ZWidget *ZTerminal::focusWidget() {
     }
 }
 
-ZWidget *ZTerminal::keyboardGrabber() {
+ZWidget *ZTerminal::keyboardGrabber() const {
     auto *const p = tuiwidgets_impl();
     return p->keyboardGrab();
 }
@@ -803,7 +803,7 @@ QString ZTerminal::autoDetectTimeoutMessage() const {
     return p->autoDetectTimeoutMessage;
 }
 
-bool ZTerminal::hasCapability(ZSymbol cap) {
+bool ZTerminal::hasCapability(ZSymbol cap) const {
     auto *const p = tuiwidgets_impl();
     if (cap == extendedCharset) {
         return termpaint_terminal_capable(p->terminal, TERMPAINT_CAPABILITY_EXTENDED_CHARSET);
@@ -836,7 +836,7 @@ void ZTerminal::unpauseOperation() {
     updateOutputForceFullRepaint();
 }
 
-bool ZTerminal::isPaused() {
+bool ZTerminal::isPaused() const {
     auto *const p = tuiwidgets_impl();
     return p->initState == ZTerminalPrivate::InitState::Paused;
 }

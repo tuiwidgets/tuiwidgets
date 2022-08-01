@@ -75,7 +75,7 @@ void ZButton::setDefault(bool d) {
     }
 }
 
-bool ZButton::isDefault() {
+bool ZButton::isDefault() const {
     ZDefaultWidgetManager *defaultManager = findFacet<ZDefaultWidgetManager>();
     if (defaultManager == nullptr) {
         return false;

@@ -69,37 +69,37 @@ public:
 #endif
 #if defined(__cpp_lib_string_view) && defined(TUIWIDGETS_ABI_FORCE_INLINE)
     template <typename U16STRINGVIEW, Private::enable_if_same_remove_cvref<U16STRINGVIEW, std::u16string_view> = 0>
-    TUIWIDGETS_ABI_FORCE_INLINE ClusterSize nextCluster(U16STRINGVIEW data) {
+    TUIWIDGETS_ABI_FORCE_INLINE ClusterSize nextCluster(U16STRINGVIEW data) const {
         return nextCluster(data.data(), data.size());
     }
     template <typename U16STRINGVIEW, Private::enable_if_same_remove_cvref<U16STRINGVIEW, std::u16string_view> = 0>
-    TUIWIDGETS_ABI_FORCE_INLINE ZTextMetrics::ClusterSize splitByColumns(U16STRINGVIEW data, int maxWidth) {
+    TUIWIDGETS_ABI_FORCE_INLINE ZTextMetrics::ClusterSize splitByColumns(U16STRINGVIEW data, int maxWidth) const {
         return splitByColumns(data.data(), data.size(), maxWidth);
     }
     template <typename U16STRINGVIEW, Private::enable_if_same_remove_cvref<U16STRINGVIEW, std::u16string_view> = 0>
-    TUIWIDGETS_ABI_FORCE_INLINE int sizeInColumns(U16STRINGVIEW data) {
+    TUIWIDGETS_ABI_FORCE_INLINE int sizeInColumns(U16STRINGVIEW data) const {
         return sizeInColumns(data.data(), data.size());
     }
     template <typename U16STRINGVIEW, Private::enable_if_same_remove_cvref<U16STRINGVIEW, std::u16string_view> = 0>
-    TUIWIDGETS_ABI_FORCE_INLINE int sizeInClusters(U16STRINGVIEW data) {
+    TUIWIDGETS_ABI_FORCE_INLINE int sizeInClusters(U16STRINGVIEW data) const {
         return sizeInClusters(data.data(), data.size());
     }
 
     // Assumes utf8 in string_view
     template <typename STRINGVIEW, Private::enable_if_same_remove_cvref<STRINGVIEW, std::string_view> = 0>
-    TUIWIDGETS_ABI_FORCE_INLINE ClusterSize nextCluster(STRINGVIEW data) {
+    TUIWIDGETS_ABI_FORCE_INLINE ClusterSize nextCluster(STRINGVIEW data) const {
         return nextCluster(data.data(), data.size());
     }
     template <typename STRINGVIEW, Private::enable_if_same_remove_cvref<STRINGVIEW, std::string_view> = 0>
-    TUIWIDGETS_ABI_FORCE_INLINE ZTextMetrics::ClusterSize splitByColumns(STRINGVIEW data, int maxWidth) {
+    TUIWIDGETS_ABI_FORCE_INLINE ZTextMetrics::ClusterSize splitByColumns(STRINGVIEW data, int maxWidth) const {
         return splitByColumns(data.data(), data.size(), maxWidth);
     }
     template <typename STRINGVIEW, Private::enable_if_same_remove_cvref<STRINGVIEW, std::string_view> = 0>
-    TUIWIDGETS_ABI_FORCE_INLINE int sizeInColumns(STRINGVIEW data) {
+    TUIWIDGETS_ABI_FORCE_INLINE int sizeInColumns(STRINGVIEW data) const {
         return sizeInColumns(data.data(), data.size());
     }
     template <typename STRINGVIEW, Private::enable_if_same_remove_cvref<STRINGVIEW, std::string_view> = 0>
-    TUIWIDGETS_ABI_FORCE_INLINE int sizeInClusters(STRINGVIEW data) {
+    TUIWIDGETS_ABI_FORCE_INLINE int sizeInClusters(STRINGVIEW data) const {
         return sizeInClusters(data.data(), data.size());
     }
 #endif

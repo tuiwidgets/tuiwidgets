@@ -309,7 +309,7 @@ QRect ZMenubar::layoutArea() const {
     return ZWidget::layoutArea();
 }
 
-QObject *ZMenubar::facet(const QMetaObject &metaObject) {
+QObject *ZMenubar::facet(const QMetaObject &metaObject) const {
     return ZWidget::facet(metaObject);
 }
 

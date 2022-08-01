@@ -20,7 +20,7 @@ void ZRoot::setFillChar(int fillChar) {
     p->fillChar = fillChar;
 }
 
-int ZRoot::fillChar() {
+int ZRoot::fillChar() const {
     auto *const p = tuiwidgets_impl();
     return p->fillChar;
 }
@@ -187,7 +187,7 @@ void ZRoot::disconnectNotify(const QMetaMethod &signal) {
     ZWidget::disconnectNotify(signal);
 }
 
-QObject *ZRoot::facet(const QMetaObject &metaObject) {
+QObject *ZRoot::facet(const QMetaObject &metaObject) const {
     return ZWidget::facet(metaObject);
 }
 

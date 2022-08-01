@@ -17,7 +17,7 @@ public:
 
 public:
     void setFillChar(int fillChar);
-    int fillChar();
+    int fillChar() const;
 
     void focusNextWindow();
     void focusPreviousWindow();
@@ -41,7 +41,7 @@ public:
     // public virtuals from base class override everything for later ABI compatibility
     bool event(QEvent *event) override;
     bool eventFilter(QObject *watched, QEvent *event) override;
-    QObject *facet(const QMetaObject &metaObject) override;
+    QObject *facet(const QMetaObject &metaObject) const override;
     QSize sizeHint() const override;
 
 protected:

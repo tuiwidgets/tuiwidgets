@@ -31,7 +31,7 @@ public:
     int shortcutWidth = 0;
     QPointer<ZMenubar> parentMenu;
 
-    MenuWindowFacet windowFacet;
+    mutable MenuWindowFacet windowFacet;
 };
 
 TUIWIDGETS_NS_END

@@ -287,7 +287,7 @@ void ZPainter::setWidget(ZWidget *widget) {
     pimpl->widget = widget;
 }
 
-ZTextMetrics ZPainter::textMetrics() {
+ZTextMetrics ZPainter::textMetrics() const {
     auto *const pimpl = tuiwidgets_impl();
     return ZTextMetrics(std::make_shared<ZTextMetricsPrivate>(pimpl->surface));
 }

@@ -224,7 +224,7 @@ QRect ZWindow::layoutArea() const {
     return r;
 }
 
-QObject *ZWindow::facet(const QMetaObject &metaObject) {
+QObject *ZWindow::facet(const QMetaObject &metaObject) const {
     auto *const p = tuiwidgets_impl();
     if (metaObject.className() == ZWindowFacet::staticMetaObject.className()) {
         if (!p->windowFacet) {

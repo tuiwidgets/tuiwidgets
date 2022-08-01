@@ -143,13 +143,13 @@ public:
 
     virtual ZWidget *resolveSizeHintChain();
 
-    ZCommandManager *commandManager();
+    ZCommandManager *commandManager() const;
     ZCommandManager *ensureCommandManager();
     void setCommandManager(ZCommandManager *cmd);
 
     template<typename T>
-    T *findFacet() {
-        ZWidget *w = this;
+    T *findFacet() const {
+        const ZWidget *w = this;
         while (w) {
             T *t = static_cast<T*>(w->facet(T::staticMetaObject));
             if (t) {
@@ -160,7 +160,7 @@ public:
         return nullptr;
     }
 
-    virtual QObject *facet(const QMetaObject &metaObject);
+    virtual QObject *facet(const QMetaObject &metaObject) const;
 
     // public virtuals from base class override everything for later ABI compatibility
     bool event(QEvent *event) override;

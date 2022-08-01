@@ -16,7 +16,7 @@ ZWindowContainer::ZWindowContainer(std::unique_ptr<ZWindowContainerPrivate> pimp
 ZWindowContainer::~ZWindowContainer() {
 }
 
-QVector<ZMenuItem> ZWindowContainer::containerMenuItems() {
+QVector<ZMenuItem> ZWindowContainer::containerMenuItems() const {
     return {};
 }
 

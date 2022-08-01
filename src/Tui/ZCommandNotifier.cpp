@@ -121,17 +121,17 @@ void ZCommandNotifierPrivate::updateContextSatisfied(ZCommandNotifier *pub) {
     }
 }
 
-ZSymbol ZCommandNotifier::command() {
+ZSymbol ZCommandNotifier::command() const {
     auto *const p = tuiwidgets_impl();
     return p->command;
 }
 
-Qt::ShortcutContext ZCommandNotifier::context() {
+Qt::ShortcutContext ZCommandNotifier::context() const {
     auto *const p = tuiwidgets_impl();
     return p->context;
 }
 
-bool ZCommandNotifier::isEnabled() {
+bool ZCommandNotifier::isEnabled() const {
     auto *const p = tuiwidgets_impl();
     return p->enabled;
 }
@@ -147,7 +147,7 @@ void ZCommandNotifier::setEnabled(bool s) {
     }
 }
 
-bool ZCommandNotifier::isContextSatisfied() {
+bool ZCommandNotifier::isContextSatisfied() const {
     auto *const p = tuiwidgets_impl();
     return p->contextSatisfied;
 }

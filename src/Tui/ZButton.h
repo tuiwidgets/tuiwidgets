@@ -28,7 +28,7 @@ public:
     void setShortcut(const ZKeySequence &key);
 
     void setDefault(bool d);
-    bool isDefault();
+    bool isDefault() const;
 
     bool event(QEvent *event) override;
     QSize sizeHint() const override;

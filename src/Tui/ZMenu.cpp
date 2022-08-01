@@ -81,7 +81,7 @@ QSize ZMenu::minimumSizeHint() const {
     return {width, 2 + p->items.size()};
 }
 
-QObject *ZMenu::facet(const QMetaObject &metaObject) {
+QObject *ZMenu::facet(const QMetaObject &metaObject) const {
     auto *const p = tuiwidgets_impl();
     if (metaObject.className() == ZWindowFacet::staticMetaObject.className()) {
         return &p->windowFacet;

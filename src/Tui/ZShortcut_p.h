@@ -14,7 +14,7 @@ public:
     static ZShortcutPrivate *get(ZShortcut *shortcut);
     static const ZShortcutPrivate *get(const ZShortcut *shortcut);
 
-    bool isContextActive(QObject *par, ZWidget *focusWidget);
+    bool isContextActive(QObject *par, ZWidget *focusWidget) const;
 
 public:
     Qt::ShortcutContext context;

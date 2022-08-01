@@ -40,14 +40,15 @@ namespace {
 class RootStubWidget : public Tui::ZWidget {
 public:
     using Tui::ZWidget::ZWidget;
-    QObject *facet(const QMetaObject &metaObject) override {
+    QObject *facet(const QMetaObject &metaObject) const override {
         if (metaObject.className() == Tui::ZWindowFacet::staticMetaObject.className()) {
             return &windowFacet;
         } else {
             return Tui::ZWidget::facet(metaObject);
         }
     }
-    TestZWindowFacet windowFacet;
+
+    mutable TestZWindowFacet windowFacet;
 };
 }
 

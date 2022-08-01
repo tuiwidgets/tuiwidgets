@@ -20,12 +20,12 @@ public:
     ~ZCommandNotifier() override;
 
 public:
-    ZSymbol command();
-    Qt::ShortcutContext context();
+    ZSymbol command() const;
+    Qt::ShortcutContext context() const;
 
-    bool isEnabled();
+    bool isEnabled() const;
     void setEnabled(bool s);
-    bool isContextSatisfied();
+    bool isContextSatisfied() const;
 
 Q_SIGNALS:
     void activated();

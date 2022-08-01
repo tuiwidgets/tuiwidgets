@@ -1335,7 +1335,7 @@ void ZWidget::disconnectNotify(const QMetaMethod &signal) {
     QObject::disconnectNotify(signal);
 }
 
-ZCommandManager *ZWidget::commandManager() {
+ZCommandManager *ZWidget::commandManager() const {
     auto *const p = tuiwidgets_impl();
     return p->commandManager;
 }
@@ -1353,7 +1353,7 @@ void ZWidget::setCommandManager(ZCommandManager *cmd) {
     p->commandManager = cmd;
 }
 
-QObject *ZWidget::facet(const QMetaObject &metaObject) {
+QObject *ZWidget::facet(const QMetaObject &metaObject) const {
     Q_UNUSED(metaObject);
     return nullptr;
 }

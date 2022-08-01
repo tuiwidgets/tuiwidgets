@@ -243,7 +243,7 @@ QRect ZInputBox::layoutArea() const {
     return ZWidget::layoutArea();
 }
 
-QObject *ZInputBox::facet(const QMetaObject &metaObject) {
+QObject *ZInputBox::facet(const QMetaObject &metaObject) const {
     return ZWidget::facet(metaObject);
 }
 

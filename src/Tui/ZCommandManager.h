@@ -22,7 +22,7 @@ public:
     ~ZCommandManager() override;
 
     void registerCommandNotifier(ZCommandNotifier *notifier);
-    bool isCommandEnabled(ZSymbol command);
+    bool isCommandEnabled(ZSymbol command) const;
     void activateCommand(ZSymbol command);
 
 Q_SIGNALS:
