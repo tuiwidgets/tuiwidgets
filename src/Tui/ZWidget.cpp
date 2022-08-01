@@ -435,7 +435,7 @@ void ZWidget::setFixedSize(QSize s) {
 }
 
 void ZWidget::setFixedSize(int w, int h) {
-    setFixedSize(w, h);
+    setFixedSize({w, h});
 }
 
 SizePolicy ZWidget::sizePolicyH() const {
