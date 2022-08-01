@@ -22,24 +22,28 @@ public:
 class ZRawSequenceEventPrivate : public ZEventPrivate {
 public:
     ZRawSequenceEventPrivate(QString seq);
+    ~ZRawSequenceEventPrivate() override;
     QString sequence;
 };
 
 class ZTerminalNativeEventPrivate : public ZEventPrivate {
 public:
     ZTerminalNativeEventPrivate(void *native);
+    ~ZTerminalNativeEventPrivate() override;
     void *native;
 };
 
 class ZPaintEventPrivate : public ZEventPrivate {
 public:
     ZPaintEventPrivate(ZPainter *painter);
+    ~ZPaintEventPrivate() override;
     ZPainter *painter;
 };
 
 class ZKeyEventPrivate : public ZEventPrivate {
 public:
     ZKeyEventPrivate(int key, Qt::KeyboardModifiers modifiers, const QString &text);
+    ~ZKeyEventPrivate() override;
 
 public:
     int key = Qt::Key_unknown;
@@ -50,6 +54,7 @@ public:
 class ZPasteEventPrivate : public ZEventPrivate {
 public:
     ZPasteEventPrivate(const QString &text);
+    ~ZPasteEventPrivate() override;
 
 public:
     QString text;
@@ -58,6 +63,7 @@ public:
 class ZFocusEventPrivate : public ZEventPrivate {
 public:
     ZFocusEventPrivate(Qt::FocusReason reason);
+    ~ZFocusEventPrivate() override;
 
 public:
     Qt::FocusReason reason;
@@ -67,6 +73,7 @@ public:
 class ZResizeEventPrivate : public ZEventPrivate {
 public:
     ZResizeEventPrivate(QSize size, QSize oldSize);
+    ~ZResizeEventPrivate() override;
 
 public:
     QSize size;
@@ -76,6 +83,7 @@ public:
 class ZMoveEventPrivate : public ZEventPrivate {
 public:
     ZMoveEventPrivate(QPoint pos, QPoint oldPos);
+    ~ZMoveEventPrivate() override;
 
 public:
     QPoint pos;
@@ -85,6 +93,7 @@ public:
 class ZCloseEventPrivate : public ZEventPrivate {
 public:
     ZCloseEventPrivate(QStringList skipChecks);
+    ~ZCloseEventPrivate() override;
 
 public:
     QStringList skipChecks;
@@ -93,6 +102,7 @@ public:
 class ZOtherChangeEventPrivate : public ZEventPrivate {
 public:
     ZOtherChangeEventPrivate(QSet<ZSymbol> unchanged);
+    ~ZOtherChangeEventPrivate() override;
 
 public:
     QSet<ZSymbol> unchanged;

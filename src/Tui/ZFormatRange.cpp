@@ -11,6 +11,9 @@ ZFormatRangePrivate::ZFormatRangePrivate(int start, int length, ZTextStyle forma
 {
 }
 
+ZFormatRangePrivate::~ZFormatRangePrivate() {
+}
+
 
 ZFormatRange::ZFormatRange() = default;
 

@@ -11,6 +11,10 @@ TUIWIDGETS_NS_START
 
 class ZStyledTextLinePrivate {
 public:
+    ZStyledTextLinePrivate();
+    virtual ~ZStyledTextLinePrivate();
+
+public:
     void ensureCache() const;
 
 public:

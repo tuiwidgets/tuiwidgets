@@ -189,5 +189,8 @@ void ZLabel::moveEvent(ZMoveEvent *event) {
 ZLabelPrivate::ZLabelPrivate(ZWidget *pub) : ZWidgetPrivate(pub) {
 }
 
+ZLabelPrivate::~ZLabelPrivate() {
+}
+
 
 TUIWIDGETS_NS_END

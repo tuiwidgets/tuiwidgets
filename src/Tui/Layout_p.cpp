@@ -9,6 +9,9 @@ SpacerLayoutItem::SpacerLayoutItem(int width, int height, SizePolicy sizePolicyH
 {
 }
 
+SpacerLayoutItem::~SpacerLayoutItem() {
+}
+
 void SpacerLayoutItem::setGeometry(QRect) {
     // Nothing to do
 }

@@ -13,6 +13,7 @@ TUIWIDGETS_NS_START
 class ZPalettePrivate {
 public:
     ZPalettePrivate();
+    virtual ~ZPalettePrivate();
 
     QHash<ZSymbol, ZColor> colorDefinitions;
     QHash<ZSymbol, ZSymbol> localAlias;

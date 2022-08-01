@@ -15,7 +15,7 @@ public:
     explicit ZTextLine(ZWidget *parent = nullptr);
     explicit ZTextLine(const QString &text, ZWidget *parent = nullptr);
     explicit ZTextLine(WithMarkupTag, const QString &markup, ZWidget *parent = nullptr);
-    ~ZTextLine();
+    ~ZTextLine() override;
 
 public:
     QString text() const;

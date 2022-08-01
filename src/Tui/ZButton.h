@@ -16,7 +16,7 @@ public:
     explicit ZButton(ZWidget *parent=nullptr);
     explicit ZButton(const QString &text, ZWidget *parent=nullptr);
     explicit ZButton(WithMarkupTag, const QString &markup, ZWidget *parent=nullptr);
-    ~ZButton();
+    ~ZButton() override;
 
 public:
     QString text() const;

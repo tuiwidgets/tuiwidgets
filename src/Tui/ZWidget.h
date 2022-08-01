@@ -43,7 +43,7 @@ class TUIWIDGETS_EXPORT ZWidget : public QObject {
     Q_OBJECT
 public:
     explicit ZWidget(ZWidget *parent = 0);
-    ~ZWidget();
+    ~ZWidget() override;
 
 protected:
     explicit ZWidget(ZWidget *parent, std::unique_ptr<ZWidgetPrivate> pimpl);

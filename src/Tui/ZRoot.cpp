@@ -15,6 +15,9 @@ ZRoot::ZRoot() : ZWidget(nullptr, std::make_unique<ZRootPrivate>(this)) {
     setMinimumSize(40, 7);
 }
 
+ZRoot::~ZRoot() {
+}
+
 void ZRoot::setFillChar(int fillChar) {
     auto *const p = tuiwidgets_impl();
     p->fillChar = fillChar;
@@ -213,6 +216,9 @@ void ZRoot::pasteEvent(ZPasteEvent *event) {
 
 ZRootPrivate::ZRootPrivate(ZRoot *pub) : ZWidgetPrivate(pub) {
 
+}
+
+ZRootPrivate::~ZRootPrivate() {
 }
 
 TUIWIDGETS_NS_END

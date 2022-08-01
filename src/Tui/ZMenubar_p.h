@@ -17,6 +17,7 @@ TUIWIDGETS_NS_START
 class ZMenubarPrivate : public ZWidgetPrivate {
 public:
     ZMenubarPrivate(ZWidget *pub);
+    ~ZMenubarPrivate() override;
 
 public:
     QVector<ZMenuItem> items;

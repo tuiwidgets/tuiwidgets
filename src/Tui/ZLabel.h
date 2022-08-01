@@ -15,7 +15,7 @@ public:
     explicit ZLabel(ZWidget *parent = nullptr);
     explicit ZLabel(const QString &text, ZWidget *parent = nullptr);
     explicit ZLabel(WithMarkupTag, const QString &markup, ZWidget *parent = nullptr);
-    ~ZLabel();
+    ~ZLabel() override;
 
 public:
     QString text() const;

@@ -35,6 +35,12 @@ ZCommandNotifier::~ZCommandNotifier() {
     setEnabled(false);
 }
 
+ZCommandNotifierPrivate::ZCommandNotifierPrivate() {
+}
+
+ZCommandNotifierPrivate::~ZCommandNotifierPrivate() {
+}
+
 void ZCommandNotifierPrivate::connectToTerminal(ZCommandNotifier *pub) {
     if (context != Qt::ApplicationShortcut) {
         ZWidget *pw = qobject_cast<ZWidget*>(pub->parent());

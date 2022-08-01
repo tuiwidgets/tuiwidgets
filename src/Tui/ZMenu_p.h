@@ -23,6 +23,7 @@ inline namespace IPrivate {
 class ZMenuPrivate : public ZWidgetPrivate {
 public:
     ZMenuPrivate(ZWidget *pub);
+    ~ZMenuPrivate() override;
 
 public:
     QVector<ZMenuItem> items;

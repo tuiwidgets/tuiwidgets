@@ -102,6 +102,12 @@ bool ZStyledTextLine::hasParsingError() const {
     return p->parsingError;
 }
 
+ZStyledTextLinePrivate::ZStyledTextLinePrivate() {
+}
+
+ZStyledTextLinePrivate::~ZStyledTextLinePrivate() {
+}
+
 void ZStyledTextLinePrivate::ensureCache() const {
     if (!cached) {
         cached = true;

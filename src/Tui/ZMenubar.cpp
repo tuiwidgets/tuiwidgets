@@ -356,5 +356,8 @@ void ZMenubar::moveEvent(ZMoveEvent *event) {
 ZMenubarPrivate::ZMenubarPrivate(ZWidget *pub) : ZWidgetPrivate (pub) {
 }
 
+ZMenubarPrivate::~ZMenubarPrivate() {
+}
+
 
 TUIWIDGETS_NS_END

@@ -105,7 +105,7 @@ public:
     explicit ZTerminal(FileDescriptor fd, Options options, QObject *parent = nullptr);
     explicit ZTerminal(const OffScreen& offscreen, QObject *parent = nullptr);
     explicit ZTerminal(TerminalConnection *connection, Options options, QObject *parent = nullptr);
-    virtual ~ZTerminal();
+    virtual ~ZTerminal() override;
 
 public:
     static bool defaultTerminalAvailable();

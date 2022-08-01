@@ -10,6 +10,9 @@ TUIWIDGETS_NS_START
 ZListViewPrivate::ZListViewPrivate(ZWidget *pub) : ZWidgetPrivate(pub) {
 }
 
+ZListViewPrivate::~ZListViewPrivate() {
+}
+
 ZListView::ZListView(ZWidget *parent) : ZWidget(parent, std::make_unique<ZListViewPrivate>(this)) {
     setFocusPolicy(Qt::StrongFocus);
     setSizePolicyV(SizePolicy::Expanding);

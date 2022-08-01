@@ -12,6 +12,10 @@ TUIWIDGETS_NS_START
 
 class ZBasicWindowFacetPrivate : public ZWindowFacetPrivate {
 public:
+    ZBasicWindowFacetPrivate();
+    ~ZBasicWindowFacetPrivate() override;
+
+public:
     bool extendViewport = false;
     Qt::Alignment alignment = Qt::AlignVCenter | Qt::AlignHCenter;
     QPoint displacement = {0, 0};

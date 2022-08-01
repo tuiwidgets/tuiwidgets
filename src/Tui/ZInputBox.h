@@ -15,6 +15,7 @@ class TUIWIDGETS_EXPORT ZInputBox : public ZWidget {
 public:
     explicit ZInputBox(ZWidget *parent=nullptr);
     explicit ZInputBox(const QString &contents, ZWidget *parent=nullptr);
+    ~ZInputBox() override;
 
 public:
     QString text() const;

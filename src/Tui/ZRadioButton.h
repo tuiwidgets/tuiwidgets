@@ -16,7 +16,7 @@ public:
     explicit ZRadioButton(ZWidget *parent = nullptr);
     explicit ZRadioButton(const QString &text, ZWidget *parent = nullptr);
     explicit ZRadioButton(WithMarkupTag, const QString &markup, ZWidget *parent = nullptr);
-    ~ZRadioButton();
+    ~ZRadioButton() override;
 
 public:
     QString text() const;

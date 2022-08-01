@@ -27,6 +27,9 @@ static QString unescapeNewLine(const QString &in) {
 ZInputBoxPrivate::ZInputBoxPrivate(ZWidget *pub) : ZWidgetPrivate(pub) {
 }
 
+ZInputBoxPrivate::~ZInputBoxPrivate() {
+}
+
 ZInputBox::ZInputBox(ZWidget *parent) : ZWidget(parent, std::make_unique<ZInputBoxPrivate>(this)) {
     setFocusPolicy(Qt::StrongFocus);
     setSizePolicyV(SizePolicy::Fixed);
@@ -35,6 +38,9 @@ ZInputBox::ZInputBox(ZWidget *parent) : ZWidget(parent, std::make_unique<ZInputB
 
 ZInputBox::ZInputBox(const QString &contents, ZWidget *parent) : ZInputBox(parent) {
     setText(contents);
+}
+
+ZInputBox::~ZInputBox() {
 }
 
 QString ZInputBox::text() const {

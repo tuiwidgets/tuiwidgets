@@ -169,5 +169,8 @@ void ZButton::keyEvent(ZKeyEvent *event) {
 ZButtonPrivate::ZButtonPrivate(ZWidget *pub) : ZWidgetPrivate(pub) {
 }
 
+ZButtonPrivate::~ZButtonPrivate() {
+}
+
 
 TUIWIDGETS_NS_END

@@ -197,6 +197,9 @@ ZTextMetricsPrivate::ZTextMetricsPrivate(termpaint_surface *surface) : surface(s
 {
 }
 
+ZTextMetricsPrivate::~ZTextMetricsPrivate() {
+}
+
 ZTextMetrics ZTextMetricsPrivate::createForTesting(termpaint_surface *surface) {
     return ZTextMetrics(std::make_shared<ZTextMetricsPrivate>(surface));
 }

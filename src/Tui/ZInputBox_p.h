@@ -13,6 +13,7 @@ TUIWIDGETS_NS_START
 class ZInputBoxPrivate : public ZWidgetPrivate {
 public:
     ZInputBoxPrivate(ZWidget *pub);
+    ~ZInputBoxPrivate() override;
 
 public:
     void adjustScrollPosition();

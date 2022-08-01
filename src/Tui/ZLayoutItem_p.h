@@ -10,7 +10,7 @@ TUIWIDGETS_NS_START
 class TUIWIDGETS_EXPORT ZWidgetLayoutItem : public ZLayoutItem {
 public:
     ZWidgetLayoutItem(ZWidget *widget) : widget(widget) {}
-    ~ZWidgetLayoutItem();
+    ~ZWidgetLayoutItem() override;
 
 public:
     void setGeometry(QRect r) override;

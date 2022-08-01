@@ -224,4 +224,7 @@ void ZCheckBox::moveEvent(ZMoveEvent *event) {
 ZCheckBoxPrivate::ZCheckBoxPrivate(ZWidget *pub) : ZWidgetPrivate(pub) {
 }
 
+ZCheckBoxPrivate::~ZCheckBoxPrivate() {
+}
+
 TUIWIDGETS_NS_END

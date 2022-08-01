@@ -14,6 +14,7 @@ class TUIWIDGETS_EXPORT ZRoot : public ZWidget {
 
 public:
     ZRoot();
+    ~ZRoot() override;
 
 public:
     void setFillChar(int fillChar);

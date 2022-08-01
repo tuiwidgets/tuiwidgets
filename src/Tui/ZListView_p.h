@@ -15,6 +15,7 @@ TUIWIDGETS_NS_START
 class ZListViewPrivate : public ZWidgetPrivate {
 public:
     ZListViewPrivate(ZWidget *pub);
+    ~ZListViewPrivate() override;
 
 public:
     ZStyledTextLine styledText;

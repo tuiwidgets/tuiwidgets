@@ -211,4 +211,7 @@ void ZRadioButton::moveEvent(ZMoveEvent *event) {
 
 ZRadioButtonPrivate::ZRadioButtonPrivate(ZWidget *pub) : ZWidgetPrivate(pub)  {}
 
+ZRadioButtonPrivate::~ZRadioButtonPrivate() {
+}
+
 TUIWIDGETS_NS_END

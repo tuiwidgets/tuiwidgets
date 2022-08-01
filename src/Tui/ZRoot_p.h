@@ -14,6 +14,7 @@ class ZRootPrivate : public ZWidgetPrivate {
 
 public:
     ZRootPrivate(ZRoot *pub);
+    ~ZRootPrivate() override;
 
 public:
     int fillChar = Erased;

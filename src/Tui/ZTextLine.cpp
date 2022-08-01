@@ -132,4 +132,7 @@ void ZTextLine::moveEvent(ZMoveEvent *event) {
 ZTextLinePrivate::ZTextLinePrivate(ZWidget *pub) : ZWidgetPrivate (pub) {
 }
 
+ZTextLinePrivate::~ZTextLinePrivate() {
+}
+
 TUIWIDGETS_NS_END

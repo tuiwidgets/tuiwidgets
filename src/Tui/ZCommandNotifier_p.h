@@ -9,6 +9,10 @@ TUIWIDGETS_NS_START
 
 class ZCommandNotifierPrivate {
 public:
+    ZCommandNotifierPrivate();
+    virtual ~ZCommandNotifierPrivate();
+
+public:
     void connectToTerminal(ZCommandNotifier *pub);
     void updateContextSatisfied(ZCommandNotifier *pub);
 

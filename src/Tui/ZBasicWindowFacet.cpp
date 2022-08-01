@@ -82,5 +82,11 @@ void ZBasicWindowFacet::setExtendViewport(bool extend) {
     p->extendViewport = extend;
 }
 
+ZBasicWindowFacetPrivate::ZBasicWindowFacetPrivate() {
+}
+
+ZBasicWindowFacetPrivate::~ZBasicWindowFacetPrivate() {
+}
+
 TUIWIDGETS_NS_END
 

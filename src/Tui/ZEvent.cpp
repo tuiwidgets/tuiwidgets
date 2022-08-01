@@ -100,6 +100,9 @@ ZRawSequenceEvent::ZRawSequenceEvent(Pending, QString seq)
 {
 }
 
+ZRawSequenceEvent::~ZRawSequenceEvent() {
+}
+
 QString ZRawSequenceEvent::sequence() const {
     return tuiwidgets_impl()->sequence;
 }
@@ -107,6 +110,9 @@ QString ZRawSequenceEvent::sequence() const {
 ZRawSequenceEventPrivate::ZRawSequenceEventPrivate(QString seq)
     : sequence(seq)
 {
+}
+
+ZRawSequenceEventPrivate::~ZRawSequenceEventPrivate() {
 }
 
 ZPaintEvent::ZPaintEvent(ZPainter *painter)
@@ -119,6 +125,9 @@ ZPaintEvent::ZPaintEvent(ZPaintEvent::Update, ZPainter *painter)
 {
 }
 
+ZPaintEvent::~ZPaintEvent() {
+}
+
 ZPainter *ZPaintEvent::painter() const {
     return tuiwidgets_impl()->painter;
 }
@@ -128,9 +137,15 @@ ZPaintEventPrivate::ZPaintEventPrivate(ZPainter *painter)
 {
 }
 
+ZPaintEventPrivate::~ZPaintEventPrivate() {
+}
+
 ZTerminalNativeEvent::ZTerminalNativeEvent(void *native)
     : ZEvent(ZEventType::terminalNativeEvent(), std::make_unique<ZTerminalNativeEventPrivate>(native))
 {
+}
+
+ZTerminalNativeEvent::~ZTerminalNativeEvent() {
 }
 
 void *ZTerminalNativeEvent::nativeEventPointer() const {
@@ -142,14 +157,23 @@ ZTerminalNativeEventPrivate::ZTerminalNativeEventPrivate(void *native)
 {
 }
 
+ZTerminalNativeEventPrivate::~ZTerminalNativeEventPrivate() {
+}
+
 ZKeyEventPrivate::ZKeyEventPrivate(int key, Qt::KeyboardModifiers modifiers, const QString &text)
     : key(key), text(text), modifiers(modifiers)
 {
 }
 
+ZKeyEventPrivate::~ZKeyEventPrivate() {
+}
+
 ZKeyEvent::ZKeyEvent(int key, Qt::KeyboardModifiers modifiers, const QString &text)
     : ZEvent(ZEventType::key(), std::make_unique<ZKeyEventPrivate>(key, modifiers, text))
 {
+}
+
+ZKeyEvent::~ZKeyEvent() {
 }
 
 int ZKeyEvent::key() const {
@@ -169,9 +193,15 @@ ZPasteEventPrivate::ZPasteEventPrivate(const QString &text)
 {
 }
 
+ZPasteEventPrivate::~ZPasteEventPrivate() {
+}
+
 ZPasteEvent::ZPasteEvent(const QString &text)
     : ZEvent(ZEventType::paste(), std::make_unique<ZPasteEventPrivate>(text))
 {
+}
+
+ZPasteEvent::~ZPasteEvent() {
 }
 
 QString ZPasteEvent::text() const {
@@ -181,6 +211,9 @@ QString ZPasteEvent::text() const {
 ZFocusEventPrivate::ZFocusEventPrivate(Qt::FocusReason reason)
     : reason(reason)
 {
+}
+
+ZFocusEventPrivate::~ZFocusEventPrivate() {
 }
 
 ZFocusEvent::ZFocusEvent(ZFocusEvent::FocusIn, Qt::FocusReason reason)
@@ -194,14 +227,23 @@ ZFocusEvent::ZFocusEvent(ZFocusEvent::FocusOut, Qt::FocusReason reason)
 {
 }
 
+ZFocusEvent::~ZFocusEvent() {
+}
+
 ZResizeEventPrivate::ZResizeEventPrivate(QSize size, QSize oldSize)
     : size(size), oldSize(oldSize)
 {
 }
 
+ZResizeEventPrivate::~ZResizeEventPrivate() {
+}
+
 ZResizeEvent::ZResizeEvent(QSize size, QSize oldSize)
     : ZEvent(ZEventType::resize(), std::make_unique<ZResizeEventPrivate>(size, oldSize))
 {
+}
+
+ZResizeEvent::~ZResizeEvent() {
 }
 
 QSize ZResizeEvent::size() const {
@@ -217,9 +259,15 @@ ZMoveEventPrivate::ZMoveEventPrivate(QPoint pos, QPoint oldPos)
 {
 }
 
+ZMoveEventPrivate::~ZMoveEventPrivate() {
+}
+
 ZMoveEvent::ZMoveEvent(QPoint pos, QPoint oldPos)
     : ZEvent(ZEventType::move(), std::make_unique<ZMoveEventPrivate>(pos, oldPos))
 {
+}
+
+ZMoveEvent::~ZMoveEvent() {
 }
 
 QPoint ZMoveEvent::pos() const {
@@ -235,6 +283,9 @@ ZCloseEvent::ZCloseEvent(QStringList skipChecks)
 {
 }
 
+ZCloseEvent::~ZCloseEvent() {
+}
+
 QStringList ZCloseEvent::skipChecks() const {
     return tuiwidgets_impl()->skipChecks;
 }
@@ -242,9 +293,15 @@ QStringList ZCloseEvent::skipChecks() const {
 ZCloseEventPrivate::ZCloseEventPrivate(QStringList skipChecks) : skipChecks(skipChecks) {
 }
 
+ZCloseEventPrivate::~ZCloseEventPrivate() {
+}
+
 ZOtherChangeEvent::ZOtherChangeEvent(QSet<ZSymbol> unchanged)
     : ZEvent(ZEventType::otherChange(), std::make_unique<ZOtherChangeEventPrivate>(unchanged))
 {
+}
+
+ZOtherChangeEvent::~ZOtherChangeEvent() {
 }
 
 QSet<ZSymbol> ZOtherChangeEvent::all() {
@@ -265,6 +322,9 @@ bool ZOtherChangeEvent::match(const QEvent *event, ZSymbol changed) {
 ZOtherChangeEventPrivate::ZOtherChangeEventPrivate(QSet<ZSymbol> unchanged)
      : unchanged(unchanged)
 {
+}
+
+ZOtherChangeEventPrivate::~ZOtherChangeEventPrivate() {
 }
 
 TUIWIDGETS_NS_END

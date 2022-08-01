@@ -12,6 +12,7 @@ namespace Private {
     class SpacerLayoutItem : public ZLayoutItem {
     public:
         explicit SpacerLayoutItem(int width, int height, SizePolicy sizePolicyH, SizePolicy sizePolicyV);
+        ~SpacerLayoutItem() override;
 
     public:
         void setGeometry(QRect r) override;

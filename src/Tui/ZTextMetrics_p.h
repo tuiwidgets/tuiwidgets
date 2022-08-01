@@ -10,6 +10,7 @@ TUIWIDGETS_NS_START
 class ZTextMetricsPrivate {
 public:
     ZTextMetricsPrivate(termpaint_surface *surface);
+    virtual ~ZTextMetricsPrivate();
 
     termpaint_surface *surface;
 

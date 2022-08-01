@@ -11,6 +11,7 @@ class ZFormatRangePrivate {
 public:
     ZFormatRangePrivate();
     ZFormatRangePrivate(int start, int length, ZTextStyle format, ZTextStyle formatingChar, int userData);
+    ~ZFormatRangePrivate();
 
 public:
     int _start = 0;

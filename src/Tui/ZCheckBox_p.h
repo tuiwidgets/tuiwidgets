@@ -13,6 +13,7 @@ TUIWIDGETS_NS_START
 class ZCheckBoxPrivate : public ZWidgetPrivate {
 public:
     ZCheckBoxPrivate(ZWidget *pub);
+    ~ZCheckBoxPrivate() override;
 
 public:
     ZStyledTextLine styledText;

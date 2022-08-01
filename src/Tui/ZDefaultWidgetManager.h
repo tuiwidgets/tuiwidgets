@@ -13,12 +13,17 @@ class TUIWIDGETS_EXPORT ZDefaultWidgetManager : public QObject {
     Q_OBJECT
 
 public:
+    ZDefaultWidgetManager();
+
+public:
     virtual void setDefaultWidget(ZWidget *w) = 0;
     virtual ZWidget *defaultWidget() const = 0;
     virtual bool isDefaultWidgetActive() const = 0;
 
+    // TODO: Abi overrides
+
 protected:
-    ~ZDefaultWidgetManager();
+    ~ZDefaultWidgetManager() override;
 };
 
 TUIWIDGETS_NS_END

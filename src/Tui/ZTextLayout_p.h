@@ -33,6 +33,7 @@ public:
 public:
     ZTextLayoutPrivate(ZTextMetrics metrics) : metrics(metrics) {}
     ZTextLayoutPrivate(ZTextMetrics metrics, const QString &text) : metrics(metrics), text(text) {}
+    virtual ~ZTextLayoutPrivate();
 
 public:
     ZTextMetrics metrics;

@@ -104,5 +104,11 @@ void ZCommandManager::disconnectNotify(const QMetaMethod &signal) {
     QObject::disconnectNotify(signal);
 }
 
+ZCommandManagerPrivate::ZCommandManagerPrivate() {
+}
+
+ZCommandManagerPrivate::~ZCommandManagerPrivate() {
+}
+
 
 TUIWIDGETS_NS_END

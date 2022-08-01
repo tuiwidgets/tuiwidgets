@@ -297,5 +297,8 @@ void ZMenu::moveEvent(ZMoveEvent *event) {
 ZMenuPrivate::ZMenuPrivate(ZWidget *pub) : ZWidgetPrivate (pub) {
 }
 
+ZMenuPrivate::~ZMenuPrivate() {
+}
+
 
 TUIWIDGETS_NS_END

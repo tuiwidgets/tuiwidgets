@@ -16,7 +16,7 @@ public:
     explicit ZCheckBox(ZWidget *parent=nullptr);
     explicit ZCheckBox(const QString &text, ZWidget *parent=nullptr);
     explicit ZCheckBox(WithMarkupTag, const QString &markup, ZWidget *parent=nullptr);
-    ~ZCheckBox();
+    ~ZCheckBox() override;
 
 public:
     QString text() const;

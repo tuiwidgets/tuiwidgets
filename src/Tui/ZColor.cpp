@@ -21,6 +21,9 @@ ZColor::ZColor(Private::GlobalColorRGB globalColor)
 ZColor::ZColor(TerminalColor color) : val(ZColor::fromTerminalColor(color).val) {
 }
 
+ZColor::~ZColor() {
+}
+
 ZColor::ColorType ZColor::colorType() const {
     static_assert ((TERMPAINT_NAMED_COLOR & 0xff000000) == (TERMPAINT_INDEXED_COLOR & 0xff000000),
                    "TERMPAINT_NAMED_COLOR or TERMPAINT_INDEXED_COLOR not as expected");

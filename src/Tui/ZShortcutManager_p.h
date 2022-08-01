@@ -29,6 +29,7 @@ public:
 
 public:
     explicit ZShortcutManager(ZTerminal *terminal);
+    virtual ~ZShortcutManager();
 
     void addShortcut(ZShortcut *s);
     void removeShortcut(ZShortcut *s);

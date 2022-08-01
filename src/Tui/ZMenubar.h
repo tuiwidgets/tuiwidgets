@@ -16,7 +16,7 @@ class TUIWIDGETS_EXPORT ZMenubar : public ZWidget {
 
 public:
     explicit ZMenubar(ZWidget *parent = nullptr);
-    ~ZMenubar();
+    ~ZMenubar() override;
 
 public:
     void setItems(QVector<ZMenuItem> items);

@@ -10,6 +10,12 @@
 
 TUIWIDGETS_NS_START
 
+ZShortcutPrivate::ZShortcutPrivate() {
+}
+
+ZShortcutPrivate::~ZShortcutPrivate() {
+}
+
 ZShortcutPrivate *ZShortcutPrivate::get(ZShortcut *shortcut) {
     return shortcut->tuiwidgets_impl();
 }
@@ -175,6 +181,12 @@ void ZShortcut::disconnectNotify(const QMetaMethod &signal) {
     QObject::disconnectNotify(signal);
 }
 
+ZKeySequencePrivate::ZKeySequencePrivate() {
+}
+
+ZKeySequencePrivate::~ZKeySequencePrivate() {
+}
+
 ZKeySequencePrivate *ZKeySequencePrivate::get(ZKeySequence *keyseq) {
     return keyseq->tuiwidgets_impl();
 }
@@ -230,6 +242,12 @@ ZKeySequence ZKeySequence::forShortcutSequence(const QString &c, Qt::KeyboardMod
     return s;
 }
 
+
+ZPendingKeySequenceCallbacksPrivate::ZPendingKeySequenceCallbacksPrivate() {
+}
+
+ZPendingKeySequenceCallbacksPrivate::~ZPendingKeySequenceCallbacksPrivate() {
+}
 
 ZPendingKeySequenceCallbacksPrivate *ZPendingKeySequenceCallbacksPrivate::get(ZPendingKeySequenceCallbacks *callbacks) {
     return callbacks->tuiwidgets_impl();

@@ -14,7 +14,7 @@ class TUIWIDGETS_EXPORT ZWindowLayout : public ZLayout {
 
 public:
     ZWindowLayout();
-    ~ZWindowLayout();
+    ~ZWindowLayout() override;
 
     void setCentralWidget(ZWidget *w);
     void setCentral(ZLayoutItem *li);

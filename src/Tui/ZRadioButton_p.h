@@ -13,6 +13,7 @@ TUIWIDGETS_NS_START
 class ZRadioButtonPrivate : public ZWidgetPrivate {
 public:
     ZRadioButtonPrivate(ZWidget *pub);
+    ~ZRadioButtonPrivate() override;
 
 public:
     ZStyledTextLine styledText;

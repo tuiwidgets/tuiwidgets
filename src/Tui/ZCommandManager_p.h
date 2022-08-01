@@ -13,6 +13,10 @@ TUIWIDGETS_NS_START
 
 class ZCommandManagerPrivate {
 public:
+    ZCommandManagerPrivate();
+    virtual ~ZCommandManagerPrivate();
+
+public:
     QHash<ZSymbol, QVector<QPointer<ZCommandNotifier>>> commandNotifiers;
 };
 

@@ -12,6 +12,9 @@ ZPalettePrivate::ZPalettePrivate() {
 
 }
 
+ZPalettePrivate::~ZPalettePrivate() {
+}
+
 ZPalette::ZPalette() {
 }
 

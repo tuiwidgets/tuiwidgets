@@ -22,7 +22,7 @@ public:
 
 public:
     explicit ZListView(ZWidget *parent=nullptr);
-    ~ZListView();
+    ~ZListView() override;
 
 public:
     void setItems(const QStringList& newItems);

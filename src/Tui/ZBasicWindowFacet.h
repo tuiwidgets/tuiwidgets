@@ -14,7 +14,7 @@ class TUIWIDGETS_EXPORT ZBasicWindowFacet : public ZWindowFacet {
     Q_OBJECT
 public:
     ZBasicWindowFacet();
-    ~ZBasicWindowFacet();
+    ~ZBasicWindowFacet() override;
 
 public:
     bool isExtendViewport() const override;

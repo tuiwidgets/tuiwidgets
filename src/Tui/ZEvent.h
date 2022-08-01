@@ -66,6 +66,7 @@ public:
 
     ZRawSequenceEvent(QString seq);
     ZRawSequenceEvent(Pending, QString seq);
+    ~ZRawSequenceEvent() override;
 
 
 public:
@@ -78,6 +79,7 @@ private:
 class TUIWIDGETS_EXPORT ZTerminalNativeEvent : public ZEvent {
 public:
     ZTerminalNativeEvent(void *native);
+    ~ZTerminalNativeEvent() override;
 
 public:
     void *nativeEventPointer() const;
@@ -92,6 +94,7 @@ public:
 
     ZPaintEvent(ZPainter *painter);
     ZPaintEvent(Update, ZPainter *painter);
+    ~ZPaintEvent() override;
 
 public:
     ZPainter *painter() const;
@@ -103,6 +106,7 @@ private:
 class TUIWIDGETS_EXPORT ZKeyEvent : public ZEvent {
 public:
     ZKeyEvent(int key, Qt::KeyboardModifiers modifiers, const QString &text);
+    ~ZKeyEvent() override;
 
 public:
     int key() const;
@@ -116,6 +120,7 @@ private:
 class TUIWIDGETS_EXPORT ZPasteEvent : public ZEvent {
 public:
     ZPasteEvent(const QString &text);
+    ~ZPasteEvent() override;
 
 public:
     QString text() const;
@@ -130,6 +135,7 @@ public:
     class FocusOut{}; static constexpr FocusOut focusOut {};
     ZFocusEvent(FocusIn, Qt::FocusReason reason = Qt::OtherFocusReason);
     ZFocusEvent(FocusOut, Qt::FocusReason reason = Qt::OtherFocusReason);
+    ~ZFocusEvent() override;
 
 public:
     Qt::FocusReason reason() const;
@@ -141,6 +147,7 @@ private:
 class TUIWIDGETS_EXPORT ZResizeEvent : public ZEvent {
 public:
     ZResizeEvent(QSize size, QSize oldSize);
+    ~ZResizeEvent() override;
 
 public:
     QSize size() const;
@@ -153,6 +160,7 @@ private:
 class TUIWIDGETS_EXPORT ZMoveEvent : public ZEvent {
 public:
     ZMoveEvent(QPoint pos, QPoint oldPos);
+    ~ZMoveEvent() override;
 
 public:
     QPoint pos() const;
@@ -165,6 +173,7 @@ private:
 class TUIWIDGETS_EXPORT ZCloseEvent : public ZEvent {
 public:
     ZCloseEvent(QStringList skipChecks);
+    ~ZCloseEvent() override;
 
 public:
     QStringList skipChecks() const;
@@ -176,6 +185,7 @@ private:
 class TUIWIDGETS_EXPORT ZOtherChangeEvent : public ZEvent {
 public:
     ZOtherChangeEvent(QSet<ZSymbol> unchanged);
+    ~ZOtherChangeEvent() override;
     static QSet<ZSymbol> all();
 
 public:

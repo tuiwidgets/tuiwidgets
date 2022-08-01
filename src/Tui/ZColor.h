@@ -81,6 +81,7 @@ public:
     ZColor(int r, int g, int b);
     ZColor(Private::GlobalColorRGB globalColor);
     ZColor(TerminalColor color);
+    ~ZColor();
 
     ColorType colorType() const;
 

@@ -11,6 +11,10 @@ class ZTerminal;
 
 class ZShortcutPrivate {
 public:
+    ZShortcutPrivate();
+    virtual ~ZShortcutPrivate();
+
+public:
     static ZShortcutPrivate *get(ZShortcut *shortcut);
     static const ZShortcutPrivate *get(const ZShortcut *shortcut);
 
@@ -28,6 +32,10 @@ public:
 
 class ZKeySequencePrivate {
 public:
+    ZKeySequencePrivate();
+    virtual ~ZKeySequencePrivate();
+
+public:
     static ZKeySequencePrivate *get(ZKeySequence *keyseq);
     static const ZKeySequencePrivate *get(const ZKeySequence *keyseq);
 
@@ -44,6 +52,10 @@ public:
 };
 
 class ZPendingKeySequenceCallbacksPrivate {
+public:
+    ZPendingKeySequenceCallbacksPrivate();
+    virtual ~ZPendingKeySequenceCallbacksPrivate();
+
 public:
     static ZPendingKeySequenceCallbacksPrivate *get(ZPendingKeySequenceCallbacks *callbacks);
     static const ZPendingKeySequenceCallbacksPrivate *get(const ZPendingKeySequenceCallbacks *callbacks);

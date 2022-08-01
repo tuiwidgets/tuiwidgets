@@ -16,6 +16,9 @@ ZShortcutManager::ZShortcutManager(ZTerminal *terminal)
 {
 }
 
+ZShortcutManager::~ZShortcutManager() {
+}
+
 void ZShortcutManager::addShortcut(ZShortcut *s) {
     ZShortcutPrivate::get(s);
     auto *kp = ZKeySequencePrivate::get(&ZShortcutPrivate::get(s)->key);

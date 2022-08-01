@@ -976,4 +976,7 @@ void ZTextLineRef::setLineWidth(int width) {
     }
 }
 
+ZTextLayoutPrivate::~ZTextLayoutPrivate() {
+}
+
 TUIWIDGETS_NS_END
