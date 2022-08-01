@@ -625,13 +625,13 @@ void ZWidget::setPaletteClass(QStringList classes) {
     p->paletteClass = classes;
 }
 
-void ZWidget::addPaletteClass(QString clazz) {
+void ZWidget::addPaletteClass(const QString &clazz) {
     QStringList cls = paletteClass();
     cls.append(clazz);
     setPaletteClass(cls);
 }
 
-void ZWidget::removePaletteClass(QString clazz) {
+void ZWidget::removePaletteClass(const QString &clazz) {
     QStringList cls = paletteClass();
     cls.removeAll(clazz);
     setPaletteClass(cls);

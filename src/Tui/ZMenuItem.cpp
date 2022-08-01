@@ -10,7 +10,7 @@ ZMenuItem::ZMenuItem(ZMenuItem&&) = default;
 ZMenuItem &ZMenuItem::operator=(const ZMenuItem&) = default;
 ZMenuItem &ZMenuItem::operator=(ZMenuItem&&) = default;
 
-ZMenuItem::ZMenuItem(QString markup, QString fakeShortcut, ZImplicitSymbol command, QVector<ZMenuItem> subitems) {
+ZMenuItem::ZMenuItem(const QString &markup, const QString &fakeShortcut, ZImplicitSymbol command, QVector<ZMenuItem> subitems) {
     auto *const p = tuiwidgets_impl();
 
     p->markup = markup;
@@ -19,7 +19,7 @@ ZMenuItem::ZMenuItem(QString markup, QString fakeShortcut, ZImplicitSymbol comma
     p->subitems = subitems;
 }
 
-ZMenuItem::ZMenuItem(QString markup, QObject *context, std::function<QVector<ZMenuItem>()> subitemsGenerator) {
+ZMenuItem::ZMenuItem(const QString &markup, QObject *context, std::function<QVector<ZMenuItem>()> subitemsGenerator) {
     auto *const p = tuiwidgets_impl();
 
     p->markup = markup;

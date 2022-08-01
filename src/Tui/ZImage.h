@@ -22,7 +22,7 @@ class TUIWIDGETS_EXPORT ZImage {
 public:
     ZImage(const ZTerminal *terminal, int width, int height);
     TUIWIDGETS_NODISCARD("return value contains loaded image")
-    static std::unique_ptr<ZImage> fromFile(const ZTerminal *terminal, QString fileName);
+    static std::unique_ptr<ZImage> fromFile(const ZTerminal *terminal, const QString &fileName);
     TUIWIDGETS_NODISCARD("return value contains loaded image")
     static std::unique_ptr<ZImage> fromByteArray(const ZTerminal *terminal, QByteArray data);
     ZImage(const ZImage& other);

@@ -112,8 +112,8 @@ public:
 
     QStringList paletteClass() const;
     void setPaletteClass(QStringList classes);
-    void addPaletteClass(QString clazz);
-    void removePaletteClass(QString clazz);
+    void addPaletteClass(const QString &clazz);
+    void removePaletteClass(const QString &clazz);
 
     CursorStyle cursorStyle() const;
     void setCursorStyle(CursorStyle style);

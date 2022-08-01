@@ -40,7 +40,7 @@ QString ZButton::markup() const {
     return p->styledText.markup();
 }
 
-void ZButton::setMarkup(QString m) {
+void ZButton::setMarkup(const QString &m) {
     auto *p = tuiwidgets_impl();
     p->styledText.setMarkup(m);
     if (p->styledText.mnemonic().size()) {

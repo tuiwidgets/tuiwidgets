@@ -23,7 +23,7 @@ public:
     void setText(const QString &t);
 
     QString markup() const;
-    void setMarkup(QString m);
+    void setMarkup(const QString &m);
 
     void setShortcut(const ZKeySequence &key);
 

@@ -15,8 +15,8 @@ class ZMenuItemPrivate;
 class TUIWIDGETS_EXPORT ZMenuItem {
 public:
     ZMenuItem();
-    ZMenuItem(QString markup, QString fakeShortcut, ZImplicitSymbol command, QVector<ZMenuItem> subitems);
-    ZMenuItem(QString markup, QObject *context, std::function<QVector<ZMenuItem>()> subitemsGenerator);
+    ZMenuItem(const QString &markup, const QString &fakeShortcut, ZImplicitSymbol command, QVector<ZMenuItem> subitems);
+    ZMenuItem(const QString &markup, QObject *context, std::function<QVector<ZMenuItem>()> subitemsGenerator);
     ZMenuItem(const ZMenuItem&);
     ZMenuItem(ZMenuItem&&);
     ~ZMenuItem();

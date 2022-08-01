@@ -770,7 +770,7 @@ QString ZTerminal::title() const {
     return p->title;
 }
 
-void ZTerminal::setTitle(QString title) {
+void ZTerminal::setTitle(const QString &title) {
     auto *const p = tuiwidgets_impl();
     if (p->title == title) {
         return;
@@ -784,7 +784,7 @@ QString ZTerminal::iconTitle() const {
     return p->iconTitle;
 }
 
-void ZTerminal::setIconTitle(QString title) {
+void ZTerminal::setIconTitle(const QString &title) {
     auto *const p = tuiwidgets_impl();
     if (p->iconTitle == title) {
         return;

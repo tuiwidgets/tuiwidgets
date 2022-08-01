@@ -136,9 +136,9 @@ public:
     void updateOutputForceFullRepaint();
 
     QString title() const;
-    void setTitle(QString title);
+    void setTitle(const QString &title);
     QString iconTitle() const;
-    void setIconTitle(QString title);
+    void setIconTitle(const QString &title);
 
     void setAutoDetectTimeoutMessage(const QString& message);
     QString autoDetectTimeoutMessage() const;

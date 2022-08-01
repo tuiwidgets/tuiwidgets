@@ -14,7 +14,7 @@ TUIWIDGETS_NS_START
 
 namespace ZTest {
 
-    TUIWIDGETS_EXPORT void sendText(ZTerminal *terminal, QString text, Qt::KeyboardModifiers modifiers) {
+    TUIWIDGETS_EXPORT void sendText(ZTerminal *terminal, const QString &text, Qt::KeyboardModifiers modifiers) {
         if (text == QStringLiteral(" ")) {
             qFatal("sendText can not be used with \" \", use sendKey instead.");
             return;
