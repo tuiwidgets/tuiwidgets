@@ -82,6 +82,9 @@ protected:
     void focusOutEvent(ZFocusEvent *event) override;
     void moveEvent(ZMoveEvent *event) override;
 
+protected:
+    explicit ZWindow(ZWidget *parent, std::unique_ptr<ZWidgetPrivate> pimpl);
+
 private:
     TUIWIDGETS_DECLARE_PRIVATE(ZWindow)
 };

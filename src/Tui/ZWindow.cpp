@@ -17,7 +17,9 @@ TUIWIDGETS_NS_START
 
 static ZSymbol extendedCharset = TUISYM_LITERAL("extendedCharset");
 
-ZWindow::ZWindow(ZWidget *parent) : ZWidget(parent, std::make_unique<ZWindowPrivate>(this)) {
+ZWindow::ZWindow(ZWidget *parent) : ZWindow(parent, std::make_unique<ZWindowPrivate>(this)) {
+}
+ZWindow::ZWindow(ZWidget *parent, std::unique_ptr<ZWidgetPrivate> pimpl) : ZWidget(parent, move(pimpl)) {
     setFocusMode(FocusContainerMode::Cycle);
     addPaletteClass(QStringLiteral("window"));
     setSizePolicyH(SizePolicy::Expanding);

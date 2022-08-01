@@ -1,4 +1,5 @@
 #include <Tui/ZWindow.h>
+#include <Tui/ZDialog.h>
 
 #include "../catchwrapper.h"
 
@@ -1379,11 +1380,77 @@ TEST_CASE("window-visual", "") {
             tests();
         }
     }
+
+    SECTION("dialog-full-charset") {
+        t = std::make_unique<Testhelper>("window", "window-visual", 25, 5);
+
+        QString kind = GENERATE("dialog", "window-with-dialog-style");
+        CAPTURE(kind);
+
+        TestBackgroundWidget background(t->root);
+        background.setGeometry({0, 0, 25, 5});
+
+        if (kind == "dialog") {
+            w = new Tui::ZDialog(&background);
+        } else {
+            w = new Tui::ZWindow(&background);
+            w->addPaletteClass("dialog");
+        }
+        w->setGeometry({1, 1, 23, 3});
+
+        SECTION("unfocused") {
+            tests();
+            fullcharsTests();
+        }
+
+        SECTION("focused") {
+            w->setFocus();
+            tests();
+            fullcharsTests();
+        }
+    }
+
+    SECTION("dialog-reduced-charset") {
+        t = std::make_unique<Testhelper>("window", "window-visual", 25, 5, Testhelper::ReducedCharset);
+
+        QString kind = GENERATE("dialog", "window-with-dialog-style");
+        CAPTURE(kind);
+
+        TestBackgroundWidget background(t->root);
+        background.setGeometry({0, 0, 25, 5});
+
+        if (kind == "dialog") {
+            w = new Tui::ZDialog(&background);
+        } else {
+            w = new Tui::ZWindow(&background);
+            w->addPaletteClass("dialog");
+        }
+        w->setGeometry({1, 1, 23, 3});
+
+        SECTION("unfocused") {
+            tests();
+        }
+
+        SECTION("focused") {
+            w->setFocus();
+            tests();
+        }
+    }
+
 }
 
 TEST_CASE("window-layout", "") {
     Testhelper t("window", "unused", 15, 5);
-    Tui::ZWindow *w = new Tui::ZWindow(t.root);
+
+    QString kind = GENERATE("window", "dialog");
+    CAPTURE(kind);
+
+    Tui::ZWindow *w;
+    if (kind == "window") {
+        w = new Tui::ZWindow(t.root);
+    } else {
+        w = new Tui::ZDialog(t.root);
+    }
 
     auto contentsMargins = GENERATE(QMargins(1, 0, 0, 0),
                                     QMargins(0, 1, 0, 0),

@@ -3,12 +3,14 @@ qt5_dep = dependency('qt5', modules: 'Core')
 
 #ide:editable-filelist
 tuiwidgets_moc_headers = [
+  'Tui/ZBasicDefaultWidgetManager.h',
   'Tui/ZBasicWindowFacet.h',
   'Tui/ZButton.h',
   'Tui/ZCheckBox.h',
   'Tui/ZCommandManager.h',
   'Tui/ZCommandNotifier.h',
   'Tui/ZDefaultWidgetManager.h',
+  'Tui/ZDialog.h',
   'Tui/ZHBoxLayout.h',
   'Tui/ZInputBox.h',
   'Tui/ZLabel.h',
@@ -33,6 +35,7 @@ tuiwidgets_moc_headers = [
 
 # find Tui -name "*.h" | grep -E -v -e "_p" -e "^Tui/[A-Y]" | sed -e "s/\\(.*\\)/  '\1',/" | sort
 tuiwidgets_public_headers = [
+  'Tui/ZBasicDefaultWidgetManager.h',
   'Tui/ZBasicWindowFacet.h',
   'Tui/ZButton.h',
   'Tui/ZCheckBox.h',
@@ -41,6 +44,7 @@ tuiwidgets_public_headers = [
   'Tui/ZCommandNotifier.h',
   'Tui/ZCommon.h',
   'Tui/ZDefaultWidgetManager.h',
+  'Tui/ZDialog.h',
   'Tui/ZEvent.h',
   'Tui/ZFormatRange.h',
   'Tui/ZHBoxLayout.h',
@@ -93,6 +97,7 @@ tuiwidgets_misc_public_headers = [
 #ide:editable-filelist
 tuiwidgets_sources = [
   'Tui/Misc/AbstractTableModelTrackBy.h',
+  'Tui/ZBasicDefaultWidgetManager.cpp',
   'Tui/ZBasicWindowFacet.cpp',
   'Tui/ListNode.cpp',
   'Tui/MarkupParser.cpp',
@@ -104,6 +109,7 @@ tuiwidgets_sources = [
   'Tui/ZCommandNotifier.cpp',
   'Tui/ZCommon.cpp',
   'Tui/ZDefaultWidgetManager.cpp',
+  'Tui/ZDialog.cpp',
   'Tui/ZEvent.cpp',
   'Tui/ZFormatRange.cpp',
   'Tui/ZHBoxLayout.cpp',
@@ -220,6 +226,7 @@ test('testtoolkitinternal',
 test_files = [
   'tests/Testhelper.cpp',
   'tests/abstracttablemodeltrackby.cpp',
+  'tests/basicdefaultwidgetmanager.cpp',
   'tests/basicwindowfacet/basicwindowfacet.cpp',
   'tests/boxlayout.cpp',
   'tests/button/button.cpp',
@@ -240,6 +247,7 @@ test_files = [
   'tests/textline/textline.cpp',
   'tests/textstyle.cpp',
   'tests/viewport/moveviewport.cpp',
+  'tests/window/dialog.cpp',
   'tests/window/window.cpp',
   'tests/windowcontainer.cpp',
   'tests/windowfacet.cpp',
