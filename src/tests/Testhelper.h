@@ -127,7 +127,7 @@ public:
         return extendViewport;
     }
 
-    virtual void autoPlace(const QSize &available, Tui::ZWidget *self) {
+    virtual void autoPlace(const QSize &available, Tui::ZWidget *self) override {
         geometry = available;
         autoPlaceSelf = self;
         autoPlaceCount += 1;
@@ -169,7 +169,7 @@ protected:
         return Tui::ZRoot::event(event);
     }
 
-    void raiseOnFocus(ZWidget *w) {
+    void raiseOnFocus(ZWidget *w) override {
         raiseCount += 1;
         raiseWidget = w;
         if (!disableRaiseOnFocus) {
