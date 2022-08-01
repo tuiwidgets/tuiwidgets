@@ -50,6 +50,34 @@ void ZWindowFacet::setContainer(ZWindowContainer *container) {
     p->container = container;
 }
 
+bool ZWindowFacet::event(QEvent *event) {
+    return QObject::event(event);
+}
+
+bool ZWindowFacet::eventFilter(QObject *watched, QEvent *event) {
+    return QObject::eventFilter(watched, event);
+}
+
+void ZWindowFacet::timerEvent(QTimerEvent *event) {
+    return QObject::timerEvent(event);
+}
+
+void ZWindowFacet::childEvent(QChildEvent *event) {
+    return QObject::childEvent(event);
+}
+
+void ZWindowFacet::customEvent(QEvent *event) {
+    return QObject::customEvent(event);
+}
+
+void ZWindowFacet::connectNotify(const QMetaMethod &signal) {
+    return QObject::connectNotify(signal);
+}
+
+void ZWindowFacet::disconnectNotify(const QMetaMethod &signal) {
+    return QObject::disconnectNotify(signal);
+}
+
 ZWindowFacetPrivate::~ZWindowFacetPrivate() = default;
 
 TUIWIDGETS_NS_END

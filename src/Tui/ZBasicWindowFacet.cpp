@@ -82,6 +82,46 @@ void ZBasicWindowFacet::setExtendViewport(bool extend) {
     p->extendViewport = extend;
 }
 
+bool ZBasicWindowFacet::event(QEvent *event) {
+    return ZWindowFacet::event(event);
+}
+
+bool ZBasicWindowFacet::eventFilter(QObject *watched, QEvent *event) {
+    return ZWindowFacet::eventFilter(watched, event);
+}
+
+ZWindowContainer *ZBasicWindowFacet::container() const {
+    return ZWindowFacet::container();
+}
+
+void ZBasicWindowFacet::setContainer(ZWindowContainer *container) {
+    return ZWindowFacet::setContainer(container);
+}
+
+void ZBasicWindowFacet::setManuallyPlaced(bool manual) {
+    return ZWindowFacet::setManuallyPlaced(manual);
+}
+
+void ZBasicWindowFacet::timerEvent(QTimerEvent *event) {
+    return ZWindowFacet::timerEvent(event);
+}
+
+void ZBasicWindowFacet::childEvent(QChildEvent *event) {
+    return ZWindowFacet::childEvent(event);
+}
+
+void ZBasicWindowFacet::customEvent(QEvent *event) {
+    return ZWindowFacet::customEvent(event);
+}
+
+void ZBasicWindowFacet::connectNotify(const QMetaMethod &signal) {
+    return ZWindowFacet::connectNotify(signal);
+}
+
+void ZBasicWindowFacet::disconnectNotify(const QMetaMethod &signal) {
+    return ZWindowFacet::disconnectNotify(signal);
+}
+
 ZBasicWindowFacetPrivate::ZBasicWindowFacetPrivate() {
 }
 
