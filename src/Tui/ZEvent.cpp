@@ -230,6 +230,10 @@ ZFocusEvent::ZFocusEvent(ZFocusEvent::FocusOut, Qt::FocusReason reason)
 ZFocusEvent::~ZFocusEvent() {
 }
 
+Qt::FocusReason ZFocusEvent::reason() const {
+    return tuiwidgets_impl()->reason;
+}
+
 ZResizeEventPrivate::ZResizeEventPrivate(QSize size, QSize oldSize)
     : size(size), oldSize(oldSize)
 {
