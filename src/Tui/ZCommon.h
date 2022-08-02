@@ -3,6 +3,7 @@
 
 #include <Tui/tuiwidgets_internal.h>
 
+#include <Qt>
 
 TUIWIDGETS_NS_START
 
@@ -13,6 +14,103 @@ enum ZItemDataRole : int {
     LeftDecorationBgRole = (TUI_ITEM_ROLE_BASE + 2),
     LeftDecorationSpaceRole = (TUI_ITEM_ROLE_BASE + 3),
 };
+
+// import some vales/types from Qt
+using Qt::CheckState;
+using Qt::Unchecked;
+using Qt::PartiallyChecked;
+using Qt::Checked;
+
+using Qt::KeyboardModifier;
+using Qt::KeyboardModifiers;
+using Qt::NoModifier;
+using Qt::ShiftModifier;
+using Qt::AltModifier;
+using Qt::ControlModifier;
+using Qt::KeypadModifier;
+
+using Qt::Key;
+using Qt::Key_0;
+using Qt::Key_1;
+using Qt::Key_2;
+using Qt::Key_3;
+using Qt::Key_4;
+using Qt::Key_5;
+using Qt::Key_6;
+using Qt::Key_7;
+using Qt::Key_8;
+using Qt::Key_9;
+using Qt::Key_Backspace;
+using Qt::Key_Delete;
+using Qt::Key_Down;
+using Qt::Key_End;
+using Qt::Key_Enter;
+using Qt::Key_Escape;
+using Qt::Key_F1;
+using Qt::Key_F2;
+using Qt::Key_F3;
+using Qt::Key_F4;
+using Qt::Key_F5;
+using Qt::Key_F6;
+using Qt::Key_F7;
+using Qt::Key_F8;
+using Qt::Key_F9;
+using Qt::Key_F10;
+using Qt::Key_F11;
+using Qt::Key_F12;
+using Qt::Key_Home;
+using Qt::Key_Insert;
+using Qt::Key_Left;
+using Qt::Key_Menu;
+using Qt::Key_Minus;
+using Qt::Key_PageDown;
+using Qt::Key_PageUp;
+using Qt::Key_Period;
+using Qt::Key_Plus;
+using Qt::Key_Right;
+using Qt::Key_Space;
+using Qt::Key_Tab;
+using Qt::Key_Up;
+using Qt::Key_division;
+using Qt::Key_multiply;
+using Qt::Key_unknown;
+
+using Qt::FocusReason;
+using Qt::TabFocusReason;
+using Qt::BacktabFocusReason;
+using Qt::ActiveWindowFocusReason;
+using Qt::ShortcutFocusReason;
+using Qt::OtherFocusReason;
+// Other focus reasons are not meaningful at the moment.
+
+using Qt::FocusPolicy;
+using Qt::NoFocus;
+using Qt::StrongFocus;
+using Qt::TabFocus;
+// Other focus policies are not meaningful at the moment.
+
+using Qt::Alignment;
+using Qt::AlignHorizontal_Mask;
+using Qt::AlignLeft;
+using Qt::AlignRight;
+using Qt::AlignVertical_Mask;
+using Qt::AlignTop;
+using Qt::AlignBottom;
+using Qt::AlignVCenter;
+using Qt::AlignHCenter;
+
+using Qt::ShortcutContext;
+using Qt::WidgetShortcut;
+using Qt::WindowShortcut;
+using Qt::ApplicationShortcut;
+using Qt::WidgetWithChildrenShortcut;
+
+using Qt::Edges;
+using Qt::Edge;
+using Qt::TopEdge;
+using Qt::LeftEdge;
+using Qt::RightEdge;
+using Qt::BottomEdge;
 
 enum class CursorStyle {
     Unset = -1,
