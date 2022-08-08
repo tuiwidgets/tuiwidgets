@@ -14,9 +14,9 @@ public:
 
 public:
     void setGeometry(QRect r) override;
-    QSize sizeHint() const  override;
-    SizePolicy sizePolicyH() const  override;
-    SizePolicy sizePolicyV() const  override;
+    QSize sizeHint() const override;
+    SizePolicy sizePolicyH() const override;
+    SizePolicy sizePolicyV() const override;
     bool isVisible() const override;
 
 private:
