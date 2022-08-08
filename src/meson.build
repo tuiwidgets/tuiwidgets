@@ -238,6 +238,7 @@ test_files = [
   'tests/image/image.cpp',
   'tests/inputbox/inputbox.cpp',
   'tests/label/label.cpp',
+  'tests/layout/layoutitem.cpp',
   'tests/layoutinvalidation.cpp',
   'tests/listview/listview.cpp',
   'tests/menu/menu.cpp',
