@@ -14,6 +14,7 @@
 #include <Tui/ZPainter.h>
 #include <Tui/ZPalette.h>
 #include <Tui/ZTerminal.h>
+#include <Tui/ZTest.h>
 #include <Tui/ZWidget.h>
 #include <Tui/ZWindowFacet.h>
 
@@ -1593,6 +1594,29 @@ TEST_CASE("window-misc", "") {
         t.render();
         // shall not crash
     }
+}
+
+TEST_CASE("window-relayout", "") {
+    Testhelper t("window", "unused", 15, 5);
+    Tui::ZWindow w(t.root);
+    w.setLayout(new StubLayout());
+
+    SECTION("setBorderEdges with change") {
+        Tui::ZTest::withLayoutRequestTracking(t.terminal.get(), [&](QSet<Tui::ZWidget*> *requests) {
+            w.setBorderEdges({});
+            CHECK(requests->contains(&w));
+            requests->clear();
+        });
+    }
+
+    SECTION("setBorderEdges without change") {
+        Tui::ZTest::withLayoutRequestTracking(t.terminal.get(), [&](QSet<Tui::ZWidget*> *requests) {
+            w.setBorderEdges(w.borderEdges());
+            CHECK(!requests->contains(&w));
+            requests->clear();
+        });
+    }
+
 }
 
 TEST_CASE("window-auto-placement", "") {
