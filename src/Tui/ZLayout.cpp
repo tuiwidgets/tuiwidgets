@@ -50,8 +50,9 @@ void ZLayout::widgetEvent(QEvent *event) {
             QEvent request(QEvent::LayoutRequest);
             QCoreApplication::sendEvent(chainRoot, &request);
         }
-        // if this layout is still pending now, layout locally by doing an additional layout starting here.
-        // This could happen if i.e. if sizeHint does not change but positions need to be updated
+        // if this layout is still pending now, layout locally by doing a (additional) layout starting here.
+        // This could happen for the chain root, or if i.e. if sizeHint does not change but positions need
+        // to be updated
         // i.e. one widget was replaced with a widget of the same size
         if (!ZLayoutPrivate::alreadyLayoutedInThisGeneration(term, w)) {
             ZLayoutPrivate::markAsAlreadyLayouted(term, w);
