@@ -62,7 +62,7 @@ void ZRadioButton::setChecked(bool state) {
 }
 
 void ZRadioButton::removeShortcut() {
-    for(ZShortcut *s : findChildren<ZShortcut*>(QString(), Qt::FindDirectChildrenOnly)) {
+    for (ZShortcut *s : findChildren<ZShortcut*>(QString(), Qt::FindDirectChildrenOnly)) {
         delete s;
     }
 }
@@ -95,9 +95,9 @@ void ZRadioButton::click() {
 
 void ZRadioButton::toggle() {
     auto *const p = tuiwidgets_impl();
-    if(!p->checked) {
-        if(parent()) {
-            for(ZRadioButton *rb : parent()->findChildren<ZRadioButton*>(QString(), Qt::FindDirectChildrenOnly)) {
+    if (!p->checked) {
+        if (parent()) {
+            for (ZRadioButton *rb : parent()->findChildren<ZRadioButton*>(QString(), Qt::FindDirectChildrenOnly)) {
                 if (rb != this) {
                     rb->tuiwidgets_impl()->checked = false;
                     rb->toggled(false);
@@ -142,7 +142,7 @@ void ZRadioButton::paintEvent(ZPaintEvent *event) {
 }
 
 void ZRadioButton::keyEvent(ZKeyEvent *event) {
-    if(event->key() == Qt::Key_Space && event->modifiers() == 0) {
+    if (event->key() == Qt::Key_Space && event->modifiers() == 0) {
         click();
     } else {
         ZWidget::keyEvent(event);
