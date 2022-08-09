@@ -402,9 +402,9 @@ void ZWindow::keyEvent(ZKeyEvent *event) {
             ZWidget *f = term->focusWidget();
             if (f && isAncestorOf(f)) {
                 if (event->modifiers() == Qt::ShiftModifier) {
-                    f->prevFocusable()->setFocus();
+                    f->prevFocusable()->setFocus(Qt::BacktabFocusReason);
                 } else {
-                    f->nextFocusable()->setFocus();
+                    f->nextFocusable()->setFocus(Qt::TabFocusReason);
                 }
             }
         }
