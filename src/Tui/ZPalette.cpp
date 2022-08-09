@@ -87,13 +87,13 @@ void ZPalette::setColors(QList<ZPalette::ColorDef> newColors) {
     }
 }
 
-void ZPalette::addLocalAlias(QList<ZPalette::AliasDef> newAliases) {
-    auto *const p = tuiwidgets_impl();
-
-    for (const auto &nc : newAliases) {
-        p->localAlias[nc.name] = nc.fallback;
-    }
-}
+//void ZPalette::addLocalAlias(QList<ZPalette::AliasDef> newAliases) {
+//    auto *const p = tuiwidgets_impl();
+//
+//    for (const auto &nc : newAliases) {
+//        p->localAlias[nc.name] = nc.fallback;
+//    }
+//}
 
 void ZPalette::addRules(QList<ZPalette::RuleDef> newRules) {
     auto *const p = tuiwidgets_impl();

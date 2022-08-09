@@ -59,7 +59,7 @@ public:
     ZColor getColor(ZWidget *targetWidget, ZImplicitSymbol x) const;
 
     void setColors(QList<ColorDef> newColors);
-    void addLocalAlias(QList<AliasDef> newAliases);
+    //void addLocalAlias(QList<AliasDef> newAliases);
     void addRules(QList<RuleDef> newRules);
 
     ZPalette& operator=(const ZPalette& other);
