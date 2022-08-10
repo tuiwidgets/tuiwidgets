@@ -28,15 +28,15 @@ int ZRoot::fillChar() const {
     return p->fillChar;
 }
 
-void ZRoot::focusNextWindow() {
+void ZRoot::activateNextWindow() {
     focusWindowHelper(true);
 }
 
-void ZRoot::focusPreviousWindow() {
+void ZRoot::activatePreviousWindow() {
     focusWindowHelper(false);
 }
 
-void ZRoot::raiseOnFocus(ZWidget *w) {
+void ZRoot::raiseOnActivate(ZWidget *w) {
     w->raise();
 }
 
@@ -65,7 +65,7 @@ void ZRoot::focusWindowHelper(bool forward) {
             ZWidget *w = win->placeFocus();
             if (w) {
                 w->setFocus(Qt::FocusReason::ActiveWindowFocusReason);
-                raiseOnFocus(win);
+                raiseOnActivate(win);
                 found = true;
                 break;
             }
@@ -76,7 +76,7 @@ void ZRoot::focusWindowHelper(bool forward) {
     }
     if (!found && first) {
         first->placeFocus()->setFocus(Qt::FocusReason::ActiveWindowFocusReason);
-        raiseOnFocus(first);
+        raiseOnActivate(first);
     }
 }
 

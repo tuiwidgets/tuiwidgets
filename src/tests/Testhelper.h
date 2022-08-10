@@ -169,11 +169,11 @@ protected:
         return Tui::ZRoot::event(event);
     }
 
-    void raiseOnFocus(ZWidget *w) override {
+    void raiseOnActivate(ZWidget *w) override {
         raiseCount += 1;
         raiseWidget = w;
         if (!disableRaiseOnFocus) {
-            Tui::ZRoot::raiseOnFocus(w);
+            Tui::ZRoot::raiseOnActivate(w);
         }
     }
 };

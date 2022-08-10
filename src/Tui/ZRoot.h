@@ -20,10 +20,10 @@ public:
     void setFillChar(int fillChar);
     int fillChar() const;
 
-    void focusNextWindow();
-    void focusPreviousWindow();
+    void activateNextWindow();
+    void activatePreviousWindow();
 
-    virtual void raiseOnFocus(ZWidget *w);
+    virtual void raiseOnActivate(ZWidget *w);
     QRect layoutArea() const override;
     QSize minimumSizeHint() const override;
 
