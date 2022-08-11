@@ -1,10 +1,12 @@
 #ifndef CATCHQT_H
 #define CATCHQT_H
 
-#include <QString>
+#include <QModelIndex>
 #include <QRect>
+#include <QString>
 
 #include <Tui/ZColor.h>
+#include <Tui/ZWidget.h>
 
 #include "../third-party/catch.hpp"
 
@@ -63,6 +65,34 @@ namespace Catch {
             }
         }
     };
+
+    template<>
+    struct StringMaker<Tui::SizePolicy, void> {
+        static std::string convert(Tui::SizePolicy const& value) {
+            if (value == Tui::SizePolicy::Fixed) {
+                return "Fixed";
+            } else if (value == Tui::SizePolicy::Maximum) {
+                return "Maximum";
+            } else if (value == Tui::SizePolicy::Minimum) {
+                return "Minimum";
+            } else if (value == Tui::SizePolicy::Expanding) {
+                return "Expanding";
+            } else if (value == Tui::SizePolicy::Preferred) {
+                return "Preferred";
+            }
+            return "unknown";
+        }
+    };
+
+    template<>
+    struct StringMaker<QModelIndex, void> {
+        static std::string convert(QModelIndex const& value) {
+            return QStringLiteral("(row: %0, column: %1, model: %2)")
+                    .arg(QString::number(value.row()), QString::number(value.column()), QString::number((intptr_t)value.model(), 16))
+                    .toStdString();
+        }
+    };
+
 }
 
 #endif
