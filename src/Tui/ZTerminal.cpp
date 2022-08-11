@@ -980,6 +980,9 @@ std::unique_ptr<ZKeyEvent> ZTerminal::translateKeyEvent(const ZTerminalNativeEve
         if (text == QStringLiteral(" ")) {
             return std::unique_ptr<ZKeyEvent>{ new ZKeyEvent(Qt::Key_Space, modifiers, QString()) };
         }
+        if (text == QStringLiteral("\n")) {
+            return std::unique_ptr<ZKeyEvent>{ new ZKeyEvent(Qt::Key_Enter, modifiers, QString()) };
+        }
         int key = Qt::Key_unknown;
         return std::unique_ptr<ZKeyEvent>{ new ZKeyEvent(key, modifiers, text) };
     }
