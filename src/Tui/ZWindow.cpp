@@ -497,6 +497,14 @@ bool ZWindow::eventFilter(QObject *watched, QEvent *event) {
     return ZWidget::eventFilter(watched, event);
 }
 
+QSize ZWindow::minimumSizeHint() const {
+    return ZWidget::minimumSizeHint();
+}
+
+ZWidget *ZWindow::resolveSizeHintChain() {
+    return ZWidget::resolveSizeHintChain();
+}
+
 void ZWindow::timerEvent(QTimerEvent *event) {
     ZWidget::timerEvent(event);
 }

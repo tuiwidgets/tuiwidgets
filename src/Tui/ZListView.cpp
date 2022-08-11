@@ -406,6 +406,10 @@ QObject *ZListView::facet(const QMetaObject &metaObject) const {
     return ZWidget::facet(metaObject);
 }
 
+ZWidget *ZListView::resolveSizeHintChain() {
+    return ZWidget::resolveSizeHintChain();
+}
+
 void ZListView::timerEvent(QTimerEvent *event) {
     return ZWidget::timerEvent(event);
 }

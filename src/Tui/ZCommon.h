@@ -112,14 +112,14 @@ using Qt::LeftEdge;
 using Qt::RightEdge;
 using Qt::BottomEdge;
 
-enum class CursorStyle {
+enum class CursorStyle : int {
     Unset = -1,
     Block = 0,
     Underline = 1,
     Bar = 2
 };
 
-enum class ZTextAttribute {
+enum class ZTextAttribute : int {
     Bold = (1<<0),
     Italic = (1<<1),
     Blink = (1<<4),

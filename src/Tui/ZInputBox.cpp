@@ -253,6 +253,10 @@ QObject *ZInputBox::facet(const QMetaObject &metaObject) const {
     return ZWidget::facet(metaObject);
 }
 
+ZWidget *ZInputBox::resolveSizeHintChain() {
+    return ZWidget::resolveSizeHintChain();
+}
+
 void ZInputBox::timerEvent(QTimerEvent *event) {
     return ZWidget::timerEvent(event);
 }

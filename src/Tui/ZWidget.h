@@ -21,13 +21,13 @@ class ZLayout;
 class ZPalette;
 class ZTerminal;
 
-enum class FocusContainerMode {
+enum class FocusContainerMode : int {
     None,
     SubOrdering,
     Cycle
 };
 
-enum class SizePolicy {
+enum class SizePolicy : int {
     Fixed,
     Minimum,
     Maximum,

@@ -166,6 +166,66 @@ void ZButton::keyEvent(ZKeyEvent *event) {
     }
 }
 
+bool ZButton::eventFilter(QObject *watched, QEvent *event) {
+    return ZWidget::eventFilter(watched, event);
+}
+
+QSize ZButton::minimumSizeHint() const {
+    return ZWidget::minimumSizeHint();
+}
+
+QRect ZButton::layoutArea() const {
+    return ZWidget::layoutArea();
+}
+
+QObject *ZButton::facet(const QMetaObject &metaObject) const {
+    return ZWidget::facet(metaObject);
+}
+
+ZWidget *ZButton::resolveSizeHintChain() {
+    return ZWidget::resolveSizeHintChain();
+}
+
+void ZButton::timerEvent(QTimerEvent *event) {
+    return ZWidget::timerEvent(event);
+}
+
+void ZButton::childEvent(QChildEvent *event) {
+    return ZWidget::childEvent(event);
+}
+
+void ZButton::customEvent(QEvent *event) {
+    return ZWidget::customEvent(event);
+}
+
+void ZButton::connectNotify(const QMetaMethod &signal) {
+    return ZWidget::connectNotify(signal);
+}
+
+void ZButton::disconnectNotify(const QMetaMethod &signal) {
+    return ZWidget::disconnectNotify(signal);
+}
+
+void ZButton::pasteEvent(ZPasteEvent *event) {
+    return ZWidget::pasteEvent(event);
+}
+
+void ZButton::focusInEvent(ZFocusEvent *event) {
+    return ZWidget::focusInEvent(event);
+}
+
+void ZButton::focusOutEvent(ZFocusEvent *event) {
+    return ZWidget::focusOutEvent(event);
+}
+
+void ZButton::resizeEvent(ZResizeEvent *event) {
+    return ZWidget::resizeEvent(event);
+}
+
+void ZButton::moveEvent(ZMoveEvent *event) {
+    return ZWidget::moveEvent(event);
+}
+
 ZButtonPrivate::ZButtonPrivate(ZWidget *pub) : ZWidgetPrivate(pub) {
 }
 

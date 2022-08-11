@@ -98,6 +98,10 @@ QRect ZDialog::layoutArea() const {
     return ZWindow::layoutArea();
 }
 
+ZWidget *ZDialog::resolveSizeHintChain() {
+    return ZWindow::resolveSizeHintChain();
+}
+
 void ZDialog::timerEvent(QTimerEvent *event) {
     return ZWindow::timerEvent(event);
 }

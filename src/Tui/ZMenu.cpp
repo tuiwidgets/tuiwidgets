@@ -254,6 +254,10 @@ QRect ZMenu::layoutArea() const {
     return ZWidget::layoutArea();
 }
 
+ZWidget *ZMenu::resolveSizeHintChain() {
+    return ZWidget::resolveSizeHintChain();
+}
+
 void ZMenu::timerEvent(QTimerEvent *event) {
     ZWidget::timerEvent(event);
 }

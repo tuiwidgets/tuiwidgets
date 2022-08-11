@@ -36,6 +36,7 @@ public:
     // public virtuals from base class override everything for later ABI compatibility
     bool event(QEvent *event) override;
     bool eventFilter(QObject *watched, QEvent *event) override;
+    bool isSpacer() const override;
 
 protected:
     void relayout();

@@ -21,7 +21,7 @@ class ZPalettePrivate;
 
 class TUIWIDGETS_EXPORT ZPalette {
 public:
-    enum Type {
+    enum Type : int {
         Publish,
         Local
     };

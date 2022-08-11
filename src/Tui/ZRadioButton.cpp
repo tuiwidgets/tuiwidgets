@@ -169,6 +169,10 @@ QObject *ZRadioButton::facet(const QMetaObject &metaObject) const {
     return ZWidget::facet(metaObject);
 }
 
+ZWidget *ZRadioButton::resolveSizeHintChain() {
+    return ZWidget::resolveSizeHintChain();
+}
+
 void ZRadioButton::timerEvent(QTimerEvent *event) {
     return ZWidget::timerEvent(event);
 }

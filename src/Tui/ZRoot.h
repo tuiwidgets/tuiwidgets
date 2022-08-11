@@ -44,6 +44,7 @@ public:
     bool eventFilter(QObject *watched, QEvent *event) override;
     QObject *facet(const QMetaObject &metaObject) const override;
     QSize sizeHint() const override;
+    ZWidget *resolveSizeHintChain() override;
 
 protected:
     // protected virtuals from base class override everything for later ABI compatibility

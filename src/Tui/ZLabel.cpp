@@ -146,6 +146,10 @@ QObject *ZLabel::facet(const QMetaObject &metaObject) const {
     return ZWidget::facet(metaObject);
 }
 
+ZWidget *ZLabel::resolveSizeHintChain() {
+    return ZWidget::resolveSizeHintChain();
+}
+
 void ZLabel::timerEvent(QTimerEvent *event) {
     return ZWidget::timerEvent(event);
 }

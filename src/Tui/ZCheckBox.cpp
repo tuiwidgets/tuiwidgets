@@ -181,6 +181,10 @@ QObject *ZCheckBox::facet(const QMetaObject &metaObject) const {
     return ZWidget::facet(metaObject);
 }
 
+ZWidget *ZCheckBox::resolveSizeHintChain() {
+    return ZWidget::resolveSizeHintChain();
+}
+
 void ZCheckBox::timerEvent(QTimerEvent *event) {
     return ZWidget::timerEvent(event);
 }

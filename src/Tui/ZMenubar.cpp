@@ -313,6 +313,10 @@ QObject *ZMenubar::facet(const QMetaObject &metaObject) const {
     return ZWidget::facet(metaObject);
 }
 
+ZWidget *ZMenubar::resolveSizeHintChain() {
+    return ZWidget::resolveSizeHintChain();
+}
+
 void ZMenubar::timerEvent(QTimerEvent *event) {
     ZWidget::timerEvent(event);
 }

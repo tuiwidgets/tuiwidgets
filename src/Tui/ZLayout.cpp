@@ -95,6 +95,10 @@ bool ZLayout::eventFilter(QObject *watched, QEvent *event) {
     return QObject::eventFilter(watched, event);
 }
 
+bool ZLayout::isSpacer() const {
+    return ZLayoutItem::isSpacer();
+}
+
 void ZLayout::relayout() {
     ZWidget *w = widget();
     if (w) {

@@ -24,7 +24,7 @@ namespace Private {
     };
 }
 
-enum class TerminalColor {
+enum class TerminalColor : int {
     black = 0,
     darkGray = 8,
     lightGray = 7,
@@ -69,7 +69,7 @@ private:
 
 class TUIWIDGETS_EXPORT ZColor {
 public:
-    enum ColorType {
+    enum ColorType : int {
         RGB,
         Default,
         Terminal,

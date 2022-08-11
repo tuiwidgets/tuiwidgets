@@ -43,6 +43,7 @@ public:
     bool event(QEvent *event) override;
     bool eventFilter(QObject *watched, QEvent *event) override;
     QRect layoutArea() const override;
+    ZWidget *resolveSizeHintChain() override;
 
 protected:
     // protected virtuals from base class override everything for later ABI compatibility

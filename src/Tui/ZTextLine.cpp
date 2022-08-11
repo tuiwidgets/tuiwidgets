@@ -85,6 +85,10 @@ QObject *ZTextLine::facet(const QMetaObject &metaObject) const {
     return ZWidget::facet(metaObject);
 }
 
+ZWidget *ZTextLine::resolveSizeHintChain() {
+    return ZWidget::resolveSizeHintChain();
+}
+
 void ZTextLine::timerEvent(QTimerEvent *event) {
     return ZWidget::timerEvent(event);
 }

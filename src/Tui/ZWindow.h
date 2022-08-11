@@ -16,7 +16,7 @@ class TUIWIDGETS_EXPORT ZWindow : public ZWidget {
     Q_OBJECT
 
 public:
-    enum Option {
+    enum Option : int {
         CloseOption = (1 << 0),
         CloseButton = CloseOption,
         MoveOption = (1 << 1),
@@ -69,6 +69,8 @@ protected:
 public:
     // public virtuals from base classes: override everything for later ABI compatibility
     bool eventFilter(QObject *watched, QEvent *event) override;
+    QSize minimumSizeHint() const override;
+    ZWidget *resolveSizeHintChain() override;
 
 protected:
     // protected virtuals from base classes: override everything for later ABI compatibility

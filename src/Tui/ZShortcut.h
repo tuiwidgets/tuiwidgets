@@ -81,6 +81,7 @@ public:
     bool event(QEvent *event) override;
     // public virtuals from base class override everything for later ABI compatibility
     bool eventFilter(QObject *watched, QEvent *event) override;
+
 protected:
     // protected virtuals from base class override everything for later ABI compatibility
     void timerEvent(QTimerEvent *event) override;

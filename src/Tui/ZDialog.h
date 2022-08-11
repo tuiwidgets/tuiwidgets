@@ -37,6 +37,7 @@ public:
     QSize sizeHint() const override;
     QSize minimumSizeHint() const override;
     QRect layoutArea() const override;
+    ZWidget *resolveSizeHintChain() override;
 
 protected:
     // protected virtuals from base class override everything for later ABI compatibility

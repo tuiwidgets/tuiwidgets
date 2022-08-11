@@ -198,6 +198,10 @@ QSize ZRoot::sizeHint() const {
     return ZWidget::sizeHint();
 }
 
+ZWidget *ZRoot::resolveSizeHintChain() {
+    return ZWidget::resolveSizeHintChain();
+}
+
 void ZRoot::focusInEvent(ZFocusEvent *event) {
     ZWidget::focusInEvent(event);
 }

@@ -56,6 +56,7 @@ public:
     QSize minimumSizeHint() const override;
     QRect layoutArea() const override;
     QObject *facet(const QMetaObject &metaObject) const override;
+    ZWidget *resolveSizeHintChain() override;
 
 protected:
     // protected virtuals from base class override everything for later ABI compatibility
