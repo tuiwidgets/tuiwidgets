@@ -19,6 +19,11 @@ namespace ZTest {
             qFatal("sendText can not be used with \" \", use sendKey instead.");
             return;
         }
+        if (text == QStringLiteral("\n")) {
+            qFatal("sendText can not be used with \"\\n\", use sendKey instead.");
+            return;
+        }
+
         ZKeyEvent event(Qt::Key_unknown, modifiers, text);
         terminal->dispatchKeyboardEvent(event);
     }
