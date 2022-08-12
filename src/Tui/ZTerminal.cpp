@@ -1107,6 +1107,11 @@ bool ZTerminal::event(QEvent *event) {
                 if (p->options & DisableAlternativeScreen) {
                     nativeOptions.append(" -altscreen ");
                 }
+
+                if (p->options & ConservativeTrueColorOutput) {
+                    termpaint_terminal_disable_capability(p->terminal, TERMPAINT_CAPABILITY_TRUECOLOR_MAYBE_SUPPORTED);
+                }
+
                 termpaint_terminal_setup_fullscreen(p->terminal,
                                                     termpaint_surface_width(p->surface),
                                                     termpaint_surface_height(p->surface),

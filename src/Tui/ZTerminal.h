@@ -36,6 +36,7 @@ public:
         ForceIncompatibleTerminals = 1 << 6,
         DisableTaggedPaste = 1 << 7,
         DebugDisableBufferedIo = 1 << 8,
+        ConservativeTrueColorOutput = 1 << 9,
     };
     Q_DECLARE_FLAGS(Options, Option)
 
