@@ -1121,7 +1121,7 @@ bool ZTerminal::event(QEvent *event) {
                     incompatibleTerminalDetected();
                 }
 
-                if (!(p->options & DisableTaggedPaste)) {
+                if (!(p->options & DisableTaggedPaste) && termpaint_terminal_capable(p->terminal, TERMPAINT_CAPABILITY_MAY_TRY_TAGGED_PASTE)) {
                     termpaint_terminal_request_tagged_paste(p->terminal, true);
                 }
 
