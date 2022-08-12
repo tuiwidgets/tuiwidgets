@@ -304,15 +304,9 @@ void ZWidget::setStackingLayer(int layer) {
     if (!parentWidget()) return;
     QList<QObject*> &list = parentWidget()->d_ptr->children;
     if (list.size() > 1) {
-        if (prevLayer > layer) {
-            // when lowering the layer this widget should end up as the top of the target layer, so raise just works.
-            list.move(list.indexOf(this), 0);
-            raise();
-        } else {
-            // when raising the layer this widget should end up as the bottom of the target layer.
-            list.move(list.indexOf(this), list.size() - 1);
-            lower();
-        }
+        // this widget should end up as the top of the target layer, so raise just works.
+        list.move(list.indexOf(this), 0);
+        raise();
     }
 }
 
