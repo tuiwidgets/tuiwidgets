@@ -202,6 +202,8 @@ private:
 };
 TUIWIDGETS_DECLARE_OPERATORS_FOR_FLAGS_IN_NAMESPACE(ZTerminal::Options)
 
+static_assert (std::is_copy_constructible<ZTerminal::OffScreen>::value, "std::is_copy_constructible_v<ZTerminal::OffScreen>");
+
 TUIWIDGETS_NS_END
 
 TUIWIDGETS_DECLARE_OPERATORS_FOR_FLAGS_GLOBAL(ZTerminal::Options)
