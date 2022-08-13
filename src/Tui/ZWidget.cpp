@@ -674,19 +674,25 @@ CursorStyle ZWidget::cursorStyle() const {
 
 void ZWidget::setCursorStyle(CursorStyle style) {
     auto *const p = tuiwidgets_impl();
+    if (p->cursorStyle == style) return;
     p->cursorStyle = style;
+    update();
 }
 
 void ZWidget::resetCursorColor() {
     auto *const p = tuiwidgets_impl();
+    if (p->cursorColorR == -1 && p->cursorColorG == -1 && p->cursorColorB == -1) return;
     p->cursorColorR = p->cursorColorG = p->cursorColorB = -1;
+    update();
 }
 
 void ZWidget::setCursorColor(int r, int g, int b) {
     auto *const p = tuiwidgets_impl();
+    if (p->cursorColorR == r && p->cursorColorG == g && p->cursorColorB == b) return;
     p->cursorColorR = r;
     p->cursorColorG = g;
     p->cursorColorB = b;
+    update();
 }
 
 void ZWidget::setFocus(Qt::FocusReason reason) {
