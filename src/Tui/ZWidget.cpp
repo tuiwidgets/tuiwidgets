@@ -158,6 +158,7 @@ void ZWidget::setParent(ZWidget *newParent) {
             newFocus->setFocus();
         }
     }
+    update();
 }
 
 QRect ZWidget::geometry() const {
