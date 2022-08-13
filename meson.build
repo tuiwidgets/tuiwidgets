@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: BSL-1.0
+
 project('tuiwidgets', ['cpp'], default_options : ['buildtype=debugoptimized', 'cpp_std=c++17'])
 
 posixsignalmanager_dep = subproject('posixsignalmanager').get_variable('posixsignalmanager_dep')

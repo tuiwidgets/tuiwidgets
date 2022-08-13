@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: BSL-1.0
+
 #include "ZListView.h"
 #include "ZListView_p.h"
 

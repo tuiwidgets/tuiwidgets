@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: BSL-1.0
+
 #ide:editable-filelist
 exmaples_demo_sources = [
   'demo.cpp',

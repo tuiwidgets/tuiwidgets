@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: BSL-1.0
+
 #include "ZMenu.h"
 #include "ZMenu_p.h"
 

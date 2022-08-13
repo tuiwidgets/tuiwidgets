@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: BSL-1.0
+
 #include "ZTextLine.h"
 #include "ZTextLine_p.h"
 

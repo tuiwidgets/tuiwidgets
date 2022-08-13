@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: BSL-1.0
+
 #include "Layout_p.h"
 
 TUIWIDGETS_NS_START

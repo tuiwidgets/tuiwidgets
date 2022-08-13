@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: BSL-1.0
+
 #include "ZButton.h"
 #include "ZButton_p.h"
 

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: BSL-1.0
+
 #include "ZBasicDefaultWidgetManager.h"
 #include "ZBasicDefaultWidgetManager_p.h"
 

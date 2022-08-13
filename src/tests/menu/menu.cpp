@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: BSL-1.0
+
 #include <Tui/ZMenu.h>
 #include <Tui/ZMenubar.h>
 

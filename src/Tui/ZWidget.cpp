@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: BSL-1.0
+
 #include <Tui/ZWidget.h>
 #include <Tui/ZWidget_p.h>
 

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: BSL-1.0
+
 #ifndef TESTHELPER_H
 #define TESTHELPER_H
 

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: BSL-1.0
+
 #include "ZSimpleStringLogger.h"
 
 TUIWIDGETS_NS_START

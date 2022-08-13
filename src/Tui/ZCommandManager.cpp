@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: BSL-1.0
+
 #include "ZCommandManager.h"
 
 #include "ZCommandManager_p.h"

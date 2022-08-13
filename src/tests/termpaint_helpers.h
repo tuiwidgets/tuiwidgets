@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: BSL-1.0
+
 #ifndef TESTS_TERMPAINT_HELPERS
 #define TESTS_TERMPAINT_HELPERS
 

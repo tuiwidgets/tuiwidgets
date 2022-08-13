@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: BSL-1.0
+
 #include <Tui/ZBasicWindowFacet.h>
 
 #include "../catchwrapper.h"

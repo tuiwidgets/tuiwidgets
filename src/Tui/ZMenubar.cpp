@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: BSL-1.0
+
 #include "ZMenubar.h"
 #include "ZMenubar_p.h"
 #include "ZStyledTextLine.h"

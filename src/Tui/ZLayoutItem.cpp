@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: BSL-1.0
+
 #include "ZLayoutItem.h"
 #include "ZLayoutItem_p.h"
 

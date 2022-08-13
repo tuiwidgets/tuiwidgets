@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: BSL-1.0
+
 #include <Tui/ZTextLayout.h>
 #include <Tui/ZTextOption.h>
 #include <Tui/ZFormatRange.h>

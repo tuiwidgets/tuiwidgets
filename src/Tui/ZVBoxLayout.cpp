@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: BSL-1.0
+
 #include "ZVBoxLayout.h"
 
 #include "Layout_p.h"

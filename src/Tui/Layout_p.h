@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: BSL-1.0
+
 #ifndef TUIWIDGETS_LAYOUT_P_INCLUDED
 #define TUIWIDGETS_LAYOUT_P_INCLUDED
 

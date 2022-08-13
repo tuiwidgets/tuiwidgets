@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: BSL-1.0
+
 #include "ZWindow.h"
 #include "ZWindow_p.h"
 

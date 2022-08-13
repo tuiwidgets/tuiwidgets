@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: BSL-1.0
+
 #include "ZBasicWindowFacet.h"
 #include "ZBasicWindowFacet_p.h"
 

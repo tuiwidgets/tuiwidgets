@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: BSL-1.0
+
 #include "ZPalette.h"
 #include "ZPalette_p.h"
 

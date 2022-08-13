@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: BSL-1.0
+
 #include "ZPainter.h"
 #include <Tui/ZPainter_p.h>
 

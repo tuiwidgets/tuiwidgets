@@ -1,3 +1,6 @@
+// Feel free to copy from this example to your own code
+// SPDX-License-Identifier: 0BSD OR BSL-1.0 OR MIT-0
+
 #include "demo.h"
 
 #include <QCoreApplication>

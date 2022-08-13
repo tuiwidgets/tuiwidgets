@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: BSL-1.0
+
 #include "ZInputBox.h"
 #include "ZInputBox_p.h"
 

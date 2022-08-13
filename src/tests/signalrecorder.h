@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: BSL-1.0
+
 #ifndef SIGNALRECORDER_H
 #define SIGNALRECORDER_H
 

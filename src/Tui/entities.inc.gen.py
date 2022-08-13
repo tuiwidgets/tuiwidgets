@@ -1,4 +1,5 @@
 #! /usr/bin/python3
+# SPDX-License-Identifier: BSL-1.0
 
 # entities.json from https://www.w3.org/TR/html5/entities.json
 

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: BSL-1.0
+
 #include <Tui/ZTextStyle.h>
 
 #include "catchwrapper.h"

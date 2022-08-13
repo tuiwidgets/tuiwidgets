@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: BSL-1.0
+
 #include <Tui/ZRadioButton.h>
 
 #include "../catchwrapper.h"

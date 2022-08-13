@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: BSL-1.0
+
 #include <Tui/ZTerminal.h>
 #include <Tui/ZTerminal_p.h>
 

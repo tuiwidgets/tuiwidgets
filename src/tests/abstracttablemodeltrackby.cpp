@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: BSL-1.0
+
 // Modeltester assumes wide contract for item model, which we generally don't want
 // #define MODELTESTER_COMPAT
 

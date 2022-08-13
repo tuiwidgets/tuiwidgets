@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: BSL-1.0
+
 #include <Tui/ZTextOption.h>
 
 #include <QList> // should this be needed?

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: BSL-1.0
+
 #include <Tui/ZTextMetrics.h>
 #include <Tui/ZTextMetrics_p.h>
 
