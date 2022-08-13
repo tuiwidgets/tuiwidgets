@@ -238,7 +238,7 @@ void ZWidget::setEnabled(bool e) {
     }
     // TODO cache effect in hierarchy
     p->updateEffectivelyEnabledRecursively();
-    // TODO trigger repaint (qt does this in the specific virtual for the event)
+    update();
 }
 
 void ZWidgetPrivate::updateEffectivelyEnabledRecursively() {
