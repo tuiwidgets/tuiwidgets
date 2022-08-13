@@ -683,7 +683,6 @@ void ZWidget::setFocus(Qt::FocusReason reason) {
         ZFocusEvent e {ZFocusEvent::focusIn, reason};
         QCoreApplication::sendEvent(this, &e);
     }
-    // TODO trigger repaint(qt does this in the specific virtual for the event)
 }
 
 void ZWidget::grabKeyboard() {
