@@ -1,5 +1,6 @@
-#include "catchwrapper.h"
 #include <Tui/ZTextStyle.h>
+
+#include "catchwrapper.h"
 
 TEST_CASE("ZTextStyle") {
 

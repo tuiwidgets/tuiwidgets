@@ -1,6 +1,7 @@
-#include "../catchwrapper.h"
 
 #include <Tui/ZInputBox.h>
+
+#include "../catchwrapper.h"
 
 #include "../Testhelper.h"
 #include "../signalrecorder.h"

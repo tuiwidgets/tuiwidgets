@@ -1,6 +1,7 @@
-#include "../catchwrapper.h"
 
 #include <Tui/ZStyledTextLine.h>
+
+#include "../catchwrapper.h"
 
 #include "../Testhelper.h"
 

@@ -1,9 +1,10 @@
-#include "catchwrapper.h"
-
-#include <QSet>
 
 #include <Tui/ZHBoxLayout.h>
 #include <Tui/ZVBoxLayout.h>
+
+#include "catchwrapper.h"
+
+#include <QSet>
 
 #include "Tui/ZTest.h"
 

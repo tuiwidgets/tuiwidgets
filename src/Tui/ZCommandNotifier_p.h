@@ -1,9 +1,10 @@
 #ifndef TUIWIDGETS_ZCOMMANDNOTIFIER_P_INCLUDED
 #define TUIWIDGETS_ZCOMMANDNOTIFIER_P_INCLUDED
 
-#include <Tui/tuiwidgets_internal.h>
-
+#include "ZCommandNotifier.h"
 #include "ZSymbol.h"
+
+#include <Tui/tuiwidgets_internal.h>
 
 TUIWIDGETS_NS_START
 

@@ -1,9 +1,10 @@
-#include "../catchwrapper.h"
-
-#include "../Testhelper.h"
 
 #include <Tui/ZWindow.h>
 #include <Tui/ZTerminal.h>
+
+#include "../catchwrapper.h"
+
+#include "../Testhelper.h"
 
 TEST_CASE("viewport-resize", "") {
 
