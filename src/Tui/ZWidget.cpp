@@ -630,6 +630,7 @@ const ZPalette &ZWidget::palette() const {
 void ZWidget::setPalette(const ZPalette &pal) {
     auto *const p = tuiwidgets_impl();
     p->palette = pal;
+    update();
 }
 
 ZColor ZWidget::getColor(const ZImplicitSymbol &x) {
@@ -646,8 +647,10 @@ QStringList ZWidget::paletteClass() const {
 void ZWidget::setPaletteClass(QStringList classes) {
     auto *const p = tuiwidgets_impl();
     classes.removeDuplicates();
+    if (p->paletteClass == classes) return;
     // TODO some event
     p->paletteClass = classes;
+    update();
 }
 
 void ZWidget::addPaletteClass(const QString &clazz) {
