@@ -62,6 +62,8 @@ public:
     void initExternal(ZTerminal::TerminalConnectionPrivate *connection, ZTerminal::Options options);
     void deinitTerminal();
 
+    void showErrorWithoutTerminal(const QByteArray utf);
+
     // internal connection
     void initIntegrationForInternalConnection();
     static bool terminalAvailableForInternalConnection();

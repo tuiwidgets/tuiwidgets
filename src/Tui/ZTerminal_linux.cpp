@@ -364,6 +364,14 @@ bool ZTerminalPrivate::setupFromControllingTerminal(ZTerminal::Options options) 
     return commonInitForInternalConnection(options);
 }
 
+void ZTerminalPrivate::showErrorWithoutTerminal(const QByteArray utf) {
+    // Try on stderr first
+    if (write(2, utf.data(), utf.size()) <= 0) {
+        // Retry on stdout
+        write(1, utf.data(), utf.size());
+    }
+}
+
 bool ZTerminalPrivate::commonInitForInternalConnection(ZTerminal::Options options) {
     initIntegrationForInternalConnection();
     callbackRequested = false;

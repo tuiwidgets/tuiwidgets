@@ -389,13 +389,26 @@ ZTerminal::ZTerminal(QObject *parent)
 ZTerminal::ZTerminal(Options options, QObject *parent)
     : QObject(parent), tuiwidgets_pimpl_ptr(std::make_unique<ZTerminalPrivate>(this, options))
 {
-    tuiwidgets_impl()->initTerminal(options, nullptr);
+    auto *const p = tuiwidgets_impl();
+
+    if (!tuiwidgets_impl()->initTerminal(options, nullptr)) {
+        QByteArray utf8 = QStringLiteral("This application needs to be run in a terminal\r\n").toUtf8();
+        p->showErrorWithoutTerminal(utf8);
+
+        QPointer<ZTerminal> weak = this;
+        QTimer::singleShot(0, [weak] {
+            if (!weak.isNull()) {
+                QCoreApplication::quit();
+            }
+        });
+    }
 }
 
 ZTerminal::ZTerminal(ZTerminal::FileDescriptor fd, Options options, QObject *parent)
     : QObject(parent), tuiwidgets_pimpl_ptr(std::make_unique<ZTerminalPrivate>(this, options))
 {
     tuiwidgets_impl()->initTerminal(options, &fd);
+    // TODO some kind of handling if init terminal did fail.
 }
 
 ZTerminal::ZTerminal(const ZTerminal::OffScreen &offscreen, QObject *parent)
