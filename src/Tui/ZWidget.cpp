@@ -619,6 +619,7 @@ void ZWidget::setContentsMargins(QMargins m) {
     if (term) {
         term->requestLayout(this);
     }
+    update();
 }
 
 const ZPalette &ZWidget::palette() const {
