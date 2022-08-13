@@ -700,7 +700,6 @@ void ZWidget::setFocus(Qt::FocusReason reason) {
     auto *const term = terminal();
     p->focusCount = ++ZTerminalPrivate::focusCounter;
     if (!term) {
-        qDebug("ZWidget::setFocus called without terminal");
         return;
     }
 

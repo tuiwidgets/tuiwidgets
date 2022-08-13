@@ -63,10 +63,7 @@ TEST_CASE("radiobutton-base", "") {
     }
 
     SECTION("click") {
-        DiagnosticMessageChecker msg;
-        msg.expectMessage("ZWidget::setFocus called without terminal");
         rb->click();
-        msg.tillHere();
     }
 
     QObject::connect(rb.get(), &Tui::ZRadioButton::toggled, [] {

@@ -64,10 +64,7 @@ TEST_CASE("checkbox-base", "") {
     }
 
     SECTION("click") {
-        DiagnosticMessageChecker msg;
-        msg.expectMessage("ZWidget::setFocus called without terminal");
         cb->click();
-        msg.tillHere();
     }
 
     QObject::connect(cb.get(), &Tui::ZCheckBox::stateChanged, [] {
