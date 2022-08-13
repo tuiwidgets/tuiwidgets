@@ -78,6 +78,8 @@ TEST_CASE("layoutinvalidation", "") {
     TestBackground *w = new TestBackground(t.root);
     w->setGeometry({0,0,80,50});
 
+    t.terminal->doLayout(); // reset pending
+
     SECTION("geometry after terminal") {
         Tui::ZWidget outer;
         SimpleLayout sl(&outer);

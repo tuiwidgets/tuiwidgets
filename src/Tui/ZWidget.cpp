@@ -403,6 +403,11 @@ QSize ZWidget::minimumSize() const {
 void ZWidget::setMinimumSize(QSize s) {
     auto *const p = tuiwidgets_impl();
     p->minimumSize = s;
+
+    ZTerminal *term = terminal();
+    if (term) {
+        term->requestLayout(this);
+    }
 }
 
 void ZWidget::setMinimumSize(int w, int h) {
@@ -417,6 +422,11 @@ QSize ZWidget::maximumSize() const {
 void ZWidget::setMaximumSize(QSize s) {
     auto *const p = tuiwidgets_impl();
     p->maximumSize = s;
+
+    ZTerminal *term = terminal();
+    if (term) {
+        term->requestLayout(this);
+    }
 }
 
 void ZWidget::setMaximumSize(int w, int h) {
@@ -426,6 +436,11 @@ void ZWidget::setMaximumSize(int w, int h) {
 void ZWidget::setFixedSize(QSize s) {
     setMinimumSize(s);
     setMaximumSize(s);
+
+    ZTerminal *term = terminal();
+    if (term) {
+        term->requestLayout(this);
+    }
 }
 
 void ZWidget::setFixedSize(int w, int h) {
@@ -440,6 +455,11 @@ SizePolicy ZWidget::sizePolicyH() const {
 void ZWidget::setSizePolicyH(SizePolicy policy) {
     auto *const p = tuiwidgets_impl();
     p->sizePolicyH = policy;
+
+    ZTerminal *term = terminal();
+    if (term) {
+        term->requestLayout(this);
+    }
 }
 
 SizePolicy ZWidget::sizePolicyV() const {
@@ -450,6 +470,11 @@ SizePolicy ZWidget::sizePolicyV() const {
 void ZWidget::setSizePolicyV(SizePolicy policy) {
     auto *const p = tuiwidgets_impl();
     p->sizePolicyV = policy;
+
+    ZTerminal *term = terminal();
+    if (term) {
+        term->requestLayout(this);
+    }
 }
 
 QSize ZWidget::sizeHint() const {
@@ -589,6 +614,11 @@ QMargins ZWidget::contentsMargins() const {
 void ZWidget::setContentsMargins(QMargins m) {
     auto *const p = tuiwidgets_impl();
     p->contentsMargins = m;
+
+    ZTerminal *term = terminal();
+    if (term) {
+        term->requestLayout(this);
+    }
 }
 
 const ZPalette &ZWidget::palette() const {
