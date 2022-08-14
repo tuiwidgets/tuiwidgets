@@ -14,3 +14,7 @@ termpaint_dep = dependency('termpaint')
 termpaint_image_dep = dependency('termpaint_image')
 
 subdir('src')
+
+tuiwidgets_dep = declare_dependency(link_with: tuiwidgets, include_directories: ['src'])
+
+subdir('examples')
