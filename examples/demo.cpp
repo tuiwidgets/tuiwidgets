@@ -421,8 +421,9 @@ LabelDialog::LabelDialog(Tui::ZWidget *parent) : Tui::ZDialog(parent) {
     setOptions(Tui::ZWindow::CloseOption | Tui::ZWindow::DeleteOnClose
                | Tui::ZWindow::MoveOption | Tui::ZWindow::AutomaticOption | Tui::ZWindow::ResizeOption);
     setDefaultPlacement(Qt::AlignCenter);
-
+    setFocusPolicy(Tui::FocusPolicy::StrongFocus);
     setFocus();
+
     setWindowTitle("Label");
     setContentsMargins({1, 1, 1, 1});
 
@@ -432,7 +433,6 @@ LabelDialog::LabelDialog(Tui::ZWidget *parent) : Tui::ZDialog(parent) {
 
     Tui::ZLabel *label1 = new Tui::ZLabel(this);
     label1->setText("Label");
-    label1->setFocus();
     vbox->addWidget(label1);
 
     Tui::ZLabel *label2 = new Tui::ZLabel(this);
@@ -587,8 +587,9 @@ AboutDialog::AboutDialog(Tui::ZWidget *parent) : Tui::ZWindow(parent) {
     setOptions(Tui::ZWindow::CloseOption | Tui::ZWindow::DeleteOnClose
                | Tui::ZWindow::MoveOption | Tui::ZWindow::AutomaticOption | Tui::ZWindow::ResizeOption);
     setDefaultPlacement(Qt::AlignCenter);
-
+    setFocusPolicy(Tui::FocusPolicy::StrongFocus);
     setFocus();
+
     setWindowTitle("About");
     setContentsMargins({1, 1, 1, 1});
     setGeometry({0, 0, 40, 10});
