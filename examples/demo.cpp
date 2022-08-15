@@ -102,7 +102,7 @@ void Demo::terminalChanged() {
         new AboutDialog(this);
     });
 
-    QObject::connect(new Tui::ZShortcut(Tui::ZKeySequence::forShortcut("q"), this, Qt::ApplicationShortcut), &Tui::ZShortcut::activated,
+    QObject::connect(new Tui::ZShortcut(Tui::ZKeySequence::forShortcut("q"), this, Tui::ApplicationShortcut), &Tui::ZShortcut::activated,
                         this, &Demo::quit);
     QObject::connect(new Tui::ZCommandNotifier("Quit", this), &Tui::ZCommandNotifier::activated,
                      this, &Demo::quit);
@@ -201,38 +201,38 @@ CheckBoxDialog::CheckBoxDialog(Tui::ZWidget *parent, Tui::ZTextLine *message) : 
     Tui::ZCheckBox *checkbox3 = new Tui::ZCheckBox(this);
     checkbox3->setMarkup("<m>s</m>elected");
     checkbox3->setFocus();
-    checkbox3->setCheckState(Qt::CheckState::Checked);
+    checkbox3->setCheckState(Tui::CheckState::Checked);
     vbox->addWidget(checkbox3);
 
     Tui::ZCheckBox *checkbox4 = new Tui::ZCheckBox(this);
     checkbox4->setMarkup("<m>t</m>ristate");
     checkbox4->setTristate(true);
-    checkbox4->setCheckState(Qt::CheckState::PartiallyChecked);
+    checkbox4->setCheckState(Tui::CheckState::PartiallyChecked);
     vbox->addWidget(checkbox4);
 
     QObject::connect(checkbox2, &Tui::ZCheckBox::stateChanged,
                      [=] {
-        if(checkbox2->checkState() == Qt::CheckState::Unchecked)
+        if(checkbox2->checkState() == Tui::CheckState::Unchecked)
             message->setText("CheckBox 2 state changed: Unchecked");
-        if(checkbox2->checkState() == Qt::CheckState::Checked)
+        if(checkbox2->checkState() == Tui::CheckState::Checked)
             message->setText("CheckBox 2 state changed: Checked");
     });
 
     QObject::connect(checkbox3, &Tui::ZCheckBox::stateChanged,
                      [=] {
-        if(checkbox3->checkState() == Qt::CheckState::Unchecked)
+        if(checkbox3->checkState() == Tui::CheckState::Unchecked)
             message->setText("CheckBox 3 state changed: Unchecked");
-        if(checkbox3->checkState() == Qt::CheckState::Checked)
+        if(checkbox3->checkState() == Tui::CheckState::Checked)
             message->setText("CheckBox 3 state changed: Checked");
     });
 
     QObject::connect(checkbox4, &Tui::ZCheckBox::stateChanged,
                      [=] {
-        if(checkbox4->checkState() == Qt::CheckState::Unchecked)
+        if(checkbox4->checkState() == Tui::CheckState::Unchecked)
             message->setText("CheckBox 4 state changed: Unchecked");
-        if(checkbox4->checkState() == Qt::CheckState::Checked)
+        if(checkbox4->checkState() == Tui::CheckState::Checked)
             message->setText("CheckBox 4 state changed: Checked");
-        if(checkbox4->checkState() == Qt::CheckState::PartiallyChecked)
+        if(checkbox4->checkState() == Tui::CheckState::PartiallyChecked)
             message->setText("CheckBox 4 state changed: PartiallyChecked");
     });
 }
@@ -457,7 +457,7 @@ LabelDialog::LabelDialog(Tui::ZWidget *parent) : Tui::ZDialog(parent) {
 
 SearchAndReplaceDialog::SearchAndReplaceDialog(Tui::ZWidget *parent) : Tui::ZDialog(parent) {
     setOptions(Tui::ZWindow::CloseOption | Tui::ZWindow::MoveOption | Tui::ZWindow::AutomaticOption);
-    setDefaultPlacement(Qt::AlignBottom | Qt::AlignHCenter, {0, -2});
+    setDefaultPlacement(Tui::AlignBottom | Tui::AlignHCenter, {0, -2});
     setContentsMargins({1, 1, 2, 1});
     setGeometry({0, 0, 60, 15});
 
@@ -519,7 +519,7 @@ SearchAndReplaceDialog::SearchAndReplaceDialog(Tui::ZWidget *parent) : Tui::ZDia
             Tui::ZCheckBox *_regexMatchBox = new Tui::ZCheckBox(Tui::withMarkup, "Re<m>g</m>ular expression", widgetA);
             nbox->addWidget(_regexMatchBox);
             Tui::ZCheckBox *_liveSearchBox = new Tui::ZCheckBox(Tui::withMarkup, "<m>L</m>ive search", widgetA);
-            _liveSearchBox->setCheckState(Qt::Checked);
+            _liveSearchBox->setCheckState(Tui::Checked);
             nbox->addWidget(_liveSearchBox);
 
             hbox->addWidget(widgetA);
@@ -540,12 +540,12 @@ SearchAndReplaceDialog::SearchAndReplaceDialog(Tui::ZWidget *parent) : Tui::ZDia
             nbox->addWidget(_backward);
 
             Tui::ZCheckBox *_parseBox = new Tui::ZCheckBox(Tui::withMarkup, "escape sequence", widgetB);
-            _parseBox->setCheckState(Qt::Checked);
+            _parseBox->setCheckState(Tui::Checked);
             _parseBox->setEnabled(false);
             nbox->addWidget(_parseBox);
 
             Tui::ZCheckBox *_wrapBox = new Tui::ZCheckBox(Tui::withMarkup, "<m>W</m>rap around", widgetB);
-            _wrapBox->setCheckState(Qt::Checked);
+            _wrapBox->setCheckState(Tui::Checked);
             nbox->addWidget(_wrapBox);
 
             hbox->addWidget(widgetB);
