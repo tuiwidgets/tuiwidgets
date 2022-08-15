@@ -263,7 +263,7 @@ RadioButtonDialog::RadioButtonDialog(Tui::ZWidget *parent, Tui::ZTextLine *messa
         vbox1->addWidget(radioButtonA1);
 
         Tui::ZRadioButton *radioButtonA2 = new Tui::ZRadioButton(groupA);
-        radioButtonA2->setMarkup("A i<m>n</m>acitve");
+        radioButtonA2->setMarkup("A i<m>n</m>active");
         radioButtonA2->setFocus();
         vbox1->addWidget(radioButtonA2);
 
@@ -290,12 +290,12 @@ RadioButtonDialog::RadioButtonDialog(Tui::ZWidget *parent, Tui::ZTextLine *messa
         groupB->setLayout(vbox2);
 
         Tui::ZRadioButton *radioButtonB1 = new Tui::ZRadioButton(groupB);
-        radioButtonB1->setMarkup("B <m>a</m>citve");
+        radioButtonB1->setMarkup("B <m>a</m>ctive");
         radioButtonB1->setChecked(true);
         vbox2->addWidget(radioButtonB1);
 
         Tui::ZRadioButton *radioButtonB2 = new Tui::ZRadioButton(groupB);
-        radioButtonB2->setMarkup("B <m>i</m>nacitve");
+        radioButtonB2->setMarkup("B <m>i</m>nactive");
         vbox2->addWidget(radioButtonB2);
 
         hbox->addWidget(groupB);
