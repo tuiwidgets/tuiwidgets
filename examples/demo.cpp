@@ -464,7 +464,8 @@ LabelDialog::LabelDialog(Tui::ZWidget *parent) : Tui::ZDialog(parent) {
 
 
 SearchAndReplaceDialog::SearchAndReplaceDialog(Tui::ZWidget *parent) : Tui::ZDialog(parent) {
-    setOptions(Tui::ZWindow::CloseOption | Tui::ZWindow::MoveOption | Tui::ZWindow::AutomaticOption);
+    setOptions(Tui::ZWindow::CloseOption | Tui::ZWindow::MoveOption |
+               Tui::ZWindow::AutomaticOption | Tui::ZWindow::ResizeOption);
     setDefaultPlacement(Tui::AlignBottom | Tui::AlignHCenter, {0, -2});
     setContentsMargins({1, 1, 2, 1});
     setGeometry({0, 0, 60, 15});
