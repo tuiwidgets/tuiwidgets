@@ -333,6 +333,14 @@ InputBoxDialog::InputBoxDialog(Tui::ZWidget *parent) : Tui::ZDialog(parent) {
     Tui::ZInputBox *inputbox2 = new Tui::ZInputBox(this);
     inputbox2->setFocus();
     vbox->addWidget(inputbox2);
+
+    Tui::ZInputBox *inputbox3 = new Tui::ZInputBox("Password", this);
+    inputbox3->setEchoMode(Tui::ZInputBox::EchoMode::Password);
+    vbox->addWidget(inputbox3);
+
+    Tui::ZInputBox *inputbox4 = new Tui::ZInputBox("Password", this);
+    inputbox4->setEchoMode(Tui::ZInputBox::EchoMode::NoEcho);
+    vbox->addWidget(inputbox4);
 }
 
 
