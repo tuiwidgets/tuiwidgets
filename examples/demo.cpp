@@ -57,7 +57,7 @@ void Demo::terminalChanged() {
     vbox->addWidget(menu);
 
     Tui::ZTextLine *message = new Tui::ZTextLine(this);
-    message->setGeometry({20,0,100,1});
+    message->setGeometry({20, 0, 100, 1});
     Tui::ZPalette p;
     p.setColors({{"control.fg", Tui::Colors::blue}, {"control.bg", Tui::Colors::lightGray}});
     message->setPalette(p);
@@ -407,7 +407,7 @@ ListViewDialog::ListViewDialog(Tui::ZWidget *parent) : Tui::ZDialog(parent) {
     _model = std::make_unique<FileModel>(_dir);
 
     _listview = new Tui::ZListView(this);
-    _listview->setMinimumSize({44,5});
+    _listview->setMinimumSize({44, 5});
     _listview->setModel(_model.get());
     _listview->setFocus();
     hbox->addWidget(_listview);
@@ -492,10 +492,10 @@ SearchAndReplaceDialog::SearchAndReplaceDialog(Tui::ZWidget *parent) : Tui::ZDia
         labelFind = new Tui::ZLabel(Tui::withMarkup, "F<m>i</m>nd", this);
         hbox->addWidget(labelFind);
 
-        Tui::ZInputBox *_searchText = new Tui::ZInputBox(this);
-        labelFind->setBuddy(_searchText);
-        _searchText->setFocus();
-        hbox->addWidget(_searchText);
+        Tui::ZInputBox *searchText = new Tui::ZInputBox(this);
+        labelFind->setBuddy(searchText);
+        searchText->setFocus();
+        hbox->addWidget(searchText);
 
         vbox->add(hbox);
     }
@@ -507,9 +507,9 @@ SearchAndReplaceDialog::SearchAndReplaceDialog(Tui::ZWidget *parent) : Tui::ZDia
         Tui::ZLabel *labelReplace = new Tui::ZLabel(Tui::withMarkup, "Replace", this);
         hbox->addWidget(labelReplace);
 
-        Tui::ZInputBox *_replaceText = new Tui::ZInputBox(this);
-        labelReplace->setBuddy(_replaceText);
-        hbox->addWidget(_replaceText);
+        Tui::ZInputBox *replaceText = new Tui::ZInputBox(this);
+        labelReplace->setBuddy(replaceText);
+        hbox->addWidget(replaceText);
 
         labelFind->setMinimumSize(labelReplace->sizeHint());
         vbox->add(hbox);
@@ -528,16 +528,16 @@ SearchAndReplaceDialog::SearchAndReplaceDialog(Tui::ZWidget *parent) : Tui::ZDia
             Tui::ZLabel *tl = new Tui::ZLabel("Options", widgetA);
             nbox->addWidget(tl);
 
-            Tui::ZCheckBox *_caseMatchBox = new Tui::ZCheckBox(Tui::withMarkup, "<m>M</m>atch case", widgetA);
-            nbox->addWidget(_caseMatchBox);
+            Tui::ZCheckBox *caseMatchBox = new Tui::ZCheckBox(Tui::withMarkup, "<m>M</m>atch case", widgetA);
+            nbox->addWidget(caseMatchBox);
             Tui::ZCheckBox *wordMatchBox = new Tui::ZCheckBox(Tui::withMarkup, "Match <m>e</m>ntire word only", widgetA);
             nbox->addWidget(wordMatchBox);
             wordMatchBox->setEnabled(false);
-            Tui::ZCheckBox *_regexMatchBox = new Tui::ZCheckBox(Tui::withMarkup, "Re<m>g</m>ular expression", widgetA);
-            nbox->addWidget(_regexMatchBox);
-            Tui::ZCheckBox *_liveSearchBox = new Tui::ZCheckBox(Tui::withMarkup, "<m>L</m>ive search", widgetA);
-            _liveSearchBox->setCheckState(Tui::Checked);
-            nbox->addWidget(_liveSearchBox);
+            Tui::ZCheckBox *regexMatchBox = new Tui::ZCheckBox(Tui::withMarkup, "Re<m>g</m>ular expression", widgetA);
+            nbox->addWidget(regexMatchBox);
+            Tui::ZCheckBox *liveSearchBox = new Tui::ZCheckBox(Tui::withMarkup, "<m>L</m>ive search", widgetA);
+            liveSearchBox->setCheckState(Tui::Checked);
+            nbox->addWidget(liveSearchBox);
 
             hbox->addWidget(widgetA);
         }
@@ -550,20 +550,20 @@ SearchAndReplaceDialog::SearchAndReplaceDialog(Tui::ZWidget *parent) : Tui::ZDia
             Tui::ZLabel *tl = new Tui::ZLabel("Direction", widgetB);
             nbox->addWidget(tl);
 
-            Tui::ZRadioButton *_forward = new Tui::ZRadioButton(Tui::withMarkup, "<m>F</m>orward", widgetB);
-            _forward->setChecked(true);
-            nbox->addWidget(_forward);
-            Tui::ZRadioButton *_backward = new Tui::ZRadioButton(Tui::withMarkup, "<m>B</m>ackward", widgetB);
-            nbox->addWidget(_backward);
+            Tui::ZRadioButton *forward = new Tui::ZRadioButton(Tui::withMarkup, "<m>F</m>orward", widgetB);
+            forward->setChecked(true);
+            nbox->addWidget(forward);
+            Tui::ZRadioButton *backward = new Tui::ZRadioButton(Tui::withMarkup, "<m>B</m>ackward", widgetB);
+            nbox->addWidget(backward);
 
-            Tui::ZCheckBox *_parseBox = new Tui::ZCheckBox(Tui::withMarkup, "escape sequence", widgetB);
-            _parseBox->setCheckState(Tui::Checked);
-            _parseBox->setEnabled(false);
-            nbox->addWidget(_parseBox);
+            Tui::ZCheckBox *parseBox = new Tui::ZCheckBox(Tui::withMarkup, "escape sequence", widgetB);
+            parseBox->setCheckState(Tui::Checked);
+            parseBox->setEnabled(false);
+            nbox->addWidget(parseBox);
 
-            Tui::ZCheckBox *_wrapBox = new Tui::ZCheckBox(Tui::withMarkup, "<m>W</m>rap around", widgetB);
-            _wrapBox->setCheckState(Tui::Checked);
-            nbox->addWidget(_wrapBox);
+            Tui::ZCheckBox *wrapBox = new Tui::ZCheckBox(Tui::withMarkup, "<m>W</m>rap around", widgetB);
+            wrapBox->setCheckState(Tui::Checked);
+            nbox->addWidget(wrapBox);
 
             hbox->addWidget(widgetB);
         }
@@ -578,20 +578,20 @@ SearchAndReplaceDialog::SearchAndReplaceDialog(Tui::ZWidget *parent) : Tui::ZDia
         hbox->setSpacing(1);
         hbox->addStretch();
 
-        Tui::ZButton *_findNextBtn = new Tui::ZButton(Tui::withMarkup, "<m>N</m>ext", this);
-        _findNextBtn->setDefault(true);
-        hbox->addWidget(_findNextBtn);
+        Tui::ZButton *findNextBtn = new Tui::ZButton(Tui::withMarkup, "<m>N</m>ext", this);
+        findNextBtn->setDefault(true);
+        hbox->addWidget(findNextBtn);
 
-        Tui::ZButton *_replaceBtn = new Tui::ZButton(Tui::withMarkup, "<m>R</m>eplace", this);
+        Tui::ZButton *replaceBtn = new Tui::ZButton(Tui::withMarkup, "<m>R</m>eplace", this);
 
-        Tui::ZButton *_replaceAllBtn = new Tui::ZButton(Tui::withMarkup, "<m>A</m>ll", this);
+        Tui::ZButton *replaceAllBtn = new Tui::ZButton(Tui::withMarkup, "<m>A</m>ll", this);
 
-        hbox->addWidget(_replaceBtn);
-        hbox->addWidget(_replaceAllBtn);
+        hbox->addWidget(replaceBtn);
+        hbox->addWidget(replaceAllBtn);
 
 
-        Tui::ZButton *_cancelBtn = new Tui::ZButton(Tui::withMarkup, "<m>C</m>lose", this);
-        hbox->addWidget(_cancelBtn);
+        Tui::ZButton *closeBtn = new Tui::ZButton(Tui::withMarkup, "<m>C</m>lose", this);
+        hbox->addWidget(closeBtn);
 
         hbox->addSpacing(3);
 
@@ -615,10 +615,10 @@ AboutDialog::AboutDialog(Tui::ZWidget *parent) : Tui::ZWindow(parent) {
 
 void AboutDialog::paintEvent(Tui::ZPaintEvent *event) {
     Tui::ZWindow::paintEvent(event);
-    Tui::ZTextLayout textline1(terminal()->textMetrics(),"Text");
+    Tui::ZTextLayout textline1(terminal()->textMetrics(), "Text");
     textline1.setText("Demo for TuiWidgets\n by Martin Hostettler and Christoph Hüffelmann\n written for FrOSCon 2022 BSL 1.0");
     textline1.doLayout(layoutArea().width());
-    textline1.draw(*event->painter(),layoutArea().topLeft(),{Tui::Colors::brightWhite, Tui::Colors::blue},{});
+    textline1.draw(*event->painter(), layoutArea().topLeft(),{Tui::Colors::brightWhite, Tui::Colors::blue},{});
 }
 
 StartDialog::StartDialog(Tui::ZWidget *parent) : Tui::ZDialog(parent) {
@@ -635,7 +635,7 @@ StartDialog::StartDialog(Tui::ZWidget *parent) : Tui::ZDialog(parent) {
 
 void StartDialog::paintEvent(Tui::ZPaintEvent *event) {
     Tui::ZWindow::paintEvent(event);
-    Tui::ZTextLayout textline1(terminal()->textMetrics(),"Text");
+    Tui::ZTextLayout textline1(terminal()->textMetrics(), "Text");
     textline1.setText("ALT + the highlighted letter to open the menu.\n"
                       "ESC Close dialogs\n"
                       "TAB to switch active element\n"
@@ -643,5 +643,5 @@ void StartDialog::paintEvent(Tui::ZPaintEvent *event) {
                       "F10 Open the menu.\n"
                       "ALT + - Open the window or dialog menu.");
     textline1.doLayout(layoutArea().width());
-    textline1.draw(*event->painter(),layoutArea().topLeft(),{Tui::Colors::black, Tui::Colors::lightGray},{});
+    textline1.draw(*event->painter(), layoutArea().topLeft(),{Tui::Colors::black, Tui::Colors::lightGray},{});
 }

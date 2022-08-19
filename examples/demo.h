@@ -31,28 +31,28 @@ class ButtonDialog : public Tui::ZDialog {
     Q_OBJECT
 
 public:
-    ButtonDialog (Tui::ZWidget *parent, Tui::ZTextLine *message);
+    ButtonDialog(Tui::ZWidget *parent, Tui::ZTextLine *message);
 };
 
 
 class CheckBoxDialog : public Tui::ZDialog {
     Q_OBJECT
 public:
-    CheckBoxDialog (Tui::ZWidget *parent, Tui::ZTextLine *message);
+    CheckBoxDialog(Tui::ZWidget *parent, Tui::ZTextLine *message);
 };
 
 
 class RadioButtonDialog : public Tui::ZDialog {
     Q_OBJECT
 public:
-    RadioButtonDialog (Tui::ZWidget *parent, Tui::ZTextLine *message);
+    RadioButtonDialog(Tui::ZWidget *parent, Tui::ZTextLine *message);
 };
 
 
 class InputBoxDialog : public Tui::ZDialog {
     Q_OBJECT
 public:
-    InputBoxDialog (Tui::ZWidget *parent);
+    InputBoxDialog(Tui::ZWidget *parent);
 };
 
 class FileModel : public Tui::Misc::AbstractTableModelTrackBy<QString> {
@@ -72,7 +72,7 @@ private:
 class ListViewDialog : public Tui::ZDialog {
     Q_OBJECT
 public:
-    ListViewDialog (Tui::ZWidget *parent);
+    ListViewDialog(Tui::ZWidget *parent);
 private:
     void refreshFolder();
     void userInput(QString filename);
@@ -85,7 +85,7 @@ private:
 class LabelDialog : public Tui::ZDialog {
     Q_OBJECT
 public:
-    LabelDialog (Tui::ZWidget *parent);
+    LabelDialog(Tui::ZWidget *parent);
 };
 
 class SearchAndReplaceDialog : public Tui::ZDialog {
@@ -97,7 +97,7 @@ public:
 class AboutDialog : public Tui::ZWindow {
     Q_OBJECT
 public:
-    AboutDialog (Tui::ZWidget *parent);
+    AboutDialog(Tui::ZWidget *parent);
     void paintEvent(Tui::ZPaintEvent *event) override;
 };
 
