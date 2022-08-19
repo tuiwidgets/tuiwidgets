@@ -593,6 +593,8 @@ SearchAndReplaceDialog::SearchAndReplaceDialog(Tui::ZWidget *parent) : Tui::ZDia
         Tui::ZButton *closeBtn = new Tui::ZButton(Tui::withMarkup, "<m>C</m>lose", this);
         hbox->addWidget(closeBtn);
 
+        QObject::connect(closeBtn, &Tui::ZButton::clicked, this, &QObject::deleteLater);
+
         hbox->addSpacing(3);
 
         vbox->add(hbox);
