@@ -248,7 +248,7 @@ RadioButtonDialog::RadioButtonDialog(Tui::ZWidget *parent, Tui::ZTextLine *messa
     setContentsMargins({1, 1, 1, 1});
 
     Tui::ZHBoxLayout *hbox = new Tui::ZHBoxLayout();
-    hbox->setSpacing(1);
+    hbox->setSpacing(3);
     setLayout(hbox);
 
     {
@@ -257,6 +257,9 @@ RadioButtonDialog::RadioButtonDialog(Tui::ZWidget *parent, Tui::ZTextLine *messa
 
         Tui::ZWidget *groupA = new Tui::ZWidget(this);
         groupA->setLayout(vbox1);
+
+        Tui::ZTextLine *heading = new Tui::ZTextLine("Group A", groupA);
+        vbox1->addWidget(heading);
 
         Tui::ZRadioButton *radioButtonA1 = new Tui::ZRadioButton(groupA);
         radioButtonA1->setMarkup("A <m>d</m>isabled");
@@ -290,6 +293,9 @@ RadioButtonDialog::RadioButtonDialog(Tui::ZWidget *parent, Tui::ZTextLine *messa
 
         Tui::ZWidget *groupB = new Tui::ZWidget(this);
         groupB->setLayout(vbox2);
+
+        Tui::ZTextLine *heading = new Tui::ZTextLine("Group B", groupB);
+        vbox2->addWidget(heading);
 
         Tui::ZRadioButton *radioButtonB1 = new Tui::ZRadioButton(groupB);
         radioButtonB1->setMarkup("B <m>a</m>ctive");
