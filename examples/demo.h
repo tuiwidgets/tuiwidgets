@@ -101,4 +101,11 @@ public:
     void paintEvent(Tui::ZPaintEvent *event) override;
 };
 
+class StartDialog : public Tui::ZDialog {
+    Q_OBJECT
+public:
+    StartDialog(Tui::ZWidget *parent);
+    void paintEvent(Tui::ZPaintEvent *event) override;
+};
+
 #endif // DEMO_H

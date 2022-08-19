@@ -109,6 +109,8 @@ void Demo::terminalChanged() {
 
     // Background
     setFillChar(u'▒');
+
+    new StartDialog(this);
 }
 
 void Demo::quit() {
@@ -610,4 +612,29 @@ void AboutDialog::paintEvent(Tui::ZPaintEvent *event) {
     textline1.setText("Demo for TuiWidgets\n by Martin Hostettler and Christoph Hüffelmann\n written for FrOSCon 2022 BSL 1.0");
     textline1.doLayout(layoutArea().width());
     textline1.draw(*event->painter(),layoutArea().topLeft(),{Tui::Colors::brightWhite, Tui::Colors::blue},{});
+}
+
+StartDialog::StartDialog(Tui::ZWidget *parent) : Tui::ZDialog(parent) {
+    setOptions(Tui::ZWindow::CloseOption | Tui::ZWindow::DeleteOnClose
+               | Tui::ZWindow::MoveOption | Tui::ZWindow::AutomaticOption | Tui::ZWindow::ResizeOption);
+    setDefaultPlacement(Qt::AlignCenter);
+    setFocusPolicy(Tui::FocusPolicy::StrongFocus);
+    setFocus();
+
+    setWindowTitle("Start");
+    setContentsMargins({1, 1, 1, 1});
+    setGeometry({0, 0, 50, 10});
+}
+
+void StartDialog::paintEvent(Tui::ZPaintEvent *event) {
+    Tui::ZWindow::paintEvent(event);
+    Tui::ZTextLayout textline1(terminal()->textMetrics(),"Text");
+    textline1.setText("ALT + the highlighted letter to open the menu.\n"
+                      "ESC Close dialogs\n"
+                      "TAB to switch active element\n"
+                      "F6 of Shift + F6 to switch window/dialog.\n"
+                      "F10 Open the menu.\n"
+                      "ALT + - Open the window or dialog menu.");
+    textline1.doLayout(layoutArea().width());
+    textline1.draw(*event->painter(),layoutArea().topLeft(),{Tui::Colors::black, Tui::Colors::lightGray},{});
 }
