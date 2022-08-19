@@ -605,6 +605,7 @@ AboutDialog::AboutDialog(Tui::ZWidget *parent) : Tui::ZWindow(parent) {
                | Tui::ZWindow::MoveOption | Tui::ZWindow::AutomaticOption | Tui::ZWindow::ResizeOption);
     setDefaultPlacement(Qt::AlignCenter);
     setFocusPolicy(Tui::FocusPolicy::StrongFocus);
+    setStackingLayer(1000);
     setFocus();
 
     setWindowTitle("About");
