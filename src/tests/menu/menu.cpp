@@ -872,6 +872,23 @@ TEST_CASE("submenu", "") {
         t.compare();
     }
 
+    SECTION("seperator-down") {
+        m->setItems({ {"<m>F</m>ile", "", {}, { {}, } } });
+        t.sendChar("f", Qt::AltModifier);
+        t.sendKey(Qt::Key_Down);
+        t.sendKey(Qt::Key_Down);
+    }
+    SECTION("seperator-up") {
+        m->setItems({ {"<m>F</m>ile", "", {}, { {}, } } });
+        t.sendChar("f", Qt::AltModifier);
+        t.sendKey(Qt::Key_Up);
+        t.sendKey(Qt::Key_Up);
+    }
+    SECTION("seperator-multi") {
+        m->setItems({ {"<m>F</m>ile", "", {}, { {},{},{},{},{},{}, } } });
+        t.sendChar("f", Qt::AltModifier);
+    }
+
     // black
     t.root->setPalette(Tui::ZPalette::black());
     SECTION("black-key-down") {
