@@ -2,11 +2,11 @@ Getting started
 ===============
 
 Tui Widgets is a high level terminal interface library using widgets.
-
 It uses the operating system abstractions and object model of Qt.
 
 Applications are generelly assembled from components called widgets.
 An applications typically uses a mix of predefined widgets and application defined widgets.
+
 
 A simple dialog with a button
 -----------------------------
@@ -26,23 +26,23 @@ The the main function contains general setup for Qt and the Terminal:
     :start-after: // snippet-main-start
     :end-before:  // snippet-main-end
 
-The first initializes Qt for non graphical usage by creating an instance of ``QCoreApplication``.
-This is always needed for Tui Wigets applications.
+This first initializes Qt for non graphical usage by creating an instance of ``QCoreApplication``.
+An instance of ``QCoreApplication`` is always needed for Tui Widgets applications.
 
 Next it creates a ZTerminal instance using its default constructor.
-The default constructor connects the terminal instance to the terminal is application was run from.
+The default constructor connects the terminal instance to the terminal from which the application was run.
 Next it creates an instance of the ``Root`` class, which is a custom widget, and connects it as the root to the terminal.
 
-At last it passed control to the Qt event loop by calling ``app.exec()``.
+At last it passes control to the Qt event loop by calling ``app.exec()``.
 This starts the application and terminal initialization.
 
 When the event loop starts running, ZTerminal connects to the terminal and executes its terminal auto detection.
-This auto detection is asynchronous and its results are needed to for proper setup of the user interface layout.
+This auto detection is asynchronous and its results are needed for setup of the user interface.
 
-When the terminal detection completes all widgets connected to the terminal will receive a terminal changed notification.
+When the terminal detection completes, all widgets connected to the terminal will receive a terminal changed notification.
 This is the point where the application can start its user interface setup.
 
-In this example this happens in the custom widget Root that is defined as follows:
+In this example this happens in the custom widget ``Root`` that is defined as follows:
 
 .. literalinclude:: examples/getting-started/getting-started.h
     :caption: root widget header
@@ -54,36 +54,36 @@ In this example this happens in the custom widget Root that is defined as follow
     :start-after: // snippet-root-start
     :end-before:  // snippet-root-end
 
-The Main class defines a widget derived from ZRoot.
-ZRoot implements common functionality like switching windows and other window related bookkeeping.
+The ``Root`` class defines a widget derived from ZRoot.
+ZRoot implements common functionality like switching between windows and other window related tasks.
 
 The ``Root`` widget reimplements the ``terminalChanged`` method to setup the applications user interface.
 If the application does not move widgets to a additional terminal, ``terminalChanged`` will only be called once in the
 lifetime of the root widget.
 
 In ``(1)``, a global (``Tui::ApplicationShortcut``) keyboard shortcut is set up for the escape key.
-The shortcut is then connected to the quit method. This allows quitting the application by pressing Escape.
+The shortcut is then connected to the quit method. This allows quitting the application by pressing the Escape key.
 
-In ``(2)`` the implementation proceeds with creating a window (a ZWindow instance) with the title "Hello World".
-It then assigns the window a postion relative to the root using the ``setGeometry`` call, passing it an QRect with
+In ``(2)`` the implementation proceeds with creating a window (using a ZWindow instance) with the title "Hello World".
+It then assigns the window a position relative to the root using the ``setGeometry`` call, passing it an QRect with
 the needed coordinates.
 
-Last in ``(3)`` a button is defined as child of the window. The button uses text with markup.
+Lastly, in ``(3)`` a button is defined as child of the window. The button uses text with markup.
 The ``<m>`` element marks the keyboard mnemonic of the button.
-In this case the button can be activated from anywhere within its parent window by pressing ``alt-q``.
-Next the clicked signal of the button is also connected to the ``quit()`` method of the class,
-so that activating the button quits the applications.
+In this case, the button can be activated from anywhere within its parent window by pressing :kbd:`Alt+Q`.
+Next, the clicked signal of the button is also connected to the ``quit()`` method of the class
+so activating the button quits the application.
 
-Next the button is given its position relative to its parent widget (the window) and finally is given keyboard focus.
+The button then is given its position relative to its parent widget (the window) and finally is given keyboard focus.
 
-Last in ``(4)`` the ``quit`` method is implemented.
+In ``(4)`` the ``quit`` method is implemented.
 It simply calls ``quit`` of QCoreApplication to exit the event loop started in the last line of the ``main()`` function.
 
 You might have noticed the use of raw ``new`` in the example code.
 While unusual in modern c++ code, this is the right thing to do within the qt object model,
 as long as the objects have a parent QObject set.
 The parent automatically deletes the child objects in its destructor.
-So memory leaks are avoided.
+Memory leaks are therefore avoided.
 
 On the other hand, your application has to make sure that it does not delete objects that
 Qt has already deleted. The quick rule is that objects that have a parent QObject either need to be lifetime managed
@@ -93,6 +93,7 @@ or it needs to be removed from its parent before the parent is deleted.
 
 See :download:`getting-started.cpp<examples/getting-started/getting-started.cpp>`
 and :download:`getting-started.h<examples/getting-started/getting-started.h>` for the whole source of this example.
+
 
 A note on building with meson
 -----------------------------

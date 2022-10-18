@@ -3,27 +3,30 @@
 Tui Widgets
 ===========
 
-Tui Widgets is high-level widget based toolkit for terminal application.
+Tui Widgets is high-level widget based toolkit for terminal applications.
 
-Its designed to be flexible and similar to use to qt grahical widgets.
+Tui Widgets is designed to be flexible and similar to use to Qt graphical widgets.
 Its look and feel is similar to graphical applications
-or classic full screen terminal applications from the PC world of the 90ies.
+or classic full screen terminal applications from the PC world of the 90s.
 
 Features
 --------
 
-* works with the qt event loop and object model
-* ready made user interface elements (text entry, checkboxes, buttons, layout managers, menu etc)
+* works with the Qt event loop and object model
+* ready to use user interface elements (text entry, checkboxes, buttons, layout managers, menu etc)
 * overlapping window support
-* robust input handling, unknown key events are gracefully filtered out
-* truecolor, soft line breaks, explicit control of trailing whitespace
+* robust input handling
+* 24-bit color, soft line breaks, explicit control of trailing whitespace
 * does not depend on correctly set $TERM or terminfo database
 * tagged paste
 * mostly utf-8 based, string width routines also handle utf-16 and utf-32
 * offscreen surfaces/layers
+* does not use global variables/singletons whenever possible and can handle multiple terminals in one process
+* permissively licensed: Boost Software License 1.0 (but Qt licensing is stricter)
+
+Planned:
+
 * ABI stability is planned (but breaking changes are still happening)
-* does not use global variables/singletons where possible, can handle multiple terminals in one process
-* permissively licensed: Boost Software License 1.0 (but qt licensing is stricter)
 
 Does not contain:
 
@@ -32,14 +35,14 @@ Does not contain:
 .. Termpaint is meant as a basic building block to build more specific libraries upon. There are a lot
 .. of different higher layer styles, so it's cleaner to have separate libraries for this.
 
+
 Minimal example
 ---------------
-
 
 A "hello world", with fixed widget positions and size:
 
 See :doc:`getting-started` for full source.
- 
+
 .. literalinclude:: examples/getting-started/getting-started-index.cpp
     :caption: UI Setup
     :start-after: // snippet-setup-start
@@ -90,6 +93,7 @@ It's known to work on
    ZTextMetrics
    ZTest
    ZWindow
+
 
 Curent Status
 -------------
