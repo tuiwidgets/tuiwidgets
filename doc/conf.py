@@ -77,6 +77,7 @@ intersphinx_mapping = {'qt': ('https://doc.qt.io/qt-5', 'qt5.inv'),
 #cpp_debug_show_tree = True
 
 from sphinx.util.docutils import SphinxDirective
+from sphinx.transforms import SphinxTransform
 import sphinx.addnodes
 from docutils import nodes
 
@@ -103,7 +104,35 @@ class AdhocDef(SphinxDirective):
         self.state.nested_parse(self.content, self.content_offset, contentnode)
         return [node]
 
+from sphinx.util.osutil import ensuredir
+import subprocess
+import hashlib
+
+class TpiConverter(SphinxTransform):
+
+    default_priority = 10
+
+    def apply(self, **kwargs) -> None:
+        for node in self.document.findall(nodes.image):
+            if node['uri'].endswith('.tpi'):
+                srcpath = node['uri']
+                self.app.env.note_dependency(srcpath)
+                with open(srcpath, 'rb') as f:
+                    contenthash = hashlib.sha256(f.read()).hexdigest()[:10]
+                filename = os.path.basename(srcpath) + '.' + contenthash + '.png'
+                imagedir = os.path.join(self.app.doctreedir, '_image_tmp')
+                ensuredir(imagedir)
+                destpath = os.path.join(imagedir, filename)
+
+                subprocess.run([x + '/tpi2png.py', srcpath, destpath])
+
+                source = os.path.dirname(self.document["source"])
+                destpath = os.path.relpath(destpath, source)
+                node['uri'] = destpath
+
 def setup(app):
     app.add_directive('adhoc-def', AdhocDef)
     app.add_role('colorchip', colorchip_role)
     app.add_node(colorchip, html=(visit_colorchip, depart_colorchip))
+
+    app.add_transform(TpiConverter)
