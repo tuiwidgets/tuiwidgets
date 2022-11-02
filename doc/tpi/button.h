@@ -8,7 +8,7 @@
 #include <Tui/ZImage.h>
 #include <Tui/ZRoot.h>
 #include <Tui/ZTerminal.h>
-#include <Tui/ZWindow.h>
+#include <Tui/ZDialog.h>
 
 #include "export_tpi.h"
 

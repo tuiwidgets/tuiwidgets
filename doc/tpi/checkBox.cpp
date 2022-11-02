@@ -8,7 +8,7 @@ void checkBox() {
     root.setGeometry({0,0,20,10});
     root.setFocus();
 
-    Tui::ZWindow win(&root);
+    Tui::ZDialog win(&root);
     win.setGeometry({0,0,20,10});
     win.setFocus();
     win.setBorderEdges({});
@@ -59,6 +59,6 @@ void checkBox() {
         cb.setMarkup("C<m>h</m>eckBox");
         cb.setEnabled(false);
 
-        export_tpi(&terminal, "checkbox-disabeld", 0,0,14,3);
+        export_tpi(&terminal, "checkbox-disabled", 0,0,14,3);
     }
 }

@@ -10,7 +10,7 @@ void button() {
     root.setGeometry({0,0,10,10});
     root.setFocus();
 
-    Tui::ZWindow win(&root);
+    Tui::ZDialog win(&root);
     win.setGeometry({0,0,10,10});
     win.setFocus();
     win.setBorderEdges({});
@@ -19,16 +19,26 @@ void button() {
     {
         Tui::ZButton button(&win);
         button.setGeometry({0,1,10,1});
-        button.setText("Button");
+        button.setMarkup("B<m>u</m>tton");
 
         export_tpi(&terminal, "button", 0,0,10,3);
+    }
+
+    // default
+    {
+        Tui::ZButton button(&win);
+        button.setGeometry({0,1,10,1});
+        button.setMarkup("B<m>u</m>tton");
+        button.setDefault(true);
+
+        export_tpi(&terminal, "button-default", 0,0,10,3);
     }
 
     //focus
     {
         Tui::ZButton button(&win);
         button.setGeometry({0,1,10,1});
-        button.setText("Button");
+        button.setMarkup("B<m>u</m>tton");
         button.setFocus();
 
         export_tpi(&terminal, "button-focus", 0,0,10,3);
@@ -38,7 +48,7 @@ void button() {
     {
         Tui::ZButton button(&win);
         button.setGeometry({0,1,10,1});
-        button.setText("Button");
+        button.setMarkup("B<m>u</m>tton");
         button.setEnabled(false);
 
         export_tpi(&terminal, "button-disable", 0,0,10,3);
