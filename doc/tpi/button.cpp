@@ -3,8 +3,6 @@
 void button() {
     Tui::ZTerminal terminal (Tui::ZTerminal::OffScreen(40,40));
 
-    //terminal.resize(10,10);
-    //ImageBuilder root;
     Tui::ZRoot root;
     terminal.setMainWidget(&root);
     root.setGeometry({0,0,10,10});

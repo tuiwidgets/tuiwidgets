@@ -5,11 +5,11 @@
 #include <QRect>
 #include <QVariant>
 
-#include <Tui/ZListView.h>
+#include <Tui/ZDialog.h>
 #include <Tui/ZImage.h>
+#include <Tui/ZListView.h>
 #include <Tui/ZRoot.h>
 #include <Tui/ZTerminal.h>
-#include <Tui/ZWindow.h>
 
 #include "export_tpi.h"
 

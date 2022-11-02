@@ -8,7 +8,7 @@ void label() {
     root.setGeometry({0,0,10,10});
     root.setFocus();
 
-    Tui::ZWindow win(&root);
+    Tui::ZDialog win(&root);
     win.setGeometry({0,0,10,10});
     win.setFocus();
     win.setBorderEdges({});

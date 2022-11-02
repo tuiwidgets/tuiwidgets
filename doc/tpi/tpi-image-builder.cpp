@@ -1,33 +1,15 @@
 #include <QCoreApplication>
 
-#include <Tui/ZButton.h>
-#include <Tui/ZCheckBox.h>
-#include <Tui/ZColor.h>
-#include <Tui/ZCommandNotifier.h>
-#include <Tui/ZHBoxLayout.h>
-#include <Tui/ZInputBox.h>
 #include <Tui/ZImage.h>
-#include <Tui/ZLabel.h>
-#include <Tui/ZMenu.h>
-#include <Tui/ZMenuItem.h>
-#include <Tui/ZMenubar.h>
 #include <Tui/ZPainter.h>
 #include <Tui/ZPalette.h>
-#include <Tui/ZRadioButton.h>
-#include <Tui/ZShortcut.h>
-#include <Tui/ZSymbol.h>
 #include <Tui/ZTerminal.h>
-#include <Tui/ZTextLayout.h>
-#include <Tui/ZTextMetrics.h>
-#include <Tui/ZVBoxLayout.h>
-#include <Tui/ZWindow.h>
 
 #include "button.h"
 #include "checkBox.h"
 #include "inputBox.h"
 #include "label.h"
 #include "listView.h"
-//#include "tpi-image-builder.h"
 #include "radiobutton.h"
 
 #include <Tui/ZRoot.h>

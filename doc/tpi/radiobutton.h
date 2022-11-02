@@ -4,11 +4,11 @@
 #include <QObject>
 #include <QRect>
 
-#include <Tui/ZRadioButton.h>
+#include <Tui/ZDialog.h>
 #include <Tui/ZImage.h>
+#include <Tui/ZRadioButton.h>
 #include <Tui/ZRoot.h>
 #include <Tui/ZTerminal.h>
-#include <Tui/ZWindow.h>
 
 #include "export_tpi.h"
 

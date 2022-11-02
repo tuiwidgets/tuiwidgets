@@ -4,12 +4,12 @@
 #include <QObject>
 #include <QRect>
 
+#include <Tui/ZDialog.h>
+#include <Tui/ZImage.h>
 #include <Tui/ZLabel.h>
 #include <Tui/ZPalette.h>
-#include <Tui/ZImage.h>
 #include <Tui/ZRoot.h>
 #include <Tui/ZTerminal.h>
-#include <Tui/ZWindow.h>
 
 #include "export_tpi.h"
 
