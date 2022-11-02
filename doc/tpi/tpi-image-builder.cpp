@@ -26,6 +26,7 @@
 #include "checkBox.h"
 #include "inputBox.h"
 #include "label.h"
+#include "listView.h"
 //#include "tpi-image-builder.h"
 
 #include <Tui/ZRoot.h>
@@ -49,6 +50,7 @@ int main(int argc, char **argv) {
     checkBox();
     inputBox();
     label();
+    listView();
 
     return 0; // app.exec();
 }
