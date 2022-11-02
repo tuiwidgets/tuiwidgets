@@ -46,4 +46,14 @@ void label() {
 
         export_tpi(&terminal, "label-color", 0,0,10,3);
     }
+
+    // disabled
+    {
+        Tui::ZLabel l(&win);
+        l.setGeometry({0,1,9,1});
+        l.setMarkup("L<m>a</m>bel");
+        l.setEnabled(false);
+
+        export_tpi(&terminal, "label-disabled", 0,0,10,3);
+    }
 }
