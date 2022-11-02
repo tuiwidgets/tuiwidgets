@@ -28,6 +28,7 @@
 #include "label.h"
 #include "listView.h"
 //#include "tpi-image-builder.h"
+#include "radiobutton.h"
 
 #include <Tui/ZRoot.h>
 
@@ -51,6 +52,7 @@ int main(int argc, char **argv) {
     inputBox();
     label();
     listView();
+    radiobutton();
 
     return 0; // app.exec();
 }
