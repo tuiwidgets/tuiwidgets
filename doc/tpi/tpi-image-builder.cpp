@@ -23,6 +23,7 @@
 #include <Tui/ZWindow.h>
 
 #include "button.h"
+#include "checkBox.h"
 //#include "tpi-image-builder.h"
 
 #include <Tui/ZRoot.h>
@@ -43,6 +44,7 @@ int main(int argc, char **argv) {
     QCoreApplication app(argc, argv);
 
     button();
+    checkBox();
 
     return 0; // app.exec();
 }
