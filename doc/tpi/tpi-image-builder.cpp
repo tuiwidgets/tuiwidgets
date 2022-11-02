@@ -25,6 +25,7 @@
 #include "button.h"
 #include "checkBox.h"
 #include "inputBox.h"
+#include "label.h"
 //#include "tpi-image-builder.h"
 
 #include <Tui/ZRoot.h>
@@ -47,6 +48,7 @@ int main(int argc, char **argv) {
     button();
     checkBox();
     inputBox();
+    label();
 
     return 0; // app.exec();
 }
