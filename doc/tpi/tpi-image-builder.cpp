@@ -7,6 +7,7 @@
 
 #include "button.h"
 #include "checkBox.h"
+#include "dialog.h"
 #include "inputBox.h"
 #include "label.h"
 #include "listView.h"
@@ -32,6 +33,7 @@ int main(int argc, char **argv) {
 
     button();
     checkBox();
+    dialog();
     inputBox();
     label();
     listView();
