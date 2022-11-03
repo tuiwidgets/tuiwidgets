@@ -151,9 +151,9 @@ void ZMenubar::respawnMenu() {
         p->activeMenu->setParentMenu(this);
         p->activeMenu->setItems(qAsConst(p->items)[p->selected].subitems());
         QSize submenuSize = p->activeMenu->sizeHint();
-        QRect rect = {p->itemX[p->selected] - 1, 1, submenuSize.width(), submenuSize.height()};
-        if (rect.right() >= geometry().width()) {
-            rect.moveRight(geometry().width() - 1);
+        QRect rect = {p->itemX[p->selected] - 1 + geometry().left(), 1 + geometry().top(), submenuSize.width(), submenuSize.height()};
+        if (rect.right() >= parentWidget()->geometry().width()) {
+            rect.moveRight(parentWidget()->geometry().width() - 1);
         }
         if (rect.left() < 0) {
             rect.moveLeft(0);

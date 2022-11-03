@@ -912,6 +912,20 @@ TEST_CASE("submenu", "") {
         t.sendKey(Qt::Key_Left);
         t.compare();
     }
+
+    SECTION("position-first") {
+        m->setGeometry({1, 2, 13, 1});
+        t.sendKey(Qt::Key_F10);
+        t.compare();
+    }
+
+    SECTION("position-second") {
+        m->setGeometry({2, 1, 13, 1});
+        t.sendKey(Qt::Key_F10);
+        t.sendKey(Qt::Key_Right);
+        t.compare();
+    }
+
 }
 
 TEST_CASE("popupmenu", "") {
