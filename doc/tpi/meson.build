@@ -9,7 +9,7 @@ qt5_dep = dependency('qt5', modules: 'Core')
 
 tuiwidgets_dep = dependency('TuiWidgets')
 
-executable('tpi-image-builder', ['tpi-image-builder.cpp', 'button.cpp', 'checkBox.cpp', 'dialog.cpp', 'inputBox.cpp', 'label.cpp', 'listView.cpp', 'menue.cpp', 'radiobutton.cpp'],
+executable('tpi-image-builder', ['tpi-image-builder.cpp', 'button.cpp', 'checkBox.cpp', 'dialog.cpp', 'inputBox.cpp', 'label.cpp', 'listView.cpp', 'menue.cpp', 'radiobutton.cpp', 'demo_gettingstarted.cpp'],
            dependencies : [qt5_dep, tuiwidgets_dep])
 
 

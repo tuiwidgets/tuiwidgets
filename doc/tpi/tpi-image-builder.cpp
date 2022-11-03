@@ -14,6 +14,7 @@
 #include "menue.h"
 #include "radiobutton.h"
 
+#include "demo_gettingstarted.h"
 #include <Tui/ZRoot.h>
 
 void export_tpi(Tui::ZTerminal *terminal, QString name, int x, int y, int w, int h) {
@@ -40,5 +41,6 @@ int main(int argc, char **argv) {
     menue();
     radiobutton();
 
+    demo_gettingstarted();
     return 0; // app.exec();
 }
