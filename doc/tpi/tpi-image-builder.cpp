@@ -10,6 +10,7 @@
 #include "inputBox.h"
 #include "label.h"
 #include "listView.h"
+#include "menue.h"
 #include "radiobutton.h"
 
 #include <Tui/ZRoot.h>
@@ -34,6 +35,7 @@ int main(int argc, char **argv) {
     inputBox();
     label();
     listView();
+    menue();
     radiobutton();
 
     return 0; // app.exec();
