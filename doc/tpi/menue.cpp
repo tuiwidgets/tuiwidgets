@@ -63,11 +63,11 @@ void submenu() {
 
     Tui::ZRoot root;
     terminal.setMainWidget(&root);
-    root.setGeometry({0,0,20,10});
+    root.setGeometry({0,0,80,24});
     root.setFocus();
 
     Tui::ZWindow win(&root);
-    win.setGeometry({0,0,20,10});
+    win.setGeometry({0,0,80,24});
     win.setFocus();
     win.setBorderEdges({});
 
@@ -75,12 +75,6 @@ void submenu() {
                                         { "<m>B</m>utton", "", "ButtonDialog", {}},
                                         { "<m>C</m>heckBox", "", "CheckBoxDialog", {}},
                                         { "<m>I</m>nputBox", "", "InputBoxDialog", {}},
-                                        { "<m>R</m>adioButton", "", "RadioButtonDialog", {}},
-                                        { "<m>L</m>istView", "", "ListViewDialog", {}},
-                                        { "L<m>a</m>bel", "", "LabelDialog", {}},
-                                        {},
-                                        { "Search and Replace", "", "SearchAndReplaceDialog", {}},
-                                        {},
                                         { "<m>Q</m>uit", "Ctrl-q", "Quit", {}},
                                         } },
                                     { "<m>H</m>elp", "", {}, {
@@ -93,9 +87,9 @@ void submenu() {
         menu->setGeometry({1,1,18,1});
         menu->setItems(items);
 
-        //TODO: how to open
+        Tui::ZTest::sendText(&terminal, "f",Tui::AltModifier);
 
-        export_tpi(&terminal, "menue-submenu", 0,0,20,3);
+        export_tpi(&terminal, "menue-submenu", 0,0,80,24);
     }
 
     // disabled
@@ -105,7 +99,9 @@ void submenu() {
         menu->setItems(items);
         menu->setEnabled(false);
 
-        export_tpi(&terminal, "menue-submenu-disabled", 0,0,20,3);
+        Tui::ZTest::sendText(&terminal, "f",Tui::AltModifier);
+
+        export_tpi(&terminal, "menue-submenu-disabled", 0,0,20,14);
     }
 }
 
@@ -118,6 +114,7 @@ void popupmenu() {
     root.setFocus();
 
     Tui::ZWindow win(&root);
+    win.ensureCommandManager();
     win.setGeometry({0,0,40,40});
     win.setFocus();
     win.setBorderEdges({});
