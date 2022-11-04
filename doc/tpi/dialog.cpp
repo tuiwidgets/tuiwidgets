@@ -13,14 +13,6 @@ void dialog() {
     win.setFocus();
     win.setBorderEdges({});
 
-    // bug
-    {
-        Tui::ZDialog dialog(&win);
-        dialog.setGeometry({0,0,18,4});
-
-        export_tpi(&terminal, "dialog-bug", 0,0,20,6);
-    }
-
     // default
     {
         Tui::ZDialog dialog(&win);
