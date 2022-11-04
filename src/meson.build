@@ -248,6 +248,7 @@ test_files = [
   'tests/root/root.cpp',
   'tests/styledtextline/styledtextline.cpp',
   'tests/surrogateescape.cpp',
+  'tests/symbol/symbol.cpp',
   'tests/textlayout/formatrange.cpp',
   'tests/textlayout/textlayout.cpp',
   'tests/textlayout/textoption.cpp',
