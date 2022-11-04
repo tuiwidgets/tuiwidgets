@@ -14,6 +14,7 @@
 #include "menue.h"
 #include "radiobutton.h"
 #include "textline.h"
+#include "window.h"
 
 #include "demo_gettingstarted.h"
 
@@ -39,6 +40,7 @@ int main(int argc, char **argv) {
     menue();
     radiobutton();
     textline();
+    window();
 
     demo_gettingstarted();
 
