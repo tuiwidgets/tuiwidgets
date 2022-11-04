@@ -13,6 +13,7 @@
 #include "listView.h"
 #include "menue.h"
 #include "radiobutton.h"
+#include "root.h"
 #include "textline.h"
 #include "window.h"
 
@@ -39,6 +40,7 @@ int main(int argc, char **argv) {
     listView();
     menue();
     radiobutton();
+    root();
     textline();
     window();
 
