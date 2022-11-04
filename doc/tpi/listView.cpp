@@ -1,5 +1,17 @@
 #include "listView.h"
 
+#include <QObject>
+#include <QRect>
+#include <QVariant>
+
+#include <Tui/ZDialog.h>
+#include <Tui/ZImage.h>
+#include <Tui/ZListView.h>
+#include <Tui/ZRoot.h>
+#include <Tui/ZTerminal.h>
+
+#include "export_tpi.h"
+
 void listView() {
     Tui::ZTerminal terminal (Tui::ZTerminal::OffScreen(40,40));
 
@@ -8,14 +20,14 @@ void listView() {
     root.setGeometry({0,0,12,10});
     root.setFocus();
 
-    Tui::ZDialog win(&root);
-    win.setGeometry({0,0,12,10});
-    win.setFocus();
-    win.setBorderEdges({});
+    Tui::ZDialog dialog(&root);
+    dialog.setGeometry({0,0,12,10});
+    dialog.setFocus();
+    dialog.setBorderEdges({});
 
     // default
     {
-        Tui::ZListView listview(&win);
+        Tui::ZListView listview(&dialog);
         listview.setGeometry({1,1,10,5});
         listview.setItems({"item1","item2","item3"});
 
@@ -24,7 +36,7 @@ void listView() {
 
     // focus
     {
-        Tui::ZListView listview(&win);
+        Tui::ZListView listview(&dialog);
         listview.setGeometry({1,1,10,5});
         listview.setItems({"item1","item2","item3"});
         listview.setFocus();
@@ -34,7 +46,7 @@ void listView() {
 
     // disabel
     {
-        Tui::ZListView listview(&win);
+        Tui::ZListView listview(&dialog);
         listview.setGeometry({1,1,10,5});
         listview.setItems({"item1","item2","item3"});
         listview.setEnabled(false);

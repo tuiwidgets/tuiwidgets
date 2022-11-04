@@ -1,5 +1,16 @@
 #include "inputBox.h"
 
+#include <QObject>
+#include <QRect>
+
+#include <Tui/ZDialog.h>
+#include <Tui/ZImage.h>
+#include <Tui/ZInputBox.h>
+#include <Tui/ZRoot.h>
+#include <Tui/ZTerminal.h>
+
+#include "export_tpi.h"
+
 void inputBox() {
     Tui::ZTerminal terminal (Tui::ZTerminal::OffScreen(40,40));
 
@@ -8,14 +19,14 @@ void inputBox() {
     root.setGeometry({0,0,12,10});
     root.setFocus();
 
-    Tui::ZDialog win(&root);
-    win.setGeometry({0,0,12,10});
-    win.setFocus();
-    win.setBorderEdges({});
+    Tui::ZDialog dialog(&root);
+    dialog.setGeometry({0,0,12,10});
+    dialog.setFocus();
+    dialog.setBorderEdges({});
 
     // default
     {
-        Tui::ZInputBox inputbox(&win);
+        Tui::ZInputBox inputbox(&dialog);
         inputbox.setGeometry({1,1,10,1});
         inputbox.setText("InputBox");
 
@@ -24,7 +35,7 @@ void inputBox() {
 
     // focus
     {
-        Tui::ZInputBox inputbox(&win);
+        Tui::ZInputBox inputbox(&dialog);
         inputbox.setGeometry({1,1,10,1});
         inputbox.setText("InputBox");
         inputbox.setFocus();
@@ -34,7 +45,7 @@ void inputBox() {
 
     // password
     {
-        Tui::ZInputBox inputbox(&win);
+        Tui::ZInputBox inputbox(&dialog);
         inputbox.setGeometry({1,1,10,1});
         inputbox.setText("InputBox");
         inputbox.setEchoMode(Tui::ZInputBox::Password);

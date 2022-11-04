@@ -20,14 +20,14 @@ void textline() {
     root.setGeometry({0,0,10,10});
     root.setFocus();
 
-    Tui::ZDialog win(&root);
-    win.setGeometry({0,0,10,10});
-    win.setFocus();
-    win.setBorderEdges({});
+    Tui::ZDialog dialog(&root);
+    dialog.setGeometry({0,0,10,10});
+    dialog.setFocus();
+    dialog.setBorderEdges({});
 
     // default
     {
-        Tui::ZTextLine textline(&win);
+        Tui::ZTextLine textline(&dialog);
         textline.setGeometry({1,1,8,1});
         textline.setMarkup("T<m>e</m>xtLine");
 
@@ -36,7 +36,7 @@ void textline() {
 
     // focus
     {
-        Tui::ZTextLine textline(&win);
+        Tui::ZTextLine textline(&dialog);
         textline.setGeometry({1,1,8,1});
         textline.setMarkup("T<m>e</m>xtLine");
         textline.setFocus();
@@ -46,7 +46,7 @@ void textline() {
 
     // disabled
     {
-        Tui::ZTextLine textline(&win);
+        Tui::ZTextLine textline(&dialog);
         textline.setGeometry({1,1,8,1});
         textline.setMarkup("T<m>e</m>xtLine");
         textline.setEnabled(false);
@@ -61,7 +61,7 @@ void textline() {
                      {"control.shortcut.bg", Tui::Colors::red},
                      {"control.fg", Tui::Colors::yellow}});
 
-        Tui::ZTextLine textline(&win);
+        Tui::ZTextLine textline(&dialog);
         textline.setGeometry({1,1,8,1});
         textline.setMarkup("T<m>e</m>xtLine");
         textline.setPalette(p);

@@ -1,5 +1,16 @@
 #include "button.h"
 
+#include <QObject>
+#include <QRect>
+
+#include <Tui/ZButton.h>
+#include <Tui/ZDialog.h>
+#include <Tui/ZImage.h>
+#include <Tui/ZRoot.h>
+#include <Tui/ZTerminal.h>
+
+#include "export_tpi.h"
+
 void button() {
     Tui::ZTerminal terminal (Tui::ZTerminal::OffScreen(40,40));
 
@@ -8,14 +19,14 @@ void button() {
     root.setGeometry({0,0,10,10});
     root.setFocus();
 
-    Tui::ZDialog win(&root);
-    win.setGeometry({0,0,10,10});
-    win.setFocus();
-    win.setBorderEdges({});
+    Tui::ZDialog dialog(&root);
+    dialog.setGeometry({0,0,10,10});
+    dialog.setFocus();
+    dialog.setBorderEdges({});
 
     //button
     {
-        Tui::ZButton button(&win);
+        Tui::ZButton button(&dialog);
         button.setGeometry({0,1,10,1});
         button.setMarkup("B<m>u</m>tton");
 
@@ -24,7 +35,7 @@ void button() {
 
     // default
     {
-        Tui::ZButton button(&win);
+        Tui::ZButton button(&dialog);
         button.setGeometry({0,1,10,1});
         button.setMarkup("B<m>u</m>tton");
         button.setDefault(true);
@@ -34,7 +45,7 @@ void button() {
 
     //focus
     {
-        Tui::ZButton button(&win);
+        Tui::ZButton button(&dialog);
         button.setGeometry({0,1,10,1});
         button.setMarkup("B<m>u</m>tton");
         button.setFocus();
@@ -44,7 +55,7 @@ void button() {
 
     //disabled
     {
-        Tui::ZButton button(&win);
+        Tui::ZButton button(&dialog);
         button.setGeometry({0,1,10,1});
         button.setMarkup("B<m>u</m>tton");
         button.setEnabled(false);

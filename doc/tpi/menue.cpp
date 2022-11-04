@@ -1,5 +1,21 @@
 #include "menue.h"
 
+#include <QObject>
+#include <QRect>
+#include <QVector>
+
+#include <Tui/ZCommandNotifier.h>
+#include <Tui/ZImage.h>
+#include <Tui/ZMenu.h>
+#include <Tui/ZMenuItem.h>
+#include <Tui/ZMenubar.h>
+#include <Tui/ZRoot.h>
+#include <Tui/ZTerminal.h>
+#include <Tui/ZTest.h>
+#include <Tui/ZWindow.h>
+
+#include "export_tpi.h"
+
 void menue() {
     menuebar();
     submenu();
@@ -38,20 +54,19 @@ void menuebar() {
 
     // Default
     {
-
-        Tui::ZMenubar *menu = new Tui::ZMenubar(&win);
-        menu->setGeometry({1,1,18,1});
-        menu->setItems(items);
+        Tui::ZMenubar *menubar = new Tui::ZMenubar(&win);
+        menubar->setGeometry({1,1,18,1});
+        menubar->setItems(items);
 
         export_tpi(&terminal, "menue", 0,0,20,3);
     }
 
     // disabled
     {
-        Tui::ZMenubar *menu = new Tui::ZMenubar(&win);
-        menu->setGeometry({1,1,18,1});
-        menu->setItems(items);
-        menu->setEnabled(false);
+        Tui::ZMenubar *menubar = new Tui::ZMenubar(&win);
+        menubar->setGeometry({1,1,18,1});
+        menubar->setItems(items);
+        menubar->setEnabled(false);
 
         export_tpi(&terminal, "menue-disabled", 0,0,20,3);
     }
@@ -83,9 +98,9 @@ void submenu() {
 
     // Default
     {
-        Tui::ZMenubar *menu = new Tui::ZMenubar(&win);
-        menu->setGeometry({1,1,18,1});
-        menu->setItems(items);
+        Tui::ZMenubar *menubar = new Tui::ZMenubar(&win);
+        menubar->setGeometry({1,1,18,1});
+        menubar->setItems(items);
 
         Tui::ZTest::sendText(&terminal, "f",Tui::AltModifier);
 
@@ -94,10 +109,10 @@ void submenu() {
 
     // disabled
     {
-        Tui::ZMenubar *menu = new Tui::ZMenubar(&win);
-        menu->setGeometry({1,1,18,1});
-        menu->setItems(items);
-        menu->setEnabled(false);
+        Tui::ZMenubar *menubar = new Tui::ZMenubar(&win);
+        menubar->setGeometry({1,1,18,1});
+        menubar->setItems(items);
+        menubar->setEnabled(false);
 
         Tui::ZTest::sendText(&terminal, "f",Tui::AltModifier);
 

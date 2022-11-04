@@ -1,5 +1,16 @@
 #include "radiobutton.h"
 
+#include <QObject>
+#include <QRect>
+
+#include <Tui/ZDialog.h>
+#include <Tui/ZImage.h>
+#include <Tui/ZRadioButton.h>
+#include <Tui/ZRoot.h>
+#include <Tui/ZTerminal.h>
+
+#include "export_tpi.h"
+
 void radiobutton() {
     Tui::ZTerminal terminal (Tui::ZTerminal::OffScreen(40,40));
 
@@ -8,14 +19,14 @@ void radiobutton() {
     root.setGeometry({0,0,17,10});
     root.setFocus();
 
-    Tui::ZDialog win(&root);
-    win.setGeometry({0,0,17,10});
-    win.setFocus();
-    win.setBorderEdges({});
+    Tui::ZDialog dialog(&root);
+    dialog.setGeometry({0,0,17,10});
+    dialog.setFocus();
+    dialog.setBorderEdges({});
 
     // default
     {
-        Tui::ZRadioButton radiobutton(&win);
+        Tui::ZRadioButton radiobutton(&dialog);
         radiobutton.setGeometry({0,1,17,1});
         radiobutton.setMarkup("R<m>a</m>dioButton");
 
@@ -24,7 +35,7 @@ void radiobutton() {
 
     // focuse
     {
-        Tui::ZRadioButton radiobutton(&win);
+        Tui::ZRadioButton radiobutton(&dialog);
         radiobutton.setGeometry({0,1,17,1});
         radiobutton.setMarkup("R<m>a</m>dioButton");
         radiobutton.setFocus();
@@ -34,7 +45,7 @@ void radiobutton() {
 
     // checked
     {
-        Tui::ZRadioButton radiobutton(&win);
+        Tui::ZRadioButton radiobutton(&dialog);
         radiobutton.setGeometry({0,1,17,1});
         radiobutton.setMarkup("R<m>a</m>dioButton");
         radiobutton.setChecked(true);
@@ -44,7 +55,7 @@ void radiobutton() {
 
     // diesabeld
     {
-        Tui::ZRadioButton radiobutton(&win);
+        Tui::ZRadioButton radiobutton(&dialog);
         radiobutton.setGeometry({0,1,17,1});
         radiobutton.setMarkup("R<m>a</m>dioButton");
         radiobutton.setChecked(true);

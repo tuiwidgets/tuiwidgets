@@ -1,5 +1,16 @@
 #include "dialog.h"
 
+#include <QObject>
+#include <QRect>
+
+#include <Tui/ZDialog.h>
+#include <Tui/ZImage.h>
+#include <Tui/ZRoot.h>
+#include <Tui/ZTerminal.h>
+#include <Tui/ZDialog.h>
+
+#include "export_tpi.h"
+
 void dialog() {
     Tui::ZTerminal terminal (Tui::ZTerminal::OffScreen(40,40));
 
