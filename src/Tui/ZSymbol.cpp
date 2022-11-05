@@ -18,9 +18,11 @@ static QList<QString> &ZSymbol_reverse() {
     return data;
 }
 
-
 QString ZSymbol::toString() const {
-    return ZSymbol_reverse().at(id + 1);
+    if (id == 0) {
+        return QStringLiteral("");
+    }
+    return ZSymbol_reverse().at(id - 1);
 }
 
 int ZSymbol::lookup(QString str, bool create) {
