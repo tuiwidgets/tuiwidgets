@@ -29,9 +29,12 @@ TEST_CASE("inputbox-base", "") {
         CHECK(inputbox->sizePolicyH() == Tui::SizePolicy::Expanding);
         CHECK(inputbox->sizePolicyV() == Tui::SizePolicy::Fixed);
         CHECK(inputbox->focusPolicy() == Qt::StrongFocus);
+        CHECK(inputbox->cursorStyle() == Tui::CursorStyle::Bar);
+        CHECK(inputbox->overwriteMode() == false);
         FAIL_CHECK_VEC(checkWidgetsDefaultsExcept(inputbox, DefaultException::SizePolicyV
                                                           | DefaultException::SizePolicyH
-                                                          | DefaultException::FocusPolicy));
+                                                          | DefaultException::FocusPolicy
+                                                          | DefaultException::CursorStyle));
     };
 
     SECTION("constructor") {
@@ -67,6 +70,14 @@ TEST_CASE("inputbox-base", "") {
         // \n is special internally, so test that explicitly too.
         inputbox->setText("\n\ntest\ntext\n");
         CHECK(inputbox->text() == "\n\ntest\ntext\n");
+    }
+
+    SECTION("get-set-overwrite") {
+        std::unique_ptr<Tui::ZInputBox> inputbox = std::make_unique<Tui::ZInputBox>(w.get());
+        inputbox->setOverwriteMode(true);
+        CHECK(inputbox->overwriteMode() == true);
+        inputbox->setOverwriteMode(false);
+        CHECK(inputbox->overwriteMode() == false);
     }
 
     SECTION("cursorPosition") {
@@ -851,6 +862,7 @@ TEST_CASE("inputbox-event", "") {
     t.sendKey(Qt::Key_Home);
     t.sendKey(Qt::Key_End);
     t.sendKey(Qt::Key_Insert);
+    t.sendKey(Qt::Key_Insert); // When we turn it on, we change the test behaviour. Therefore, we turn it off again.
     t.sendKey(Qt::Key_Left);
     t.sendKey(Qt::Key_Right);
     t.sendKey(Qt::Key_Up);
@@ -1216,4 +1228,174 @@ TEST_CASE("inputbox-small3", "") {
         t.compare("clear");
         CHECK(t.terminal->grabCursorPosition() == QPoint{-1, -1});
     }
+}
+
+TEST_CASE("insert-mode", "") {
+    Testhelper t("inputbox", "unused", 10, 3);
+
+    Tui::ZWindow *w = new Tui::ZWindow(t.root);
+    w->setGeometry({0, 0, 10, 3});
+
+    Tui::ZInputBox *inputbox = new Tui::ZInputBox(w);
+    inputbox->setGeometry({1, 1, 8, 1});
+    inputbox->setFocus();
+
+    SECTION("ABcdefg") {
+        inputbox->setText("abcdefg");
+        CHECK(inputbox->overwriteMode() == false);
+        t.sendKey(Qt::Key_Insert);
+        CHECK(inputbox->overwriteMode() == true);
+        t.sendKey(Qt::Key_Home);
+        t.sendChar("A");
+        t.sendChar("B");
+        CHECK(inputbox->text() == "ABcdefg");
+    }
+
+    SECTION("insert-over-abcdeFGhi") {
+        inputbox->setText("abcdefg");
+        CHECK(inputbox->overwriteMode() == false);
+        t.sendKey(Qt::Key_Insert);
+        CHECK(inputbox->overwriteMode() == true);
+        t.sendKey(Qt::Key_Left);
+        t.sendKey(Qt::Key_Left);
+        t.sendChar("F");
+        t.sendChar("G");
+        t.sendChar("h");
+        t.sendChar("i");
+        CHECK(inputbox->text() == "abcdeFGhi");
+    }
+
+    SECTION("paste-over-abcdeFGhi-paste") {
+        inputbox->setText("abcdefg");
+        CHECK(inputbox->overwriteMode() == false);
+        t.sendKey(Qt::Key_Insert);
+        CHECK(inputbox->overwriteMode() == true);
+        t.sendKey(Qt::Key_Left);
+        t.sendKey(Qt::Key_Left);
+        t.sendPaste("FGhi");
+        CHECK(inputbox->text() == "abcdeFGhifg");
+    }
+
+    SECTION("toggle-insert-AbCdEfG") {
+        inputbox->setText("123");
+        CHECK(inputbox->overwriteMode() == false);
+        CHECK(inputbox->cursorStyle() == Tui::CursorStyle::Bar);
+        t.sendKey(Qt::Key_Insert);
+        CHECK(inputbox->cursorStyle() == Tui::CursorStyle::Block);
+        CHECK(inputbox->overwriteMode() == true);
+        t.sendKey(Qt::Key_Home);
+        CHECK(inputbox->cursorPosition() == 0);
+        t.sendChar("A");
+        inputbox->setOverwriteMode(false);
+        CHECK(inputbox->cursorStyle() == Tui::CursorStyle::Bar);
+        CHECK(inputbox->cursorPosition() == 1);
+        t.sendChar("b");
+        inputbox->setOverwriteMode(true);
+        CHECK(inputbox->cursorStyle() == Tui::CursorStyle::Block);
+        CHECK(inputbox->cursorPosition() == 2);
+        CHECK(inputbox->text() == "Ab23");
+        t.sendChar("C");
+        t.sendKey(Qt::Key_Insert);
+        CHECK(inputbox->cursorPosition() == 3);
+        t.sendChar("d");
+        t.sendKey(Qt::Key_Insert);
+        CHECK(inputbox->cursorPosition() == 4);
+        CHECK(inputbox->text() == "AbCd3");
+        t.sendChar("E");
+        t.sendKey(Qt::Key_Insert);
+        CHECK(inputbox->cursorPosition() == 5);
+        t.sendChar("f");
+        t.sendKey(Qt::Key_Insert);
+        CHECK(inputbox->cursorPosition() == 6);
+        t.sendChar("G");
+        CHECK(inputbox->cursorPosition() == 7);
+        CHECK(inputbox->text() == "AbCdEfG");
+    }
+
+    SECTION("backspace-abCDg") {
+        inputbox->setText("abcdefg");
+        CHECK(inputbox->overwriteMode() == false);
+        t.sendKey(Qt::Key_Insert);
+        CHECK(inputbox->overwriteMode() == true);
+        t.sendKey(Qt::Key_Left);
+        t.sendKey(Qt::Key_Left);
+        t.sendKey(Qt::Key_Left);
+        CHECK(inputbox->text().size() == 7);
+        t.sendKey(Qt::Key_Backspace);
+        t.sendKey(Qt::Key_Backspace);
+        CHECK(inputbox->text().size() == 5);
+        t.sendChar("C");
+        t.sendChar("D");
+        CHECK(inputbox->text().size() == 5);
+        CHECK(inputbox->text() == "abCDg");
+    }
+
+    SECTION("surrogate-pairs-replace-ABCz") {
+        inputbox->setText("😁😇😂z");
+        CHECK(inputbox->overwriteMode() == false);
+        t.sendKey(Qt::Key_Insert);
+        CHECK(inputbox->overwriteMode() == true);
+        t.sendKey(Qt::Key_Home);
+        t.sendChar("A");
+        t.sendChar("B");
+        t.sendChar("C");
+        CHECK(inputbox->text() == "ABCz");
+    }
+    SECTION("surrogate-pairs-paste-inserts-ABC") {
+        inputbox->setText("😁😁😁");
+        CHECK(inputbox->overwriteMode() == false);
+        t.sendKey(Qt::Key_Insert);
+        CHECK(inputbox->overwriteMode() == true);
+        t.sendKey(Qt::Key_Home);
+        t.sendPaste("ABC");
+        CHECK(inputbox->text() == "ABC😁😁😁");
+    }
+    SECTION("surrogate-pairs-replace-clusters") {
+        inputbox->setText("ABCD");
+        CHECK(inputbox->overwriteMode() == false);
+        t.sendKey(Qt::Key_Insert);
+        CHECK(inputbox->overwriteMode() == true);
+        t.sendKey(Qt::Key_Home);
+        t.sendChar("😁");
+        t.sendChar("😁");
+        t.sendChar("😁");
+        CHECK(inputbox->text() == "😁😁😁D");
+    }
+    SECTION("surrogate-pairs-replace-clusters") {
+        inputbox->setText("ABCD");
+        CHECK(inputbox->overwriteMode() == false);
+        t.sendKey(Qt::Key_Insert);
+        CHECK(inputbox->overwriteMode() == true);
+        t.sendKey(Qt::Key_Home);
+        t.sendPaste("😁😁😁");
+        CHECK(inputbox->text() == "😁😁😁ABCD");
+    }
+    SECTION("CursorStyle") {
+        CHECK(w->cursorStyle() == Tui::CursorStyle::Unset);
+        CHECK(inputbox->cursorStyle() == Tui::CursorStyle::Bar);
+        t.sendKey(Qt::Key_Insert);
+        CHECK(w->cursorStyle() == Tui::CursorStyle::Unset);
+        CHECK(inputbox->cursorStyle() == Tui::CursorStyle::Block);
+        t.sendKey(Qt::Key_Insert);
+        CHECK(w->cursorStyle() == Tui::CursorStyle::Unset);
+        CHECK(inputbox->cursorStyle() == Tui::CursorStyle::Bar);
+
+        inputbox->setOverwriteMode(true);
+        CHECK(w->cursorStyle() == Tui::CursorStyle::Unset);
+        CHECK(inputbox->cursorStyle() == Tui::CursorStyle::Block);
+        inputbox->setOverwriteMode(false);
+        CHECK(w->cursorStyle() == Tui::CursorStyle::Unset);
+        CHECK(inputbox->cursorStyle() == Tui::CursorStyle::Bar);
+    }
+
+    SECTION("insertAtCursorPosition") {
+        inputbox->setText("abcdefg");
+        CHECK(inputbox->overwriteMode() == false);
+        t.sendKey(Qt::Key_Insert);
+        CHECK(inputbox->overwriteMode() == true);
+        t.sendKey(Qt::Key_Home);
+        inputbox->insertAtCursorPosition("AB");
+        CHECK(inputbox->text() == "ABabcdefg");
+    }
+
 }

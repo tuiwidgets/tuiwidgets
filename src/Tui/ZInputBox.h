@@ -29,6 +29,8 @@ public:
     };
     void setEchoMode(EchoMode echoMode);
     EchoMode echoMode() const;
+    void setOverwriteMode(bool overwriteMode);
+    bool overwriteMode() const;
 
     int cursorPosition() const;
     void setCursorPosition(int pos);

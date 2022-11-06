@@ -33,9 +33,11 @@ ZInputBoxPrivate::~ZInputBoxPrivate() {
 }
 
 ZInputBox::ZInputBox(ZWidget *parent) : ZWidget(parent, std::make_unique<ZInputBoxPrivate>(this)) {
+    auto *const p = tuiwidgets_impl();
     setFocusPolicy(Qt::StrongFocus);
     setSizePolicyV(SizePolicy::Fixed);
     setSizePolicyH(SizePolicy::Expanding);
+    setOverwriteMode(p->overwriteMode);
 }
 
 ZInputBox::ZInputBox(const QString &contents, ZWidget *parent) : ZInputBox(parent) {
@@ -59,6 +61,21 @@ void ZInputBox::setEchoMode(ZInputBox::EchoMode echoMode) {
 ZInputBox::EchoMode ZInputBox::echoMode() const {
     auto *const p = tuiwidgets_impl();
     return p->echoMode;
+}
+
+void ZInputBox::setOverwriteMode(bool overwriteMode) {
+    auto *const p = tuiwidgets_impl();
+    p->overwriteMode = overwriteMode;
+    if (p->overwriteMode) {
+        setCursorStyle(Tui::CursorStyle::Block);
+    } else {
+        setCursorStyle(Tui::CursorStyle::Bar);
+    }
+}
+
+bool ZInputBox::overwriteMode() const {
+    auto *const p = tuiwidgets_impl();
+    return p->overwriteMode;
 }
 
 int ZInputBox::cursorPosition() const {
@@ -86,6 +103,20 @@ void ZInputBox::setCursorPosition(int pos) {
         }
     }
     update();
+}
+
+void ZInputBoxPrivate::insertOrReplaceCharacterAtCursorPosition(const QString &insertText) {
+    const QString internalText = escapeNewLine(insertText);
+    if (!overwriteMode || text.size() <= cursorPosition) {
+        text.insert(cursorPosition, internalText);
+    } else {
+        ZTextLayout textlayout = getTextLayout();
+        int cpright = textlayout.nextCursorPosition(cursorPosition);
+        text.replace(cursorPosition, cpright - cursorPosition, internalText);
+    }
+    pub()->setCursorPosition(cursorPosition + internalText.size());
+    adjustScrollPosition();
+    pub()->textChanged(unescapeNewLine(text));
 }
 
 void ZInputBox::insertAtCursorPosition(const QString &text) {
@@ -156,9 +187,9 @@ void ZInputBox::keyEvent(ZKeyEvent *event) {
     ZTextLayout textlayout = p->getTextLayout();
 
     if (event->key() == Qt::Key_Space && event->modifiers() == 0) {
-        insertAtCursorPosition(QStringLiteral(" "));
+        p->insertOrReplaceCharacterAtCursorPosition(QStringLiteral(" "));
     } else if (text.size() && event->modifiers() == 0) {
-        insertAtCursorPosition(text);
+        p->insertOrReplaceCharacterAtCursorPosition(text);
     } else if (event->key() == Qt::Key_Backspace && event->modifiers() == 0) {
         if (p->cursorPosition > 0) {
             int cpleft = textlayout.previousCursorPosition(p->cursorPosition);
@@ -196,6 +227,8 @@ void ZInputBox::keyEvent(ZKeyEvent *event) {
         setCursorPosition(p->text.size());
         p->adjustScrollPosition();
         update();
+    } else if(event->key() == Qt::Key_Insert && event->modifiers() == 0) {
+       setOverwriteMode(!p->overwriteMode);
     } else {
         ZWidget::keyEvent(event);
     }

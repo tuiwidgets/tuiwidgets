@@ -21,12 +21,14 @@ public:
     void adjustScrollPosition();
     ZTextLayout getTextLayout();
     ZTextLayout getTextLayoutForPaint();
+    void insertOrReplaceCharacterAtCursorPosition(const QString &text);
 
 public:
     QString text;
     int cursorPosition = 0;
     int scrollPosition = 0;
     ZInputBox::EchoMode echoMode = ZInputBox::Normal;
+    bool overwriteMode = false;
 
     TUIWIDGETS_DECLARE_PUBLIC(ZInputBox)
 };
