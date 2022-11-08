@@ -29,9 +29,9 @@ public:
     ZWidget *widget() const;
 
     void setGeometry(QRect r) override = 0;
-    QSize sizeHint() const  override;
-    SizePolicy sizePolicyH() const  override;
-    SizePolicy sizePolicyV() const  override;
+    QSize sizeHint() const override;
+    SizePolicy sizePolicyH() const override;
+    SizePolicy sizePolicyV() const override;
     bool isVisible() const override;
 
 public:

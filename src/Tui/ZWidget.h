@@ -44,7 +44,7 @@ class ZWidgetPrivate;
 class TUIWIDGETS_EXPORT ZWidget : public QObject {
     Q_OBJECT
 public:
-    explicit ZWidget(ZWidget *parent = 0);
+    explicit ZWidget(ZWidget *parent = nullptr);
     ~ZWidget() override;
 
 protected:
