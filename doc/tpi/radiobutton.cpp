@@ -1,66 +1,89 @@
-#include "radiobutton.h"
+#include "tpi-image-builder.h"
 
 #include <QObject>
 #include <QRect>
 
 #include <Tui/ZDialog.h>
-#include <Tui/ZImage.h>
 #include <Tui/ZRadioButton.h>
 #include <Tui/ZRoot.h>
 #include <Tui/ZTerminal.h>
 
-#include "export_tpi.h"
-
 void radiobutton() {
-    Tui::ZTerminal terminal (Tui::ZTerminal::OffScreen(40,40));
+    Tui::ZTerminal terminal (Tui::ZTerminal::OffScreen(40, 40));
 
     Tui::ZRoot root;
     terminal.setMainWidget(&root);
-    root.setGeometry({0,0,17,10});
-    root.setFocus();
 
     Tui::ZDialog dialog(&root);
-    dialog.setGeometry({0,0,17,10});
+    dialog.setGeometry({0, 0, 17, 10});
     dialog.setFocus();
     dialog.setBorderEdges({});
 
     // default
     {
-        Tui::ZRadioButton radiobutton(&dialog);
-        radiobutton.setGeometry({0,1,17,1});
-        radiobutton.setMarkup("R<m>a</m>dioButton");
+        Tui::ZRadioButton radiobutton1(&dialog);
+        radiobutton1.setGeometry({0, 1, 17, 1});
+        radiobutton1.setMarkup("<m>R</m>ed");
+        radiobutton1.setChecked(true);
 
-        export_tpi(&terminal, "radiobutton", 0,0,17,3);
+        Tui::ZRadioButton radiobutton2(&dialog);
+        radiobutton2.setGeometry({0, 3, 17, 1});
+        radiobutton2.setMarkup("<m>G</m>reen");
+
+        Tui::ZRadioButton radiobutton3(&dialog);
+        radiobutton3.setGeometry({0, 5, 17, 1});
+        radiobutton3.setMarkup("<m>B</m>lue");
+
+        export_tpi(&terminal, "radiobutton", 0, 0, 17, 7);
     }
 
-    // focuse
+    // focus
     {
-        Tui::ZRadioButton radiobutton(&dialog);
-        radiobutton.setGeometry({0,1,17,1});
-        radiobutton.setMarkup("R<m>a</m>dioButton");
-        radiobutton.setFocus();
+        Tui::ZRadioButton radiobutton1(&dialog);
+        radiobutton1.setGeometry({0, 1, 17, 1});
+        radiobutton1.setMarkup("<m>R</m>ed");
+        radiobutton1.setChecked(true);
 
-        export_tpi(&terminal, "radiobutton-focus", 0,0,17,3);
+        Tui::ZRadioButton radiobutton2(&dialog);
+        radiobutton2.setGeometry({0, 3, 17, 1});
+        radiobutton2.setMarkup("<m>G</m>reen");
+        radiobutton2.setFocus();
+
+        Tui::ZRadioButton radiobutton3(&dialog);
+        radiobutton3.setGeometry({0, 5, 17, 1});
+        radiobutton3.setMarkup("<m>B</m>lue");
+
+        export_tpi(&terminal, "radiobutton-focus", 0, 0, 17, 7);
     }
 
     // checked
     {
         Tui::ZRadioButton radiobutton(&dialog);
-        radiobutton.setGeometry({0,1,17,1});
+        radiobutton.setGeometry({0, 1, 17, 1});
         radiobutton.setMarkup("R<m>a</m>dioButton");
         radiobutton.setChecked(true);
 
-        export_tpi(&terminal, "radiobutton-checked", 0,0,17,3);
+        export_tpi(&terminal, "radiobutton-checked", 0, 0, 17, 3);
     }
 
-    // diesabeld
+    // disabled
     {
-        Tui::ZRadioButton radiobutton(&dialog);
-        radiobutton.setGeometry({0,1,17,1});
-        radiobutton.setMarkup("R<m>a</m>dioButton");
-        radiobutton.setChecked(true);
-        radiobutton.setEnabled(false);
+        Tui::ZRadioButton radiobutton1(&dialog);
+        radiobutton1.setGeometry({0, 1, 17, 1});
+        radiobutton1.setMarkup("<m>R</m>ed");
+        radiobutton1.setChecked(true);
+        radiobutton1.setEnabled(false);
 
-        export_tpi(&terminal, "radiobutton-diesabeld", 0,0,17,3);
+        Tui::ZRadioButton radiobutton2(&dialog);
+        radiobutton2.setGeometry({0, 3, 17, 1});
+        radiobutton2.setMarkup("<m>G</m>reen");
+        radiobutton2.setEnabled(false);
+
+        Tui::ZRadioButton radiobutton3(&dialog);
+        radiobutton3.setGeometry({0, 5, 17, 1});
+        radiobutton3.setMarkup("<m>B</m>lue");
+        radiobutton3.setEnabled(false);
+
+        export_tpi(&terminal, "radiobutton-disabled", 0, 0, 17, 7);
     }
 }

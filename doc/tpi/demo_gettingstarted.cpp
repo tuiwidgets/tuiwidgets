@@ -1,4 +1,4 @@
-#include "demo_gettingstarted.h"
+#include "tpi-image-builder.h"
 
 #include <QCoreApplication>
 #include <QRect>
@@ -9,7 +9,7 @@
 #include <Tui/ZWindow.h>
 
 void demo_gettingstarted() {
-    Tui::ZTerminal terminal (Tui::ZTerminal::OffScreen(80,24));
+    Tui::ZTerminal terminal (Tui::ZTerminal::OffScreen(80, 24));
     Tui::ZRoot root;
     terminal.setMainWidget(&root);
 
@@ -20,7 +20,5 @@ void demo_gettingstarted() {
     button->setGeometry({6, 7, 10, 1});
     button->setFocus();
 
-    export_tpi(&terminal, "demo_gettingstarted", 0,0,40,15);
+    export_tpi(&terminal, "demo_gettingstarted", 0, 0, 40, 15);
 }
-
-
