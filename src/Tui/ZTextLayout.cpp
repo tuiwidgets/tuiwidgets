@@ -769,7 +769,7 @@ void ZTextLineRef::draw(ZPainter painter, const QPoint &pos, ZTextStyle color, Z
 
                 ZColor fg = color.backgroundColor();
                 ZColor bg = color.foregroundColor();
-                ZPainter::Attributes attr = color.attributes();
+                ZTextAttributes attr = color.attributes();
                 for (const ZFormatRange& formatRange: ranges) {
                     if (formatRange.length() <= 0) {
                         continue;

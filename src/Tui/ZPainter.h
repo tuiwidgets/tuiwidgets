@@ -26,12 +26,6 @@ class ZWidget;
 class ZPainterPrivate;
 class TUIWIDGETS_EXPORT ZPainter {
 public:
-    using Attribute = ::TUIWIDGETS_NS_FULL::ZTextAttribute;
-    using Attributes = ::TUIWIDGETS_NS_FULL::ZTextAttributes;
-
-    static constexpr int Erased = ::TUIWIDGETS_NS_FULL::Erased;
-
-public:
     ZPainter(const ZPainter &other);
     virtual ~ZPainter();
 
@@ -43,10 +37,10 @@ public:
     void writeWithColors(int x, int y, const QChar *string, int size, ZColor fg, ZColor bg);
     void writeWithColors(int x, int y, const char16_t *string, int size, ZColor fg, ZColor bg);
     void writeWithColors(int x, int y, const char *stringUtf8, int utf8CodeUnits, ZColor fg, ZColor bg);
-    void writeWithAttributes(int x, int y, const QString &string, ZColor fg, ZColor bg, Attributes attr);
-    void writeWithAttributes(int x, int y, const QChar *string, int size, ZColor fg, ZColor bg, Attributes attr);
-    void writeWithAttributes(int x, int y, const char16_t *string, int size, ZColor fg, ZColor bg, Attributes attr);
-    void writeWithAttributes(int x, int y, const char *stringUtf8, int utf8CodeUnits, ZColor fg, ZColor bg, Attributes attr);
+    void writeWithAttributes(int x, int y, const QString &string, ZColor fg, ZColor bg, ZTextAttributes attr);
+    void writeWithAttributes(int x, int y, const QChar *string, int size, ZColor fg, ZColor bg, ZTextAttributes attr);
+    void writeWithAttributes(int x, int y, const char16_t *string, int size, ZColor fg, ZColor bg, ZTextAttributes attr);
+    void writeWithAttributes(int x, int y, const char *stringUtf8, int utf8CodeUnits, ZColor fg, ZColor bg, ZTextAttributes attr);
 
     // Wrappers for more modern types:
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0) && defined(TUIWIDGETS_ABI_FORCE_INLINE)
@@ -55,7 +49,7 @@ public:
         writeWithColors(x, y, string.data(), string.size(), fg, bg);
     }
     template <typename QSTRINGVIEW, Private::enable_if_same_remove_cvref<QSTRINGVIEW, QStringView> = 0>
-    TUIWIDGETS_ABI_FORCE_INLINE void writeWithAttributes(int x, int y, QSTRINGVIEW string, ZColor fg, ZColor bg, Attributes attr) {
+    TUIWIDGETS_ABI_FORCE_INLINE void writeWithAttributes(int x, int y, QSTRINGVIEW string, ZColor fg, ZColor bg, ZTextAttributes attr) {
         writeWithAttributes(x, y, string.data(), string.size(), fg, bg, attr);
     }
 #endif
@@ -65,7 +59,7 @@ public:
         writeWithColors(x, y, string.data(), string.size(), fg, bg);
     }
     template <typename U16STRINGVIEW, Private::enable_if_same_remove_cvref<U16STRINGVIEW, std::u16string_view> = 0>
-    TUIWIDGETS_ABI_FORCE_INLINE void writeWithAttributes(int x, int y, U16STRINGVIEW string, ZColor fg, ZColor bg, Attributes attr) {
+    TUIWIDGETS_ABI_FORCE_INLINE void writeWithAttributes(int x, int y, U16STRINGVIEW string, ZColor fg, ZColor bg, ZTextAttributes attr) {
         writeWithAttributes(x, y, string.data(), string.size(), fg, bg, attr);
     }
 
@@ -75,15 +69,15 @@ public:
         writeWithColors(x, y, string.data(), string.size(), fg, bg);
     }
     template <typename STRINGVIEW, Private::enable_if_same_remove_cvref<STRINGVIEW, std::string_view> = 0>
-    TUIWIDGETS_ABI_FORCE_INLINE void writeWithAttributes(int x, int y, STRINGVIEW string, ZColor fg, ZColor bg, Attributes attr) {
+    TUIWIDGETS_ABI_FORCE_INLINE void writeWithAttributes(int x, int y, STRINGVIEW string, ZColor fg, ZColor bg, ZTextAttributes attr) {
         writeWithAttributes(x, y, string.data(), string.size(), fg, bg, attr);
     }
 #endif
 
-    void clear(ZColor fg, ZColor bg, Attributes attr = {});
-    void clearWithChar(ZColor fg, ZColor bg, int fillChar, Attributes attr = {});
-    void clearRect(int x, int y, int width, int height, ZColor fg, ZColor bg, Attributes attr = {});
-    void clearRectWithChar(int x, int y, int width, int height, ZColor fg, ZColor bg, int fillChar, Attributes attr = {});
+    void clear(ZColor fg, ZColor bg, ZTextAttributes attr = {});
+    void clearWithChar(ZColor fg, ZColor bg, int fillChar, ZTextAttributes attr = {});
+    void clearRect(int x, int y, int width, int height, ZColor fg, ZColor bg, ZTextAttributes attr = {});
+    void clearRectWithChar(int x, int y, int width, int height, ZColor fg, ZColor bg, int fillChar, ZTextAttributes attr = {});
     void setSoftwrapMarker(int x, int y);
     void clearSoftwrapMarker(int x, int y);
 

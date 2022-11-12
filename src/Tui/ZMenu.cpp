@@ -96,14 +96,14 @@ void ZMenu::paintEvent(ZPaintEvent *event) {
     auto *const p = tuiwidgets_impl();
     auto *painter = event->painter();
     ZTextStyle baseStyle = {getColor("menu.fg"), getColor("menu.bg")};
-    ZTextStyle shortcut = {getColor("menu.shortcut.fg"), getColor("menu.shortcut.bg"), ZPainter::Attribute::Underline};
+    ZTextStyle shortcut = {getColor("menu.shortcut.fg"), getColor("menu.shortcut.bg"), ZTextAttribute::Underline};
     // For better support of terminals that don't do color or that don't understand the color format used, apply
     // inverse attribute but also swap background and foreground color. This ensures that these terminals show the
     // selected entry in inverse. By also swapping the colors terminals with full color support will still show the
     // intended colors.
-    ZTextStyle selectedStyle = {getColor("menu.selected.bg"), getColor("menu.selected.fg"), ZPainter::Attribute::Inverse};
+    ZTextStyle selectedStyle = {getColor("menu.selected.bg"), getColor("menu.selected.fg"), ZTextAttribute::Inverse};
     ZTextStyle selectedShortcut = {getColor("menu.selected.shortcut.bg"), getColor("menu.selected.shortcut.fg"),
-                                  ZPainter::Attribute::Inverse | ZPainter::Attribute::Underline};
+                                  ZTextAttribute::Inverse | ZTextAttribute::Underline};
     ZTextStyle disabledStyle = {getColor("menu.disabled.fg"), getColor("menu.disabled.bg")};
     ZTextStyle selectedDisabledStyle = {getColor("menu.selected.disabled.fg"), getColor("menu.selected.disabled.bg")};
     painter->clear(baseStyle.foregroundColor(), baseStyle.backgroundColor());

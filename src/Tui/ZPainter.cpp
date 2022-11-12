@@ -100,12 +100,12 @@ void ZPainter::writeWithColors(int x, int y, const char16_t *string, int size, Z
     writeWithColors(x, y, utf8.data(), utf8.size(), fg, bg);
 }
 
-void ZPainter::writeWithAttributes(int x, int y, const QString &string, ZColor fg, ZColor bg, Attributes attr) {
+void ZPainter::writeWithAttributes(int x, int y, const QString &string, ZColor fg, ZColor bg, ZTextAttributes attr) {
     auto utf8 = string.toUtf8();
     writeWithAttributes(x, y, utf8.data(), utf8.size(), fg, bg, attr);
 }
 
-void ZPainter::writeWithAttributes(int x, int y, const char *stringUtf8, int utf8CodeUnits, ZColor fg, ZColor bg, Attributes attr) {
+void ZPainter::writeWithAttributes(int x, int y, const char *stringUtf8, int utf8CodeUnits, ZColor fg, ZColor bg, ZTextAttributes attr) {
     auto *const pimpl = tuiwidgets_impl();
 
     x += pimpl->offsetX;
@@ -123,21 +123,21 @@ void ZPainter::writeWithAttributes(int x, int y, const char *stringUtf8, int utf
     termpaint_attr_free(termpaintAttr);
 }
 
-void ZPainter::writeWithAttributes(int x, int y, const QChar *string, int size, ZColor fg, ZColor bg, Attributes attr) {
+void ZPainter::writeWithAttributes(int x, int y, const QChar *string, int size, ZColor fg, ZColor bg, ZTextAttributes attr) {
     QByteArray utf8 = QTextCodec::codecForMib(106)->fromUnicode(string, size);
     writeWithAttributes(x, y, utf8.data(), utf8.size(), fg, bg, attr);
 }
 
-void ZPainter::writeWithAttributes(int x, int y, const char16_t *string, int size, ZColor fg, ZColor bg, Attributes attr) {
+void ZPainter::writeWithAttributes(int x, int y, const char16_t *string, int size, ZColor fg, ZColor bg, ZTextAttributes attr) {
     QByteArray utf8 = QTextCodec::codecForMib(106)->fromUnicode(reinterpret_cast<const QChar*>(string), size);
     writeWithAttributes(x, y, utf8.data(), utf8.size(), fg, bg, attr);
 }
 
-void ZPainter::clear(ZColor fg, ZColor bg, Attributes attr) {
+void ZPainter::clear(ZColor fg, ZColor bg, ZTextAttributes attr) {
     clearWithChar(fg, bg, Erased, attr);
 }
 
-void ZPainter::clearWithChar(ZColor fg, ZColor bg, int fillChar, Attributes attr) {
+void ZPainter::clearWithChar(ZColor fg, ZColor bg, int fillChar, ZTextAttributes attr) {
     auto *const pimpl = tuiwidgets_impl();
     termpaint_attr *termpaintAttr = termpaint_attr_new(toTermPaintColor(fg), toTermPaintColor(bg));
     termpaint_attr_set_style(termpaintAttr, attr);
@@ -147,7 +147,7 @@ void ZPainter::clearWithChar(ZColor fg, ZColor bg, int fillChar, Attributes attr
     termpaint_attr_free(termpaintAttr);
 }
 
-void ZPainter::clearRectWithChar(int x, int y, int width, int height, ZColor fg, ZColor bg, int fillChar, Attributes attr) {
+void ZPainter::clearRectWithChar(int x, int y, int width, int height, ZColor fg, ZColor bg, int fillChar, ZTextAttributes attr) {
     auto *const pimpl = tuiwidgets_impl();
 
     x += pimpl->offsetX;
@@ -178,7 +178,7 @@ void ZPainter::clearRectWithChar(int x, int y, int width, int height, ZColor fg,
     termpaint_attr_free(termpaintAttr);
 }
 
-void ZPainter::clearRect(int x, int y, int width, int height, ZColor fg, ZColor bg, Attributes attr) {
+void ZPainter::clearRect(int x, int y, int width, int height, ZColor fg, ZColor bg, ZTextAttributes attr) {
     clearRectWithChar(x, y, width, height, fg, bg, Erased, attr);
 }
 

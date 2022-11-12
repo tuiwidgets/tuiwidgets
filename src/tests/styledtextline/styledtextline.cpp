@@ -280,7 +280,7 @@ TEST_CASE("styledtextline-visual", "") {
     SECTION("MnemonicStyle") {
         Tui::ZTextStyle tsTxt({0xAA, 0xAA, 0xAA},{0xFF, 0xFF, 0xFF});
         Tui::ZTextStyle tsMnem({0x00, 0x00, 0x00},{0xEE, 0xEE, 0xEE});
-        tsMnem.setAttributes(Tui::ZPainter::Attribute::Strike);
+        tsMnem.setAttributes(Tui::ZTextAttribute::Strike);
         stl->setMnemonicStyle(tsTxt, tsMnem);
         SECTION("text-6-chars") {
             stl->setText("Hallo1");
