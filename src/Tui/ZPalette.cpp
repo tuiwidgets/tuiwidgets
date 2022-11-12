@@ -26,7 +26,7 @@ ZPalette::~ZPalette() {
 
 }
 
-ZColor ZPalette::getColor(ZWidget *targetWidget, ZImplicitSymbol x) const {
+ZColor ZPalette::getColor(ZWidget *targetWidget, ZImplicitSymbol x) {
     // TODO Most stupid impl., needs optimization
 
     QList<ZWidget*> widgets;

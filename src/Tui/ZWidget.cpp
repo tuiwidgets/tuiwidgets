@@ -637,9 +637,7 @@ void ZWidget::setPalette(const ZPalette &pal) {
 }
 
 ZColor ZWidget::getColor(const ZImplicitSymbol &x) {
-    auto *const p = tuiwidgets_impl();
-
-    return p->palette.getColor(this, x);
+    return ZPalette::getColor(this, x);
 }
 
 QStringList ZWidget::paletteClass() const {
