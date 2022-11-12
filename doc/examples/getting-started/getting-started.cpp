@@ -18,11 +18,11 @@ void Root::terminalChanged() {
     QObject::connect(shortcut,
                      &Tui::ZShortcut::activated,
                      this, &Root::quit);
-                     
+
     // (2)
     Tui::ZWindow *win = new Tui::ZWindow("Hello World", this);
     win->setGeometry({5, 3, 20, 10});
-    
+
     // (3)
     Tui::ZButton *button = new Tui::ZButton(Tui::withMarkup, "<m>Q</m>uit", win);
     QObject::connect(button, &Tui::ZButton::clicked, this, &Root::quit);
