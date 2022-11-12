@@ -114,7 +114,7 @@ public:
     virtual ~ZTerminal() override;
 
 public:
-    static bool defaultTerminalAvailable();
+    static bool isDefaultTerminalAvailable();
 
 public:
     ZPainter painter();

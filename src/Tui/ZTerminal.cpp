@@ -576,7 +576,7 @@ ZTerminal::~ZTerminal() {
     }
 }
 
-bool ZTerminal::defaultTerminalAvailable() {
+bool ZTerminal::isDefaultTerminalAvailable() {
     return ZTerminalPrivate::terminalAvailableForInternalConnection();
 }
 
