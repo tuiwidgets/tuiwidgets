@@ -94,9 +94,9 @@ TEST_CASE("windowlayout-layout", "") {
     }
 
     SECTION("sizehint-noitems-closebtn") {
-        auto edges = GENERATE(Qt::TopEdge | Qt::BottomEdge, Qt::TopEdge | Qt::BottomEdge | Qt::LeftEdge,
-                              Qt::TopEdge | Qt::BottomEdge | Qt::RightEdge,
-                              Qt::TopEdge | Qt::BottomEdge | Qt::LeftEdge | Qt::RightEdge);
+        auto edges = GENERATE(Tui::TopEdge | Tui::BottomEdge, Tui::TopEdge | Tui::BottomEdge | Tui::LeftEdge,
+                              Tui::TopEdge | Tui::BottomEdge | Tui::RightEdge,
+                              Tui::TopEdge | Tui::BottomEdge | Tui::LeftEdge | Tui::RightEdge);
         CAPTURE(edges);
 
         win.setOptions(Tui::ZWindow::Option::CloseButton);
@@ -111,10 +111,10 @@ TEST_CASE("windowlayout-layout", "") {
         int leftEdge = GENERATE(0, 1);
         int rightEdge = GENERATE(0, 1);
         int bottomEdge = GENERATE(0, 1);
-        Qt::Edges edges = {};
-        if (leftEdge) edges |= Qt::LeftEdge;
-        if (rightEdge) edges |= Qt::RightEdge;
-        if (bottomEdge) edges |= Qt::BottomEdge;
+        Tui::Edges edges = {};
+        if (leftEdge) edges |= Tui::LeftEdge;
+        if (rightEdge) edges |= Tui::RightEdge;
+        if (bottomEdge) edges |= Tui::BottomEdge;
         CAPTURE(edges);
 
         win.setOptions(Tui::ZWindow::Option::CloseButton);
@@ -131,11 +131,11 @@ TEST_CASE("windowlayout-layout", "") {
         int rightEdge = GENERATE(0, 1);
         int topEdge = GENERATE(0, 1);
         int bottomEdge = GENERATE(0, 1);
-        Qt::Edges edges = {};
-        if (leftEdge) edges |= Qt::LeftEdge;
-        if (rightEdge) edges |= Qt::RightEdge;
-        if (topEdge) edges |= Qt::TopEdge;
-        if (bottomEdge) edges |= Qt::BottomEdge;
+        Tui::Edges edges = {};
+        if (leftEdge) edges |= Tui::LeftEdge;
+        if (rightEdge) edges |= Tui::RightEdge;
+        if (topEdge) edges |= Tui::TopEdge;
+        if (bottomEdge) edges |= Tui::BottomEdge;
         CAPTURE(edges);
 
         win.setOptions({});
@@ -151,11 +151,11 @@ TEST_CASE("windowlayout-layout", "") {
         int rightEdge = GENERATE(0, 1);
         int topEdge = GENERATE(0, 1);
         int bottomEdge = GENERATE(0, 1);
-        Qt::Edges edges = {};
-        if (leftEdge) edges |= Qt::LeftEdge;
-        if (rightEdge) edges |= Qt::RightEdge;
-        if (topEdge) edges |= Qt::TopEdge;
-        if (bottomEdge) edges |= Qt::BottomEdge;
+        Tui::Edges edges = {};
+        if (leftEdge) edges |= Tui::LeftEdge;
+        if (rightEdge) edges |= Tui::RightEdge;
+        if (topEdge) edges |= Tui::TopEdge;
+        if (bottomEdge) edges |= Tui::BottomEdge;
         CAPTURE(edges);
         win.setBorderEdges(edges);
         bool useItemSizeHint = GENERATE(false, true);
@@ -182,11 +182,11 @@ TEST_CASE("windowlayout-layout", "") {
         int rightEdge = GENERATE(0, 1);
         int topEdge = GENERATE(0, 1);
         int bottomEdge = GENERATE(0, 1);
-        Qt::Edges edges = {};
-        if (leftEdge) edges |= Qt::LeftEdge;
-        if (rightEdge) edges |= Qt::RightEdge;
-        if (topEdge) edges |= Qt::TopEdge;
-        if (bottomEdge) edges |= Qt::BottomEdge;
+        Tui::Edges edges = {};
+        if (leftEdge) edges |= Tui::LeftEdge;
+        if (rightEdge) edges |= Tui::RightEdge;
+        if (topEdge) edges |= Tui::TopEdge;
+        if (bottomEdge) edges |= Tui::BottomEdge;
         CAPTURE(edges);
         bool useItemSizeHint = GENERATE(false, true);
         CAPTURE(useItemSizeHint);
@@ -241,7 +241,7 @@ TEST_CASE("windowlayout-layout", "") {
         CAPTURE(leftAdjust);
         int rightAdjust = GENERATE(0, -1, 1);
         CAPTURE(rightAdjust);
-        auto alignment = GENERATE(Qt::AlignHCenter, Qt::AlignLeft, Qt::AlignRight);
+        auto alignment = GENERATE(Tui::AlignHCenter, Tui::AlignLeft, Tui::AlignRight);
         CAPTURE(alignment);
 
         win.setOptions({});
@@ -263,8 +263,8 @@ TEST_CASE("windowlayout-layout", "") {
         CAPTURE(leftAdjust);
         int rightAdjust = GENERATE(0, -1, 1);
         CAPTURE(rightAdjust);
-        auto alignment = GENERATE(Qt::AlignHCenter | Qt::AlignBottom, Qt::AlignHCenter, Qt::AlignCenter,
-                                  Qt::AlignHCenter | Qt::AlignTop);
+        auto alignment = GENERATE(Tui::AlignHCenter | Tui::AlignBottom, Tui::AlignHCenter, Tui::AlignCenter,
+                                  Tui::AlignHCenter | Tui::AlignTop);
         CAPTURE(alignment);
 
         win.setOptions({});
@@ -291,8 +291,8 @@ TEST_CASE("windowlayout-layout", "") {
         CAPTURE(leftAdjust);
         int rightAdjust = GENERATE(0, -1, 1);
         CAPTURE(rightAdjust);
-        auto alignment = GENERATE(Qt::AlignHCenter | Qt::AlignBottom, Qt::AlignHCenter, Qt::AlignCenter,
-                                  Qt::AlignHCenter | Qt::AlignTop);
+        auto alignment = GENERATE(Tui::AlignHCenter | Tui::AlignBottom, Tui::AlignHCenter, Tui::AlignCenter,
+                                  Tui::AlignHCenter | Tui::AlignTop);
         CAPTURE(alignment);
 
         win.setOptions(Tui::ZWindow::Option::CloseButton);
@@ -329,8 +329,8 @@ TEST_CASE("windowlayout-layout", "") {
         StubWidget widget;
         widget.stubSizeHint = {4, 1};
         if (useAlign) {
-            auto alignment = GENERATE(Qt::AlignLeft | Qt::AlignBottom, Qt::AlignLeft | Qt::AlignVCenter, Qt::AlignLeft,
-                                      Qt::AlignLeft | Qt::AlignTop);
+            auto alignment = GENERATE(Tui::AlignLeft | Tui::AlignBottom, Tui::AlignLeft | Tui::AlignVCenter, Tui::AlignLeft,
+                                      Tui::AlignLeft | Tui::AlignTop);
             layout.setTopBorderWidget(&widget, alignment);
         } else {
             layout.setTopBorderWidget(&widget, {});
@@ -354,8 +354,8 @@ TEST_CASE("windowlayout-layout", "") {
         CAPTURE(leftAdjust);
         int rightAdjust = GENERATE(0, -1, 1);
         CAPTURE(rightAdjust);
-        auto alignment = GENERATE(Qt::AlignRight | Qt::AlignBottom, Qt::AlignRight | Qt::AlignVCenter, Qt::AlignRight,
-                                  Qt::AlignRight | Qt::AlignTop);
+        auto alignment = GENERATE(Tui::AlignRight | Tui::AlignBottom, Tui::AlignRight | Tui::AlignVCenter, Tui::AlignRight,
+                                  Tui::AlignRight | Tui::AlignTop);
         CAPTURE(alignment);
         bool closeBtn = GENERATE(false, true);
         CAPTURE(closeBtn);
@@ -431,7 +431,7 @@ TEST_CASE("windowlayout-layout", "") {
         CAPTURE(leftAdjust);
         int rightAdjust = GENERATE(0, -1, 1);
         CAPTURE(rightAdjust);
-        auto alignment = GENERATE(Qt::AlignHCenter, Qt::AlignLeft, Qt::AlignRight);
+        auto alignment = GENERATE(Tui::AlignHCenter, Tui::AlignLeft, Tui::AlignRight);
         CAPTURE(alignment);
 
         win.setOptions({});
@@ -453,8 +453,8 @@ TEST_CASE("windowlayout-layout", "") {
         CAPTURE(leftAdjust);
         int rightAdjust = GENERATE(0, -1, 1);
         CAPTURE(rightAdjust);
-        auto alignment = GENERATE(Qt::AlignHCenter | Qt::AlignBottom, Qt::AlignHCenter, Qt::AlignCenter,
-                                  Qt::AlignHCenter | Qt::AlignTop);
+        auto alignment = GENERATE(Tui::AlignHCenter | Tui::AlignBottom, Tui::AlignHCenter, Tui::AlignCenter,
+                                  Tui::AlignHCenter | Tui::AlignTop);
         CAPTURE(alignment);
 
         win.setOptions({});
@@ -490,8 +490,8 @@ TEST_CASE("windowlayout-layout", "") {
         layout.setBottomBorderLeftAdjust(leftAdjust);
         layout.setBottomBorderRightAdjust(rightAdjust);
         if (useAlign) {
-            auto alignment = GENERATE(Qt::AlignLeft | Qt::AlignBottom, Qt::AlignLeft | Qt::AlignVCenter, Qt::AlignLeft,
-                                      Qt::AlignLeft | Qt::AlignTop);
+            auto alignment = GENERATE(Tui::AlignLeft | Tui::AlignBottom, Tui::AlignLeft | Tui::AlignVCenter, Tui::AlignLeft,
+                                      Tui::AlignLeft | Tui::AlignTop);
             layout.setBottomBorderWidget(&widget, alignment);
         } else {
             layout.setBottomBorderWidget(&widget, {});
@@ -510,8 +510,8 @@ TEST_CASE("windowlayout-layout", "") {
         CAPTURE(leftAdjust);
         int rightAdjust = GENERATE(0, -1, 1);
         CAPTURE(rightAdjust);
-        auto alignment = GENERATE(Qt::AlignRight | Qt::AlignBottom, Qt::AlignRight | Qt::AlignVCenter, Qt::AlignRight,
-                                  Qt::AlignRight | Qt::AlignTop);
+        auto alignment = GENERATE(Tui::AlignRight | Tui::AlignBottom, Tui::AlignRight | Tui::AlignVCenter, Tui::AlignRight,
+                                  Tui::AlignRight | Tui::AlignTop);
         CAPTURE(alignment);
 
         win.setOptions({});
@@ -562,7 +562,7 @@ TEST_CASE("windowlayout-layout", "") {
         CAPTURE(topAdjust);
         int bottomAdjust = GENERATE(0, -1, 1);
         CAPTURE(bottomAdjust);
-        auto alignment = GENERATE(Qt::AlignVCenter, Qt::AlignTop, Qt::AlignBottom);
+        auto alignment = GENERATE(Tui::AlignVCenter, Tui::AlignTop, Tui::AlignBottom);
         CAPTURE(alignment);
 
         win.setOptions({});
@@ -584,8 +584,8 @@ TEST_CASE("windowlayout-layout", "") {
         CAPTURE(topAdjust);
         int bottomAdjust = GENERATE(0, -1, 1);
         CAPTURE(bottomAdjust);
-        auto alignment = GENERATE(Qt::AlignVCenter | Qt::AlignRight, Qt::AlignVCenter, Qt::AlignCenter,
-                                  Qt::AlignVCenter | Qt::AlignLeft);
+        auto alignment = GENERATE(Tui::AlignVCenter | Tui::AlignRight, Tui::AlignVCenter, Tui::AlignCenter,
+                                  Tui::AlignVCenter | Tui::AlignLeft);
         CAPTURE(alignment);
 
         win.setOptions({});
@@ -621,8 +621,8 @@ TEST_CASE("windowlayout-layout", "") {
         layout.setRightBorderTopAdjust(topAdjust);
         layout.setRightBorderBottomAdjust(bottomAdjust);
         if (useAlign) {
-            auto alignment = GENERATE(Qt::AlignTop | Qt::AlignRight, Qt::AlignTop | Qt::AlignHCenter, Qt::AlignTop,
-                                      Qt::AlignTop | Qt::AlignLeft);
+            auto alignment = GENERATE(Tui::AlignTop | Tui::AlignRight, Tui::AlignTop | Tui::AlignHCenter, Tui::AlignTop,
+                                      Tui::AlignTop | Tui::AlignLeft);
             layout.setRightBorderWidget(&widget, alignment);
         } else {
             layout.setRightBorderWidget(&widget, {});
@@ -641,8 +641,8 @@ TEST_CASE("windowlayout-layout", "") {
         CAPTURE(topAdjust);
         int bottomAdjust = GENERATE(0, -1, 1);
         CAPTURE(bottomAdjust);
-        auto alignment = GENERATE(Qt::AlignBottom | Qt::AlignRight, Qt::AlignBottom | Qt::AlignHCenter, Qt::AlignBottom,
-                                  Qt::AlignBottom | Qt::AlignLeft);
+        auto alignment = GENERATE(Tui::AlignBottom | Tui::AlignRight, Tui::AlignBottom | Tui::AlignHCenter, Tui::AlignBottom,
+                                  Tui::AlignBottom | Tui::AlignLeft);
         CAPTURE(alignment);
         win.setOptions({});
         StubWidget widget;

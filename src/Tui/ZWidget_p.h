@@ -60,7 +60,7 @@ public:
 
     // variables
     QRect geometry;
-    Qt::FocusPolicy focusPolicy = Qt::NoFocus;
+    Tui::FocusPolicy focusPolicy = Tui::NoFocus;
     FocusContainerMode focusMode = FocusContainerMode::None;
     int focusOrder = 0;
     int stackingLayer = 0;

@@ -31,7 +31,7 @@ TEST_CASE("radiobutton-base", "") {
         CHECK(rb1->checked() == false);
         CHECK(rb1->sizePolicyH() == Tui::SizePolicy::Expanding);
         CHECK(rb1->sizePolicyV() == Tui::SizePolicy::Fixed);
-        CHECK(rb1->focusPolicy() == Qt::StrongFocus);
+        CHECK(rb1->focusPolicy() == Tui::StrongFocus);
         FAIL_CHECK_VEC(checkWidgetsDefaultsExcept(rb1, DefaultException::SizePolicyV
                                                      | DefaultException::SizePolicyH
                                                      | DefaultException::FocusPolicy));
@@ -92,7 +92,7 @@ TEST_CASE("radiobutton-base", "") {
     }
 
     SECTION("set-shortcut") {
-        rb->setShortcut(Tui::ZKeySequence::forKey(Qt::Key_F1));
+        rb->setShortcut(Tui::ZKeySequence::forKey(Tui::Key_F1));
     }
 
     SECTION("content-margins-without-terminal") {
@@ -183,7 +183,7 @@ TEST_CASE("radiobutton-two", "") {
         CHECK(!rb1->checked());
         CHECK(rb2->checked());
 
-        t.sendKey(Qt::Key_Space);
+        t.sendKey(Tui::Key_Space);
         CHECK(rb1->checked());
         CHECK(!rb2->checked());
         t.compare();
@@ -192,7 +192,7 @@ TEST_CASE("radiobutton-two", "") {
     SECTION("send-tab") {
         rb1->setFocus();
 
-        t.sendKey(Qt::Key_Tab);
+        t.sendKey(Tui::Key_Tab);
         CHECK(rb2->focus());
         CHECK(!rb1->checked());
         CHECK(!rb2->checked());
@@ -202,8 +202,8 @@ TEST_CASE("radiobutton-two", "") {
     SECTION("send-tab-enter") {
         rb1->setFocus();
 
-        t.sendKey(Qt::Key_Tab);
-        t.sendKey(Qt::Key_Enter);
+        t.sendKey(Tui::Key_Tab);
+        t.sendKey(Tui::Key_Enter);
         CHECK(!rb1->checked());
         CHECK(!rb2->checked());
         t.compare("send-tab");
@@ -213,8 +213,8 @@ TEST_CASE("radiobutton-two", "") {
     SECTION("send-tab-disable") {
         rb1->setFocus();
         rb2->setEnabled(false);
-        t.sendKey(Qt::Key_Tab);
-        t.sendKey(Qt::Key_Space);
+        t.sendKey(Tui::Key_Tab);
+        t.sendKey(Tui::Key_Space);
         CHECK(rb1->checked());
         t.compare();
     }
@@ -250,15 +250,15 @@ TEST_CASE("radiobutton-withMarkup", "") {
         CHECK(!rb1->checked());
         CHECK(!rb2->checked());
         CHECK(!rb3->checked());
-        t.sendChar("r", Qt::AltModifier);
+        t.sendChar("r", Tui::AltModifier);
         CHECK(rb1->checked());
         CHECK(!rb2->checked());
         CHECK(!rb3->checked());
-        t.sendChar("B", Qt::AltModifier);
+        t.sendChar("B", Tui::AltModifier);
         CHECK(!rb1->checked());
         CHECK(rb2->checked());
         CHECK(!rb3->checked());
-        t.sendChar("2", Qt::AltModifier);
+        t.sendChar("2", Tui::AltModifier);
         CHECK(!rb1->checked());
         CHECK(!rb2->checked());
         CHECK(rb3->checked());
@@ -279,11 +279,11 @@ TEST_CASE("radiobutton-withMarkup", "") {
         CHECK(!rb1->checked());
         CHECK(!rb2->checked());
         CHECK(!rb3->checked());
-        FAIL_CHECK_VEC(t.checkCharEventBubbles("r", Qt::AltModifier));
+        FAIL_CHECK_VEC(t.checkCharEventBubbles("r", Tui::AltModifier));
         CHECK(!rb1->checked());
         CHECK(!rb2->checked());
         CHECK(!rb3->checked());
-        FAIL_CHECK_VEC(t.checkCharEventBubbles("B", Qt::AltModifier | Qt::ControlModifier));
+        FAIL_CHECK_VEC(t.checkCharEventBubbles("B", Tui::AltModifier | Tui::ControlModifier));
         CHECK(!rb1->checked());
         CHECK(!rb2->checked());
         CHECK(!rb3->checked());
@@ -336,7 +336,7 @@ TEST_CASE("radiobutton-emit", "") {
     SECTION("Shortcut match") {
         rb1->setChecked(false);
         triggerState = ToggleExpectedTrue;
-        t.sendChar("r", Qt::AltModifier);
+        t.sendChar("r", Tui::AltModifier);
         CHECK(triggerState == ToggleDone);
     }
 
@@ -344,7 +344,7 @@ TEST_CASE("radiobutton-emit", "") {
         rb1->setMarkup("r<m>b</m>1-setText");
         rb1->setChecked(false);
         triggerState = ToggleExpectedTrue;
-        t.sendChar("b", Qt::AltModifier);
+        t.sendChar("b", Tui::AltModifier);
         CHECK(triggerState == ToggleDone);
     }
 
@@ -352,16 +352,16 @@ TEST_CASE("radiobutton-emit", "") {
         rb1->setText("rb1-new");
         rb1->setChecked(false);
         triggerState = ToggleExpectedTrue;
-        t.sendKey(Qt::Key_Space);
+        t.sendKey(Tui::Key_Space);
         CHECK(triggerState == ToggleDone);
     }
 
     SECTION("setShortcut forKey") {
         rb1->setText("rb1-new");
         rb1->setChecked(false);
-        rb1->setShortcut(Tui::ZKeySequence::forKey(Qt::Key_F1));
+        rb1->setShortcut(Tui::ZKeySequence::forKey(Tui::Key_F1));
         triggerState = ToggleExpectedTrue;
-        t.sendKey(Qt::Key_F1);
+        t.sendKey(Tui::Key_F1);
         CHECK(triggerState == ToggleDone);
     }
 
@@ -370,7 +370,7 @@ TEST_CASE("radiobutton-emit", "") {
         rb1->setChecked(false);
         rb1->setShortcut(Tui::ZKeySequence::forShortcut("a"));
         triggerState = ToggleExpectedTrue;
-        t.sendChar("a", Qt::ControlModifier);
+        t.sendChar("a", Tui::ControlModifier);
         CHECK(triggerState == ToggleDone);
     }
 
@@ -379,7 +379,7 @@ TEST_CASE("radiobutton-emit", "") {
         rb1->setChecked(false);
         rb1->setShortcut(Tui::ZKeySequence::forMnemonic("a"));
         triggerState = ToggleExpectedTrue;
-        t.sendChar("a", Qt::AltModifier);
+        t.sendChar("a", Tui::AltModifier);
         CHECK(triggerState == ToggleDone);
     }
 
@@ -394,13 +394,13 @@ TEST_CASE("radiobutton-emit", "") {
     SECTION("mnemonic-via-markup-reset-via-text") {
         rb1->setMarkup("<m>O</m>K");
         rb1->setText("OK");
-        FAIL_CHECK_VEC(t.checkCharEventBubbles("o", Qt::AltModifier));
+        FAIL_CHECK_VEC(t.checkCharEventBubbles("o", Tui::AltModifier));
     }
 
     SECTION("mnemonic-via-markup-reset-via-markup") {
         rb1->setMarkup("<m>O</m>K");
         rb1->setMarkup("OK");
-        FAIL_CHECK_VEC(t.checkCharEventBubbles("o", Qt::AltModifier));
+        FAIL_CHECK_VEC(t.checkCharEventBubbles("o", Tui::AltModifier));
     }
 }
 
@@ -408,7 +408,7 @@ TEST_CASE("radiobutton-color", "") {
 
     Testhelper t("radiobutton", "radiobutton-color", 15, 5);
     Tui::ZWindow *w = new Tui::ZWindow(t.root);
-    w->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
+    w->setFocusPolicy(Tui::FocusPolicy::StrongFocus);
     w->setGeometry({0, 0, 15, 5});
 
     SECTION("single-black") {
@@ -580,28 +580,28 @@ TEST_CASE("radiobutton-multiparent", "") {
         rb4->setGeometry({1, 2, 13, 1});
 
         CHECK(!rb1->checked());
-        t.sendKey(Qt::Key_Space);
+        t.sendKey(Tui::Key_Space);
         CHECK(rb1->checked());
         CHECK(!rb2->checked());
         CHECK(!rb3->checked());
         CHECK(!rb4->checked());
 
-        t.sendKey(Qt::Key_Tab);
-        t.sendKey(Qt::Key_Space);
+        t.sendKey(Tui::Key_Tab);
+        t.sendKey(Tui::Key_Space);
         CHECK(!rb1->checked());
         CHECK(rb2->checked());
         CHECK(!rb3->checked());
         CHECK(!rb4->checked());
 
-        t.sendKey(Qt::Key_Tab);
-        t.sendKey(Qt::Key_Space);
+        t.sendKey(Tui::Key_Tab);
+        t.sendKey(Tui::Key_Space);
         CHECK(!rb1->checked());
         CHECK(rb2->checked());
         CHECK(rb3->checked());
         CHECK(!rb4->checked());
 
-        t.sendKey(Qt::Key_Tab);
-        t.sendKey(Qt::Key_Space);
+        t.sendKey(Tui::Key_Tab);
+        t.sendKey(Tui::Key_Space);
         CHECK(!rb1->checked());
         CHECK(rb2->checked());
         CHECK(!rb3->checked());

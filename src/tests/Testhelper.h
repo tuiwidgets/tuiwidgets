@@ -34,20 +34,20 @@ public:
     Testhelper(QString dir, QString namePrefix, int width, int height, Options options = {});
     ~Testhelper();
 
-    void sendChar(QString ch, Qt::KeyboardModifiers modifiers = {});
-    void sendKey(Qt::Key key, Qt::KeyboardModifiers modifiers = {});
-    void sendKeyToWidget(Tui::ZWidget *w, Qt::Key key, Qt::KeyboardModifiers modifiers = {});
+    void sendChar(QString ch, Tui::KeyboardModifiers modifiers = {});
+    void sendKey(Tui::Key key, Tui::KeyboardModifiers modifiers = {});
+    void sendKeyToWidget(Tui::ZWidget *w, Tui::Key key, Tui::KeyboardModifiers modifiers = {});
     void sendKeyToZTerminal(QString key);
     void sendPaste(const QString &text);
 
     [[nodiscard]]
-    std::vector<std::string> checkCharEventBubbles(QString ch, Qt::KeyboardModifiers modifiers = {});
+    std::vector<std::string> checkCharEventBubbles(QString ch, Tui::KeyboardModifiers modifiers = {});
     [[nodiscard]]
-    std::vector<std::string> checkKeyEventBubbles(Qt::Key key, Qt::KeyboardModifiers modifiers = {});
+    std::vector<std::string> checkKeyEventBubbles(Tui::Key key, Tui::KeyboardModifiers modifiers = {});
     [[nodiscard]]
     std::vector<std::string> checkPasteEventBubbles(QString str);
     [[nodiscard]]
-    std::vector<std::string> checkKeyEventBubblesToParent(Qt::Key key, Qt::KeyboardModifiers modifiers = {});
+    std::vector<std::string> checkKeyEventBubblesToParent(Tui::Key key, Tui::KeyboardModifiers modifiers = {});
 
     void compare();
     void compare(QString name);

@@ -44,13 +44,13 @@ public:
 
 class ZKeyEventPrivate : public ZEventPrivate {
 public:
-    ZKeyEventPrivate(int key, Qt::KeyboardModifiers modifiers, const QString &text);
+    ZKeyEventPrivate(int key, Tui::KeyboardModifiers modifiers, const QString &text);
     ~ZKeyEventPrivate() override;
 
 public:
-    int key = Qt::Key_unknown;
+    int key = Tui::Key_unknown;
     QString text;
-    Qt::KeyboardModifiers modifiers = {};
+    Tui::KeyboardModifiers modifiers = {};
 };
 
 class ZPasteEventPrivate : public ZEventPrivate {
@@ -64,11 +64,11 @@ public:
 
 class ZFocusEventPrivate : public ZEventPrivate {
 public:
-    ZFocusEventPrivate(Qt::FocusReason reason);
+    ZFocusEventPrivate(Tui::FocusReason reason);
     ~ZFocusEventPrivate() override;
 
 public:
-    Qt::FocusReason reason;
+    Tui::FocusReason reason;
 };
 
 

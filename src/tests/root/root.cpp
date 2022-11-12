@@ -189,20 +189,20 @@ TEST_CASE("root-sendkey-from-root") {
     Tui::ZRoot root;
     root.setParent(t.root);
     RootStubWidget sw(&root);
-    sw.setFocusPolicy(Qt::FocusPolicy::StrongFocus);
+    sw.setFocusPolicy(Tui::FocusPolicy::StrongFocus);
 
-    t.sendKey(Qt::Key_F6);
+    t.sendKey(Tui::Key_F6);
     CHECK(root.focus() == false);
     CHECK(sw.focus() == false);
 
     root.setFocus();
     CHECK(root.focus() == true);
 
-    t.sendKey(Qt::Key_F6);
+    t.sendKey(Tui::Key_F6);
     CHECK(root.focus() == false);
     CHECK(sw.focus() == true);
 
-    t.sendKey(Qt::Key_F6);
+    t.sendKey(Tui::Key_F6);
     CHECK(root.focus() == false);
     CHECK(sw.focus() == true);
 }
@@ -214,16 +214,16 @@ TEST_CASE("root-sendkey-to-root") {
     Tui::ZRoot root;
     root.setParent(t.root);
     RootStubWidget sw(&root);
-    sw.setFocusPolicy(Qt::FocusPolicy::StrongFocus);
+    sw.setFocusPolicy(Tui::FocusPolicy::StrongFocus);
 
-    t.sendKey(Qt::Key_F6);
+    t.sendKey(Tui::Key_F6);
     CHECK(root.focus() == false);
     CHECK(sw.focus() == false);
 
     sw.setFocus();
     CHECK(sw.focus() == true);
 
-    t.sendKey(Qt::Key_F6);
+    t.sendKey(Tui::Key_F6);
     CHECK(root.focus() == false);
     CHECK(sw.focus() == true);
 }
@@ -235,7 +235,7 @@ TEST_CASE("root-sendkey-to-root3") {
     Tui::ZRoot root;
     root.setParent(t.root);
     RootStubWidget sw1(&root);
-    sw1.setFocusPolicy(Qt::FocusPolicy::StrongFocus);
+    sw1.setFocusPolicy(Tui::FocusPolicy::StrongFocus);
 
     // Add a non ZWidget object to check if that confuses anything
     QObject nonWidget(&root);
@@ -245,11 +245,11 @@ TEST_CASE("root-sendkey-to-root3") {
     nonWindow.setGeometry({0, 0, 1, 1});
 
     RootStubWidget sw2(&root);
-    sw2.setFocusPolicy(Qt::FocusPolicy::StrongFocus);
+    sw2.setFocusPolicy(Tui::FocusPolicy::StrongFocus);
     RootStubWidget sw3(&root);
-    sw3.setFocusPolicy(Qt::FocusPolicy::StrongFocus);
+    sw3.setFocusPolicy(Tui::FocusPolicy::StrongFocus);
 
-    t.sendKey(Qt::Key_F6);
+    t.sendKey(Tui::Key_F6);
     CHECK(root.focus() == false);
     CHECK(sw1.focus() == false);
     CHECK(sw2.focus() == false);
@@ -263,7 +263,7 @@ TEST_CASE("root-sendkey-to-root3") {
         {
             for(int i = 1, r = 0; i <= 13; i++) {
                 if (usingKey) {
-                    t.sendKey(Qt::Key_F6);
+                    t.sendKey(Tui::Key_F6);
                 } else {
                     root.activateNextWindow();
                 }
@@ -284,7 +284,7 @@ TEST_CASE("root-sendkey-to-root3") {
         {
             for(int i = 1, r = 0; i <= 12; i++) {
                 if (usingKey) {
-                    t.sendKey(Qt::Key_F6, Qt::ShiftModifier);
+                    t.sendKey(Tui::Key_F6, Tui::ShiftModifier);
                 } else {
                     root.activatePreviousWindow();
                 }
@@ -305,7 +305,7 @@ TEST_CASE("root-sendkey-to-root3") {
     }
 
     SECTION("the-first-one") {
-        t.sendKey(Qt::Key_F6);
+        t.sendKey(Tui::Key_F6);
         CHECK(root.focus() == false);
         CHECK(sw1.focus() == true);
         CHECK(sw2.focus() == false);
@@ -313,7 +313,7 @@ TEST_CASE("root-sendkey-to-root3") {
     }
 
     SECTION("remove-window") {
-        t.sendKey(Qt::Key_F6);
+        t.sendKey(Tui::Key_F6);
         CHECK(root.focus() == false);
         CHECK(sw1.focus() == true);
         CHECK(sw2.focus() == false);
@@ -325,13 +325,13 @@ TEST_CASE("root-sendkey-to-root3") {
         CHECK(sw2.focus() == true);
         CHECK(sw3.focus() == false);
 
-        t.sendKey(Qt::Key_F6);
+        t.sendKey(Tui::Key_F6);
         CHECK(root.focus() == false);
         CHECK(sw1.focus() == false);
         CHECK(sw2.focus() == false);
         CHECK(sw3.focus() == true);
 
-        t.sendKey(Qt::Key_F6);
+        t.sendKey(Tui::Key_F6);
         CHECK(root.focus() == false);
         CHECK(sw1.focus() == false);
         CHECK(sw2.focus() == true);
@@ -339,12 +339,12 @@ TEST_CASE("root-sendkey-to-root3") {
     }
 
     SECTION("remove-all-window") {
-        t.sendKey(Qt::Key_F6);
+        t.sendKey(Tui::Key_F6);
         sw3.setParent(nullptr);
         sw2.setParent(nullptr);
         sw1.setParent(nullptr);
 
-        t.sendKey(Qt::Key_F6);
+        t.sendKey(Tui::Key_F6);
         //Starting from here, nothing has focus
         CHECK(root.focus() == false);
         CHECK(sw1.focus() == false);
@@ -356,7 +356,7 @@ TEST_CASE("root-sendkey-to-root3") {
         int policy = GENERATE(0, 1, 2, 3, 4);
         CAPTURE(policy);
         if (policy == 0) {
-            sw3.setFocusPolicy(Qt::FocusPolicy::NoFocus);
+            sw3.setFocusPolicy(Tui::FocusPolicy::NoFocus);
         } else if (policy == 1) {
             sw3.setParent(nullptr);
         } else if (policy == 2) {
@@ -364,40 +364,40 @@ TEST_CASE("root-sendkey-to-root3") {
         } else if (policy == 3) {
             sw3.setVisible(false);
         } else if (policy == 4) {
-            sw3.setFocusPolicy(Qt::FocusPolicy::ClickFocus);
+            sw3.setFocusPolicy(Tui::FocusPolicy::ClickFocus);
         }
 
-        t.sendKey(Qt::Key_F6);
+        t.sendKey(Tui::Key_F6);
         CHECK(sw1.focus() == true);
         CHECK(sw2.focus() == false);
         CHECK(sw3.focus() == false);
 
-        t.sendKey(Qt::Key_F6);
+        t.sendKey(Tui::Key_F6);
         CHECK(sw1.focus() == false);
         CHECK(sw2.focus() == true);
         CHECK(sw3.focus() == false);
 
-        t.sendKey(Qt::Key_F6);
+        t.sendKey(Tui::Key_F6);
         CHECK(sw1.focus() == true);
         CHECK(sw2.focus() == false);
         CHECK(sw3.focus() == false);
     }
 
     SECTION("change-focuspolicy") {
-        Tui::FocusPolicy policy = GENERATE(Qt::FocusPolicy::TabFocus, Qt::FocusPolicy::WheelFocus, Qt::FocusPolicy::StrongFocus);
+        Tui::FocusPolicy policy = GENERATE(Tui::FocusPolicy::TabFocus, Tui::FocusPolicy::WheelFocus, Tui::FocusPolicy::StrongFocus);
         CAPTURE(policy);
         sw3.setFocusPolicy(policy);
-        t.sendKey(Qt::Key_F6);
+        t.sendKey(Tui::Key_F6);
         CHECK(sw1.focus() == true);
         CHECK(sw2.focus() == false);
         CHECK(sw3.focus() == false);
 
-        t.sendKey(Qt::Key_F6);
+        t.sendKey(Tui::Key_F6);
         CHECK(sw1.focus() == false);
         CHECK(sw2.focus() == true);
         CHECK(sw3.focus() == false);
 
-        t.sendKey(Qt::Key_F6);
+        t.sendKey(Tui::Key_F6);
         CHECK(sw1.focus() == false);
         CHECK(sw2.focus() == false);
         CHECK(sw3.focus() == true);
@@ -405,9 +405,9 @@ TEST_CASE("root-sendkey-to-root3") {
 
     SECTION("add-window") {
         //We go through all the window so that we are at the top of the list.
-        t.sendKey(Qt::Key_F6);
-        t.sendKey(Qt::Key_F6);
-        t.sendKey(Qt::Key_F6);
+        t.sendKey(Tui::Key_F6);
+        t.sendKey(Tui::Key_F6);
+        t.sendKey(Tui::Key_F6);
         CHECK(root.focus() == false);
         CHECK(sw1.focus() == false);
         CHECK(sw2.focus() == false);
@@ -415,10 +415,10 @@ TEST_CASE("root-sendkey-to-root3") {
 
         //We create a new window.
         RootStubWidget sw4(&root);
-        sw4.setFocusPolicy(Qt::FocusPolicy::StrongFocus);
+        sw4.setFocusPolicy(Tui::FocusPolicy::StrongFocus);
 
         //Since it is at the end of the list, it becomes active next.
-        t.sendKey(Qt::Key_F6);
+        t.sendKey(Tui::Key_F6);
         CHECK(root.focus() == false);
         CHECK(sw1.focus() == false);
         CHECK(sw2.focus() == false);
@@ -427,7 +427,7 @@ TEST_CASE("root-sendkey-to-root3") {
 
         //We delete the next window.
         sw1.setParent(nullptr);
-        t.sendKey(Qt::Key_F6);
+        t.sendKey(Tui::Key_F6);
         CHECK(root.focus() == false);
         CHECK(sw1.focus() == false);
         CHECK(sw2.focus() == true);
@@ -495,14 +495,14 @@ TEST_CASE("root-keyEventBubbles") {
     Tui::ZRoot root;
     root.setParent(t.root);
     RootStubWidget sw(&root);
-    sw.setFocusPolicy(Qt::FocusPolicy::StrongFocus);
+    sw.setFocusPolicy(Tui::FocusPolicy::StrongFocus);
 
     sw.setFocus();
-    auto mod = GENERATE(Qt::NoModifier, Qt::ShiftModifier);
+    auto mod = GENERATE(Tui::NoModifier, Tui::ShiftModifier);
     CAPTURE(mod);
-    FAIL_CHECK_VEC(t.checkKeyEventBubbles(Qt::Key_F5, mod));
+    FAIL_CHECK_VEC(t.checkKeyEventBubbles(Tui::Key_F5, mod));
     root.setFocus();
-    FAIL_CHECK_VEC(t.checkKeyEventBubbles(Qt::Key_F5, mod));
+    FAIL_CHECK_VEC(t.checkKeyEventBubbles(Tui::Key_F5, mod));
     FAIL_CHECK_VEC(t.checkCharEventBubbles("A", mod));
 }
 
@@ -756,10 +756,10 @@ TEST_CASE("raiseOnActivate") {
         CHECK(t.root->raiseCount == 0);
 
         RootStubWidget sw1(t.root);
-        sw1.setFocusPolicy(Qt::FocusPolicy::StrongFocus);
+        sw1.setFocusPolicy(Tui::FocusPolicy::StrongFocus);
 
         if (usingKey) {
-            t.sendKey(Qt::Key_F6);
+            t.sendKey(Tui::Key_F6);
         } else {
             t.root->activateNextWindow();
         }
@@ -769,10 +769,10 @@ TEST_CASE("raiseOnActivate") {
         CHECK(t.root->raiseWidget == &sw1);
 
         RootStubWidget sw2(t.root);
-        sw2.setFocusPolicy(Qt::FocusPolicy::StrongFocus);
+        sw2.setFocusPolicy(Tui::FocusPolicy::StrongFocus);
 
         if (usingKey) {
-            t.sendKey(Qt::Key_F6);
+            t.sendKey(Tui::Key_F6);
         } else {
             t.root->activateNextWindow();
         }
@@ -782,10 +782,10 @@ TEST_CASE("raiseOnActivate") {
         CHECK(t.root->raiseWidget == &sw2);
 
         RootStubWidget sw3(t.root);
-        sw3.setFocusPolicy(Qt::FocusPolicy::StrongFocus);
+        sw3.setFocusPolicy(Tui::FocusPolicy::StrongFocus);
 
         if (usingKey) {
-            t.sendKey(Qt::Key_F6);
+            t.sendKey(Tui::Key_F6);
         } else {
             t.root->activateNextWindow();
         }
@@ -795,7 +795,7 @@ TEST_CASE("raiseOnActivate") {
         CHECK(t.root->raiseWidget == &sw3);
 
         if (usingKey) {
-            t.sendKey(Qt::Key_F6);
+            t.sendKey(Tui::Key_F6);
         } else {
             t.root->activateNextWindow();
         }
@@ -810,10 +810,10 @@ TEST_CASE("raiseOnActivate") {
         CAPTURE(disableRaise);
         t.root->disableRaiseOnFocus = disableRaise;
         RootStubWidget sw1(t.root);
-        sw1.setFocusPolicy(Qt::FocusPolicy::StrongFocus);
+        sw1.setFocusPolicy(Tui::FocusPolicy::StrongFocus);
 
         RootStubWidget sw2(t.root);
-        sw2.setFocusPolicy(Qt::FocusPolicy::StrongFocus);
+        sw2.setFocusPolicy(Tui::FocusPolicy::StrongFocus);
 
         t.root->activateNextWindow();
 

@@ -98,8 +98,8 @@ public:
     void update();
     void updateGeometry();
 
-    void setFocusPolicy(Qt::FocusPolicy policy);
-    Qt::FocusPolicy focusPolicy() const;
+    void setFocusPolicy(Tui::FocusPolicy policy);
+    Tui::FocusPolicy focusPolicy() const;
     void setFocusMode(FocusContainerMode mode);
     FocusContainerMode focusMode() const;
     void setFocusOrder(int order);
@@ -122,7 +122,7 @@ public:
     void resetCursorColor();
     void setCursorColor(int r, int b, int g);
 
-    void setFocus(Qt::FocusReason reason = Qt::OtherFocusReason);
+    void setFocus(Tui::FocusReason reason = Tui::OtherFocusReason);
     void grabKeyboard();
     void grabKeyboard(Private::ZMoFunc<void(QEvent*)> handler);
     void releaseKeyboard();

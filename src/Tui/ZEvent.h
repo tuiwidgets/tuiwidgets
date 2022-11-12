@@ -8,6 +8,8 @@
 #include <QEvent>
 #include <QStringList>
 
+#include <Tui/ZCommon.h>
+
 #include <Tui/tuiwidgets_internal.h>
 
 class QPoint;
@@ -108,13 +110,13 @@ private:
 
 class TUIWIDGETS_EXPORT ZKeyEvent : public ZEvent {
 public:
-    ZKeyEvent(int key, Qt::KeyboardModifiers modifiers, const QString &text);
+    ZKeyEvent(int key, Tui::KeyboardModifiers modifiers, const QString &text);
     ~ZKeyEvent() override;
 
 public:
     int key() const;
     QString text() const;
-    Qt::KeyboardModifiers modifiers() const;
+    Tui::KeyboardModifiers modifiers() const;
 
 private:
     TUIWIDGETS_DECLARE_PRIVATE(ZKeyEvent)
@@ -136,12 +138,12 @@ class TUIWIDGETS_EXPORT ZFocusEvent : public ZEvent {
 public:
     class FocusIn{}; static constexpr FocusIn focusIn {};
     class FocusOut{}; static constexpr FocusOut focusOut {};
-    ZFocusEvent(FocusIn, Qt::FocusReason reason = Qt::OtherFocusReason);
-    ZFocusEvent(FocusOut, Qt::FocusReason reason = Qt::OtherFocusReason);
+    ZFocusEvent(FocusIn, Tui::FocusReason reason = Tui::OtherFocusReason);
+    ZFocusEvent(FocusOut, Tui::FocusReason reason = Tui::OtherFocusReason);
     ~ZFocusEvent() override;
 
 public:
-    Qt::FocusReason reason() const;
+    Tui::FocusReason reason() const;
 
 private:
     TUIWIDGETS_DECLARE_PRIVATE(ZFocusEvent)

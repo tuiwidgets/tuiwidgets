@@ -23,7 +23,7 @@ public:
     class Key {
     public:
         QString c;
-        Qt::KeyboardModifiers modifiers = {};
+        Tui::KeyboardModifiers modifiers = {};
 
         bool operator==(const Key &rhs) const { return c == rhs.c && modifiers == rhs.modifiers; }
         bool operator<(const Key &rhs) const { return c < rhs.c ? true : modifiers < rhs.modifiers; };

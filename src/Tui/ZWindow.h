@@ -38,10 +38,10 @@ public:
 
     Options options() const;
     void setOptions(Options options);
-    Qt::Edges borderEdges() const;
-    void setBorderEdges(Qt::Edges borders);
+    Tui::Edges borderEdges() const;
+    void setBorderEdges(Tui::Edges borders);
 
-    void setDefaultPlacement(Qt::Alignment align, QPoint displace = {0, 0});
+    void setDefaultPlacement(Tui::Alignment align, QPoint displace = {0, 0});
     void setAutomaticPlacement();
 
     QSize sizeHint() const override;

@@ -19,17 +19,17 @@ TEST_CASE("basicwindowfacet-base") {
 
     CHECK(w.geometry() == originalGeometry);
 
-    struct TestCase { std::string name; Qt::Alignment align; int x; int y; };
+    struct TestCase { std::string name; Tui::Alignment align; int x; int y; };
     auto testCase = GENERATE(
-                TestCase{"top-left", Qt::AlignTop | Qt::AlignLeft, 0, 0},
-                TestCase{"top-center", Qt::AlignTop | Qt::AlignHCenter, 50 - 5, 0},
-                TestCase{"top-right", Qt::AlignTop | Qt::AlignRight, 89, 0},
-                TestCase{"center-left", Qt::AlignVCenter | Qt::AlignLeft, 0, 15 - 6},
-                TestCase{"center", Qt::AlignCenter, 50 - 5, 15 - 6},
-                TestCase{"center-right", Qt::AlignVCenter | Qt::AlignRight, 89, 15 - 6},
-                TestCase{"bottom-left", Qt::AlignBottom | Qt::AlignLeft, 0, 17},
-                TestCase{"bottom-center", Qt::AlignBottom | Qt::AlignHCenter, 50 - 5, 17},
-                TestCase{"bottom-right", Qt::AlignBottom | Qt::AlignRight, 89, 17}
+                TestCase{"top-left", Tui::AlignTop | Tui::AlignLeft, 0, 0},
+                TestCase{"top-center", Tui::AlignTop | Tui::AlignHCenter, 50 - 5, 0},
+                TestCase{"top-right", Tui::AlignTop | Tui::AlignRight, 89, 0},
+                TestCase{"center-left", Tui::AlignVCenter | Tui::AlignLeft, 0, 15 - 6},
+                TestCase{"center", Tui::AlignCenter, 50 - 5, 15 - 6},
+                TestCase{"center-right", Tui::AlignVCenter | Tui::AlignRight, 89, 15 - 6},
+                TestCase{"bottom-left", Tui::AlignBottom | Tui::AlignLeft, 0, 17},
+                TestCase{"bottom-center", Tui::AlignBottom | Tui::AlignHCenter, 50 - 5, 17},
+                TestCase{"bottom-right", Tui::AlignBottom | Tui::AlignRight, 89, 17}
                 );
 
     CAPTURE(testCase.name);

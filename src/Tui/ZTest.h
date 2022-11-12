@@ -7,6 +7,8 @@
 
 #include <QString>
 
+#include <Tui/ZCommon.h>
+
 #include <Tui/tuiwidgets_internal.h>
 
 TUIWIDGETS_NS_START
@@ -17,9 +19,9 @@ class ZWidget;
 
 namespace ZTest {
 
-    TUIWIDGETS_EXPORT void sendText(ZTerminal *terminal, const QString &text, Qt::KeyboardModifiers modifiers);
-    TUIWIDGETS_EXPORT void sendKey(ZTerminal *terminal, Qt::Key key, Qt::KeyboardModifiers modifiers);
-    TUIWIDGETS_EXPORT void sendKeyToWidget(ZWidget *w, Qt::Key key, Qt::KeyboardModifiers modifiers);
+    TUIWIDGETS_EXPORT void sendText(ZTerminal *terminal, const QString &text, Tui::KeyboardModifiers modifiers);
+    TUIWIDGETS_EXPORT void sendKey(ZTerminal *terminal, Tui::Key key, Tui::KeyboardModifiers modifiers);
+    TUIWIDGETS_EXPORT void sendKeyToWidget(ZWidget *w, Tui::Key key, Tui::KeyboardModifiers modifiers);
     TUIWIDGETS_EXPORT void sendPaste(ZTerminal *terminal, const QString &text);
 
     TUIWIDGETS_EXPORT ZImage waitForNextRenderAndGetContents(ZTerminal *terminal);

@@ -25,7 +25,7 @@ public:
 public:
     ZWindow::Options options;
     QString windowTitle;
-    Qt::Edges borders = Qt::TopEdge | Qt::RightEdge | Qt::BottomEdge | Qt::LeftEdge;
+    Tui::Edges borders = Tui::TopEdge | Tui::RightEdge | Tui::BottomEdge | Tui::LeftEdge;
     mutable std::unique_ptr<ZBasicWindowFacet> windowFacet;
     bool interactiveMode = false;
     QRect interactiveInitialGeometry;

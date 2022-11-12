@@ -859,7 +859,7 @@ bool ZTerminal::isPaused() const {
 std::unique_ptr<ZKeyEvent> ZTerminal::translateKeyEvent(const ZTerminalNativeEvent &nativeEvent) {
     termpaint_event *native = static_cast<termpaint_event*>(nativeEvent.nativeEventPointer());
 
-    Qt::KeyboardModifiers modifiers = {};
+    Tui::KeyboardModifiers modifiers = {};
     unsigned nativeModifier = 0;
     if (native->type == TERMPAINT_EV_KEY) {
         nativeModifier = native->key.modifier;
@@ -873,132 +873,132 @@ std::unique_ptr<ZKeyEvent> ZTerminal::translateKeyEvent(const ZTerminalNativeEve
     }
 
     if (nativeModifier & TERMPAINT_MOD_SHIFT) {
-        modifiers |= Qt::ShiftModifier;
+        modifiers |= Tui::ShiftModifier;
     }
     if (nativeModifier & TERMPAINT_MOD_CTRL) {
-        modifiers |= Qt::ControlModifier;
+        modifiers |= Tui::ControlModifier;
     }
     if (nativeModifier & TERMPAINT_MOD_ALT) {
-        modifiers |= Qt::AltModifier;
+        modifiers |= Tui::AltModifier;
     }
 
     if (native->type == TERMPAINT_EV_KEY) {
-        int key = Qt::Key_unknown;
+        int key = Tui::Key_unknown;
         if (native->key.atom == termpaint_input_page_up()) {
-            key = Qt::Key_PageUp;
+            key = Tui::Key_PageUp;
         } else if (native->key.atom == termpaint_input_page_down()) {
-            key = Qt::Key_PageDown;
+            key = Tui::Key_PageDown;
         } else if (native->key.atom == termpaint_input_arrow_right()) {
-            key = Qt::Key_Right;
+            key = Tui::Key_Right;
         } else if (native->key.atom == termpaint_input_arrow_left()) {
-            key = Qt::Key_Left;
+            key = Tui::Key_Left;
         } else if (native->key.atom == termpaint_input_arrow_down()) {
-            key = Qt::Key_Down;
+            key = Tui::Key_Down;
         } else if (native->key.atom == termpaint_input_arrow_up()) {
-            key = Qt::Key_Up;
+            key = Tui::Key_Up;
         } else if (native->key.atom == termpaint_input_tab()) {
-            key = Qt::Key_Tab;
+            key = Tui::Key_Tab;
         } else if  (native->key.atom == termpaint_input_enter()) {
-            key = Qt::Key_Enter;
+            key = Tui::Key_Enter;
         } else if  (native->key.atom == termpaint_input_backspace()) {
-            key = Qt::Key_Backspace;
+            key = Tui::Key_Backspace;
         } else if  (native->key.atom == termpaint_input_context_menu()) {
-            key = Qt::Key_Menu;
+            key = Tui::Key_Menu;
         } else if  (native->key.atom == termpaint_input_delete()) {
-            key = Qt::Key_Delete;
+            key = Tui::Key_Delete;
         } else if  (native->key.atom == termpaint_input_home()) {
-            key = Qt::Key_Home;
+            key = Tui::Key_Home;
         } else if  (native->key.atom == termpaint_input_insert()) {
-            key = Qt::Key_Insert;
+            key = Tui::Key_Insert;
         } else if  (native->key.atom == termpaint_input_end()) {
-            key = Qt::Key_End;
+            key = Tui::Key_End;
         } else if  (native->key.atom == termpaint_input_space()) {
-            key = Qt::Key_Space;
+            key = Tui::Key_Space;
         } else if  (native->key.atom == termpaint_input_escape()) {
-            key = Qt::Key_Escape;
+            key = Tui::Key_Escape;
         } else if  (native->key.atom == termpaint_input_f1()) {
-            key = Qt::Key_F1;
+            key = Tui::Key_F1;
         } else if  (native->key.atom == termpaint_input_f2()) {
-            key = Qt::Key_F2;
+            key = Tui::Key_F2;
         } else if  (native->key.atom == termpaint_input_f3()) {
-            key = Qt::Key_F3;
+            key = Tui::Key_F3;
         } else if  (native->key.atom == termpaint_input_f4()) {
-            key = Qt::Key_F4;
+            key = Tui::Key_F4;
         } else if  (native->key.atom == termpaint_input_f5()) {
-            key = Qt::Key_F5;
+            key = Tui::Key_F5;
         } else if  (native->key.atom == termpaint_input_f6()) {
-            key = Qt::Key_F6;
+            key = Tui::Key_F6;
         } else if  (native->key.atom == termpaint_input_f7()) {
-            key = Qt::Key_F7;
+            key = Tui::Key_F7;
         } else if  (native->key.atom == termpaint_input_f8()) {
-            key = Qt::Key_F8;
+            key = Tui::Key_F8;
         } else if  (native->key.atom == termpaint_input_f9()) {
-            key = Qt::Key_F9;
+            key = Tui::Key_F9;
         } else if  (native->key.atom == termpaint_input_f10()) {
-            key = Qt::Key_F10;
+            key = Tui::Key_F10;
         } else if  (native->key.atom == termpaint_input_f11()) {
-            key = Qt::Key_F11;
+            key = Tui::Key_F11;
         } else if  (native->key.atom == termpaint_input_f12()) {
-            key = Qt::Key_F12;
+            key = Tui::Key_F12;
         } else if  (native->key.atom == termpaint_input_numpad_divide()) {
-            modifiers |= Qt::KeypadModifier;
-            key = Qt::Key_division;
+            modifiers |= Tui::KeypadModifier;
+            key = Tui::Key_division;
         } else if  (native->key.atom == termpaint_input_numpad_multiply()) {
-            modifiers |= Qt::KeypadModifier;
-            key = Qt::Key_multiply;
+            modifiers |= Tui::KeypadModifier;
+            key = Tui::Key_multiply;
         } else if  (native->key.atom == termpaint_input_numpad_subtract()) {
-            modifiers |= Qt::KeypadModifier;
-            key = Qt::Key_Minus;
+            modifiers |= Tui::KeypadModifier;
+            key = Tui::Key_Minus;
         } else if  (native->key.atom == termpaint_input_numpad_add()) {
-            modifiers |= Qt::KeypadModifier;
-            key = Qt::Key_Plus;
+            modifiers |= Tui::KeypadModifier;
+            key = Tui::Key_Plus;
         } else if  (native->key.atom == termpaint_input_numpad_enter()) {
-            modifiers |= Qt::KeypadModifier;
-            key = Qt::Key_Enter;
+            modifiers |= Tui::KeypadModifier;
+            key = Tui::Key_Enter;
         } else if  (native->key.atom == termpaint_input_numpad_decimal()) {
-            modifiers |= Qt::KeypadModifier;
-            key = Qt::Key_Period;
+            modifiers |= Tui::KeypadModifier;
+            key = Tui::Key_Period;
         } else if  (native->key.atom == termpaint_input_numpad0()) {
-            modifiers |= Qt::KeypadModifier;
-            key = Qt::Key_0;
+            modifiers |= Tui::KeypadModifier;
+            key = Tui::Key_0;
         } else if  (native->key.atom == termpaint_input_numpad1()) {
-            modifiers |= Qt::KeypadModifier;
-            key = Qt::Key_1;
+            modifiers |= Tui::KeypadModifier;
+            key = Tui::Key_1;
         } else if  (native->key.atom == termpaint_input_numpad2()) {
-            modifiers |= Qt::KeypadModifier;
-            key = Qt::Key_2;
+            modifiers |= Tui::KeypadModifier;
+            key = Tui::Key_2;
         } else if  (native->key.atom == termpaint_input_numpad3()) {
-            modifiers |= Qt::KeypadModifier;
-            key = Qt::Key_3;
+            modifiers |= Tui::KeypadModifier;
+            key = Tui::Key_3;
         } else if  (native->key.atom == termpaint_input_numpad4()) {
-            modifiers |= Qt::KeypadModifier;
-            key = Qt::Key_4;
+            modifiers |= Tui::KeypadModifier;
+            key = Tui::Key_4;
         } else if  (native->key.atom == termpaint_input_numpad5()) {
-            modifiers |= Qt::KeypadModifier;
-            key = Qt::Key_5;
+            modifiers |= Tui::KeypadModifier;
+            key = Tui::Key_5;
         } else if  (native->key.atom == termpaint_input_numpad6()) {
-            modifiers |= Qt::KeypadModifier;
-            key = Qt::Key_6;
+            modifiers |= Tui::KeypadModifier;
+            key = Tui::Key_6;
         } else if  (native->key.atom == termpaint_input_numpad7()) {
-            modifiers |= Qt::KeypadModifier;
-            key = Qt::Key_7;
+            modifiers |= Tui::KeypadModifier;
+            key = Tui::Key_7;
         } else if  (native->key.atom == termpaint_input_numpad8()) {
-            modifiers |= Qt::KeypadModifier;
-            key = Qt::Key_8;
+            modifiers |= Tui::KeypadModifier;
+            key = Tui::Key_8;
         } else if  (native->key.atom == termpaint_input_numpad9()) {
-            modifiers |= Qt::KeypadModifier;
-            key = Qt::Key_9;
+            modifiers |= Tui::KeypadModifier;
+            key = Tui::Key_9;
         }
         return std::unique_ptr<ZKeyEvent>{ new ZKeyEvent(key, modifiers, QString()) };
     } else if (native->type == TERMPAINT_EV_CHAR) {
         const QString text = QString::fromUtf8(native->c.string, native->c.length);
         if (text == QStringLiteral(" ")) {
-            return std::unique_ptr<ZKeyEvent>{ new ZKeyEvent(Qt::Key_Space, modifiers, QString()) };
+            return std::unique_ptr<ZKeyEvent>{ new ZKeyEvent(Tui::Key_Space, modifiers, QString()) };
         }
         if (text == QStringLiteral("\n")) {
-            return std::unique_ptr<ZKeyEvent>{ new ZKeyEvent(Qt::Key_Enter, modifiers, QString()) };
+            return std::unique_ptr<ZKeyEvent>{ new ZKeyEvent(Tui::Key_Enter, modifiers, QString()) };
         }
-        int key = Qt::Key_unknown;
+        int key = Tui::Key_unknown;
         return std::unique_ptr<ZKeyEvent>{ new ZKeyEvent(key, modifiers, text) };
     }
 
@@ -1053,23 +1053,23 @@ void ZTerminalPrivate::adjustViewportOffset() {
 
 bool ZTerminalPrivate::viewportKeyEvent(ZKeyEvent *translated) {
     if (viewportUI) {
-        if (translated->key() == Qt::Key_F6 && translated->modifiers() == 0) {
+        if (translated->key() == Tui::Key_F6 && translated->modifiers() == 0) {
             viewportUI = false;
             return false;
-        } else if (translated->key() == Qt::Key_Escape) {
+        } else if (translated->key() == Tui::Key_Escape) {
             viewportUI = false;
-        } else if(translated->key() == Qt::Key_Left) {
+        } else if(translated->key() == Tui::Key_Left) {
             viewportOffset.setX(viewportOffset.x() + 1);
-        } else if(translated->key() == Qt::Key_Right) {
+        } else if(translated->key() == Tui::Key_Right) {
             viewportOffset.setX(viewportOffset.x() - 1);
-        } else if(translated->key() == Qt::Key_Down) {
+        } else if(translated->key() == Tui::Key_Down) {
             viewportOffset.setY(viewportOffset.y() - 1);
-        } else if(translated->key() == Qt::Key_Up) {
+        } else if(translated->key() == Tui::Key_Up) {
             viewportOffset.setY(viewportOffset.y() + 1);
         }
         adjustViewportOffset();
         pub()->update();
-    } else if (viewportActive && translated->key() == Qt::Key_F6 && translated->modifiers() == 0) {
+    } else if (viewportActive && translated->key() == Tui::Key_F6 && translated->modifiers() == 0) {
         viewportUI = true;
         pub()->update();
     } else {
@@ -1092,7 +1092,7 @@ bool ZTerminal::event(QEvent *event) {
                     dispatchKeyboardEvent(*translated);
                 }
                 if (!translated->isAccepted()) {
-                    if (translated->modifiers() == Qt::ControlModifier
+                    if (translated->modifiers() == Tui::ControlModifier
                         && translated->text() == QStringLiteral("l")) {
                         forceRepaint();
                     }

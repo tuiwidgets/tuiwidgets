@@ -19,11 +19,11 @@ public:
 public:
     std::unique_ptr<ZLayoutItem> m_centralItem;
     std::unique_ptr<ZLayoutItem> m_rightBorder;
-    Qt::Alignment m_rightBorderAlign = Qt::Alignment();
+    Tui::Alignment m_rightBorderAlign = Tui::Alignment();
     std::unique_ptr<ZLayoutItem> m_bottomBorder;
-    Qt::Alignment m_bottomBorderAlign = Qt::Alignment();
+    Tui::Alignment m_bottomBorderAlign = Tui::Alignment();
     std::unique_ptr<ZLayoutItem> m_topBorder;
-    Qt::Alignment m_topBorderAlign = Qt::Alignment();
+    Tui::Alignment m_topBorderAlign = Tui::Alignment();
     int m_topBorderLeftAdjust = 0;
     int m_topBorderRightAdjust = 0;
     int m_rightBorderTopAdjust = 0;

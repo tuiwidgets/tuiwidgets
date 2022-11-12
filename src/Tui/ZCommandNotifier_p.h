@@ -22,7 +22,7 @@ public:
     ZSymbol command;
     bool enabled = true;
     bool contextSatisfied = true;
-    Qt::ShortcutContext context = Qt::ApplicationShortcut;
+    Tui::ShortcutContext context = Tui::ApplicationShortcut;
     QMetaObject::Connection focusChangedConnection;
     QMetaObject::Connection beforeRenderingConnection;
 };

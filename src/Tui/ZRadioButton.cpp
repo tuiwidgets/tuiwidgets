@@ -9,7 +9,7 @@
 TUIWIDGETS_NS_START
 
 ZRadioButton::ZRadioButton(ZWidget *parent) : ZWidget(parent, std::make_unique<ZRadioButtonPrivate>(this)) {
-    setFocusPolicy(Qt::StrongFocus);
+    setFocusPolicy(Tui::StrongFocus);
     setSizePolicyV(SizePolicy::Fixed);
     setSizePolicyH(SizePolicy::Expanding);
 }
@@ -144,7 +144,7 @@ void ZRadioButton::paintEvent(ZPaintEvent *event) {
 }
 
 void ZRadioButton::keyEvent(ZKeyEvent *event) {
-    if (event->key() == Qt::Key_Space && event->modifiers() == 0) {
+    if (event->key() == Tui::Key_Space && event->modifiers() == 0) {
         click();
     } else {
         ZWidget::keyEvent(event);

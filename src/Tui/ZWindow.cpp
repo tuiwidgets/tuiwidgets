@@ -27,10 +27,10 @@ ZWindow::ZWindow(ZWidget *parent, std::unique_ptr<ZWidgetPrivate> pimpl) : ZWidg
     setSizePolicyH(SizePolicy::Expanding);
     setSizePolicyV(SizePolicy::Expanding);
 
-    QObject::connect(new ZCommandNotifier("ZWindowInteractiveMove", this, Qt::WindowShortcut), &ZCommandNotifier::activated, this, &ZWindow::startInteractiveMove);
-    QObject::connect(new ZCommandNotifier("ZWindowInteractiveResize", this, Qt::WindowShortcut), &ZCommandNotifier::activated, this, &ZWindow::startInteractiveResize);
-    QObject::connect(new ZCommandNotifier("ZWindowAutomaticPlacement", this, Qt::WindowShortcut), &ZCommandNotifier::activated, this, &ZWindow::setAutomaticPlacement);
-    QObject::connect(new ZCommandNotifier("ZWindowClose", this, Qt::WindowShortcut), &ZCommandNotifier::activated, this, &ZWindow::close);
+    QObject::connect(new ZCommandNotifier("ZWindowInteractiveMove", this, Tui::WindowShortcut), &ZCommandNotifier::activated, this, &ZWindow::startInteractiveMove);
+    QObject::connect(new ZCommandNotifier("ZWindowInteractiveResize", this, Tui::WindowShortcut), &ZCommandNotifier::activated, this, &ZWindow::startInteractiveResize);
+    QObject::connect(new ZCommandNotifier("ZWindowAutomaticPlacement", this, Tui::WindowShortcut), &ZCommandNotifier::activated, this, &ZWindow::setAutomaticPlacement);
+    QObject::connect(new ZCommandNotifier("ZWindowClose", this, Tui::WindowShortcut), &ZCommandNotifier::activated, this, &ZWindow::close);
 }
 
 ZWindow::ZWindow(const QString &title, ZWidget *parent)
@@ -82,20 +82,20 @@ void ZWindow::startInteractiveMove() {
         auto *const p = tuiwidgets_impl();
         if (event->type() == ZEventType::key()) {
             auto *keyEvent = static_cast<ZKeyEvent*>(event);
-            if (keyEvent->key() == Qt::Key_Enter) {
+            if (keyEvent->key() == Tui::Key_Enter) {
                 p->finalizeInteractiveGeometry(this);
-            } else if (keyEvent->key() == Qt::Key_Escape) {
+            } else if (keyEvent->key() == Tui::Key_Escape) {
                 p->cancelInteractiveGeometry(this);
-            } else if (keyEvent->key() == Qt::Key_Left) {
+            } else if (keyEvent->key() == Tui::Key_Left) {
                 QRect g = geometry();
                 setGeometry(g.translated(-1, 0));
-            } else if (keyEvent->key() == Qt::Key_Right) {
+            } else if (keyEvent->key() == Tui::Key_Right) {
                 QRect g = geometry();
                 setGeometry(g.translated(1, 0));
-            } else if (keyEvent->key() == Qt::Key_Up) {
+            } else if (keyEvent->key() == Tui::Key_Up) {
                 QRect g = geometry();
                 setGeometry(g.translated(0, -1));
-            } else if (keyEvent->key() == Qt::Key_Down) {
+            } else if (keyEvent->key() == Tui::Key_Down) {
                 QRect g = geometry();
                 setGeometry(g.translated(0, 1));
             }
@@ -110,23 +110,23 @@ void ZWindow::startInteractiveResize() {
         auto *const p = tuiwidgets_impl();
         if (event->type() == ZEventType::key()) {
             auto *keyEvent = static_cast<ZKeyEvent*>(event);
-            if (keyEvent->key() == Qt::Key_Enter) {
+            if (keyEvent->key() == Tui::Key_Enter) {
                 p->finalizeInteractiveGeometry(this);
-            } else if (keyEvent->key() == Qt::Key_Escape) {
+            } else if (keyEvent->key() == Tui::Key_Escape) {
                 p->cancelInteractiveGeometry(this);
-            } else if (keyEvent->key() == Qt::Key_Left) {
+            } else if (keyEvent->key() == Tui::Key_Left) {
                 QRect g = geometry();
                 g.setWidth(std::max(effectiveMinimumSize().width(), std::max(3, g.width() - 1)));
                 setGeometry(g);
-            } else if (keyEvent->key() == Qt::Key_Right) {
+            } else if (keyEvent->key() == Tui::Key_Right) {
                 QRect g = geometry();
                 g.setWidth(std::min(maximumSize().width(), g.width() + 1));
                 setGeometry(g);
-            } else if (keyEvent->key() == Qt::Key_Up) {
+            } else if (keyEvent->key() == Tui::Key_Up) {
                 QRect g = geometry();
                 g.setHeight(std::max(effectiveMinimumSize().height(), std::max(3, g.height() - 1)));
                 setGeometry(g);
-            } else if (keyEvent->key() == Qt::Key_Down) {
+            } else if (keyEvent->key() == Tui::Key_Down) {
                 QRect g = geometry();
                 g.setHeight(std::min(maximumSize().height(), g.height() + 1));
                 setGeometry(g);
@@ -145,12 +145,12 @@ void ZWindow::setOptions(ZWindow::Options options) {
     p->options = options;
 }
 
-Qt::Edges ZWindow::borderEdges() const {
+Tui::Edges ZWindow::borderEdges() const {
     auto *const p = tuiwidgets_impl();
     return p->borders;
 }
 
-void ZWindow::setBorderEdges(Qt::Edges borders) {
+void ZWindow::setBorderEdges(Tui::Edges borders) {
     auto *const p = tuiwidgets_impl();
     if (p->borders == borders) {
         return;
@@ -162,7 +162,7 @@ void ZWindow::setBorderEdges(Qt::Edges borders) {
     }
 }
 
-void ZWindow::setDefaultPlacement(Qt::Alignment align, QPoint displace) {
+void ZWindow::setDefaultPlacement(Tui::Alignment align, QPoint displace) {
     auto *const p = tuiwidgets_impl();
     QObject *windowFacet = facet(ZWindowFacet::staticMetaObject);
     if (windowFacet == p->windowFacet.get()) { // ensure that the default facet is actually used
@@ -193,16 +193,16 @@ QSize ZWindow::sizeHint() const {
         res.rwidth() += cm.left() + cm.right();
         res.rheight() += cm.top() + cm.bottom();
 
-        if (p->borders & Qt::TopEdge) {
+        if (p->borders & Tui::TopEdge) {
             res += QSize(0, 1);
         }
-        if (p->borders & Qt::RightEdge) {
+        if (p->borders & Tui::RightEdge) {
             res += QSize(1, 0);
         }
-        if (p->borders & Qt::BottomEdge) {
+        if (p->borders & Tui::BottomEdge) {
             res += QSize(0, 1);
         }
-        if (p->borders & Qt::LeftEdge) {
+        if (p->borders & Tui::LeftEdge) {
             res += QSize(1, 0);
         }
     }
@@ -212,16 +212,16 @@ QSize ZWindow::sizeHint() const {
 QRect ZWindow::layoutArea() const {
     auto *const p = tuiwidgets_impl();
     QRect r = { QPoint(0, 0), geometry().size() };
-    if (p->borders & Qt::TopEdge) {
+    if (p->borders & Tui::TopEdge) {
         r.adjust(0, 1, 0, 0);
     }
-    if (p->borders & Qt::RightEdge) {
+    if (p->borders & Tui::RightEdge) {
         r.adjust(0, 0, -1, 0);
     }
-    if (p->borders & Qt::BottomEdge) {
+    if (p->borders & Tui::BottomEdge) {
         r.adjust(0, 0, 0, -1);
     }
-    if (p->borders & Qt::LeftEdge) {
+    if (p->borders & Tui::LeftEdge) {
         r.adjust(1, 0, 0, 0);
     }
     r = r.marginsRemoved(contentsMargins());
@@ -291,44 +291,44 @@ void ZWindow::paintEvent(ZPaintEvent *event) {
     bool extendetCharsetAvailable = terminal()->hasCapability(extendedCharset);
     auto decorations = windowDecorations[active + 2 * !extendetCharsetAvailable];
 
-    if (p->borders & Qt::TopEdge && p->borders & Qt::LeftEdge) {
+    if (p->borders & Tui::TopEdge && p->borders & Tui::LeftEdge) {
         painter->writeWithColors(0, 0, QString::fromUtf8(decorations.topLeft), frameFg, frameBg);
-    } else if (p->borders & Qt::TopEdge) {
+    } else if (p->borders & Tui::TopEdge) {
         painter->writeWithColors(0, 0, QString::fromUtf8(decorations.terminatorLeft), frameFg, frameBg);
-    } else if (p->borders & Qt::LeftEdge) {
+    } else if (p->borders & Tui::LeftEdge) {
         painter->writeWithColors(0, 0, QString::fromUtf8(decorations.terminatorTop), frameFg, frameBg);
     }
-    if (p->borders & Qt::TopEdge && p->borders & Qt::RightEdge) {
+    if (p->borders & Tui::TopEdge && p->borders & Tui::RightEdge) {
         painter->writeWithColors(w - 1, 0, QString::fromUtf8(decorations.topRight), frameFg, frameBg);
-    } else if (p->borders & Qt::TopEdge) {
+    } else if (p->borders & Tui::TopEdge) {
         painter->writeWithColors(w - 1, 0, QString::fromUtf8(decorations.terminatorRight), frameFg, frameBg);
-    } else if (p->borders & Qt::RightEdge) {
+    } else if (p->borders & Tui::RightEdge) {
         painter->writeWithColors(w - 1, 0, QString::fromUtf8(decorations.terminatorTop), frameFg, frameBg);
     }
-    if (p->borders & Qt::BottomEdge && p->borders & Qt::RightEdge) {
+    if (p->borders & Tui::BottomEdge && p->borders & Tui::RightEdge) {
         painter->writeWithColors(w - 1, h - 1, QString::fromUtf8(decorations.bottomRight), frameFg, frameBg);
-    } else if (p->borders & Qt::BottomEdge) {
+    } else if (p->borders & Tui::BottomEdge) {
         painter->writeWithColors(w - 1, h - 1, QString::fromUtf8(decorations.terminatorRight), frameFg, frameBg);
-    } else if (p->borders & Qt::RightEdge) {
+    } else if (p->borders & Tui::RightEdge) {
         painter->writeWithColors(w - 1, h - 1, QString::fromUtf8(decorations.terminatorBottom), frameFg, frameBg);
     }
-    if (p->borders & Qt::BottomEdge && p->borders & Qt::LeftEdge) {
+    if (p->borders & Tui::BottomEdge && p->borders & Tui::LeftEdge) {
         painter->writeWithColors(0, h - 1, QString::fromUtf8(decorations.bottomLeft), frameFg, frameBg);
-    } else if (p->borders & Qt::BottomEdge) {
+    } else if (p->borders & Tui::BottomEdge) {
         painter->writeWithColors(0, h - 1, QString::fromUtf8(decorations.terminatorLeft), frameFg, frameBg);
-    } else if (p->borders & Qt::LeftEdge) {
+    } else if (p->borders & Tui::LeftEdge) {
         painter->writeWithColors(0, h - 1, QString::fromUtf8(decorations.terminatorBottom), frameFg, frameBg);
     }
 
     QString hline = QString(w - 2, decorations.horizontal);
-    if (p->borders & Qt::TopEdge) {
+    if (p->borders & Tui::TopEdge) {
         painter->writeWithColors(1, 0, hline, frameFg, frameBg);
     }
-    if (p->borders & Qt::BottomEdge) {
+    if (p->borders & Tui::BottomEdge) {
         painter->writeWithColors(1, h - 1, hline, frameFg, frameBg);
     }
 
-    if (p->borders & Qt::TopEdge && p->windowTitle.size()) {
+    if (p->borders & Tui::TopEdge && p->windowTitle.size()) {
         int titleLength = metrics.sizeInColumns(p->windowTitle);
         int minX = options() & ZWindow::CloseButton ? 6 : 1;
         if (minX + titleLength + 1 > w) {
@@ -345,14 +345,14 @@ void ZWindow::paintEvent(ZPaintEvent *event) {
     }
 
     for (int i = 1; i < h - 1; i++) {
-        if (p->borders & Qt::LeftEdge) {
+        if (p->borders & Tui::LeftEdge) {
             painter->writeWithColors(0, i, QString::fromUtf8(decorations.vertical), frameFg, frameBg);
         }
-        if (p->borders & Qt::RightEdge) {
+        if (p->borders & Tui::RightEdge) {
             painter->writeWithColors(w - 1, i, QString::fromUtf8(decorations.vertical), frameFg, frameBg);
         }
     }
-    if (p->borders & Qt::TopEdge && (p->options & CloseButton) && active) {
+    if (p->borders & Tui::TopEdge && (p->options & CloseButton) && active) {
         painter->writeWithColors(2, 0, QStringLiteral("["), frameFg, frameBg);
         painter->writeWithColors(3, 0, QStringLiteral("■"), buttonFg, buttonBg);
         painter->writeWithColors(4, 0, QStringLiteral("]"), frameFg, frameBg);
@@ -398,19 +398,19 @@ void ZWindow::closeEvent(ZCloseEvent *event) {
 }
 
 void ZWindow::keyEvent(ZKeyEvent *event) {
-    if (event->key() == Qt::Key_Tab && (event->modifiers() == 0 || event->modifiers() == Qt::ShiftModifier)) {
+    if (event->key() == Tui::Key_Tab && (event->modifiers() == 0 || event->modifiers() == Tui::ShiftModifier)) {
         ZTerminal *term = terminal();
         if (term) {
             ZWidget *f = term->focusWidget();
             if (f && isAncestorOf(f)) {
-                if (event->modifiers() == Qt::ShiftModifier) {
-                    f->prevFocusable()->setFocus(Qt::BacktabFocusReason);
+                if (event->modifiers() == Tui::ShiftModifier) {
+                    f->prevFocusable()->setFocus(Tui::BacktabFocusReason);
                 } else {
-                    f->nextFocusable()->setFocus(Qt::TabFocusReason);
+                    f->nextFocusable()->setFocus(Tui::TabFocusReason);
                 }
             }
         }
-    } else if (event->text() == QStringLiteral("-") && event->modifiers() == Qt::AltModifier) {
+    } else if (event->text() == QStringLiteral("-") && event->modifiers() == Tui::AltModifier) {
         if (!showSystemMenu()) {
             ZWidget::keyEvent(event);
         }

@@ -41,7 +41,7 @@ TEST_CASE("listview-base", "") {
         std::unique_ptr<Tui::ZListView> lv = std::make_unique<Tui::ZListView>(w.get());
         CHECK(lv->sizePolicyH() == Tui::SizePolicy::Expanding);
         CHECK(lv->sizePolicyV() == Tui::SizePolicy::Expanding);
-        CHECK(lv->focusPolicy() == Qt::StrongFocus);
+        CHECK(lv->focusPolicy() == Tui::StrongFocus);
         FAIL_CHECK_VEC(checkWidgetsDefaultsExcept(lv.get(), DefaultException::SizePolicyV
                                                           | DefaultException::SizePolicyH
                                                           | DefaultException::FocusPolicy));
@@ -104,7 +104,7 @@ TEST_CASE("listview-base", "") {
 TEST_CASE("listview", "") {
     Testhelper t("listview", "listview", 15, 5);
     Tui::ZWindow *w = new Tui::ZWindow(t.root);
-    w->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
+    w->setFocusPolicy(Tui::FocusPolicy::StrongFocus);
     w->setGeometry({0, 0, 15, 5});
 
     // The initialisation must not break down.
@@ -133,14 +133,14 @@ TEST_CASE("listview", "") {
     SECTION("items-empty") {
         //must not break
         lv1->setFocus();
-        t.sendKey(Qt::Key_Down);
-        t.sendKey(Qt::Key_Up);
-        t.sendKey(Qt::Key_Enter);
-        t.sendKey(Qt::Key_Home);
-        t.sendKey(Qt::Key_End);
-        t.sendKey(Qt::Key_PageUp);
-        t.sendKey(Qt::Key_PageDown);
-        t.sendKey(Qt::Key_Space);
+        t.sendKey(Tui::Key_Down);
+        t.sendKey(Tui::Key_Up);
+        t.sendKey(Tui::Key_Enter);
+        t.sendKey(Tui::Key_Home);
+        t.sendKey(Tui::Key_End);
+        t.sendKey(Tui::Key_PageUp);
+        t.sendKey(Tui::Key_PageDown);
+        t.sendKey(Tui::Key_Space);
         CHECK(lv1->items().empty());
         CHECK(lv1->currentIndex().isValid() == false);
         CHECK(lv1->currentItem() == "");
@@ -152,14 +152,14 @@ TEST_CASE("listview", "") {
     SECTION("items-A") {
         lv1->setItems(qsl);
         lv1->setFocus();
-        t.sendKey(Qt::Key_Down);
-        t.sendKey(Qt::Key_Up);
-        t.sendKey(Qt::Key_Enter);
-        t.sendKey(Qt::Key_Home);
-        t.sendKey(Qt::Key_End);
-        t.sendKey(Qt::Key_PageUp);
-        t.sendKey(Qt::Key_PageDown);
-        t.sendKey(Qt::Key_Space);
+        t.sendKey(Tui::Key_Down);
+        t.sendKey(Tui::Key_Up);
+        t.sendKey(Tui::Key_Enter);
+        t.sendKey(Tui::Key_Home);
+        t.sendKey(Tui::Key_End);
+        t.sendKey(Tui::Key_PageUp);
+        t.sendKey(Tui::Key_PageDown);
+        t.sendKey(Tui::Key_Space);
         CHECK(!lv1->items().empty());
         CHECK(lv1->currentIndex().row() == 0);
         CHECK(lv1->currentItem() == "A");
@@ -170,14 +170,14 @@ TEST_CASE("listview", "") {
     SECTION("items-AB") {
         lv1->setItems(qsl);
         lv1->setFocus();
-        t.sendKey(Qt::Key_Down);
-        t.sendKey(Qt::Key_Up);
-        t.sendKey(Qt::Key_Enter);
-        t.sendKey(Qt::Key_Home);
-        t.sendKey(Qt::Key_End);
-        t.sendKey(Qt::Key_PageUp);
-        t.sendKey(Qt::Key_PageDown);
-        t.sendKey(Qt::Key_Space);
+        t.sendKey(Tui::Key_Down);
+        t.sendKey(Tui::Key_Up);
+        t.sendKey(Tui::Key_Enter);
+        t.sendKey(Tui::Key_Home);
+        t.sendKey(Tui::Key_End);
+        t.sendKey(Tui::Key_PageUp);
+        t.sendKey(Tui::Key_PageDown);
+        t.sendKey(Tui::Key_Space);
         CHECK(!lv1->items().empty());
         CHECK(lv1->currentItem() == "B");
         CHECK(lv1->currentIndex().row() == 1);
@@ -188,14 +188,14 @@ TEST_CASE("listview", "") {
     SECTION("items-ABC") {
         lv1->setItems(qsl);
         lv1->setFocus();
-        t.sendKey(Qt::Key_Down);
-        t.sendKey(Qt::Key_Up);
-        t.sendKey(Qt::Key_Enter);
-        t.sendKey(Qt::Key_Home);
-        t.sendKey(Qt::Key_End);
-        t.sendKey(Qt::Key_PageUp);
-        t.sendKey(Qt::Key_PageDown);
-        t.sendKey(Qt::Key_Space);
+        t.sendKey(Tui::Key_Down);
+        t.sendKey(Tui::Key_Up);
+        t.sendKey(Tui::Key_Enter);
+        t.sendKey(Tui::Key_Home);
+        t.sendKey(Tui::Key_End);
+        t.sendKey(Tui::Key_PageUp);
+        t.sendKey(Tui::Key_PageDown);
+        t.sendKey(Tui::Key_Space);
         CHECK(!lv1->items().empty());
         CHECK(lv1->currentItem() == "C");
         CHECK(lv1->currentIndex().row() == 2);
@@ -208,23 +208,23 @@ TEST_CASE("listview", "") {
         lv1->setFocus();
         CHECK(lv1->currentItem() == "A");
         CHECK(lv1->currentIndex().row() == 0);
-        t.sendKey(Qt::Key_Down);
+        t.sendKey(Tui::Key_Down);
         CHECK(lv1->currentItem() == "B");
         CHECK(lv1->currentIndex().row() == 1);
-        t.sendKey(Qt::Key_Up);
+        t.sendKey(Tui::Key_Up);
         CHECK(lv1->currentItem() == "A");
         CHECK(lv1->currentIndex().row() == 0);
-        t.sendKey(Qt::Key_Enter);
-        t.sendKey(Qt::Key_Home);
+        t.sendKey(Tui::Key_Enter);
+        t.sendKey(Tui::Key_Home);
         CHECK(lv1->currentItem() == "A");
         CHECK(lv1->currentIndex().row() == 0);
-        t.sendKey(Qt::Key_End);
+        t.sendKey(Tui::Key_End);
         CHECK(lv1->currentItem() == "D");
         CHECK(lv1->currentIndex().row() == 3);
-        t.sendKey(Qt::Key_PageUp);
+        t.sendKey(Tui::Key_PageUp);
         CHECK(lv1->currentItem() == "A");
         CHECK(lv1->currentIndex().row() == 0);
-        t.sendKey(Qt::Key_PageDown);
+        t.sendKey(Tui::Key_PageDown);
         CHECK(!lv1->items().empty());
         CHECK(lv1->currentItem() == "D");
         CHECK(lv1->currentIndex().row() == 3);
@@ -497,9 +497,9 @@ TEST_CASE("search", "") {
 
         lv1->setCurrentIndex(lv1->model()->index(testCase.start, 0));
         if (testCase.ch == " ") {
-            t.sendKey(Qt::Key_Space);
+            t.sendKey(Tui::Key_Space);
         } else if (testCase.ch == "\n") {
-            t.sendKey(Qt::Key_Enter);
+            t.sendKey(Tui::Key_Enter);
         } else {
             t.sendChar(testCase.ch);
         }
@@ -532,27 +532,27 @@ TEST_CASE("emit", "") {
 
         lv1->setFocus();
         trigger = 0;
-        t.sendKey(Qt::Key_Enter);
+        t.sendKey(Tui::Key_Enter);
         CHECK(trigger == -1);
 
-        t.sendKey(Qt::Key_Down);
+        t.sendKey(Tui::Key_Down);
         trigger = 1;
-        t.sendKey(Qt::Key_Enter);
+        t.sendKey(Tui::Key_Enter);
         CHECK(trigger == -1);
 
-        t.sendKey(Qt::Key_Down);
+        t.sendKey(Tui::Key_Down);
         trigger = 2;
-        t.sendKey(Qt::Key_Enter);
+        t.sendKey(Tui::Key_Enter);
         CHECK(trigger == -1);
 
         //Nothing more must happen here
-        t.sendKey(Qt::Key_Down);
-        t.sendKey(Qt::Key_Up);
-        t.sendKey(Qt::Key_Home);
-        t.sendKey(Qt::Key_End);
-        t.sendKey(Qt::Key_PageUp);
-        t.sendKey(Qt::Key_PageDown);
-        t.sendKey(Qt::Key_Space);
+        t.sendKey(Tui::Key_Down);
+        t.sendKey(Tui::Key_Up);
+        t.sendKey(Tui::Key_Home);
+        t.sendKey(Tui::Key_End);
+        t.sendKey(Tui::Key_PageUp);
+        t.sendKey(Tui::Key_PageDown);
+        t.sendKey(Tui::Key_Space);
         CHECK(trigger == -1);
     }
 }
@@ -560,7 +560,7 @@ TEST_CASE("emit", "") {
 TEST_CASE("listview-key", "") {
     Testhelper t("listview", "listview-key", 15, 5);
     Tui::ZWindow *w = new Tui::ZWindow(t.root);
-    w->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
+    w->setFocusPolicy(Tui::FocusPolicy::StrongFocus);
     w->setGeometry({0, 0, 15, 5});
 
     Tui::ZListView *lv1 = new Tui::ZListView(w);
@@ -575,87 +575,87 @@ TEST_CASE("listview-key", "") {
     lv1->setItems(qsl);
 
     SECTION("1down") {
-        t.sendKey(Qt::Key_Down);
+        t.sendKey(Tui::Key_Down);
         CHECK(lv1->currentItem() == qsl.at(1));
         CHECK(lv1->currentIndex().row() == 1);
         t.compare();
     }
 
     SECTION("2down") {
-        t.sendKey(Qt::Key_Down);
+        t.sendKey(Tui::Key_Down);
         CHECK(lv1->currentItem() == qsl.at(1));
         CHECK(lv1->currentIndex().row() == 1);
-        t.sendKey(Qt::Key_Down);
+        t.sendKey(Tui::Key_Down);
         CHECK(lv1->currentItem() == qsl.at(2));
         CHECK(lv1->currentIndex().row() == 2);
         t.compare();
     }
 
     SECTION("3down") {
-        t.sendKey(Qt::Key_Down);
+        t.sendKey(Tui::Key_Down);
         CHECK(lv1->currentItem() == qsl.at(1));
         CHECK(lv1->currentIndex().row() == 1);
-        t.sendKey(Qt::Key_Down);
+        t.sendKey(Tui::Key_Down);
         CHECK(lv1->currentItem() == qsl.at(2));
         CHECK(lv1->currentIndex().row() == 2);
-        t.sendKey(Qt::Key_Down);
+        t.sendKey(Tui::Key_Down);
         CHECK(lv1->currentItem() == qsl.at(3));
         CHECK(lv1->currentIndex().row() == 3);
         t.compare();
     }
 
     SECTION("4down") {
-        t.sendKey(Qt::Key_Down);
-        t.sendKey(Qt::Key_Down);
-        t.sendKey(Qt::Key_Down);
-        t.sendKey(Qt::Key_Down);
+        t.sendKey(Tui::Key_Down);
+        t.sendKey(Tui::Key_Down);
+        t.sendKey(Tui::Key_Down);
+        t.sendKey(Tui::Key_Down);
         CHECK(lv1->currentItem() == qsl.at(3));
         CHECK(lv1->currentIndex().row() == 3);
         t.compare("3down");
     }
 
     SECTION("end") {
-        t.sendKey(Qt::Key_End);
+        t.sendKey(Tui::Key_End);
         CHECK(lv1->currentItem() == qsl.last());
         CHECK(lv1->currentIndex().row() == 3);
-        t.sendKey(Qt::Key_End);
+        t.sendKey(Tui::Key_End);
         CHECK(lv1->currentItem() == qsl.last());
         CHECK(lv1->currentIndex().row() == 3);
     }
 
     SECTION("home") {
-        t.sendKey(Qt::Key_End);
+        t.sendKey(Tui::Key_End);
         CHECK(lv1->currentItem() == qsl.last());
         CHECK(lv1->currentIndex().row() == 3);
-        t.sendKey(Qt::Key_Home);
+        t.sendKey(Tui::Key_Home);
         CHECK(lv1->currentItem() == qsl.at(0));
         CHECK(lv1->currentIndex().row() == 0);
     }
 
     SECTION("pagedown") {
-        t.sendKey(Qt::Key_PageDown);
+        t.sendKey(Tui::Key_PageDown);
         CHECK(lv1->currentItem() == qsl.at(3));
         CHECK(lv1->currentIndex().row() == 3);
     }
 
     SECTION("pageup") {
-        t.sendKey(Qt::Key_PageDown);
+        t.sendKey(Tui::Key_PageDown);
         CHECK(lv1->currentItem() == qsl.at(3));
         CHECK(lv1->currentIndex().row() == 3);
-        t.sendKey(Qt::Key_PageUp);
+        t.sendKey(Tui::Key_PageUp);
         CHECK(lv1->currentItem() == qsl.at(0));
         CHECK(lv1->currentIndex().row() == 0);
     }
 
     SECTION("left") {
-        t.sendKey(Qt::Key_Left);
+        t.sendKey(Tui::Key_Left);
         CHECK(lv1->currentItem() == qsl.at(0));
         CHECK(lv1->currentIndex().row() == 0);
         t.compare();
     }
 
     SECTION("right") {
-        t.sendKey(Qt::Key_Right);
+        t.sendKey(Tui::Key_Right);
         CHECK(lv1->currentItem() == qsl.at(0));
         CHECK(lv1->currentIndex().row() == 0);
         t.compare("left");
@@ -664,7 +664,7 @@ TEST_CASE("listview-key", "") {
     SECTION("disable-down") {
         lv1->setFocus();
         lv1->setEnabled(false);
-        t.sendKey(Qt::Key_Down);
+        t.sendKey(Tui::Key_Down);
         CHECK(lv1->currentItem() == qsl.at(0));
         CHECK(lv1->currentIndex().row() == 0);
         t.compare();
@@ -688,67 +688,67 @@ TEST_CASE("listview-key30", "") {
     lv1->setItems(qsl);
 
     SECTION("end") {
-       t.sendKey(Qt::Key_End);
+       t.sendKey(Tui::Key_End);
        CHECK(lv1->currentItem() == qsl.last());
        CHECK(lv1->currentIndex().row() == 29);
     }
 
     SECTION("pagedown") {
-        t.sendKey(Qt::Key_PageDown);
+        t.sendKey(Tui::Key_PageDown);
         CHECK(lv1->currentItem() == "4");
         CHECK(lv1->currentIndex().row() == 3);
-        t.sendKey(Qt::Key_PageDown);
+        t.sendKey(Tui::Key_PageDown);
         CHECK(lv1->currentItem() == "7");
         CHECK(lv1->currentIndex().row() == 6);
-        t.sendKey(Qt::Key_PageDown);
+        t.sendKey(Tui::Key_PageDown);
         CHECK(lv1->currentItem() == "10");
         CHECK(lv1->currentIndex().row() == 9);
-        t.sendKey(Qt::Key_PageDown);
+        t.sendKey(Tui::Key_PageDown);
         CHECK(lv1->currentItem() == "13");
         CHECK(lv1->currentIndex().row() == 12);
-        t.sendKey(Qt::Key_PageDown);
+        t.sendKey(Tui::Key_PageDown);
         CHECK(lv1->currentItem() == "16");
         CHECK(lv1->currentIndex().row() == 15);
-        t.sendKey(Qt::Key_PageDown);
+        t.sendKey(Tui::Key_PageDown);
         CHECK(lv1->currentItem() == "19");
         CHECK(lv1->currentIndex().row() == 18);
-        t.sendKey(Qt::Key_PageDown);
+        t.sendKey(Tui::Key_PageDown);
         CHECK(lv1->currentItem() == "22");
         CHECK(lv1->currentIndex().row() == 21);
-        t.sendKey(Qt::Key_PageDown);
+        t.sendKey(Tui::Key_PageDown);
         CHECK(lv1->currentItem() == "25");
         CHECK(lv1->currentIndex().row() == 24);
-        t.sendKey(Qt::Key_PageDown);
+        t.sendKey(Tui::Key_PageDown);
         CHECK(lv1->currentItem() == "30");
         CHECK(lv1->currentIndex().row() == 29);
-        t.sendKey(Qt::Key_PageDown);
+        t.sendKey(Tui::Key_PageDown);
         CHECK(lv1->currentItem() == "30");
         CHECK(lv1->currentIndex().row() == 29);
     }
 
     SECTION("pageup") {
-        t.sendKey(Qt::Key_PageDown);
+        t.sendKey(Tui::Key_PageDown);
         CHECK(lv1->currentItem() == "4");
         CHECK(lv1->currentIndex().row() == 3);
-        t.sendKey(Qt::Key_Down);
+        t.sendKey(Tui::Key_Down);
         CHECK(lv1->currentItem() == "5");
         CHECK(lv1->currentIndex().row() == 4);
-        t.sendKey(Qt::Key_PageUp);
+        t.sendKey(Tui::Key_PageUp);
         CHECK(lv1->currentItem() == "3");
         CHECK(lv1->currentIndex().row() == 2);
-        t.sendKey(Qt::Key_PageUp);
+        t.sendKey(Tui::Key_PageUp);
         CHECK(lv1->currentItem() == "1");
         CHECK(lv1->currentIndex().row() == 0);
     }
 
     SECTION("end-home") {
-        t.sendKey(Qt::Key_End);
+        t.sendKey(Tui::Key_End);
         CHECK(lv1->currentItem() == "30");
         CHECK(lv1->currentIndex().row() == 29);
-        t.sendKey(Qt::Key_Home);
+        t.sendKey(Tui::Key_Home);
         CHECK(lv1->currentItem() == "1");
         CHECK(lv1->currentIndex().row() == 0);
-        t.sendKey(Qt::Key_End);
+        t.sendKey(Tui::Key_End);
         CHECK(lv1->currentItem() == "30");
         CHECK(lv1->currentIndex().row() == 29);
     }

@@ -6,6 +6,7 @@
 #include <memory>
 #include <QObject>
 
+#include <Tui/ZCommon.h>
 #include <Tui/tuiwidgets_internal.h>
 
 TUIWIDGETS_NS_START
@@ -18,12 +19,12 @@ class TUIWIDGETS_EXPORT ZCommandNotifier : public QObject {
     Q_OBJECT
 public:
     explicit ZCommandNotifier(ZImplicitSymbol command, QObject *parent = nullptr);
-    explicit ZCommandNotifier(ZImplicitSymbol command, QObject *parent, Qt::ShortcutContext context /*= Qt::ApplicationShortcut*/);
+    explicit ZCommandNotifier(ZImplicitSymbol command, QObject *parent, Tui::ShortcutContext context /*= Tui::ApplicationShortcut*/);
     ~ZCommandNotifier() override;
 
 public:
     ZSymbol command() const;
-    Qt::ShortcutContext context() const;
+    Tui::ShortcutContext context() const;
 
     bool isEnabled() const;
     void setEnabled(bool s);

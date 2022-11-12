@@ -5,6 +5,7 @@
 
 #include <QSize>
 
+#include <Tui/ZCommon.h>
 #include <Tui/ZPalette.h>
 #include <Tui/ZPainter.h>
 #include <Tui/ZTerminal.h>
@@ -66,7 +67,7 @@ void ZRoot::focusWindowHelper(bool forward) {
         if (arm) {
             ZWidget *w = win->placeFocus();
             if (w) {
-                w->setFocus(Qt::FocusReason::ActiveWindowFocusReason);
+                w->setFocus(Tui::FocusReason::ActiveWindowFocusReason);
                 raiseOnActivate(win);
                 found = true;
                 break;
@@ -77,7 +78,7 @@ void ZRoot::focusWindowHelper(bool forward) {
         }
     }
     if (!found && first) {
-        first->placeFocus()->setFocus(Qt::FocusReason::ActiveWindowFocusReason);
+        first->placeFocus()->setFocus(Tui::FocusReason::ActiveWindowFocusReason);
         raiseOnActivate(first);
     }
 }
@@ -88,8 +89,8 @@ void ZRoot::paintEvent(ZPaintEvent *event) {
 }
 
 void ZRoot::keyEvent(ZKeyEvent *event) {
-    if (event->key() == Qt::Key_F6 && (event->modifiers() == 0 || event->modifiers() == Qt::Modifier::SHIFT)) {
-        focusWindowHelper(event->modifiers() != Qt::Modifier::SHIFT);
+    if (event->key() == Tui::Key_F6 && (event->modifiers() == 0 || event->modifiers() == Tui::ShiftModifier)) {
+        focusWindowHelper(event->modifiers() != Tui::ShiftModifier);
     } else {
         ZWidget::keyEvent(event);
     }

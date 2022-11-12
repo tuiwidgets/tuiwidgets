@@ -89,7 +89,7 @@ void ZMenubar::updateCacheAndRegrabKeys() {
         delete s;
     }
 
-    ZShortcut *s = new ZShortcut(ZKeySequence::forKey(Qt::Key_F10), this, Qt::ApplicationShortcut);
+    ZShortcut *s = new ZShortcut(ZKeySequence::forKey(Tui::Key_F10), this, Tui::ApplicationShortcut);
     connect(s, &ZShortcut::activated, this, [this] () {
         auto *const p = tuiwidgets_impl();
         grabKeyboard();
@@ -108,7 +108,7 @@ void ZMenubar::updateCacheAndRegrabKeys() {
         st.setMarkup(QStringLiteral("<body> ") + item.markup() + QStringLiteral(" </body>"));
         x += st.width(term->textMetrics());
         if (st.mnemonic().size()) {
-            s = new ZShortcut(ZKeySequence::forMnemonic(st.mnemonic()), this, Qt::ApplicationShortcut);
+            s = new ZShortcut(ZKeySequence::forMnemonic(st.mnemonic()), this, Tui::ApplicationShortcut);
             if (item.command()) {
                 s->setEnabled(cmdMgr->isCommandEnabled(item.command()));
                 connect(s, &ZShortcut::activated, this, [this, cmd=item.command()] () {
@@ -278,13 +278,13 @@ QSize ZMenubar::sizeHint() const {
 
 void ZMenubar::keyEvent(ZKeyEvent *event) {
     auto *const p = tuiwidgets_impl();
-    if (event->key() == Qt::Key_Left && event->modifiers() == 0) {
+    if (event->key() == Tui::Key_Left && event->modifiers() == 0) {
         left();
-    } else if (event->key() == Qt::Key_Right && event->modifiers() == 0) {
+    } else if (event->key() == Tui::Key_Right && event->modifiers() == 0) {
         right();
-    } else if ((event->key() == Qt::Key_Escape || event->key() == Qt::Key_F10) && event->modifiers() == 0) {
+    } else if ((event->key() == Tui::Key_Escape || event->key() == Tui::Key_F10) && event->modifiers() == 0) {
         close();
-    } else if (event->key() == Qt::Key_Enter && event->modifiers() == 0) {
+    } else if (event->key() == Tui::Key_Enter && event->modifiers() == 0) {
         ZCommandManager *const cmdMgr = parentWidget()->ensureCommandManager();
         const auto &item = qAsConst(p->items)[p->selected];
         bool isEnabled = item.command() && cmdMgr->isCommandEnabled(item.command());
@@ -292,7 +292,7 @@ void ZMenubar::keyEvent(ZKeyEvent *event) {
             close();
             cmdMgr->activateCommand(item.command());
         }
-    } else if (event->modifiers() == Qt::AltModifier && event->text().size()) {
+    } else if (event->modifiers() == Tui::AltModifier && event->text().size()) {
         keyActivate(event);
     } else {
         ZWidget::keyEvent(event);

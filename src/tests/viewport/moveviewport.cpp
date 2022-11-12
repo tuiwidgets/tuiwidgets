@@ -48,12 +48,12 @@ TEST_CASE("viewport-f6", "") {
     Testhelper t("viewport", "viewport-f6", 15, 5);
     Tui::ZWindow *w = new Tui::ZWindow(t.root);
     w->setGeometry({0, 0, 15, 5});
-    w->setFocusPolicy(Qt::StrongFocus);
+    w->setFocusPolicy(Tui::StrongFocus);
     w->setFocus();
 
     Tui::ZWindow *w2 = new Tui::ZWindow(t.root);
     w2->setGeometry({4, 2, 4, 2});
-    w2->setFocusPolicy(Qt::StrongFocus);
+    w2->setFocusPolicy(Tui::StrongFocus);
 
     // Check that F6 activates view port scroll mode
     SECTION("press-16-6") {

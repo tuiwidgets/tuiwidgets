@@ -70,7 +70,7 @@ void ZHBoxLayout::setGeometry(QRect toFill) {
     }
 
     auto place = [&visibleItems, height, toFill] (int x, int wi, int idx) {
-        placeWidgetInCell(toFill.x() + x, toFill.y(), wi, height, visibleItems[idx], Qt::Alignment());
+        placeWidgetInCell(toFill.x() + x, toFill.y(), wi, height, visibleItems[idx], Tui::Alignment());
     };
     auto getHint = [&visibleItems] (int idx) {
         return visibleItems[idx]->sizeHint().width();

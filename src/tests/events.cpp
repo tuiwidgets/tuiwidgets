@@ -59,17 +59,17 @@ TEST_CASE("ZPaintEvent") {
 }
 
 TEST_CASE("ZKeyEvent") {
-    struct TestCase { int key; Qt::KeyboardModifiers modifiers; QString text; };
+    struct TestCase { int key; Tui::KeyboardModifiers modifiers; QString text; };
 
-    auto testCase = GENERATE(TestCase{Qt::Key_Escape, Qt::NoModifier, ""},
-                             TestCase{Qt::Key_Space, Qt::ControlModifier, ""},
-                             TestCase{Qt::Key_Backspace, Qt::NoModifier, ""},
-                             TestCase{Qt::Key_Enter, Qt::NoModifier, ""},
-                             TestCase{Qt::Key_unknown, Qt::ShiftModifier, "B"},
-                             TestCase{Qt::Key_unknown, Qt::NoModifier, "ä"},
-                             TestCase{Qt::Key_unknown, Qt::NoModifier, "😎"},
-                             TestCase{Qt::Key_unknown, Qt::NoModifier, "あ"},
-                             TestCase{Qt::Key_unknown, Qt::NoModifier, "a\u0308"});
+    auto testCase = GENERATE(TestCase{Tui::Key_Escape, Tui::NoModifier, ""},
+                             TestCase{Tui::Key_Space, Tui::ControlModifier, ""},
+                             TestCase{Tui::Key_Backspace, Tui::NoModifier, ""},
+                             TestCase{Tui::Key_Enter, Tui::NoModifier, ""},
+                             TestCase{Tui::Key_unknown, Tui::ShiftModifier, "B"},
+                             TestCase{Tui::Key_unknown, Tui::NoModifier, "ä"},
+                             TestCase{Tui::Key_unknown, Tui::NoModifier, "😎"},
+                             TestCase{Tui::Key_unknown, Tui::NoModifier, "あ"},
+                             TestCase{Tui::Key_unknown, Tui::NoModifier, "a\u0308"});
     CAPTURE(testCase.key);
     CAPTURE(testCase.modifiers);
     CAPTURE(testCase.text);
@@ -90,22 +90,22 @@ TEST_CASE("ZFocusEvent") {
     SECTION("focus-in") {
         Tui::ZFocusEvent e{Tui::ZFocusEvent::focusIn};
         CHECK(e.type() == Tui::ZEventType::focusIn());
-        CHECK(e.reason() == Qt::OtherFocusReason);
+        CHECK(e.reason() == Tui::OtherFocusReason);
     }
     SECTION("focus-in tab focus") {
-        Tui::ZFocusEvent e{Tui::ZFocusEvent::focusIn, Qt::TabFocusReason};
+        Tui::ZFocusEvent e{Tui::ZFocusEvent::focusIn, Tui::TabFocusReason};
         CHECK(e.type() == Tui::ZEventType::focusIn());
-        CHECK(e.reason() == Qt::TabFocusReason);
+        CHECK(e.reason() == Tui::TabFocusReason);
     }
     SECTION("focus-out") {
         Tui::ZFocusEvent e{Tui::ZFocusEvent::focusOut};
         CHECK(e.type() == Tui::ZEventType::focusOut());
-        CHECK(e.reason() == Qt::OtherFocusReason);
+        CHECK(e.reason() == Tui::OtherFocusReason);
     }
     SECTION("focus-out tab focus") {
-        Tui::ZFocusEvent e{Tui::ZFocusEvent::focusOut, Qt::TabFocusReason};
+        Tui::ZFocusEvent e{Tui::ZFocusEvent::focusOut, Tui::TabFocusReason};
         CHECK(e.type() == Tui::ZEventType::focusOut());
-        CHECK(e.reason() == Qt::TabFocusReason);
+        CHECK(e.reason() == Tui::TabFocusReason);
     }
 }
 

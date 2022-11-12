@@ -68,7 +68,7 @@ void ZVBoxLayout::setGeometry(QRect toFill) {
     }
 
     auto place = [&visibleItems, width, toFill] (int y, int h, int idx) {
-        placeWidgetInCell(toFill.x(), toFill.y() + y, width, h, visibleItems[idx], Qt::Alignment());
+        placeWidgetInCell(toFill.x(), toFill.y() + y, width, h, visibleItems[idx], Tui::Alignment());
     };
     auto getHint = [&visibleItems] (int idx) {
         return visibleItems[idx]->sizeHint().height();

@@ -38,17 +38,17 @@ Testhelper::~Testhelper() {
     delete root;
 }
 
-void Testhelper::sendChar(QString ch, Qt::KeyboardModifiers modifiers) {
+void Testhelper::sendChar(QString ch, Tui::KeyboardModifiers modifiers) {
     Tui::ZTest::sendText(terminal.get(), ch, modifiers);
     render();
 }
 
-void Testhelper::sendKey(Qt::Key key, Qt::KeyboardModifiers modifiers) {
+void Testhelper::sendKey(Tui::Key key, Tui::KeyboardModifiers modifiers) {
     Tui::ZTest::sendKey(terminal.get(), key, modifiers);
     render();
 }
 
-void Testhelper::sendKeyToWidget(Tui::ZWidget *w, Qt::Key key, Qt::KeyboardModifiers modifiers) {
+void Testhelper::sendKeyToWidget(Tui::ZWidget *w, Tui::Key key, Tui::KeyboardModifiers modifiers) {
     Tui::ZTest::sendKeyToWidget(w, key, modifiers);
     render();
 }
@@ -91,7 +91,7 @@ void Testhelper::sendPaste(const QString &text) {
     Tui::ZTest::sendPaste(terminal.get(), text);
 }
 
-std::vector<std::string> Testhelper::checkCharEventBubbles(QString ch, Qt::KeyboardModifiers modifiers) {
+std::vector<std::string> Testhelper::checkCharEventBubbles(QString ch, Tui::KeyboardModifiers modifiers) {
     std::vector<std::string> problems;
     auto fEventRestore = root->fEvent;
 
@@ -116,7 +116,7 @@ std::vector<std::string> Testhelper::checkCharEventBubbles(QString ch, Qt::Keybo
     return problems;
 }
 
-std::vector<std::string> Testhelper::checkKeyEventBubbles(Qt::Key key, Qt::KeyboardModifiers modifiers) {
+std::vector<std::string> Testhelper::checkKeyEventBubbles(Tui::Key key, Tui::KeyboardModifiers modifiers) {
     std::vector<std::string> problems;
     auto fEventRestore = root->fEvent;
 
@@ -177,7 +177,7 @@ namespace {
     };
 }
 
-std::vector<std::string> Testhelper::checkKeyEventBubblesToParent(Qt::Key key, Qt::KeyboardModifiers modifiers) {
+std::vector<std::string> Testhelper::checkKeyEventBubblesToParent(Tui::Key key, Tui::KeyboardModifiers modifiers) {
     std::vector<std::string> problems;
 
     bool keyBubbled = false;
@@ -354,16 +354,16 @@ void TestBackground::paintEvent(Tui::ZPaintEvent *event) {
     int startX = 0;
     int startY = 0;
     auto border = borderEdges();
-    if (border & Qt::TopEdge) {
+    if (border & Tui::TopEdge) {
         startY = 1;
     }
-    if (border & Qt::BottomEdge) {
+    if (border & Tui::BottomEdge) {
         h -= 1;
     }
-    if (border & Qt::LeftEdge) {
+    if (border & Tui::LeftEdge) {
         startX = 1;
     }
-    if (border & Qt::RightEdge) {
+    if (border & Tui::RightEdge) {
         w -= 1;
     }
     for(int i = startY; i < h; i++) {
@@ -402,7 +402,7 @@ std::vector<std::string> checkWidgetsDefaultsExcept(const Tui::ZWidget *w, Defau
         errors.push_back("has layout");
     }
 
-    if (!exceptions.testFlag(DefaultException::FocusPolicy) && w->focusPolicy() != Qt::NoFocus) {
+    if (!exceptions.testFlag(DefaultException::FocusPolicy) && w->focusPolicy() != Tui::NoFocus) {
         errors.push_back("focusPolicy() != NoFocus");
     }
 

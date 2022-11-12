@@ -162,7 +162,7 @@ ZTerminalNativeEventPrivate::ZTerminalNativeEventPrivate(void *native)
 ZTerminalNativeEventPrivate::~ZTerminalNativeEventPrivate() {
 }
 
-ZKeyEventPrivate::ZKeyEventPrivate(int key, Qt::KeyboardModifiers modifiers, const QString &text)
+ZKeyEventPrivate::ZKeyEventPrivate(int key, Tui::KeyboardModifiers modifiers, const QString &text)
     : key(key), text(text), modifiers(modifiers)
 {
 }
@@ -170,7 +170,7 @@ ZKeyEventPrivate::ZKeyEventPrivate(int key, Qt::KeyboardModifiers modifiers, con
 ZKeyEventPrivate::~ZKeyEventPrivate() {
 }
 
-ZKeyEvent::ZKeyEvent(int key, Qt::KeyboardModifiers modifiers, const QString &text)
+ZKeyEvent::ZKeyEvent(int key, Tui::KeyboardModifiers modifiers, const QString &text)
     : ZEvent(ZEventType::key(), std::make_unique<ZKeyEventPrivate>(key, modifiers, text))
 {
 }
@@ -186,7 +186,7 @@ QString ZKeyEvent::text() const {
     return tuiwidgets_impl()->text;
 }
 
-Qt::KeyboardModifiers ZKeyEvent::modifiers() const {
+Tui::KeyboardModifiers ZKeyEvent::modifiers() const {
     return tuiwidgets_impl()->modifiers;
 }
 
@@ -210,7 +210,7 @@ QString ZPasteEvent::text() const {
     return tuiwidgets_impl()->text;
 }
 
-ZFocusEventPrivate::ZFocusEventPrivate(Qt::FocusReason reason)
+ZFocusEventPrivate::ZFocusEventPrivate(Tui::FocusReason reason)
     : reason(reason)
 {
 }
@@ -218,13 +218,13 @@ ZFocusEventPrivate::ZFocusEventPrivate(Qt::FocusReason reason)
 ZFocusEventPrivate::~ZFocusEventPrivate() {
 }
 
-ZFocusEvent::ZFocusEvent(ZFocusEvent::FocusIn, Qt::FocusReason reason)
+ZFocusEvent::ZFocusEvent(ZFocusEvent::FocusIn, Tui::FocusReason reason)
     : ZEvent(ZEventType::focusIn(), std::make_unique<ZFocusEventPrivate>(reason))
 {
 
 }
 
-ZFocusEvent::ZFocusEvent(ZFocusEvent::FocusOut, Qt::FocusReason reason)
+ZFocusEvent::ZFocusEvent(ZFocusEvent::FocusOut, Tui::FocusReason reason)
     : ZEvent(ZEventType::focusOut(), std::make_unique<ZFocusEventPrivate>(reason))
 {
 }
@@ -232,7 +232,7 @@ ZFocusEvent::ZFocusEvent(ZFocusEvent::FocusOut, Qt::FocusReason reason)
 ZFocusEvent::~ZFocusEvent() {
 }
 
-Qt::FocusReason ZFocusEvent::reason() const {
+Tui::FocusReason ZFocusEvent::reason() const {
     return tuiwidgets_impl()->reason;
 }
 

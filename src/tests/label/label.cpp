@@ -188,10 +188,10 @@ TEST_CASE("label-visual", "") {
         l2->setGeometry({1, 2, 3, 1});
         l2->setBuddy(sw2);
 
-        t.sendChar("l", Qt::AltModifier);
+        t.sendChar("l", Tui::AltModifier);
         CHECK(sw1->focus());
         CHECK(sw2->focus() == false);
-        t.sendChar("2", Qt::AltModifier);
+        t.sendChar("2", Tui::AltModifier);
         CHECK(sw1->focus() == false);
         CHECK(sw2->focus());
         t.compare();
@@ -204,7 +204,7 @@ TEST_CASE("label-visual", "") {
         l->setGeometry({1, 1, 3, 1});
         l->setBuddy(sw1);
         l->setEnabled(false);
-        FAIL_CHECK_VEC(t.checkCharEventBubbles("l", Qt::AltModifier));
+        FAIL_CHECK_VEC(t.checkCharEventBubbles("l", Tui::AltModifier));
         CHECK(sw1->focus() == false);
         t.compare("buddy-disable-label");
     }
@@ -216,7 +216,7 @@ TEST_CASE("label-visual", "") {
         l->setMarkup("<m>L</m>1");
         l->setGeometry({1, 1, 3, 1});
         l->setBuddy(sw1);
-        FAIL_CHECK_VEC(t.checkCharEventBubbles("l", Qt::AltModifier));
+        FAIL_CHECK_VEC(t.checkCharEventBubbles("l", Tui::AltModifier));
         CHECK(sw1->focus() == false);
         t.compare("buddy-disable-label");
     }
@@ -225,7 +225,7 @@ TEST_CASE("label-visual", "") {
         l->setMarkup("<m>L</m>1");
         // this one is accepted by the label to avoid an
         // unrelated shortcut triggering an unexpected action.
-        t.sendChar("l", Qt::AltModifier);
+        t.sendChar("l", Tui::AltModifier);
     }
 
     SECTION("buddy-reset-text") {
@@ -235,7 +235,7 @@ TEST_CASE("label-visual", "") {
         l->setText("L1");
         l->setGeometry({1, 1, 3, 1});
         l->setBuddy(sw1);
-        FAIL_CHECK_VEC(t.checkCharEventBubbles("l", Qt::AltModifier));
+        FAIL_CHECK_VEC(t.checkCharEventBubbles("l", Tui::AltModifier));
         CHECK(sw1->focus() == false);
     }
 
@@ -246,7 +246,7 @@ TEST_CASE("label-visual", "") {
         l->setMarkup("L1");
         l->setGeometry({1, 1, 3, 1});
         l->setBuddy(sw1);
-        FAIL_CHECK_VEC(t.checkCharEventBubbles("l", Qt::AltModifier));
+        FAIL_CHECK_VEC(t.checkCharEventBubbles("l", Tui::AltModifier));
         CHECK(sw1->focus() == false);
     }
 }
@@ -281,7 +281,7 @@ TEST_CASE("label-margin", "") {
 TEST_CASE("label-palette", "") {
     Testhelper t("label", "label", 15, 3);
     TestBackground *w = new TestBackground(t.root);
-    w->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
+    w->setFocusPolicy(Tui::FocusPolicy::StrongFocus);
     w->setGeometry({0, 0, 10, 3});
     w->setFocus();
     Tui::ZLabel *l = new Tui::ZLabel(w);

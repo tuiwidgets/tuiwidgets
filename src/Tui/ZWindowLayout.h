@@ -20,9 +20,9 @@ public:
 
     void setCentralWidget(ZWidget *w);
     void setCentral(ZLayoutItem *li);
-    void setRightBorderWidget(ZWidget *w, Qt::Alignment align = Qt::Alignment());
-    void setBottomBorderWidget(ZWidget *w, Qt::Alignment align = Qt::Alignment());
-    void setTopBorderWidget(ZWidget *w, Qt::Alignment align = Qt::AlignHCenter);
+    void setRightBorderWidget(ZWidget *w, Tui::Alignment align = Tui::Alignment());
+    void setBottomBorderWidget(ZWidget *w, Tui::Alignment align = Tui::Alignment());
+    void setTopBorderWidget(ZWidget *w, Tui::Alignment align = Tui::AlignHCenter);
 
     void setGeometry(QRect toFill) override;
     QSize sizeHint() const override;

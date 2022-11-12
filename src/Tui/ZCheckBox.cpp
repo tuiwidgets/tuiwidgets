@@ -9,7 +9,7 @@
 TUIWIDGETS_NS_START
 
 ZCheckBox::ZCheckBox(ZWidget *parent) : ZWidget(parent, std::make_unique<ZCheckBoxPrivate>(this)) {
-    setFocusPolicy(Qt::StrongFocus);
+    setFocusPolicy(Tui::StrongFocus);
     setSizePolicyV(SizePolicy::Fixed);
     setSizePolicyH(SizePolicy::Expanding);
 }
@@ -52,13 +52,13 @@ void ZCheckBox::setMarkup(const QString &markup) {
     update();
 }
 
-void ZCheckBox::setCheckState(Qt::CheckState state) {
+void ZCheckBox::setCheckState(Tui::CheckState state) {
     auto *const p = tuiwidgets_impl();
     p->state = state;
     update();
 }
 
-Qt::CheckState ZCheckBox::checkState() const {
+Tui::CheckState ZCheckBox::checkState() const {
     auto *const p = tuiwidgets_impl();
     return p->state;
 }
@@ -96,9 +96,9 @@ void ZCheckBox::paintEvent(ZPaintEvent *event) {
 
     ZPainter *painter = event->painter();
 
-    if (p->state == Qt::Checked) {
+    if (p->state == Tui::Checked) {
         painter->writeWithColors(cm.left(), cm.top(), focusIndicator + QStringLiteral("[X] "), baseStyle.foregroundColor(), baseStyle.backgroundColor());
-    } else if (p->state == Qt::Unchecked) {
+    } else if (p->state == Tui::Unchecked) {
         painter->writeWithColors(cm.left(), cm.top(), focusIndicator + QStringLiteral("[ ] "), baseStyle.foregroundColor(), baseStyle.backgroundColor());
     } else {
         painter->writeWithColors(cm.left(), cm.top(), focusIndicator + QStringLiteral("[#] "), baseStyle.foregroundColor(), baseStyle.backgroundColor());
@@ -109,16 +109,16 @@ void ZCheckBox::paintEvent(ZPaintEvent *event) {
 
 void ZCheckBox::toggle() {
     auto *const p = tuiwidgets_impl();
-    if (p->state == Qt::Unchecked) {
-        p->state = Qt::Checked;
-    } else if (p->state == Qt::Checked) {
+    if (p->state == Tui::Unchecked) {
+        p->state = Tui::Checked;
+    } else if (p->state == Tui::Checked) {
         if (p->tristate) {
-            p->state = Qt::PartiallyChecked;
+            p->state = Tui::PartiallyChecked;
         } else {
-            p->state = Qt::Unchecked;
+            p->state = Tui::Unchecked;
         }
     } else {
-        p->state = Qt::Unchecked;
+        p->state = Tui::Unchecked;
     }
     stateChanged(p->state);
     update();
@@ -134,7 +134,7 @@ void ZCheckBox::click() {
 }
 
 void ZCheckBox::keyEvent(ZKeyEvent *event) {
-    if (event->key() == Qt::Key_Space && event->modifiers() == 0) {
+    if (event->key() == Tui::Key_Space && event->modifiers() == 0) {
         click();
     } else {
         ZWidget::keyEvent(event);

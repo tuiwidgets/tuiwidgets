@@ -424,22 +424,22 @@ TEST_CASE("menubar", "") {
     SECTION("items-three-f10") {
         m->setItems({{"File", "", "file", {}}, {"Edit", "", "edit", {}}, {"Options", "", "options", {}}});
         new Tui::ZCommandNotifier("file", m);
-        t.sendKey(Qt::Key_F10);
+        t.sendKey(Tui::Key_F10);
         t.compare("items-three-file");
     }
 
     SECTION("items-three-leftkey") {
         m->setItems({{"File", "", "file", {}}, {"Edit", "", "edit", {}}, {"Options", "", "options", {}}});
         new Tui::ZCommandNotifier("file", m);
-        t.sendKey(Qt::Key_F10);
-        t.sendKey(Qt::Key_Left);
+        t.sendKey(Tui::Key_F10);
+        t.sendKey(Tui::Key_Left);
         t.compare("items-three-options");
     }
 
     SECTION("items-three-leftfunc") {
         m->setItems({{"File", "", "file", {}}, {"Edit", "", "edit", {}}, {"Options", "", "options", {}}});
         new Tui::ZCommandNotifier("file", m);
-        t.sendKey(Qt::Key_F10);
+        t.sendKey(Tui::Key_F10);
         m->left();
         t.compare("items-three-options");
     }
@@ -447,7 +447,7 @@ TEST_CASE("menubar", "") {
     SECTION("items-three-close") {
         m->setItems({{"File", "", "file", {}}, {"Edit", "", "edit", {}}, {"Options", "", "options", {}}});
         new Tui::ZCommandNotifier("file", m);
-        t.sendKey(Qt::Key_F10);
+        t.sendKey(Tui::Key_F10);
         m->close();
         t.compare("items-three");
     }
@@ -455,23 +455,23 @@ TEST_CASE("menubar", "") {
     SECTION("items-three-esc") {
         m->setItems({{"File", "", "file", {}}, {"Edit", "", "edit", {}}, {"Options", "", "options", {}}});
         new Tui::ZCommandNotifier("file", m);
-        t.sendKey(Qt::Key_F10);
-        t.sendKey(Qt::Key_Escape);
+        t.sendKey(Tui::Key_F10);
+        t.sendKey(Tui::Key_Escape);
         t.compare("items-three");
     }
 
     SECTION("items-three-rightkey") {
         m->setItems({{"File", "", "file", {}}, {"Edit", "", "edit", {}}, {"Options", "", "options", {}}});
         new Tui::ZCommandNotifier("file", m);
-        t.sendKey(Qt::Key_F10);
-        t.sendKey(Qt::Key_Right);
+        t.sendKey(Tui::Key_F10);
+        t.sendKey(Tui::Key_Right);
         t.compare("items-three-edit");
     }
 
     SECTION("items-three-rightfunc") {
         m->setItems({{"File", "", "file", {}}, {"Edit", "", "edit", {}}, {"Options", "", "options", {}}});
         new Tui::ZCommandNotifier("file", m);
-        t.sendKey(Qt::Key_F10);
+        t.sendKey(Tui::Key_F10);
         m->right();
         t.compare("items-three-edit");
     }
@@ -486,17 +486,17 @@ TEST_CASE("menubar", "") {
         m->setItems({{"<m>F</m>ile", "", "file", {}}, {"Edi<m>t</m>", "", {}, {}}});
         new Tui::ZCommandNotifier("file", m);
         // Menu "Edit" has no ZCommandNotifier. The menu item should not be highlighted.
-        t.sendChar("t", Qt::AltModifier);
+        t.sendChar("t", Tui::AltModifier);
         t.compare("items-two-markup");
     }
 
     SECTION("items-three-f10-f10") {
         m->setItems({{"File", "", "file", {}}, {"Edit", "", "edit", {}}, {"Options", "", "options", {}}});
         new Tui::ZCommandNotifier("file", m);
-        t.sendKey(Qt::Key_F10);
+        t.sendKey(Tui::Key_F10);
         m->left();
         t.compare("items-three-options");
-        t.sendKey(Qt::Key_F10);
+        t.sendKey(Tui::Key_F10);
         t.compare("items-three");
     }
 
@@ -514,7 +514,7 @@ TEST_CASE("menubar", "") {
             FAIL("May not be called.");
         });
         cm->setEnabled(false);
-        t.sendChar("f", Qt::AltModifier);
+        t.sendChar("f", Tui::AltModifier);
         // The menu item should not be highlighted.
         t.compare("items-one");
     }
@@ -523,7 +523,7 @@ TEST_CASE("menubar", "") {
         m->setItems({{"<m>F</m>ile", "", "file", {}}});
         Tui::ZCommandNotifier *cm = new Tui::ZCommandNotifier("file", m);
         cm->setEnabled(false);
-        t.sendKey(Qt::Key_F10);
+        t.sendKey(Tui::Key_F10);
         t.compare();
     }
 
@@ -548,8 +548,8 @@ TEST_CASE("menubar", "") {
         new Tui::ZCommandNotifier("file", m);
         new Tui::ZCommandNotifier("edit", m);
         new Tui::ZCommandNotifier("options", m);
-        t.sendKey(Qt::Key_F10);
-        t.sendChar("e", Qt::AltModifier);
+        t.sendKey(Tui::Key_F10);
+        t.sendChar("e", Tui::AltModifier);
         t.compare("items-three-out");
     }
 
@@ -569,17 +569,17 @@ TEST_CASE("menubar", "") {
             trigger = -1;
         });
         trigger = 1;
-        t.sendChar("e", Qt::AltModifier);
+        t.sendChar("e", Tui::AltModifier);
         CHECK(trigger == -1);
-        t.sendKey(Qt::Key_Down);
+        t.sendKey(Tui::Key_Down);
         CHECK(trigger == -1);
-        t.sendKey(Qt::Key_Up);
+        t.sendKey(Tui::Key_Up);
         CHECK(trigger == -1);
-        t.sendKey(Qt::Key_Right);
+        t.sendKey(Tui::Key_Right);
         CHECK(trigger == -1);
-        t.sendKey(Qt::Key_Left);
+        t.sendKey(Tui::Key_Left);
         CHECK(trigger == -1);
-        t.sendKey(Qt::Key_Escape);
+        t.sendKey(Tui::Key_Escape);
         CHECK(trigger == -1);
     }
 
@@ -599,25 +599,25 @@ TEST_CASE("menubar", "") {
             trigger = -1;
         });
 
-        t.sendKey(Qt::Key_F10);
+        t.sendKey(Tui::Key_F10);
         CHECK(trigger == -1);
         trigger = 0;
-        t.sendKey(Qt::Key_Enter);
+        t.sendKey(Tui::Key_Enter);
         CHECK(trigger == -1);
 
-        t.sendKey(Qt::Key_F10);
-        t.sendKey(Qt::Key_Down);
+        t.sendKey(Tui::Key_F10);
+        t.sendKey(Tui::Key_Down);
         CHECK(trigger == -1);
-        t.sendKey(Qt::Key_Up);
+        t.sendKey(Tui::Key_Up);
         CHECK(trigger == -1);
-        t.sendKey(Qt::Key_Escape);
+        t.sendKey(Tui::Key_Escape);
 
-        t.sendKey(Qt::Key_F10);
-        t.sendKey(Qt::Key_Right);
+        t.sendKey(Tui::Key_F10);
+        t.sendKey(Tui::Key_Right);
         CHECK(trigger == -1);
-        t.sendKey(Qt::Key_Left);
+        t.sendKey(Tui::Key_Left);
         CHECK(trigger == -1);
-        t.sendKey(Qt::Key_Escape);
+        t.sendKey(Tui::Key_Escape);
         CHECK(trigger == -1);
     }
 
@@ -629,7 +629,7 @@ TEST_CASE("menubar", "") {
         });
         m->setItems({{"File", "", "file", {}}, {"<m>e</m>mit", "", "command_name", {}}, {"Options", "", "options", {}}});
         trigger = 0;
-        t.sendChar("e", Qt::AltModifier);
+        t.sendChar("e", Tui::AltModifier);
         CHECK(trigger == -1);
     }
 
@@ -640,9 +640,9 @@ TEST_CASE("menubar", "") {
             FAIL("May not be called.");
         });
         cm->setEnabled(false);
-        t.sendChar("f", Qt::AltModifier);
-        t.sendKey(Qt::Key_F10);
-        t.sendKey(Qt::Key_Enter);
+        t.sendChar("f", Tui::AltModifier);
+        t.sendKey(Tui::Key_F10);
+        t.sendKey(Tui::Key_Enter);
     }
 }
 
@@ -703,7 +703,7 @@ TEST_CASE("submenu", "") {
     new Tui::ZCommandNotifier("mega", m);
 
     SECTION("menu-window-facet-configuration") {
-        t.sendChar("o", Qt::AltModifier);
+        t.sendChar("o", Tui::AltModifier);
         REQUIRE(t.terminal->keyboardGrabber());
         QObject *facetObject = t.terminal->keyboardGrabber()->facet(Tui::ZWindowFacet::staticMetaObject);
         REQUIRE(facetObject != nullptr);
@@ -714,43 +714,43 @@ TEST_CASE("submenu", "") {
     }
 
     SECTION("geometry-w15-11-left") {
-        t.sendChar("o", Qt::AltModifier);
+        t.sendChar("o", Tui::AltModifier);
         t.compare();
     }
 
     SECTION("geometry-w15-11-right") {
-        t.sendChar("o", Qt::AltModifier);
-        t.sendKey(Qt::Key_Left);
+        t.sendChar("o", Tui::AltModifier);
+        t.sendKey(Tui::Key_Left);
         t.compare();
     }
 
     SECTION("esc") {
-        t.sendChar("o", Qt::AltModifier);
+        t.sendChar("o", Tui::AltModifier);
         t.render();
-        t.sendKey(Qt::Key_Escape);
+        t.sendKey(Tui::Key_Escape);
         t.compare();
     }
 
     SECTION("enter") {
-        t.sendChar("o", Qt::AltModifier);
-        t.sendKey(Qt::Key_Down);
-        t.sendKey(Qt::Key_Down);
+        t.sendChar("o", Tui::AltModifier);
+        t.sendKey(Tui::Key_Down);
+        t.sendKey(Tui::Key_Down);
         t.render();
         trigger = 0;
-        t.sendKey(Qt::Key_Enter);
+        t.sendKey(Tui::Key_Enter);
         CHECK(trigger == -1);
         t.compare("esc");
     }
 
     SECTION("F10") {
-        t.sendChar("o", Qt::AltModifier);
+        t.sendChar("o", Tui::AltModifier);
         t.render();
-        t.sendKey(Qt::Key_F10);
+        t.sendKey(Tui::Key_F10);
         t.compare("esc");
     }
 
     SECTION("alt-x") {
-        t.sendChar("x", Qt::AltModifier);
+        t.sendChar("x", Tui::AltModifier);
         t.compare("esc");
     }
 
@@ -760,7 +760,7 @@ TEST_CASE("submenu", "") {
     }
 
     SECTION("emit") {
-        t.sendChar("o", Qt::AltModifier);
+        t.sendChar("o", Tui::AltModifier);
         trigger = 0;
         t.sendChar("g");
         CHECK(trigger == -1);
@@ -768,8 +768,8 @@ TEST_CASE("submenu", "") {
     }
 
     SECTION("emit-number") {
-        t.sendChar("o", Qt::AltModifier);
-        t.sendKey(Qt::Key_Left);
+        t.sendChar("o", Tui::AltModifier);
+        t.sendKey(Tui::Key_Left);
         trigger = 2;
         t.sendChar("2");
         CHECK(trigger == -1);
@@ -777,13 +777,13 @@ TEST_CASE("submenu", "") {
     }
 
     SECTION("alt-utf8") {
-        t.sendChar("😇", Qt::AltModifier);
+        t.sendChar("😇", Tui::AltModifier);
         t.compare("esc");
     }
 
     SECTION("emit-utf8") {
-        t.sendChar("o", Qt::AltModifier);
-        t.sendKey(Qt::Key_Right);
+        t.sendChar("o", Tui::AltModifier);
+        t.sendKey(Tui::Key_Right);
         trigger = 1;
         t.sendChar("😇");
         CHECK(trigger == -1);
@@ -793,52 +793,52 @@ TEST_CASE("submenu", "") {
     m->setGeometry({0, 0, 30, 1});
 
     SECTION("geometry-m30-1") {
-        t.sendChar("o", Qt::AltModifier);
+        t.sendChar("o", Tui::AltModifier);
         t.compare("geometry-w15-11-left");
     }
 
     w->setGeometry({0, 0, 30, 11});
 
     SECTION("geometry-w30-11-left") {
-        t.sendChar("o", Qt::AltModifier);
+        t.sendChar("o", Tui::AltModifier);
         t.compare();
     }
 
     SECTION("geometry-w30-11-right") {
-        t.sendChar("o", Qt::AltModifier);
-        t.sendKey(Qt::Key_Left);
+        t.sendChar("o", Tui::AltModifier);
+        t.sendKey(Tui::Key_Left);
         t.compare();
     }
 
     SECTION("key-down") {
-        t.sendChar("o", Qt::AltModifier);
-        t.sendKey(Qt::Key_Down);
+        t.sendChar("o", Tui::AltModifier);
+        t.sendKey(Tui::Key_Down);
         t.compare();
     }
 
     SECTION("key-up") {
-        t.sendChar("o", Qt::AltModifier);
-        t.sendKey(Qt::Key_Up);
+        t.sendChar("o", Tui::AltModifier);
+        t.sendKey(Tui::Key_Up);
         t.compare();
     }
 
     SECTION("key-right") {
-        t.sendChar("o", Qt::AltModifier);
-        t.sendKey(Qt::Key_Right);
+        t.sendChar("o", Tui::AltModifier);
+        t.sendKey(Tui::Key_Right);
         t.compare();
     }
 
     SECTION("key-left") {
-        t.sendChar("o", Qt::AltModifier);
-        t.sendKey(Qt::Key_Left);
+        t.sendChar("o", Tui::AltModifier);
+        t.sendKey(Tui::Key_Left);
         t.compare("geometry-w30-11-right");
     }
 
     SECTION("reopen") {
-        t.sendKey(Qt::Key_F10);
-        t.sendKey(Qt::Key_Right);
+        t.sendKey(Tui::Key_F10);
+        t.sendKey(Tui::Key_Right);
         t.compare("key-right");
-        t.sendChar("o", Qt::AltModifier);
+        t.sendChar("o", Tui::AltModifier);
         t.compare("geometry-w30-11-left");
     }
 
@@ -853,7 +853,7 @@ TEST_CASE("submenu", "") {
                          {"Exa", "Ctrl+E", "exa", {}},
                         }}
                     });
-        t.sendChar("o", Qt::AltModifier);
+        t.sendChar("o", Tui::AltModifier);
         t.compare();
     }
 
@@ -868,27 +868,27 @@ TEST_CASE("submenu", "") {
                          {"Exabytes", "Ctrl+E", "exa", {}},
                         }}
                     });
-        t.sendChar("o", Qt::AltModifier);
+        t.sendChar("o", Tui::AltModifier);
         t.compare();
     }
 
     // black
     t.root->setPalette(Tui::ZPalette::black());
     SECTION("black-key-down") {
-        t.sendChar("o", Qt::AltModifier);
-        t.sendKey(Qt::Key_Down);
+        t.sendChar("o", Tui::AltModifier);
+        t.sendKey(Tui::Key_Down);
         t.compare();
     }
 
     SECTION("black-key-right") {
-        t.sendChar("o", Qt::AltModifier);
-        t.sendKey(Qt::Key_Right);
+        t.sendChar("o", Tui::AltModifier);
+        t.sendKey(Tui::Key_Right);
         t.compare();
     }
 
     SECTION("black-key-left") {
-        t.sendChar("o", Qt::AltModifier);
-        t.sendKey(Qt::Key_Left);
+        t.sendChar("o", Tui::AltModifier);
+        t.sendKey(Tui::Key_Left);
         t.compare();
     }
 
@@ -896,33 +896,33 @@ TEST_CASE("submenu", "") {
     t.root->setPalette(Tui::ZPalette::classic());
     w->setPaletteClass({"window", "cyan"});
     SECTION("cyan-key-down") {
-        t.sendChar("o", Qt::AltModifier);
-        t.sendKey(Qt::Key_Down);
+        t.sendChar("o", Tui::AltModifier);
+        t.sendKey(Tui::Key_Down);
         t.compare();
     }
 
     SECTION("cyan-key-right") {
-        t.sendChar("o", Qt::AltModifier);
-        t.sendKey(Qt::Key_Right);
+        t.sendChar("o", Tui::AltModifier);
+        t.sendKey(Tui::Key_Right);
         t.compare();
     }
 
     SECTION("cyan-key-left") {
-        t.sendChar("o", Qt::AltModifier);
-        t.sendKey(Qt::Key_Left);
+        t.sendChar("o", Tui::AltModifier);
+        t.sendKey(Tui::Key_Left);
         t.compare();
     }
 
     SECTION("position-first") {
         m->setGeometry({1, 2, 13, 1});
-        t.sendKey(Qt::Key_F10);
+        t.sendKey(Tui::Key_F10);
         t.compare();
     }
 
     SECTION("position-second") {
         m->setGeometry({2, 1, 13, 1});
-        t.sendKey(Qt::Key_F10);
-        t.sendKey(Qt::Key_Right);
+        t.sendKey(Tui::Key_F10);
+        t.sendKey(Tui::Key_Right);
         t.compare();
     }
 
@@ -1039,18 +1039,18 @@ TEST_CASE("popupmenu", "") {
         menu->setItems(items1);
         menu->popup({1, 1});
         t.render();
-        t.sendKey(Qt::Key_Escape);
+        t.sendKey(Tui::Key_Escape);
         t.compare();
     }
 
     SECTION("enter") {
         menu->setItems(items1);
         menu->popup({1, 1});
-        t.sendKey(Qt::Key_Down);
-        t.sendKey(Qt::Key_Down);
+        t.sendKey(Tui::Key_Down);
+        t.sendKey(Tui::Key_Down);
         t.render();
         trigger = 0;
-        t.sendKey(Qt::Key_Enter);
+        t.sendKey(Tui::Key_Enter);
         CHECK(trigger == -1);
         t.compare("esc");
     }
@@ -1059,7 +1059,7 @@ TEST_CASE("popupmenu", "") {
         menu->setItems(items1);
         menu->popup({1, 1});
         t.render();
-        t.sendKey(Qt::Key_F10);
+        t.sendKey(Tui::Key_F10);
         t.compare("esc");
     }
     SECTION("emit") {
@@ -1092,14 +1092,14 @@ TEST_CASE("popupmenu", "") {
     SECTION("key-down") {
         menu->setItems(items2);
         menu->popup({1, 1});
-        t.sendKey(Qt::Key_Down);
+        t.sendKey(Tui::Key_Down);
         t.compare();
     }
 
     SECTION("key-up") {
         menu->setItems(items2);
         menu->popup({1, 1});
-        t.sendKey(Qt::Key_Up);
+        t.sendKey(Tui::Key_Up);
         t.compare();
     }
 
@@ -1114,7 +1114,7 @@ TEST_CASE("popupmenu", "") {
                          {"Exa", "Ctrl+E", "exa", {}},
                     });
         menu->popup({1, 1});
-        t.sendChar("o", Qt::AltModifier);
+        t.sendChar("o", Tui::AltModifier);
         t.compare();
     }
 
@@ -1130,7 +1130,7 @@ TEST_CASE("popupmenu", "") {
                          {"Exabytes", "Ctrl+E", "exa", {}},
                     });
         menu->popup({1, 1});
-        t.sendChar("o", Qt::AltModifier);
+        t.sendChar("o", Tui::AltModifier);
         t.compare();
     }
 
@@ -1139,7 +1139,7 @@ TEST_CASE("popupmenu", "") {
     SECTION("black-key-down") {
         menu->setItems(items1);
         menu->popup({1, 1});
-        t.sendKey(Qt::Key_Down);
+        t.sendKey(Tui::Key_Down);
         t.compare();
     }
 
@@ -1149,7 +1149,7 @@ TEST_CASE("popupmenu", "") {
     SECTION("cyan-key-down") {
         menu->setItems(items1);
         menu->popup({1, 1});
-        t.sendKey(Qt::Key_Down);
+        t.sendKey(Tui::Key_Down);
         t.compare();
     }
 }

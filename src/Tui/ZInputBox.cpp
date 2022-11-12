@@ -34,7 +34,7 @@ ZInputBoxPrivate::~ZInputBoxPrivate() {
 
 ZInputBox::ZInputBox(ZWidget *parent) : ZWidget(parent, std::make_unique<ZInputBoxPrivate>(this)) {
     auto *const p = tuiwidgets_impl();
-    setFocusPolicy(Qt::StrongFocus);
+    setFocusPolicy(Tui::StrongFocus);
     setSizePolicyV(SizePolicy::Fixed);
     setSizePolicyH(SizePolicy::Expanding);
     setOverwriteMode(p->overwriteMode);
@@ -186,11 +186,11 @@ void ZInputBox::keyEvent(ZKeyEvent *event) {
 
     ZTextLayout textlayout = p->getTextLayout();
 
-    if (event->key() == Qt::Key_Space && event->modifiers() == 0) {
+    if (event->key() == Tui::Key_Space && event->modifiers() == 0) {
         p->insertOrReplaceCharacterAtCursorPosition(QStringLiteral(" "));
     } else if (text.size() && event->modifiers() == 0) {
         p->insertOrReplaceCharacterAtCursorPosition(text);
-    } else if (event->key() == Qt::Key_Backspace && event->modifiers() == 0) {
+    } else if (event->key() == Tui::Key_Backspace && event->modifiers() == 0) {
         if (p->cursorPosition > 0) {
             int cpleft = textlayout.previousCursorPosition(p->cursorPosition);
             p->text.remove(cpleft, p->cursorPosition - cpleft);
@@ -199,7 +199,7 @@ void ZInputBox::keyEvent(ZKeyEvent *event) {
             textChanged(unescapeNewLine(p->text));
             update();
         }
-    } else if (event->key() == Qt::Key_Delete && event->modifiers() == 0) {
+    } else if (event->key() == Tui::Key_Delete && event->modifiers() == 0) {
         if(p->text.size() > 0) {
             int cpright = textlayout.nextCursorPosition(p->cursorPosition);
             p->text.remove(p->cursorPosition, cpright - p->cursorPosition);
@@ -207,27 +207,27 @@ void ZInputBox::keyEvent(ZKeyEvent *event) {
             textChanged(unescapeNewLine(p->text));
             update();
         }
-    } else if(event->key() == Qt::Key_Left && event->modifiers() == 0) {
+    } else if(event->key() == Tui::Key_Left && event->modifiers() == 0) {
         if (p->cursorPosition > 0) {
             setCursorPosition(textlayout.previousCursorPosition(p->cursorPosition));
             p->adjustScrollPosition();
             update();
         }
-    } else if(event->key() == Qt::Key_Right && event->modifiers() == 0) {
+    } else if(event->key() == Tui::Key_Right && event->modifiers() == 0) {
         if (p->cursorPosition < p->text.size()) {
             setCursorPosition(textlayout.nextCursorPosition(p->cursorPosition));
             p->adjustScrollPosition();
             update();
         }
-    } else if(event->key() == Qt::Key_Home && event->modifiers() == 0) {
+    } else if(event->key() == Tui::Key_Home && event->modifiers() == 0) {
         setCursorPosition(0);
         p->adjustScrollPosition();
         update();
-    } else if(event->key() == Qt::Key_End && event->modifiers() == 0) {
+    } else if(event->key() == Tui::Key_End && event->modifiers() == 0) {
         setCursorPosition(p->text.size());
         p->adjustScrollPosition();
         update();
-    } else if(event->key() == Qt::Key_Insert && event->modifiers() == 0) {
+    } else if(event->key() == Tui::Key_Insert && event->modifiers() == 0) {
        setOverwriteMode(!p->overwriteMode);
     } else {
         ZWidget::keyEvent(event);

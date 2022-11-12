@@ -131,7 +131,7 @@ int main(int argc, char **argv) {
 ButtonDialog::ButtonDialog(Tui::ZWidget *parent, Tui::ZTextLine *message) : Tui::ZDialog(parent) {
     setOptions(Tui::ZWindow::CloseOption | Tui::ZWindow::DeleteOnClose
                | Tui::ZWindow::MoveOption | Tui::ZWindow::AutomaticOption | Tui::ZWindow::ResizeOption);
-    setDefaultPlacement(Qt::AlignCenter);
+    setDefaultPlacement(Tui::AlignCenter);
 
     setWindowTitle("Button");
     setContentsMargins({1, 1, 1, 1});
@@ -180,7 +180,7 @@ ButtonDialog::ButtonDialog(Tui::ZWidget *parent, Tui::ZTextLine *message) : Tui:
 CheckBoxDialog::CheckBoxDialog(Tui::ZWidget *parent, Tui::ZTextLine *message) : Tui::ZDialog(parent) {
     setOptions(Tui::ZWindow::CloseOption | Tui::ZWindow::DeleteOnClose
                | Tui::ZWindow::MoveOption | Tui::ZWindow::AutomaticOption | Tui::ZWindow::ResizeOption);
-    setDefaultPlacement(Qt::AlignCenter);
+    setDefaultPlacement(Tui::AlignCenter);
 
     setFocus();
     setWindowTitle("CheckBox");
@@ -242,7 +242,7 @@ CheckBoxDialog::CheckBoxDialog(Tui::ZWidget *parent, Tui::ZTextLine *message) : 
 RadioButtonDialog::RadioButtonDialog(Tui::ZWidget *parent, Tui::ZTextLine *message) : Tui::ZDialog(parent) {
     setOptions(Tui::ZWindow::CloseOption | Tui::ZWindow::DeleteOnClose
                | Tui::ZWindow::MoveOption | Tui::ZWindow::AutomaticOption | Tui::ZWindow::ResizeOption);
-    setDefaultPlacement(Qt::AlignCenter);
+    setDefaultPlacement(Tui::AlignCenter);
 
     setWindowTitle("RadioButton");
     setContentsMargins({1, 1, 1, 1});
@@ -326,7 +326,7 @@ RadioButtonDialog::RadioButtonDialog(Tui::ZWidget *parent, Tui::ZTextLine *messa
 InputBoxDialog::InputBoxDialog(Tui::ZWidget *parent) : Tui::ZDialog(parent) {
     setOptions(Tui::ZWindow::CloseOption | Tui::ZWindow::DeleteOnClose
                | Tui::ZWindow::MoveOption | Tui::ZWindow::AutomaticOption | Tui::ZWindow::ResizeOption);
-    setDefaultPlacement(Qt::AlignCenter);
+    setDefaultPlacement(Tui::AlignCenter);
 
     setWindowTitle("InputBox");
     setContentsMargins({1, 1, 1, 1});
@@ -395,7 +395,7 @@ void FileModel::setDirectory(const QDir &dir) {
 ListViewDialog::ListViewDialog(Tui::ZWidget *parent) : Tui::ZDialog(parent) {
     setOptions(Tui::ZWindow::CloseOption | Tui::ZWindow::DeleteOnClose
                | Tui::ZWindow::MoveOption | Tui::ZWindow::AutomaticOption | Tui::ZWindow::ResizeOption);
-    setDefaultPlacement(Qt::AlignCenter);
+    setDefaultPlacement(Tui::AlignCenter);
 
     setWindowTitle("ListView");
     setContentsMargins({1, 1, 1, 1});
@@ -436,7 +436,7 @@ void ListViewDialog::userInput(QString filename) {
 LabelDialog::LabelDialog(Tui::ZWidget *parent) : Tui::ZDialog(parent) {
     setOptions(Tui::ZWindow::CloseOption | Tui::ZWindow::DeleteOnClose
                | Tui::ZWindow::MoveOption | Tui::ZWindow::AutomaticOption | Tui::ZWindow::ResizeOption);
-    setDefaultPlacement(Qt::AlignCenter);
+    setDefaultPlacement(Tui::AlignCenter);
     setFocusPolicy(Tui::FocusPolicy::StrongFocus);
     setFocus();
 
@@ -605,7 +605,7 @@ SearchAndReplaceDialog::SearchAndReplaceDialog(Tui::ZWidget *parent) : Tui::ZDia
 AboutDialog::AboutDialog(Tui::ZWidget *parent) : Tui::ZWindow(parent) {
     setOptions(Tui::ZWindow::CloseOption | Tui::ZWindow::DeleteOnClose
                | Tui::ZWindow::MoveOption | Tui::ZWindow::AutomaticOption | Tui::ZWindow::ResizeOption);
-    setDefaultPlacement(Qt::AlignCenter);
+    setDefaultPlacement(Tui::AlignCenter);
     setFocusPolicy(Tui::FocusPolicy::StrongFocus);
     setStackingLayer(1000);
     setFocus();
@@ -626,7 +626,7 @@ void AboutDialog::paintEvent(Tui::ZPaintEvent *event) {
 StartDialog::StartDialog(Tui::ZWidget *parent) : Tui::ZDialog(parent) {
     setOptions(Tui::ZWindow::CloseOption | Tui::ZWindow::DeleteOnClose
                | Tui::ZWindow::MoveOption | Tui::ZWindow::AutomaticOption | Tui::ZWindow::ResizeOption);
-    setDefaultPlacement(Qt::AlignCenter);
+    setDefaultPlacement(Tui::AlignCenter);
     setFocusPolicy(Tui::FocusPolicy::StrongFocus);
     setFocus();
 

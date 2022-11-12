@@ -26,7 +26,7 @@ public:
 
     struct QueueItem {
         int key;
-        Qt::KeyboardModifiers modifiers;
+        Tui::KeyboardModifiers modifiers;
     };
 
     QList<QueueItem> queue;
@@ -216,41 +216,41 @@ TEST_CASE("dialog-behavior") {
     defaultManager->setDefaultWidget(&catcher);
 
     SECTION("escape key") {
-        t.sendKey(Qt::Key_Escape);
+        t.sendKey(Tui::Key_Escape);
         CHECK(recorder.consumeFirst(&Tui::ZDialog::rejected));
         CHECK(recorder.noMoreSignal());
         CHECK(dlg->isVisible() == false);
         CHECK(catcher.queue.size() == 0);
 
         dlg->setVisible(true);
-        t.sendKey(Qt::Key_Escape, Qt::ControlModifier);
+        t.sendKey(Tui::Key_Escape, Tui::ControlModifier);
         CHECK(recorder.noMoreSignal());
         CHECK(dlg->isVisible() == true);
         CHECK(catcher.queue.size() == 0);
 
         dlg->setVisible(true);
-        t.sendKey(Qt::Key_Escape, Qt::AltModifier);
+        t.sendKey(Tui::Key_Escape, Tui::AltModifier);
         CHECK(recorder.noMoreSignal());
         CHECK(dlg->isVisible() == true);
         CHECK(catcher.queue.size() == 0);
 
         dlg->setVisible(true);
-        t.sendKey(Qt::Key_Escape, Qt::ShiftModifier);
+        t.sendKey(Tui::Key_Escape, Tui::ShiftModifier);
         CHECK(recorder.noMoreSignal());
         CHECK(dlg->isVisible() == true);
         CHECK(catcher.queue.size() == 0);
     }
 
     SECTION("enter key") {
-        t.sendKey(Qt::Key_Enter);
+        t.sendKey(Tui::Key_Enter);
         REQUIRE(catcher.queue.size() == 1);
-        CHECK(catcher.queue[0].key == Qt::Key_Enter);
+        CHECK(catcher.queue[0].key == Tui::Key_Enter);
         CHECK(catcher.queue[0].modifiers == 0);
     }
 
     SECTION("enter key - no default") {
         defaultManager->setDefaultWidget(nullptr);
-        t.sendKey(Qt::Key_Enter);
+        t.sendKey(Tui::Key_Enter);
         CHECK(catcher.queue.size() == 0);
     }
 

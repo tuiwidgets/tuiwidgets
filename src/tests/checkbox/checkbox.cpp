@@ -29,10 +29,10 @@ TEST_CASE("checkbox-base", "") {
 
     auto checkDefaultState = [] (Tui::ZCheckBox *cb1) {
         CHECK(!cb1->isTristate());
-        CHECK(cb1->checkState() == Qt::CheckState::Unchecked);
+        CHECK(cb1->checkState() == Tui::CheckState::Unchecked);
         CHECK(cb1->sizePolicyH() == Tui::SizePolicy::Expanding);
         CHECK(cb1->sizePolicyV() == Tui::SizePolicy::Fixed);
-        CHECK(cb1->focusPolicy() == Qt::StrongFocus);
+        CHECK(cb1->focusPolicy() == Tui::StrongFocus);
         FAIL_CHECK_VEC(checkWidgetsDefaultsExcept(cb1, DefaultException::SizePolicyV
                                                      | DefaultException::SizePolicyH
                                                      | DefaultException::FocusPolicy));
@@ -86,12 +86,12 @@ TEST_CASE("checkbox-base", "") {
     }
 
     SECTION("get-set-checkstate") {
-        cb->setCheckState(Qt::Checked);
-        CHECK(cb->checkState() == Qt::Checked);
-        cb->setCheckState(Qt::Unchecked);
-        CHECK(cb->checkState() == Qt::Unchecked);
-        cb->setCheckState(Qt::PartiallyChecked);
-        CHECK(cb->checkState() == Qt::PartiallyChecked);
+        cb->setCheckState(Tui::Checked);
+        CHECK(cb->checkState() == Tui::Checked);
+        cb->setCheckState(Tui::Unchecked);
+        CHECK(cb->checkState() == Tui::Unchecked);
+        cb->setCheckState(Tui::PartiallyChecked);
+        CHECK(cb->checkState() == Tui::PartiallyChecked);
     }
 
     SECTION("get-set-tristate") {
@@ -102,7 +102,7 @@ TEST_CASE("checkbox-base", "") {
     }
 
     SECTION("set-shortcut") {
-        cb->setShortcut(Tui::ZKeySequence::forKey(Qt::Key_F1));
+        cb->setShortcut(Tui::ZKeySequence::forKey(Tui::Key_F1));
     }
 
     SECTION("content-margins-without-terminal") {
@@ -128,18 +128,18 @@ TEST_CASE("checkbox", "") {
     cb->setGeometry({1, 1, 13, 1});
 
     SECTION("single-geometry") {
-        CHECK(cb->checkState() == Qt::CheckState::Unchecked);
+        CHECK(cb->checkState() == Tui::CheckState::Unchecked);
     }
 
     SECTION("single-checked") {
-        cb->setCheckState(Qt::CheckState::Checked);
-        CHECK(cb->checkState() == Qt::CheckState::Checked);
+        cb->setCheckState(Tui::CheckState::Checked);
+        CHECK(cb->checkState() == Tui::CheckState::Checked);
         t.compare();
     }
 
     SECTION("single-unchecked") {
-        cb->setCheckState(Qt::CheckState::Unchecked);
-        CHECK(cb->checkState() == Qt::CheckState::Unchecked);
+        cb->setCheckState(Tui::CheckState::Unchecked);
+        CHECK(cb->checkState() == Tui::CheckState::Unchecked);
         t.compare();
     }
 
@@ -159,26 +159,26 @@ TEST_CASE("checkbox", "") {
         CHECK(!cb->focus());
         cb->click();
         CHECK(cb->focus());
-        CHECK(cb->checkState() == Qt::CheckState::Checked);
+        CHECK(cb->checkState() == Tui::CheckState::Checked);
         cb->click();
-        CHECK(cb->checkState() == Qt::CheckState::Unchecked);
+        CHECK(cb->checkState() == Tui::CheckState::Unchecked);
     }
 
     SECTION("single-space") {
         cb->setFocus();
-        t.sendKey(Qt::Key_Space);
-        CHECK(cb->checkState() == Qt::CheckState::Checked);
+        t.sendKey(Tui::Key_Space);
+        CHECK(cb->checkState() == Tui::CheckState::Checked);
     }
 
     SECTION("single-enter") {
         cb->setFocus();
-        FAIL_CHECK_VEC(t.checkKeyEventBubbles(Qt::Key_Enter));
-        CHECK(cb->checkState() == Qt::CheckState::Unchecked);
+        FAIL_CHECK_VEC(t.checkKeyEventBubbles(Tui::Key_Enter));
+        CHECK(cb->checkState() == Tui::CheckState::Unchecked);
     }
 
     SECTION("single-tristate") {
-        cb->setCheckState(Qt::CheckState::PartiallyChecked);
-        CHECK(cb->checkState() == Qt::CheckState::PartiallyChecked);
+        cb->setCheckState(Tui::CheckState::PartiallyChecked);
+        CHECK(cb->checkState() == Tui::CheckState::PartiallyChecked);
         CHECK(!cb->isTristate());
         t.compare();
     }
@@ -186,16 +186,16 @@ TEST_CASE("checkbox", "") {
     SECTION("single-tristate-focus") {
         cb->setFocus();
         CHECK(!cb->isTristate());
-        cb->setCheckState(Qt::CheckState::PartiallyChecked);
-        CHECK(cb->checkState() == Qt::CheckState::PartiallyChecked);
+        cb->setCheckState(Tui::CheckState::PartiallyChecked);
+        CHECK(cb->checkState() == Tui::CheckState::PartiallyChecked);
         CHECK(!cb->isTristate());
         t.compare();
     }
 
     SECTION("single-tristate-disable") {
-        cb->setCheckState(Qt::CheckState::PartiallyChecked);
+        cb->setCheckState(Tui::CheckState::PartiallyChecked);
         cb->setEnabled(false);
-        CHECK(cb->checkState() == Qt::CheckState::PartiallyChecked);
+        CHECK(cb->checkState() == Tui::CheckState::PartiallyChecked);
         t.compare();
     }
 
@@ -203,9 +203,9 @@ TEST_CASE("checkbox", "") {
         cb->setFocus();
         cb->setTristate(true);
         CHECK(cb->isTristate());
-        cb->setCheckState(Qt::CheckState::Checked);
-        t.sendKey(Qt::Key_Space);
-        CHECK(cb->checkState() == Qt::CheckState::PartiallyChecked);
+        cb->setCheckState(Tui::CheckState::Checked);
+        t.sendKey(Tui::Key_Space);
+        CHECK(cb->checkState() == Tui::CheckState::PartiallyChecked);
     }
 }
 
@@ -222,32 +222,32 @@ TEST_CASE("checkbox-two", "") {
 
     SECTION("send-tab") {
         cb1->setFocus();
-        t.sendKey(Qt::Key_Tab);
+        t.sendKey(Tui::Key_Tab);
         CHECK(cb2->focus());
-        CHECK(cb1->checkState() == Qt::CheckState::Unchecked);
-        CHECK(cb2->checkState() == Qt::CheckState::Unchecked);
+        CHECK(cb1->checkState() == Tui::CheckState::Unchecked);
+        CHECK(cb2->checkState() == Tui::CheckState::Unchecked);
         t.compare();
     }
 
     SECTION("send-tab-disable") {
         cb1->setFocus();
         cb2->setEnabled(false);
-        t.sendKey(Qt::Key_Tab);
-        t.sendKey(Qt::Key_Space);
-        CHECK(cb1->checkState() == Qt::CheckState::Checked);
-        CHECK(cb2->checkState() == Qt::CheckState::Unchecked);
+        t.sendKey(Tui::Key_Tab);
+        t.sendKey(Tui::Key_Space);
+        CHECK(cb1->checkState() == Tui::CheckState::Checked);
+        CHECK(cb2->checkState() == Tui::CheckState::Unchecked);
         t.compare();
     }
 
     SECTION("toggle") {
-        CHECK(cb1->checkState() == Qt::CheckState::Unchecked);
-        CHECK(cb2->checkState() == Qt::CheckState::Unchecked);
+        CHECK(cb1->checkState() == Tui::CheckState::Unchecked);
+        CHECK(cb2->checkState() == Tui::CheckState::Unchecked);
         cb2->toggle();
-        cb1->setCheckState(Qt::CheckState::Checked);
-        CHECK(cb1->checkState() == Qt::CheckState::Checked);
-        CHECK(cb2->checkState() == Qt::CheckState::Checked);
+        cb1->setCheckState(Tui::CheckState::Checked);
+        CHECK(cb1->checkState() == Tui::CheckState::Checked);
+        CHECK(cb2->checkState() == Tui::CheckState::Checked);
         cb2->toggle();
-        CHECK(cb2->checkState() == Qt::CheckState::Unchecked);
+        CHECK(cb2->checkState() == Tui::CheckState::Unchecked);
         CHECK(!cb1->focus());
         CHECK(!cb2->focus());
     }
@@ -267,21 +267,21 @@ TEST_CASE("checkbox-withMarkup", "") {
         Tui::ZCheckBox *cb3 = new Tui::ZCheckBox(Tui::withMarkup, "cb<m>2</m>", w);
         cb3->setGeometry({1, 3, 13, 1});
 
-        CHECK(cb1->checkState() == Qt::CheckState::Unchecked);
-        CHECK(cb2->checkState() == Qt::CheckState::Unchecked);
-        CHECK(cb3->checkState() == Qt::CheckState::Unchecked);
-        t.sendChar("c", Qt::AltModifier);
-        CHECK(cb1->checkState() == Qt::CheckState::Checked);
-        CHECK(cb2->checkState() == Qt::CheckState::Unchecked);
-        CHECK(cb3->checkState() == Qt::CheckState::Unchecked);
-        t.sendChar("B", Qt::AltModifier);
-        CHECK(cb1->checkState() == Qt::CheckState::Checked);
-        CHECK(cb2->checkState() == Qt::CheckState::Checked);
-        CHECK(cb3->checkState() == Qt::CheckState::Unchecked);
-        t.sendChar("2", Qt::AltModifier);
-        CHECK(cb1->checkState() == Qt::CheckState::Checked);
-        CHECK(cb2->checkState() == Qt::CheckState::Checked);
-        CHECK(cb3->checkState() == Qt::CheckState::Checked);
+        CHECK(cb1->checkState() == Tui::CheckState::Unchecked);
+        CHECK(cb2->checkState() == Tui::CheckState::Unchecked);
+        CHECK(cb3->checkState() == Tui::CheckState::Unchecked);
+        t.sendChar("c", Tui::AltModifier);
+        CHECK(cb1->checkState() == Tui::CheckState::Checked);
+        CHECK(cb2->checkState() == Tui::CheckState::Unchecked);
+        CHECK(cb3->checkState() == Tui::CheckState::Unchecked);
+        t.sendChar("B", Tui::AltModifier);
+        CHECK(cb1->checkState() == Tui::CheckState::Checked);
+        CHECK(cb2->checkState() == Tui::CheckState::Checked);
+        CHECK(cb3->checkState() == Tui::CheckState::Unchecked);
+        t.sendChar("2", Tui::AltModifier);
+        CHECK(cb1->checkState() == Tui::CheckState::Checked);
+        CHECK(cb2->checkState() == Tui::CheckState::Checked);
+        CHECK(cb3->checkState() == Tui::CheckState::Checked);
         t.compare();
     }
 
@@ -296,21 +296,21 @@ TEST_CASE("checkbox-withMarkup", "") {
         cb3->setMarkup("cb<m>2</m>");
         cb3->setGeometry({1, 3, 13, 1});
 
-        CHECK(cb1->checkState() == Qt::CheckState::Unchecked);
-        CHECK(cb2->checkState() == Qt::CheckState::Unchecked);
-        CHECK(cb3->checkState() == Qt::CheckState::Unchecked);
-        FAIL_CHECK_VEC(t.checkCharEventBubbles("c", Qt::AltModifier));
-        CHECK(cb1->checkState() == Qt::CheckState::Unchecked);
-        CHECK(cb2->checkState() == Qt::CheckState::Unchecked);
-        CHECK(cb3->checkState() == Qt::CheckState::Unchecked);
-        FAIL_CHECK_VEC(t.checkCharEventBubbles("B", Qt::AltModifier | Qt::ControlModifier));
-        CHECK(cb1->checkState() == Qt::CheckState::Unchecked);
-        CHECK(cb2->checkState() == Qt::CheckState::Unchecked);
-        CHECK(cb3->checkState() == Qt::CheckState::Unchecked);
+        CHECK(cb1->checkState() == Tui::CheckState::Unchecked);
+        CHECK(cb2->checkState() == Tui::CheckState::Unchecked);
+        CHECK(cb3->checkState() == Tui::CheckState::Unchecked);
+        FAIL_CHECK_VEC(t.checkCharEventBubbles("c", Tui::AltModifier));
+        CHECK(cb1->checkState() == Tui::CheckState::Unchecked);
+        CHECK(cb2->checkState() == Tui::CheckState::Unchecked);
+        CHECK(cb3->checkState() == Tui::CheckState::Unchecked);
+        FAIL_CHECK_VEC(t.checkCharEventBubbles("B", Tui::AltModifier | Tui::ControlModifier));
+        CHECK(cb1->checkState() == Tui::CheckState::Unchecked);
+        CHECK(cb2->checkState() == Tui::CheckState::Unchecked);
+        CHECK(cb3->checkState() == Tui::CheckState::Unchecked);
         FAIL_CHECK_VEC(t.checkCharEventBubbles("2"));
-        CHECK(cb1->checkState() == Qt::CheckState::Unchecked);
-        CHECK(cb2->checkState() == Qt::CheckState::Unchecked);
-        CHECK(cb3->checkState() == Qt::CheckState::Unchecked);
+        CHECK(cb1->checkState() == Tui::CheckState::Unchecked);
+        CHECK(cb2->checkState() == Tui::CheckState::Unchecked);
+        CHECK(cb3->checkState() == Tui::CheckState::Unchecked);
         t.compare();
     }
 
@@ -320,9 +320,9 @@ TEST_CASE("checkbox-withMarkup", "") {
         cb1->setText("cb1");
         cb1->setGeometry({1, 1, 13, 1});
 
-        CHECK(cb1->checkState() == Qt::CheckState::Unchecked);
-        FAIL_CHECK_VEC(t.checkCharEventBubbles("c", Qt::AltModifier));
-        CHECK(cb1->checkState() == Qt::CheckState::Unchecked);
+        CHECK(cb1->checkState() == Tui::CheckState::Unchecked);
+        FAIL_CHECK_VEC(t.checkCharEventBubbles("c", Tui::AltModifier));
+        CHECK(cb1->checkState() == Tui::CheckState::Unchecked);
     }
 
     SECTION("mnemonic-via-markup-reset-via-markup") {
@@ -331,9 +331,9 @@ TEST_CASE("checkbox-withMarkup", "") {
         cb1->setMarkup("cb1");
         cb1->setGeometry({1, 1, 13, 1});
 
-        CHECK(cb1->checkState() == Qt::CheckState::Unchecked);
-        FAIL_CHECK_VEC(t.checkCharEventBubbles("c", Qt::AltModifier));
-        CHECK(cb1->checkState() == Qt::CheckState::Unchecked);
+        CHECK(cb1->checkState() == Tui::CheckState::Unchecked);
+        FAIL_CHECK_VEC(t.checkCharEventBubbles("c", Tui::AltModifier));
+        CHECK(cb1->checkState() == Tui::CheckState::Unchecked);
     }
 
 }
@@ -346,22 +346,22 @@ TEST_CASE("checkbox-emit", "") {
     Tui::ZCheckBox *cb1 = new Tui::ZCheckBox(Tui::withMarkup, "<m>c</m>b1", w);
     cb1->setGeometry({1, 1, 13, 1});
     cb1->setEnabled(true);
-    cb1->setCheckState(Qt::CheckState::Unchecked);
+    cb1->setCheckState(Tui::CheckState::Unchecked);
     cb1->setFocus();
 
     int triggerCountC = 0;
     int triggerCountU = 0;
     int triggerCountP = 0;
 
-    QObject::connect(cb1, &Tui::ZCheckBox::stateChanged, [&triggerCountC, &triggerCountU, &triggerCountP](Qt::CheckState value) {
+    QObject::connect(cb1, &Tui::ZCheckBox::stateChanged, [&triggerCountC, &triggerCountU, &triggerCountP](Tui::CheckState value) {
         switch (value) {
-            case Qt::CheckState::Checked:
+            case Tui::CheckState::Checked:
                 triggerCountC++;
                 break;
-            case Qt::CheckState::Unchecked:
+            case Tui::CheckState::Unchecked:
                 triggerCountU++;
                 break;
-            case Qt::CheckState::PartiallyChecked:
+            case Tui::CheckState::PartiallyChecked:
                 triggerCountP++;
                 break;
             default:
@@ -369,7 +369,7 @@ TEST_CASE("checkbox-emit", "") {
         }
     });
 
-    CHECK(cb1->focusPolicy() == Qt::StrongFocus);
+    CHECK(cb1->focusPolicy() == Tui::StrongFocus);
     CHECK(cb1->maximumSize().width() == Tui::tuiMaxSize);
     CHECK(cb1->maximumSize().height() == Tui::tuiMaxSize);
     CHECK(cb1->sizePolicyV() == Tui::SizePolicy::Fixed);
@@ -378,8 +378,8 @@ TEST_CASE("checkbox-emit", "") {
     CHECK(cb1->text() == "");
     CHECK(cb1->markup() == "<m>c</m>b1");
 
-    cb1->setCheckState(Qt::CheckState::Unchecked);
-    t.sendChar("c", Qt::AltModifier);
+    cb1->setCheckState(Tui::CheckState::Unchecked);
+    t.sendChar("c", Tui::AltModifier);
     CHECK(triggerCountC == 1);
     CHECK(triggerCountU == 0);
 
@@ -387,8 +387,8 @@ TEST_CASE("checkbox-emit", "") {
     CHECK(cb1->text() == "");
     CHECK(cb1->markup() == "c<m>b</m>1-setText");
 
-    cb1->setCheckState(Qt::CheckState::Unchecked);
-    t.sendChar("b", Qt::AltModifier);
+    cb1->setCheckState(Tui::CheckState::Unchecked);
+    t.sendChar("b", Tui::AltModifier);
     CHECK(triggerCountC == 2);
     CHECK(triggerCountU == 0);
 
@@ -396,26 +396,26 @@ TEST_CASE("checkbox-emit", "") {
     CHECK(cb1->text() == "cb1-new");
     CHECK(cb1->markup() == "");
 
-    cb1->setCheckState(Qt::CheckState::Unchecked);
-    t.sendKey(Qt::Key_Space);
+    cb1->setCheckState(Tui::CheckState::Unchecked);
+    t.sendKey(Tui::Key_Space);
     CHECK(triggerCountC == 3);
     CHECK(triggerCountU == 0);
 
-    cb1->setCheckState(Qt::CheckState::Unchecked);
-    cb1->setShortcut(Tui::ZKeySequence::forKey(Qt::Key_F1));
-    t.sendKey(Qt::Key_F1);
+    cb1->setCheckState(Tui::CheckState::Unchecked);
+    cb1->setShortcut(Tui::ZKeySequence::forKey(Tui::Key_F1));
+    t.sendKey(Tui::Key_F1);
     CHECK(triggerCountC == 4);
     CHECK(triggerCountU == 0);
 
-    cb1->setCheckState(Qt::CheckState::Unchecked);
+    cb1->setCheckState(Tui::CheckState::Unchecked);
     cb1->setShortcut(Tui::ZKeySequence::forShortcut("a"));
-    t.sendChar("a", Qt::ControlModifier);
+    t.sendChar("a", Tui::ControlModifier);
     CHECK(triggerCountC == 5);
     CHECK(triggerCountU == 0);
 
-    cb1->setCheckState(Qt::CheckState::Unchecked);
+    cb1->setCheckState(Tui::CheckState::Unchecked);
     cb1->setShortcut(Tui::ZKeySequence::forMnemonic("a"));
-    t.sendChar("a", Qt::AltModifier);
+    t.sendChar("a", Tui::AltModifier);
     CHECK(triggerCountC == 6);
     CHECK(triggerCountU == 0);
 
@@ -444,7 +444,7 @@ TEST_CASE("checkbox-emit", "") {
 TEST_CASE("checkbox-color", "") {
     Testhelper t("checkbox", "checkbox-color", 15, 5);
     Tui::ZWindow *w = new TestBackground(t.root);
-    w->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
+    w->setFocusPolicy(Tui::FocusPolicy::StrongFocus);
     w->setGeometry({0, 0, 15, 5});
 
     SECTION("single-black") {
@@ -458,7 +458,7 @@ TEST_CASE("checkbox-color", "") {
         t.root->setPalette(Tui::ZPalette::black());
         Tui::ZCheckBox *cb1 = new Tui::ZCheckBox("cb1", w);
         cb1->setGeometry({1, 1, 13, 1});
-        cb1->setCheckState(Qt::CheckState::Checked);
+        cb1->setCheckState(Tui::CheckState::Checked);
         cb1->setFocus();
         t.compare();
     }
@@ -467,7 +467,7 @@ TEST_CASE("checkbox-color", "") {
         t.root->setPalette(Tui::ZPalette::black());
         Tui::ZCheckBox *cb1 = new Tui::ZCheckBox("cb1", w);
         cb1->setGeometry({1, 1, 13, 1});
-        cb1->setCheckState(Qt::CheckState::Unchecked);
+        cb1->setCheckState(Tui::CheckState::Unchecked);
         cb1->setFocus();
         t.compare();
     }
@@ -476,7 +476,7 @@ TEST_CASE("checkbox-color", "") {
         t.root->setPalette(Tui::ZPalette::black());
         Tui::ZCheckBox *cb1 = new Tui::ZCheckBox("cb1", w);
         cb1->setGeometry({1, 1, 13, 1});
-        cb1->setCheckState(Qt::CheckState::PartiallyChecked);
+        cb1->setCheckState(Tui::CheckState::PartiallyChecked);
         cb1->setFocus();
         t.compare();
     }
@@ -518,7 +518,7 @@ TEST_CASE("checkbox-color", "") {
         Tui::ZCheckBox *cb1 = new Tui::ZCheckBox("cb1", w);
         cb1->setGeometry({1, 1, 13, 1});
         cb1->setFocus();
-        cb1->setCheckState(Qt::CheckState::Checked);
+        cb1->setCheckState(Tui::CheckState::Checked);
         t.compare();
     }
 
@@ -558,7 +558,7 @@ TEST_CASE("checkbox-color", "") {
         w->setPaletteClass({"window", "dialog"});
         Tui::ZCheckBox *cb1 = new Tui::ZCheckBox("cb1", w);
         cb1->setGeometry({1, 1, 13, 1});
-        cb1->setCheckState(Qt::CheckState::Checked);
+        cb1->setCheckState(Tui::CheckState::Checked);
         cb1->setFocus();
         t.compare();
     }
@@ -599,7 +599,7 @@ TEST_CASE("checkbox-margin", "") {
         CHECK(cb1->sizeHint().height() == 1);
         CHECK(cb1->sizeHint().width() == 8);
         cb1->setContentsMargins({2, 2, 2, 2});
-        CHECK(cb1->checkState() == Qt::CheckState::Unchecked);
+        CHECK(cb1->checkState() == Tui::CheckState::Unchecked);
         CHECK(cb1->sizeHint().height() == 5);
         CHECK(cb1->sizeHint().width() == 12);
         t.compare();

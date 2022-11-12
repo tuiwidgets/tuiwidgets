@@ -8,6 +8,7 @@
 
 #include <QObject>
 
+#include <Tui/ZCommon.h>
 #include <Tui/ZMoFunc_p.h>
 #include <Tui/ZValuePtr.h>
 
@@ -51,12 +52,12 @@ public:
 public:
     // FIXME Massive changes needed
     static ZKeySequence forMnemonic(const QString &c);
-    static ZKeySequence forKey(int key, Qt::KeyboardModifiers modifiers = {});
-    static ZKeySequence forShortcut(const QString &c, Qt::KeyboardModifiers modifiers = Qt::ControlModifier);
-    static ZKeySequence forShortcutSequence(const QString &c, Qt::KeyboardModifiers modifiers,
-                                            const QString &c2, Qt::KeyboardModifiers modifiers2);
-    static ZKeySequence forShortcutSequence(const QString &c, Qt::KeyboardModifiers modifiers,
-                                            int key2, Qt::KeyboardModifiers modifiers2);
+    static ZKeySequence forKey(int key, Tui::KeyboardModifiers modifiers = {});
+    static ZKeySequence forShortcut(const QString &c, Tui::KeyboardModifiers modifiers = Tui::ControlModifier);
+    static ZKeySequence forShortcutSequence(const QString &c, Tui::KeyboardModifiers modifiers,
+                                            const QString &c2, Tui::KeyboardModifiers modifiers2);
+    static ZKeySequence forShortcutSequence(const QString &c, Tui::KeyboardModifiers modifiers,
+                                            int key2, Tui::KeyboardModifiers modifiers2);
 
 protected:
     ZValuePtr<ZKeySequencePrivate> tuiwidgets_pimpl_ptr;
@@ -71,7 +72,7 @@ class TUIWIDGETS_EXPORT ZShortcut : public QObject {
     Q_OBJECT
 public:
     //explicit ZShortcut(ZWidget *parent = 0);
-    explicit ZShortcut(const ZKeySequence &key, ZWidget *parent, Qt::ShortcutContext context = Qt::WindowShortcut);
+    explicit ZShortcut(const ZKeySequence &key, ZWidget *parent, Tui::ShortcutContext context = Tui::WindowShortcut);
     virtual ~ZShortcut() override;
 
 public:

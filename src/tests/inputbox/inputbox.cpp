@@ -28,7 +28,7 @@ TEST_CASE("inputbox-base", "") {
         CHECK(inputbox->sizeHint() == QSize{10, 1});
         CHECK(inputbox->sizePolicyH() == Tui::SizePolicy::Expanding);
         CHECK(inputbox->sizePolicyV() == Tui::SizePolicy::Fixed);
-        CHECK(inputbox->focusPolicy() == Qt::StrongFocus);
+        CHECK(inputbox->focusPolicy() == Tui::StrongFocus);
         CHECK(inputbox->cursorStyle() == Tui::CursorStyle::Bar);
         CHECK(inputbox->overwriteMode() == false);
         FAIL_CHECK_VEC(checkWidgetsDefaultsExcept(inputbox, DefaultException::SizePolicyV
@@ -194,7 +194,7 @@ TEST_CASE("inputbox-behavior", "") {
 
     SECTION("char-B-and-Space") {
         t.sendChar("B");
-        t.sendKey(Qt::Key_Space);
+        t.sendKey(Tui::Key_Space);
         CHECK(inputbox->cursorPosition() == 2);
         CHECK(inputbox->text() == "B ");
     }
@@ -259,8 +259,8 @@ TEST_CASE("inputbox-behavior", "") {
         t.sendChar("D");
         t.sendChar("E");
         t.sendChar("F");
-        t.sendKey(Qt::Key_Left);
-        t.sendKey(Qt::Key_Left);
+        t.sendKey(Tui::Key_Left);
+        t.sendKey(Tui::Key_Left);
         CHECK(inputbox->cursorPosition() == 4);
         CHECK(inputbox->text() == "ABCDEF");
         t.compare("char-ABCDEF-5x1+2+2");
@@ -274,10 +274,10 @@ TEST_CASE("inputbox-behavior", "") {
         t.sendChar("D");
         t.sendChar("E");
         t.sendChar("F");
-        t.sendKey(Qt::Key_Left);
-        t.sendKey(Qt::Key_Left);
-        t.sendKey(Qt::Key_Left);
-        t.sendKey(Qt::Key_Left);
+        t.sendKey(Tui::Key_Left);
+        t.sendKey(Tui::Key_Left);
+        t.sendKey(Tui::Key_Left);
+        t.sendKey(Tui::Key_Left);
         CHECK(inputbox->cursorPosition() == 2);
         CHECK(inputbox->text() == "ABCDEF");
         t.compare();
@@ -291,12 +291,12 @@ TEST_CASE("inputbox-behavior", "") {
         t.sendChar("D");
         t.sendChar("E");
         t.sendChar("F");
-        t.sendKey(Qt::Key_Left);
-        t.sendKey(Qt::Key_Left);
-        t.sendKey(Qt::Key_Left);
-        t.sendKey(Qt::Key_Left);
-        t.sendKey(Qt::Key_Left);
-        t.sendKey(Qt::Key_Left);
+        t.sendKey(Tui::Key_Left);
+        t.sendKey(Tui::Key_Left);
+        t.sendKey(Tui::Key_Left);
+        t.sendKey(Tui::Key_Left);
+        t.sendKey(Tui::Key_Left);
+        t.sendKey(Tui::Key_Left);
         CHECK(inputbox->cursorPosition() == 0);
         CHECK(inputbox->text() == "ABCDEF");
         t.compare();
@@ -310,13 +310,13 @@ TEST_CASE("inputbox-behavior", "") {
         t.sendChar("D");
         t.sendChar("E");
         t.sendChar("F");
-        t.sendKey(Qt::Key_Left);
-        t.sendKey(Qt::Key_Left);
-        t.sendKey(Qt::Key_Left);
-        t.sendKey(Qt::Key_Left);
-        t.sendKey(Qt::Key_Left);
-        t.sendKey(Qt::Key_Left);
-        t.sendKey(Qt::Key_Left);
+        t.sendKey(Tui::Key_Left);
+        t.sendKey(Tui::Key_Left);
+        t.sendKey(Tui::Key_Left);
+        t.sendKey(Tui::Key_Left);
+        t.sendKey(Tui::Key_Left);
+        t.sendKey(Tui::Key_Left);
+        t.sendKey(Tui::Key_Left);
         CHECK(inputbox->cursorPosition() == 0);
         CHECK(inputbox->text() == "ABCDEF");
         t.compare("char-left6-ABCDEF-5x1+2+2");
@@ -330,7 +330,7 @@ TEST_CASE("inputbox-behavior", "") {
         t.sendChar("D");
         t.sendChar("E");
         t.sendChar("F");
-        t.sendKey(Qt::Key_Home);
+        t.sendKey(Tui::Key_Home);
         CHECK(inputbox->cursorPosition() == 0);
         CHECK(inputbox->text() == "ABCDEF");
         t.compare("char-left6-ABCDEF-5x1+2+2");
@@ -344,10 +344,10 @@ TEST_CASE("inputbox-behavior", "") {
         t.sendChar("D");
         t.sendChar("E");
         t.sendChar("F");
-        t.sendKey(Qt::Key_Home);
-        t.sendKey(Qt::Key_Right);
+        t.sendKey(Tui::Key_Home);
+        t.sendKey(Tui::Key_Right);
         t.sendChar("a");
-        t.sendKey(Qt::Key_Right);
+        t.sendKey(Tui::Key_Right);
         t.sendChar("b");
         CHECK(inputbox->cursorPosition() == 4);
         CHECK(inputbox->text() == "AaBbCDEF");
@@ -362,9 +362,9 @@ TEST_CASE("inputbox-behavior", "") {
         t.sendChar("D");
         t.sendChar("E");
         t.sendChar("F");
-        t.sendKey(Qt::Key_Left);
-        t.sendKey(Qt::Key_Left);
-        t.sendKey(Qt::Key_End);
+        t.sendKey(Tui::Key_Left);
+        t.sendKey(Tui::Key_Left);
+        t.sendKey(Tui::Key_End);
         CHECK(inputbox->cursorPosition() == 6);
         CHECK(inputbox->text() == "ABCDEF");
         t.compare("char-ABCDEF-5x1+2+2");
@@ -377,7 +377,7 @@ TEST_CASE("inputbox-behavior", "") {
         t.sendChar("D");
         t.sendChar("E");
         t.sendChar("F");
-        t.sendKey(Qt::Key_Up);
+        t.sendKey(Tui::Key_Up);
         CHECK(inputbox->cursorPosition() == 6);
         CHECK(inputbox->text() == "ABCDEF");
         t.compare("char-ABCDEF-5x1+2+2");
@@ -390,7 +390,7 @@ TEST_CASE("inputbox-behavior", "") {
         t.sendChar("D");
         t.sendChar("E");
         t.sendChar("F");
-        t.sendKey(Qt::Key_Down);
+        t.sendKey(Tui::Key_Down);
         CHECK(inputbox->cursorPosition() == 6);
         CHECK(inputbox->text() == "ABCDEF");
         t.compare("char-ABCDEF-5x1+2+2");
@@ -403,7 +403,7 @@ TEST_CASE("inputbox-behavior", "") {
         t.sendChar("D");
         t.sendChar("E");
         t.sendChar("F");
-        t.sendKey(Qt::Key_Enter);
+        t.sendKey(Tui::Key_Enter);
         CHECK(inputbox->cursorPosition() == 6);
         CHECK(inputbox->text() == "ABCDEF");
         t.compare("char-ABCDEF-5x1+2+2");
@@ -416,9 +416,9 @@ TEST_CASE("inputbox-behavior", "") {
         t.sendChar("D");
         t.sendChar("E");
         t.sendChar("F");
-        t.sendKey(Qt::Key_Home);
-        t.sendKey(Qt::Key_Delete);
-        t.sendKey(Qt::Key_Delete);
+        t.sendKey(Tui::Key_Home);
+        t.sendKey(Tui::Key_Delete);
+        t.sendKey(Tui::Key_Delete);
         CHECK(inputbox->cursorPosition() == 0);
         CHECK(inputbox->text() == "CDEF");
         t.compare("char-ABCDEF-5x1+2+2");
@@ -431,8 +431,8 @@ TEST_CASE("inputbox-behavior", "") {
         t.sendChar("D");
         t.sendChar("E");
         t.sendChar("F");
-        t.sendKey(Qt::Key_Backspace);
-        t.sendKey(Qt::Key_Backspace);
+        t.sendKey(Tui::Key_Backspace);
+        t.sendKey(Tui::Key_Backspace);
         CHECK(inputbox->cursorPosition() == 4);
         CHECK(inputbox->text() == "ABCD");
         t.compare("char-ABCD-5x1+2+2");
@@ -440,30 +440,30 @@ TEST_CASE("inputbox-behavior", "") {
 
     SECTION("backspace-surrogate-pair") {
         inputbox->setText("😁hello world😁");
-        t.sendKey(Qt::Key_Backspace);
+        t.sendKey(Tui::Key_Backspace);
         CHECK(inputbox->text() == "😁hello world");
         t.compare("backspace-wide-char");
     }
 
     SECTION("delete-surrogate-pair") {
         inputbox->setText("😁hello world😁");
-        t.sendKey(Qt::Key_Left);
-        t.sendKey(Qt::Key_Delete);
+        t.sendKey(Tui::Key_Left);
+        t.sendKey(Tui::Key_Delete);
         CHECK(inputbox->text() == "😁hello world");
         t.compare("backspace-wide-char");
     }
 
     SECTION("backspace-wide-char") {
         inputbox->setText("あhello worldあ");
-        t.sendKey(Qt::Key_Backspace);
+        t.sendKey(Tui::Key_Backspace);
         CHECK(inputbox->text() == "あhello world");
         t.compare();
     }
 
     SECTION("delete-wide-char") {
         inputbox->setText("あhello worldあ");
-        t.sendKey(Qt::Key_Left);
-        t.sendKey(Qt::Key_Delete);
+        t.sendKey(Tui::Key_Left);
+        t.sendKey(Tui::Key_Delete);
         CHECK(inputbox->text() == "あhello world");
         t.compare("backspace-wide-char");
     }
@@ -497,9 +497,9 @@ TEST_CASE("inputbox-behavior", "") {
         inputbox->setText("bcdあ");
         inputbox->setCursorPosition(0);
         t.sendChar("A");
-        t.sendKey(Qt::Key_Right);
-        t.sendKey(Qt::Key_Right);
-        t.sendKey(Qt::Key_Right);
+        t.sendKey(Tui::Key_Right);
+        t.sendKey(Tui::Key_Right);
+        t.sendKey(Tui::Key_Right);
         t.compare();
         CHECK(t.terminal->grabCursorPosition() == inputbox->mapToTerminal({3, 0}));
     }
@@ -508,9 +508,9 @@ TEST_CASE("inputbox-behavior", "") {
         inputbox->setText("bcdあ");
         inputbox->setCursorPosition(0);
         t.sendChar("A");
-        t.sendKey(Qt::Key_Right);
-        t.sendKey(Qt::Key_Right);
-        t.sendKey(Qt::Key_Right);
+        t.sendKey(Tui::Key_Right);
+        t.sendKey(Tui::Key_Right);
+        t.sendKey(Tui::Key_Right);
         t.compare();
         CHECK(t.terminal->grabCursorPosition() == inputbox->mapToTerminal({3, 0}));
     }
@@ -626,7 +626,7 @@ TEST_CASE("inputbox-behavior", "") {
     }
 
     SECTION("tab-bubbles") {
-        FAIL_CHECK_VEC(t.checkKeyEventBubblesToParent(Qt::Key_Tab));
+        FAIL_CHECK_VEC(t.checkKeyEventBubblesToParent(Tui::Key_Tab));
     }
 
 }
@@ -815,21 +815,21 @@ TEST_CASE("inputbox-echomode", "") {
         t.sendChar("C");
         CHECK(inputbox->text() == "ABC");
         CHECK(inputbox->cursorPosition() == 3);
-        t.sendKey(Qt::Key_Left);
+        t.sendKey(Tui::Key_Left);
         CHECK(inputbox->cursorPosition() == 2);
-        t.sendKey(Qt::Key_Left);
+        t.sendKey(Tui::Key_Left);
         CHECK(inputbox->cursorPosition() == 1);
-        t.sendKey(Qt::Key_Right);
+        t.sendKey(Tui::Key_Right);
         CHECK(inputbox->cursorPosition() == 2);
-        t.sendKey(Qt::Key_Right);
+        t.sendKey(Tui::Key_Right);
         CHECK(inputbox->cursorPosition() == 3);
         inputbox->setCursorPosition(1);
         CHECK(inputbox->cursorPosition() == 1);
         inputbox->setCursorPosition(2);
-        t.sendKey(Qt::Key_Backspace);
+        t.sendKey(Tui::Key_Backspace);
         CHECK(inputbox->text() == "AC");
         CHECK(inputbox->cursorPosition() == 1);
-        t.sendKey(Qt::Key_Delete);
+        t.sendKey(Tui::Key_Delete);
         CHECK(inputbox->text() == "A");
         CHECK(inputbox->cursorPosition() == 1);
     }
@@ -855,18 +855,18 @@ TEST_CASE("inputbox-event", "") {
     CHECK(recorder.noMoreSignal());
     CHECK(inputbox->cursorPosition() == 18);
     inputbox->setCursorPosition(9);
-    t.sendKey(Qt::Key_Space);
+    t.sendKey(Tui::Key_Space);
     CHECK(recorder.consumeFirst(&Tui::ZInputBox::textChanged, QString("no change no change")));
     CHECK(recorder.noMoreSignal());
-    t.sendKey(Qt::Key_Enter);
-    t.sendKey(Qt::Key_Home);
-    t.sendKey(Qt::Key_End);
-    t.sendKey(Qt::Key_Insert);
-    t.sendKey(Qt::Key_Insert); // When we turn it on, we change the test behaviour. Therefore, we turn it off again.
-    t.sendKey(Qt::Key_Left);
-    t.sendKey(Qt::Key_Right);
-    t.sendKey(Qt::Key_Up);
-    t.sendKey(Qt::Key_Down);
+    t.sendKey(Tui::Key_Enter);
+    t.sendKey(Tui::Key_Home);
+    t.sendKey(Tui::Key_End);
+    t.sendKey(Tui::Key_Insert);
+    t.sendKey(Tui::Key_Insert); // When we turn it on, we change the test behaviour. Therefore, we turn it off again.
+    t.sendKey(Tui::Key_Left);
+    t.sendKey(Tui::Key_Right);
+    t.sendKey(Tui::Key_Up);
+    t.sendKey(Tui::Key_Down);
     CHECK(recorder.noMoreSignal());
 
     // \n is special internally, so test that explicitly too.
@@ -879,12 +879,12 @@ TEST_CASE("inputbox-event", "") {
     CHECK(recorder.consumeFirst(&Tui::ZInputBox::textChanged, QString("Some\ntext")));
     CHECK(recorder.noMoreSignal());
 
-    t.sendKey(Qt::Key_Backspace);
+    t.sendKey(Tui::Key_Backspace);
     CHECK(recorder.consumeFirst(&Tui::ZInputBox::textChanged, QString("Some\ntex")));
     CHECK(recorder.noMoreSignal());
 
     inputbox->setCursorPosition(0);
-    t.sendKey(Qt::Key_Delete);
+    t.sendKey(Tui::Key_Delete);
     CHECK(recorder.consumeFirst(&Tui::ZInputBox::textChanged, QString("ome\ntex")));
     CHECK(recorder.noMoreSignal());
 
@@ -924,7 +924,7 @@ TEST_CASE("inputbox-small1", "") {
 
     SECTION("ab-Backspace") {
         inputbox->setText("ab");
-        t.sendKey(Qt::Key_Backspace);
+        t.sendKey(Tui::Key_Backspace);
         t.compare("a");
         CHECK(t.terminal->grabCursorPosition() == QPoint{-1, -1});
     }
@@ -932,14 +932,14 @@ TEST_CASE("inputbox-small1", "") {
     SECTION("ab-Home") {
         inputbox->setText("ab");
         inputbox->setCursorPosition(2);
-        t.sendKey(Qt::Key_Home);
+        t.sendKey(Tui::Key_Home);
         t.compare("a");
         CHECK(t.terminal->grabCursorPosition() == inputbox->mapToTerminal({0, 0}));
     }
 
     SECTION("ab-Delete") {
         inputbox->setText("ab");
-        t.sendKey(Qt::Key_Delete);
+        t.sendKey(Tui::Key_Delete);
         t.compare("b");
         CHECK(t.terminal->grabCursorPosition() == QPoint{-1, -1});
     }
@@ -957,7 +957,7 @@ TEST_CASE("inputbox-small1", "") {
 
     SECTION("smiley-right") {
         inputbox->setText("😁");
-        t.sendKey(Qt::Key_Right);
+        t.sendKey(Tui::Key_Right);
         CHECK(inputbox->cursorPosition() == 2);
         t.compare("empty");
         CHECK(t.terminal->grabCursorPosition() == QPoint{-1, -1});
@@ -966,7 +966,7 @@ TEST_CASE("inputbox-small1", "") {
     SECTION("smiley-left") {
         inputbox->setText("😁");
         CHECK(inputbox->cursorPosition() == 2);
-        t.sendKey(Qt::Key_Left);
+        t.sendKey(Tui::Key_Left);
         CHECK(inputbox->cursorPosition() == 0);
         t.compare("empty");
         CHECK(t.terminal->grabCursorPosition() == inputbox->mapToTerminal({0, 0}));
@@ -974,7 +974,7 @@ TEST_CASE("inputbox-small1", "") {
 
     SECTION("smiley-Backspace") {
         inputbox->setText("😁");
-        t.sendKey(Qt::Key_Backspace);
+        t.sendKey(Tui::Key_Backspace);
         CHECK(inputbox->text() == "");
         CHECK(inputbox->cursorPosition() == 0);
         t.compare("clear");
@@ -983,8 +983,8 @@ TEST_CASE("inputbox-small1", "") {
 
     SECTION("smiley-Delete") {
         inputbox->setText("😁");
-        t.sendKey(Qt::Key_Home);
-        t.sendKey(Qt::Key_Delete);
+        t.sendKey(Tui::Key_Home);
+        t.sendKey(Tui::Key_Delete);
         CHECK(inputbox->cursorPosition() == 0);
         CHECK(inputbox->text() == "");
         t.compare("clear");
@@ -1028,7 +1028,7 @@ TEST_CASE("inputbox-small2", "") {
     SECTION("ab") {
         inputbox->setText("ab");
         CHECK(inputbox->cursorPosition() == 2);
-        t.sendKey(Qt::Key_Left);
+        t.sendKey(Tui::Key_Left);
         CHECK(inputbox->cursorPosition() == 1);
         t.compare();
         CHECK(t.terminal->grabCursorPosition() == inputbox->mapToTerminal({1, 0}));
@@ -1037,8 +1037,8 @@ TEST_CASE("inputbox-small2", "") {
     SECTION("ab2") {
         inputbox->setText("ab");
         CHECK(inputbox->cursorPosition() == 2);
-        t.sendKey(Qt::Key_Left);
-        t.sendKey(Qt::Key_Left);
+        t.sendKey(Tui::Key_Left);
+        t.sendKey(Tui::Key_Left);
         CHECK(inputbox->cursorPosition() == 0);
         t.compare("ab");
         CHECK(t.terminal->grabCursorPosition() == inputbox->mapToTerminal({0, 0}));
@@ -1046,7 +1046,7 @@ TEST_CASE("inputbox-small2", "") {
 
     SECTION("ab-Backspace") {
         inputbox->setText("ab");
-        t.sendKey(Qt::Key_Backspace);
+        t.sendKey(Tui::Key_Backspace);
         CHECK(inputbox->cursorPosition() == 1);
         t.compare("a-clear");
         CHECK(t.terminal->grabCursorPosition() == inputbox->mapToTerminal({1, 0}));
@@ -1054,8 +1054,8 @@ TEST_CASE("inputbox-small2", "") {
 
     SECTION("ab-Delete") {
         inputbox->setText("ab");
-        t.sendKey(Qt::Key_Home);
-        t.sendKey(Qt::Key_Delete);
+        t.sendKey(Tui::Key_Home);
+        t.sendKey(Tui::Key_Delete);
         CHECK(inputbox->cursorPosition() == 0);
         t.compare("b");
         CHECK(t.terminal->grabCursorPosition() == inputbox->mapToTerminal({0, 0}));
@@ -1077,7 +1077,7 @@ TEST_CASE("inputbox-small2", "") {
 
     SECTION("asmiley-left") {
         inputbox->setText("a😁");
-        t.sendKey(Qt::Key_Left);
+        t.sendKey(Tui::Key_Left);
         CHECK(inputbox->cursorPosition() == 1);
         t.compare("a-empty");
         CHECK(t.terminal->grabCursorPosition() == inputbox->mapToTerminal({1, 0}));
@@ -1085,8 +1085,8 @@ TEST_CASE("inputbox-small2", "") {
 
     SECTION("asmiley-left-Backspace") {
         inputbox->setText("a😁");
-        t.sendKey(Qt::Key_Left);
-        t.sendKey(Qt::Key_Backspace);
+        t.sendKey(Tui::Key_Left);
+        t.sendKey(Tui::Key_Backspace);
         CHECK(inputbox->cursorPosition() == 0);
         t.compare("smiley");
         CHECK(t.terminal->grabCursorPosition() == inputbox->mapToTerminal({0, 0}));
@@ -1094,7 +1094,7 @@ TEST_CASE("inputbox-small2", "") {
 
     SECTION("asmiley-home") {
         inputbox->setText("a😁");
-        t.sendKey(Qt::Key_Home);
+        t.sendKey(Tui::Key_Home);
         CHECK(inputbox->cursorPosition() == 0);
         t.compare("a-empty");
         CHECK(t.terminal->grabCursorPosition() == inputbox->mapToTerminal({0, 0}));
@@ -1102,8 +1102,8 @@ TEST_CASE("inputbox-small2", "") {
 
     SECTION("asmiley-delete") {
         inputbox->setText("a😁");
-        t.sendKey(Qt::Key_Home);
-        t.sendKey(Qt::Key_Delete);
+        t.sendKey(Tui::Key_Home);
+        t.sendKey(Tui::Key_Delete);
         CHECK(inputbox->cursorPosition() == 0);
         t.compare("smiley");
         CHECK(t.terminal->grabCursorPosition() == inputbox->mapToTerminal({0, 0}));
@@ -1118,7 +1118,7 @@ TEST_CASE("inputbox-small2", "") {
 
     SECTION("asmileya-left") {
         inputbox->setText("a😁a");
-        t.sendKey(Qt::Key_Left);
+        t.sendKey(Tui::Key_Left);
         CHECK(inputbox->cursorPosition() == 3);
         t.compare("smiley");
         CHECK(t.terminal->grabCursorPosition() == QPoint{-1, -1});
@@ -1126,8 +1126,8 @@ TEST_CASE("inputbox-small2", "") {
 
     SECTION("asmileya-left2") {
         inputbox->setText("a😁a");
-        t.sendKey(Qt::Key_Left);
-        t.sendKey(Qt::Key_Left);
+        t.sendKey(Tui::Key_Left);
+        t.sendKey(Tui::Key_Left);
         CHECK(inputbox->cursorPosition() == 1);
         t.compare("a-empty");
         CHECK(t.terminal->grabCursorPosition() == inputbox->mapToTerminal({1, 0}));
@@ -1164,7 +1164,7 @@ TEST_CASE("inputbox-small3", "") {
 
     SECTION("smiley-left") {
         inputbox->setText("😁😇");
-        t.sendKey(Qt::Key_Left);
+        t.sendKey(Tui::Key_Left);
         CHECK(inputbox->cursorPosition() == 2);
         t.compare("smiley-empty");
         CHECK(t.terminal->grabCursorPosition() == inputbox->mapToTerminal({2, 0}));
@@ -1172,8 +1172,8 @@ TEST_CASE("inputbox-small3", "") {
 
     SECTION("smiley-left2") {
         inputbox->setText("😁😇");
-        t.sendKey(Qt::Key_Left);
-        t.sendKey(Qt::Key_Left);
+        t.sendKey(Tui::Key_Left);
+        t.sendKey(Tui::Key_Left);
         CHECK(inputbox->cursorPosition() == 0);
         t.compare("smiley-empty");
         CHECK(t.terminal->grabCursorPosition() == inputbox->mapToTerminal({0, 0}));
@@ -1181,7 +1181,7 @@ TEST_CASE("inputbox-small3", "") {
 
     SECTION("smiley-left-a") {
         inputbox->setText("😇😁");
-        t.sendKey(Qt::Key_Left);
+        t.sendKey(Tui::Key_Left);
         CHECK(inputbox->cursorPosition() == 2);
         t.sendChar("a");
         CHECK(inputbox->cursorPosition() == 3);
@@ -1191,7 +1191,7 @@ TEST_CASE("inputbox-small3", "") {
 
     SECTION("smiley-left-ba") {
         inputbox->setText("😇😁");
-        t.sendKey(Qt::Key_Left);
+        t.sendKey(Tui::Key_Left);
         t.sendChar("b");
         t.sendChar("a");
         CHECK(inputbox->cursorPosition() == 4);
@@ -1202,10 +1202,10 @@ TEST_CASE("inputbox-small3", "") {
     SECTION("cde-left") {
         inputbox->setText("abcdefg");
         CHECK(inputbox->cursorPosition() == 7);
-        t.sendKey(Qt::Key_Left);
-        t.sendKey(Qt::Key_Left);
-        t.sendKey(Qt::Key_Left);
-        t.sendKey(Qt::Key_Left);
+        t.sendKey(Tui::Key_Left);
+        t.sendKey(Tui::Key_Left);
+        t.sendKey(Tui::Key_Left);
+        t.sendKey(Tui::Key_Left);
         CHECK(inputbox->cursorPosition() == 3);
         t.compare("cde");
         CHECK(t.terminal->grabCursorPosition() == inputbox->mapToTerminal({1, 0}));
@@ -1213,11 +1213,11 @@ TEST_CASE("inputbox-small3", "") {
 
     SECTION("cde-right") {
         inputbox->setText("abcdefg");
-        t.sendKey(Qt::Key_Home);
-        t.sendKey(Qt::Key_Right);
-        t.sendKey(Qt::Key_Right);
-        t.sendKey(Qt::Key_Right);
-        t.sendKey(Qt::Key_Right);
+        t.sendKey(Tui::Key_Home);
+        t.sendKey(Tui::Key_Right);
+        t.sendKey(Tui::Key_Right);
+        t.sendKey(Tui::Key_Right);
+        t.sendKey(Tui::Key_Right);
         CHECK(inputbox->cursorPosition() == 4);
         t.compare("cde");
         CHECK(t.terminal->grabCursorPosition() == inputbox->mapToTerminal({2, 0}));
@@ -1243,9 +1243,9 @@ TEST_CASE("insert-mode", "") {
     SECTION("ABcdefg") {
         inputbox->setText("abcdefg");
         CHECK(inputbox->overwriteMode() == false);
-        t.sendKey(Qt::Key_Insert);
+        t.sendKey(Tui::Key_Insert);
         CHECK(inputbox->overwriteMode() == true);
-        t.sendKey(Qt::Key_Home);
+        t.sendKey(Tui::Key_Home);
         t.sendChar("A");
         t.sendChar("B");
         CHECK(inputbox->text() == "ABcdefg");
@@ -1254,10 +1254,10 @@ TEST_CASE("insert-mode", "") {
     SECTION("insert-over-abcdeFGhi") {
         inputbox->setText("abcdefg");
         CHECK(inputbox->overwriteMode() == false);
-        t.sendKey(Qt::Key_Insert);
+        t.sendKey(Tui::Key_Insert);
         CHECK(inputbox->overwriteMode() == true);
-        t.sendKey(Qt::Key_Left);
-        t.sendKey(Qt::Key_Left);
+        t.sendKey(Tui::Key_Left);
+        t.sendKey(Tui::Key_Left);
         t.sendChar("F");
         t.sendChar("G");
         t.sendChar("h");
@@ -1268,10 +1268,10 @@ TEST_CASE("insert-mode", "") {
     SECTION("paste-over-abcdeFGhi-paste") {
         inputbox->setText("abcdefg");
         CHECK(inputbox->overwriteMode() == false);
-        t.sendKey(Qt::Key_Insert);
+        t.sendKey(Tui::Key_Insert);
         CHECK(inputbox->overwriteMode() == true);
-        t.sendKey(Qt::Key_Left);
-        t.sendKey(Qt::Key_Left);
+        t.sendKey(Tui::Key_Left);
+        t.sendKey(Tui::Key_Left);
         t.sendPaste("FGhi");
         CHECK(inputbox->text() == "abcdeFGhifg");
     }
@@ -1280,10 +1280,10 @@ TEST_CASE("insert-mode", "") {
         inputbox->setText("123");
         CHECK(inputbox->overwriteMode() == false);
         CHECK(inputbox->cursorStyle() == Tui::CursorStyle::Bar);
-        t.sendKey(Qt::Key_Insert);
+        t.sendKey(Tui::Key_Insert);
         CHECK(inputbox->cursorStyle() == Tui::CursorStyle::Block);
         CHECK(inputbox->overwriteMode() == true);
-        t.sendKey(Qt::Key_Home);
+        t.sendKey(Tui::Key_Home);
         CHECK(inputbox->cursorPosition() == 0);
         t.sendChar("A");
         inputbox->setOverwriteMode(false);
@@ -1295,17 +1295,17 @@ TEST_CASE("insert-mode", "") {
         CHECK(inputbox->cursorPosition() == 2);
         CHECK(inputbox->text() == "Ab23");
         t.sendChar("C");
-        t.sendKey(Qt::Key_Insert);
+        t.sendKey(Tui::Key_Insert);
         CHECK(inputbox->cursorPosition() == 3);
         t.sendChar("d");
-        t.sendKey(Qt::Key_Insert);
+        t.sendKey(Tui::Key_Insert);
         CHECK(inputbox->cursorPosition() == 4);
         CHECK(inputbox->text() == "AbCd3");
         t.sendChar("E");
-        t.sendKey(Qt::Key_Insert);
+        t.sendKey(Tui::Key_Insert);
         CHECK(inputbox->cursorPosition() == 5);
         t.sendChar("f");
-        t.sendKey(Qt::Key_Insert);
+        t.sendKey(Tui::Key_Insert);
         CHECK(inputbox->cursorPosition() == 6);
         t.sendChar("G");
         CHECK(inputbox->cursorPosition() == 7);
@@ -1315,14 +1315,14 @@ TEST_CASE("insert-mode", "") {
     SECTION("backspace-abCDg") {
         inputbox->setText("abcdefg");
         CHECK(inputbox->overwriteMode() == false);
-        t.sendKey(Qt::Key_Insert);
+        t.sendKey(Tui::Key_Insert);
         CHECK(inputbox->overwriteMode() == true);
-        t.sendKey(Qt::Key_Left);
-        t.sendKey(Qt::Key_Left);
-        t.sendKey(Qt::Key_Left);
+        t.sendKey(Tui::Key_Left);
+        t.sendKey(Tui::Key_Left);
+        t.sendKey(Tui::Key_Left);
         CHECK(inputbox->text().size() == 7);
-        t.sendKey(Qt::Key_Backspace);
-        t.sendKey(Qt::Key_Backspace);
+        t.sendKey(Tui::Key_Backspace);
+        t.sendKey(Tui::Key_Backspace);
         CHECK(inputbox->text().size() == 5);
         t.sendChar("C");
         t.sendChar("D");
@@ -1333,9 +1333,9 @@ TEST_CASE("insert-mode", "") {
     SECTION("surrogate-pairs-replace-ABCz") {
         inputbox->setText("😁😇😂z");
         CHECK(inputbox->overwriteMode() == false);
-        t.sendKey(Qt::Key_Insert);
+        t.sendKey(Tui::Key_Insert);
         CHECK(inputbox->overwriteMode() == true);
-        t.sendKey(Qt::Key_Home);
+        t.sendKey(Tui::Key_Home);
         t.sendChar("A");
         t.sendChar("B");
         t.sendChar("C");
@@ -1344,18 +1344,18 @@ TEST_CASE("insert-mode", "") {
     SECTION("surrogate-pairs-paste-inserts-ABC") {
         inputbox->setText("😁😁😁");
         CHECK(inputbox->overwriteMode() == false);
-        t.sendKey(Qt::Key_Insert);
+        t.sendKey(Tui::Key_Insert);
         CHECK(inputbox->overwriteMode() == true);
-        t.sendKey(Qt::Key_Home);
+        t.sendKey(Tui::Key_Home);
         t.sendPaste("ABC");
         CHECK(inputbox->text() == "ABC😁😁😁");
     }
     SECTION("surrogate-pairs-replace-clusters") {
         inputbox->setText("ABCD");
         CHECK(inputbox->overwriteMode() == false);
-        t.sendKey(Qt::Key_Insert);
+        t.sendKey(Tui::Key_Insert);
         CHECK(inputbox->overwriteMode() == true);
-        t.sendKey(Qt::Key_Home);
+        t.sendKey(Tui::Key_Home);
         t.sendChar("😁");
         t.sendChar("😁");
         t.sendChar("😁");
@@ -1364,19 +1364,19 @@ TEST_CASE("insert-mode", "") {
     SECTION("surrogate-pairs-replace-clusters") {
         inputbox->setText("ABCD");
         CHECK(inputbox->overwriteMode() == false);
-        t.sendKey(Qt::Key_Insert);
+        t.sendKey(Tui::Key_Insert);
         CHECK(inputbox->overwriteMode() == true);
-        t.sendKey(Qt::Key_Home);
+        t.sendKey(Tui::Key_Home);
         t.sendPaste("😁😁😁");
         CHECK(inputbox->text() == "😁😁😁ABCD");
     }
     SECTION("CursorStyle") {
         CHECK(w->cursorStyle() == Tui::CursorStyle::Unset);
         CHECK(inputbox->cursorStyle() == Tui::CursorStyle::Bar);
-        t.sendKey(Qt::Key_Insert);
+        t.sendKey(Tui::Key_Insert);
         CHECK(w->cursorStyle() == Tui::CursorStyle::Unset);
         CHECK(inputbox->cursorStyle() == Tui::CursorStyle::Block);
-        t.sendKey(Qt::Key_Insert);
+        t.sendKey(Tui::Key_Insert);
         CHECK(w->cursorStyle() == Tui::CursorStyle::Unset);
         CHECK(inputbox->cursorStyle() == Tui::CursorStyle::Bar);
 
@@ -1391,9 +1391,9 @@ TEST_CASE("insert-mode", "") {
     SECTION("insertAtCursorPosition") {
         inputbox->setText("abcdefg");
         CHECK(inputbox->overwriteMode() == false);
-        t.sendKey(Qt::Key_Insert);
+        t.sendKey(Tui::Key_Insert);
         CHECK(inputbox->overwriteMode() == true);
-        t.sendKey(Qt::Key_Home);
+        t.sendKey(Tui::Key_Home);
         inputbox->insertAtCursorPosition("AB");
         CHECK(inputbox->text() == "ABabcdefg");
     }

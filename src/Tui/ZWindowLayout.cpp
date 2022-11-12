@@ -32,19 +32,19 @@ void ZWindowLayout::setCentral(ZLayoutItem *li) {
     p->m_centralItem.reset(li);
 }
 
-void ZWindowLayout::setRightBorderWidget(ZWidget *w, Qt::Alignment align) {
+void ZWindowLayout::setRightBorderWidget(ZWidget *w, Tui::Alignment align) {
     auto *const p = tuiwidgets_impl();
     p->m_rightBorder = ZLayoutItem::wrapWidget(w);
     p->m_rightBorderAlign = align;
 }
 
-void ZWindowLayout::setBottomBorderWidget(ZWidget *w, Qt::Alignment align) {
+void ZWindowLayout::setBottomBorderWidget(ZWidget *w, Tui::Alignment align) {
     auto *const p = tuiwidgets_impl();
     p->m_bottomBorder = ZLayoutItem::wrapWidget(w);
     p->m_bottomBorderAlign = align;
 }
 
-void ZWindowLayout::setTopBorderWidget(ZWidget *w, Qt::Alignment align) {
+void ZWindowLayout::setTopBorderWidget(ZWidget *w, Tui::Alignment align) {
     auto *const p = tuiwidgets_impl();
     p->m_topBorder = ZLayoutItem::wrapWidget(w);
     p->m_topBorderAlign = align;
@@ -97,22 +97,22 @@ QSize ZWindowLayout::sizeHint() const {
 
     ZWindow* w = qobject_cast<ZWindow*>(widget());
 
-    const bool closeBtn = w && w->borderEdges() & Qt::TopEdge && w->options() & ZWindow::CloseButton;
+    const bool closeBtn = w && w->borderEdges() & Tui::TopEdge && w->options() & ZWindow::CloseButton;
 
     int tbBorder = 0;
     int rlBorder = 0;
 
     if (w) {
-        if (w->borderEdges() & Qt::TopEdge) {
+        if (w->borderEdges() & Tui::TopEdge) {
             tbBorder += 1;
         }
-        if (w->borderEdges() & Qt::RightEdge) {
+        if (w->borderEdges() & Tui::RightEdge) {
             rlBorder += 1;
         }
-        if (w->borderEdges() & Qt::BottomEdge) {
+        if (w->borderEdges() & Tui::BottomEdge) {
             tbBorder += 1;
         }
-        if (w->borderEdges() & Qt::LeftEdge) {
+        if (w->borderEdges() & Tui::LeftEdge) {
             rlBorder += 1;
         }
     }

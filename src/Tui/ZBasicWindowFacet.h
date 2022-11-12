@@ -23,7 +23,7 @@ public:
     bool isManuallyPlaced() const override;
     void autoPlace(const QSize &available, ZWidget *self) override;
 
-    void setDefaultPlacement(Qt::Alignment align, QPoint displace);
+    void setDefaultPlacement(Tui::Alignment align, QPoint displace);
     void setExtendViewport(bool extend);
 
 public:

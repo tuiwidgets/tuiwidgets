@@ -82,7 +82,7 @@ TEST_CASE("button-base") {
         CHECK(button->markup() == "");
         CHECK(button->sizePolicyH() == Tui::SizePolicy::Minimum);
         CHECK(button->sizePolicyV() == Tui::SizePolicy::Fixed);
-        CHECK(button->focusPolicy() == Qt::StrongFocus);
+        CHECK(button->focusPolicy() == Tui::StrongFocus);
         FAIL_CHECK_VEC(checkWidgetsDefaultsExcept(button.get(), DefaultException::SizePolicyV
                                                            | DefaultException::SizePolicyH
                                                            | DefaultException::FocusPolicy));
@@ -94,7 +94,7 @@ TEST_CASE("button-base") {
         CHECK(button->markup() == "");
         CHECK(button->sizePolicyH() == Tui::SizePolicy::Minimum);
         CHECK(button->sizePolicyV() == Tui::SizePolicy::Fixed);
-        CHECK(button->focusPolicy() == Qt::StrongFocus);
+        CHECK(button->focusPolicy() == Tui::StrongFocus);
         FAIL_CHECK_VEC(checkWidgetsDefaultsExcept(button.get(), DefaultException::SizePolicyV
                                                            | DefaultException::SizePolicyH
                                                            | DefaultException::FocusPolicy));
@@ -106,7 +106,7 @@ TEST_CASE("button-base") {
         CHECK(button->markup() == "<m>m</m>");
         CHECK(button->sizePolicyH() == Tui::SizePolicy::Minimum);
         CHECK(button->sizePolicyV() == Tui::SizePolicy::Fixed);
-        CHECK(button->focusPolicy() == Qt::StrongFocus);
+        CHECK(button->focusPolicy() == Tui::StrongFocus);
         FAIL_CHECK_VEC(checkWidgetsDefaultsExcept(button.get(), DefaultException::SizePolicyV
                                                            | DefaultException::SizePolicyH
                                                            | DefaultException::FocusPolicy));
@@ -194,7 +194,7 @@ TEST_CASE("button-display", "") {
     Testhelper t("button", "button-display", 15, 5);
 
     TestBackgroundWithDlgManager *w = new TestBackgroundWithDlgManager(t.root);
-    w->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
+    w->setFocusPolicy(Tui::FocusPolicy::StrongFocus);
     w->hasDefaultManager = false;
 
     QString windowType = GENERATE(as<QString>(), "", "dialog", "cyan");
@@ -480,44 +480,44 @@ TEST_CASE("button-behavior", "") {
         button->setFocus();
         SECTION("enter") {
             triggerState = ClickedExpected;
-            t.sendKey(Qt::Key_Enter);
+            t.sendKey(Tui::Key_Enter);
             CHECK(triggerState == ClickedDone);
             CHECK(t.terminal->focusWidget() == button);
         }
 
         SECTION("enter-with-modifier") {
-            FAIL_CHECK_VEC(t.checkKeyEventBubbles(Qt::Key_Enter, Qt::KeyboardModifier::AltModifier));
-            FAIL_CHECK_VEC(t.checkKeyEventBubbles(Qt::Key_Enter, Qt::KeyboardModifier::ShiftModifier));
-            FAIL_CHECK_VEC(t.checkKeyEventBubbles(Qt::Key_Enter, Qt::KeyboardModifier::ControlModifier));
+            FAIL_CHECK_VEC(t.checkKeyEventBubbles(Tui::Key_Enter, Tui::KeyboardModifier::AltModifier));
+            FAIL_CHECK_VEC(t.checkKeyEventBubbles(Tui::Key_Enter, Tui::KeyboardModifier::ShiftModifier));
+            FAIL_CHECK_VEC(t.checkKeyEventBubbles(Tui::Key_Enter, Tui::KeyboardModifier::ControlModifier));
         }
 
         SECTION("enter-on-disabled") {
             button->setEnabled(false);
-            t.sendKeyToWidget(button, Qt::Key_Enter);
-            t.sendKeyToWidget(button, Qt::Key_Enter, Qt::KeyboardModifier::AltModifier);
-            t.sendKeyToWidget(button, Qt::Key_Enter, Qt::KeyboardModifier::ShiftModifier);
-            t.sendKeyToWidget(button, Qt::Key_Enter, Qt::KeyboardModifier::ControlModifier);
+            t.sendKeyToWidget(button, Tui::Key_Enter);
+            t.sendKeyToWidget(button, Tui::Key_Enter, Tui::KeyboardModifier::AltModifier);
+            t.sendKeyToWidget(button, Tui::Key_Enter, Tui::KeyboardModifier::ShiftModifier);
+            t.sendKeyToWidget(button, Tui::Key_Enter, Tui::KeyboardModifier::ControlModifier);
         }
 
         SECTION("space") {
             triggerState = ClickedExpected;
-            t.sendKey(Qt::Key_Space);
+            t.sendKey(Tui::Key_Space);
             CHECK(triggerState == ClickedDone);
             CHECK(t.terminal->focusWidget() == button);
         }
 
         SECTION("space-with-modifier") {
-            FAIL_CHECK_VEC(t.checkKeyEventBubbles(Qt::Key_Space, Qt::KeyboardModifier::AltModifier));
-            FAIL_CHECK_VEC(t.checkKeyEventBubbles(Qt::Key_Space, Qt::KeyboardModifier::ShiftModifier));
-            FAIL_CHECK_VEC(t.checkKeyEventBubbles(Qt::Key_Space, Qt::KeyboardModifier::ControlModifier));
+            FAIL_CHECK_VEC(t.checkKeyEventBubbles(Tui::Key_Space, Tui::KeyboardModifier::AltModifier));
+            FAIL_CHECK_VEC(t.checkKeyEventBubbles(Tui::Key_Space, Tui::KeyboardModifier::ShiftModifier));
+            FAIL_CHECK_VEC(t.checkKeyEventBubbles(Tui::Key_Space, Tui::KeyboardModifier::ControlModifier));
         }
 
         SECTION("space-on-disabled") {
             button->setEnabled(false);
-            t.sendKeyToWidget(button, Qt::Key_Space);
-            t.sendKeyToWidget(button, Qt::Key_Space, Qt::KeyboardModifier::AltModifier);
-            t.sendKeyToWidget(button, Qt::Key_Space, Qt::KeyboardModifier::ShiftModifier);
-            t.sendKeyToWidget(button, Qt::Key_Space, Qt::KeyboardModifier::ControlModifier);
+            t.sendKeyToWidget(button, Tui::Key_Space);
+            t.sendKeyToWidget(button, Tui::Key_Space, Tui::KeyboardModifier::AltModifier);
+            t.sendKeyToWidget(button, Tui::Key_Space, Tui::KeyboardModifier::ShiftModifier);
+            t.sendKeyToWidget(button, Tui::Key_Space, Tui::KeyboardModifier::ControlModifier);
         }
     }
 
@@ -526,7 +526,7 @@ TEST_CASE("button-behavior", "") {
         SECTION("mnemonic-via-markup") {
             button->setMarkup("<m>O</m>K");
             triggerState = ClickedExpected;
-            t.sendChar("o", Qt::AltModifier);
+            t.sendChar("o", Tui::AltModifier);
             CHECK(triggerState == ClickedDone);
             CHECK(t.terminal->focusWidget() == button);
         }
@@ -534,7 +534,7 @@ TEST_CASE("button-behavior", "") {
         SECTION("mnemonic-via-markup-and-captial-letter") {
             button->setMarkup("<m>O</m>K");
             triggerState = ClickedExpected;
-            t.sendChar("O", Qt::AltModifier);
+            t.sendChar("O", Tui::AltModifier);
             CHECK(triggerState == ClickedDone);
             CHECK(t.terminal->focusWidget() == button);
         }
@@ -542,7 +542,7 @@ TEST_CASE("button-behavior", "") {
         SECTION("mnemonic-via-setShortcut") {
             button->setShortcut(Tui::ZKeySequence::forMnemonic("o"));
             triggerState = ClickedExpected;
-            t.sendChar("o", Qt::AltModifier);
+            t.sendChar("o", Tui::AltModifier);
             CHECK(triggerState == ClickedDone);
             CHECK(t.terminal->focusWidget() == button);
         }
@@ -550,7 +550,7 @@ TEST_CASE("button-behavior", "") {
         SECTION("mnemonic-via-setShortcut-with-focus-and-captial-letter") {
             button->setShortcut(Tui::ZKeySequence::forMnemonic("o"));
             triggerState = ClickedExpected;
-            t.sendChar("O", Qt::AltModifier);
+            t.sendChar("O", Tui::AltModifier);
             CHECK(triggerState == ClickedDone);
             CHECK(t.terminal->focusWidget() == button);
         }
@@ -558,13 +558,13 @@ TEST_CASE("button-behavior", "") {
         SECTION("mnemonic-via-markup-reset-via-text") {
             button->setMarkup("<m>O</m>K");
             button->setText("OK");
-            FAIL_CHECK_VEC(t.checkCharEventBubbles("o", Qt::AltModifier));
+            FAIL_CHECK_VEC(t.checkCharEventBubbles("o", Tui::AltModifier));
         }
 
         SECTION("mnemonic-via-markup-reset-via-markup") {
             button->setMarkup("<m>O</m>K");
             button->setMarkup("OK");
-            FAIL_CHECK_VEC(t.checkCharEventBubbles("o", Qt::AltModifier));
+            FAIL_CHECK_VEC(t.checkCharEventBubbles("o", Tui::AltModifier));
         }
 
     }

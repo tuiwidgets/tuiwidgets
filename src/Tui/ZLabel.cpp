@@ -55,7 +55,7 @@ void ZLabel::setMarkup(const QString &markup) {
         connect(s, &ZShortcut::activated, this, [this] {
             auto *p = tuiwidgets_impl();
             if (p->buddy) {
-                p->buddy->setFocus(Qt::ShortcutFocusReason);
+                p->buddy->setFocus(Tui::ShortcutFocusReason);
             }
         });
         s->setEnabledDelegate([this] {

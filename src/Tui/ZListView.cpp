@@ -16,7 +16,7 @@ ZListViewPrivate::~ZListViewPrivate() {
 }
 
 ZListView::ZListView(ZWidget *parent) : ZWidget(parent, std::make_unique<ZListViewPrivate>(this)) {
-    setFocusPolicy(Qt::StrongFocus);
+    setFocusPolicy(Tui::StrongFocus);
     setSizePolicyV(SizePolicy::Expanding);
     setSizePolicyH(SizePolicy::Expanding);
 
@@ -306,27 +306,27 @@ void ZListView::keyEvent(ZKeyEvent *event) {
 
     const QModelIndex current = currentIndex();
 
-    if (event->key() == Qt::Key_Up) {
+    if (event->key() == Tui::Key_Up) {
         if (current.row() > 0) {
             setCurrentIndex(current.sibling(current.row() - 1, 0));
         }
         update();
-    } else if (event->key() == Qt::Key_Down) {
+    } else if (event->key() == Tui::Key_Down) {
         if (current.row() < size - 1) {
             setCurrentIndex(current.sibling(current.row() + 1, 0));
         }
         update();
-    } else if (event->key() == Qt::Key_Home) {
+    } else if (event->key() == Tui::Key_Home) {
         setCurrentIndex(p->model->index(0, 0));
         p->scrollPosition = 0;
         update();
-    } else if (event->key() == Qt::Key_End) {
+    } else if (event->key() == Tui::Key_End) {
         setCurrentIndex(p->model->index(size - 1, 0));
         if (size > geometry().height()) {
             p->scrollPosition = size - geometry().height();
         }
         update();
-    } else if (event->key() == Qt::Key_PageUp) {
+    } else if (event->key() == Tui::Key_PageUp) {
         if (p->scrollPosition >= geometry().height()) {
             int sp = p->scrollPosition - geometry().height();
             setCurrentIndex(p->model->index(sp + geometry().height() - 1, 0));
@@ -336,7 +336,7 @@ void ZListView::keyEvent(ZKeyEvent *event) {
             p->scrollPosition = 0;
         }
         update();
-    } else if (event->key() == Qt::Key_PageDown) {
+    } else if (event->key() == Tui::Key_PageDown) {
         if (p->scrollPosition + 2 * geometry().height() < size) {
             int row = p->scrollPosition + geometry().height();
             setCurrentIndex(p->model->index(row, 0));
@@ -350,7 +350,7 @@ void ZListView::keyEvent(ZKeyEvent *event) {
             }
         }
         update();
-    } else if (event->key() == Qt::Key_Enter) {
+    } else if (event->key() == Tui::Key_Enter) {
         enterPressed(current.row());
     } else if (!event->text().isEmpty() && event->modifiers() == 0) {
         int laterMatch = -1, match = -1;

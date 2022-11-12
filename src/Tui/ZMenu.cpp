@@ -157,15 +157,15 @@ void ZMenu::paintEvent(ZPaintEvent *event) {
 
 void ZMenu::keyEvent(ZKeyEvent *event) {
     auto *const p = tuiwidgets_impl();
-    if (event->key() == Qt::Key_Left && event->modifiers() == 0) {
+    if (event->key() == Tui::Key_Left && event->modifiers() == 0) {
         if (p->parentMenu) {
             p->parentMenu->left();
         }
-    } else if (event->key() == Qt::Key_Right && event->modifiers() == 0) {
+    } else if (event->key() == Tui::Key_Right && event->modifiers() == 0) {
         if (p->parentMenu) {
             p->parentMenu->right();
         }
-    } else if (event->key() == Qt::Key_Up && event->modifiers() == 0) {
+    } else if (event->key() == Tui::Key_Up && event->modifiers() == 0) {
         int newSelected = p->selected;
         for (int i = 0; i < p->items.size(); i++) { // loop at most once through all elements
             if (newSelected > 0) {
@@ -179,7 +179,7 @@ void ZMenu::keyEvent(ZKeyEvent *event) {
             }
         }
         update();
-    } else if (event->key() == Qt::Key_Down && event->modifiers() == 0) {
+    } else if (event->key() == Tui::Key_Down && event->modifiers() == 0) {
         int newSelected = p->selected;
         for (int i = 0; i < p->items.size(); i++) { // loop at most once through all elements
             if (newSelected < p->items.size() - 1) {
@@ -193,7 +193,7 @@ void ZMenu::keyEvent(ZKeyEvent *event) {
             }
         }
         update();
-    } else if (event->key() == Qt::Key_Enter && event->modifiers() == 0) {
+    } else if (event->key() == Tui::Key_Enter && event->modifiers() == 0) {
         ZCommandManager *const cmdMgr = parentWidget()->ensureCommandManager();
         const auto& item = qAsConst(p->items)[p->selected];
         bool isEnabled = item.command() && cmdMgr->isCommandEnabled(item.command());
@@ -207,7 +207,7 @@ void ZMenu::keyEvent(ZKeyEvent *event) {
             }
             cmdMgr->activateCommand(item.command());
         }
-    } else if ((event->key() == Qt::Key_Escape || event->key() == Qt::Key_F10) && event->modifiers() == 0) {
+    } else if ((event->key() == Tui::Key_Escape || event->key() == Tui::Key_F10) && event->modifiers() == 0) {
         if (p->parentMenu) {
             p->parentMenu->close();
         } else {
@@ -215,7 +215,7 @@ void ZMenu::keyEvent(ZKeyEvent *event) {
             setVisible(false);
             Q_EMIT aboutToHide();
         }
-    } else if (event->modifiers() == Qt::AltModifier && event->text().size()) {
+    } else if (event->modifiers() == Tui::AltModifier && event->text().size()) {
         // actualy this should be the toplevel menu bar
         if (p->parentMenu) {
             p->parentMenu->keyActivate(event);

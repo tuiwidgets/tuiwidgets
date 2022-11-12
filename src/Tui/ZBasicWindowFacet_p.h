@@ -19,7 +19,7 @@ public:
 
 public:
     bool extendViewport = false;
-    Qt::Alignment alignment = Qt::AlignVCenter | Qt::AlignHCenter;
+    Tui::Alignment alignment = Tui::AlignVCenter | Tui::AlignHCenter;
     QPoint displacement = {0, 0};
 };
 

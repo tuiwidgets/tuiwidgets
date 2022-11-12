@@ -86,7 +86,7 @@ TEST_CASE("window-base", "") {
 
     auto checkDefaultState = [] (Tui::ZWindow *w) {
         CHECK(w->options() == Tui::ZWindow::Options{});
-        CHECK(w->borderEdges() == (Qt::TopEdge | Qt::RightEdge | Qt::BottomEdge | Qt::LeftEdge));
+        CHECK(w->borderEdges() == (Tui::TopEdge | Tui::RightEdge | Tui::BottomEdge | Tui::LeftEdge));
         CHECK(w->focusMode() == Tui::FocusContainerMode::Cycle);
         CHECK(w->paletteClass() == QStringList{"window"});
         CHECK(w->sizePolicyH() == Tui::SizePolicy::Expanding);
@@ -127,13 +127,13 @@ TEST_CASE("window-base", "") {
 
     SECTION("get-set-borderEdges") {
         w.setBorderEdges({});
-        CHECK(w.borderEdges() == Qt::Edges{});
-        w.setBorderEdges(Qt::Edge::TopEdge);
-        CHECK(w.borderEdges() == Qt::Edge::TopEdge);
+        CHECK(w.borderEdges() == Tui::Edges{});
+        w.setBorderEdges(Tui::Edge::TopEdge);
+        CHECK(w.borderEdges() == Tui::Edge::TopEdge);
     }
 
     SECTION("setDefaultPlacement") {
-        w.setDefaultPlacement(Qt::AlignCenter);
+        w.setDefaultPlacement(Tui::AlignCenter);
         auto windowFacet = static_cast<Tui::ZWindowFacet*>(w.facet(Tui::ZWindowFacet::staticMetaObject));
         CHECK(windowFacet->isManuallyPlaced() == false);
     }
@@ -605,7 +605,7 @@ TEST_CASE("window-systemmenu", "") {
         w.setFocus();
         w.setGeometry({2, 0, 23, 10});
 
-        FAIL_CHECK_VEC(t.checkCharEventBubbles("-", Qt::AltModifier));
+        FAIL_CHECK_VEC(t.checkCharEventBubbles("-", Tui::AltModifier));
         t.compare("show-empty");
     }
 
@@ -616,7 +616,7 @@ TEST_CASE("window-systemmenu", "") {
         w.menuItems = {
             {},
         };
-        FAIL_CHECK_VEC(t.checkCharEventBubbles("-", Qt::AltModifier));
+        FAIL_CHECK_VEC(t.checkCharEventBubbles("-", Tui::AltModifier));
         t.compare("show-empty");
     }
 
@@ -662,7 +662,7 @@ TEST_CASE("window-systemmenu", "") {
             }
         });
 
-        t.sendChar("-", Qt::AltModifier);
+        t.sendChar("-", Tui::AltModifier);
         t.compare("show-alpha");
         t.sendChar("a");
         CHECK(triggered == true);
@@ -732,7 +732,7 @@ TEST_CASE("window-interactivegeometry", "") {
         CHECK(t.terminal->keyboardGrabber() == w);
 
         t.compare("base-interactive");
-        t.sendKey(Qt::Key_Escape);
+        t.sendKey(Tui::Key_Escape);
         t.compare("base-noninteractive");
         CHECK(windowFacet->isManuallyPlaced() == initialManually);
         CHECK(t.terminal->keyboardGrabber() == nullptr);
@@ -748,10 +748,10 @@ TEST_CASE("window-interactivegeometry", "") {
         CHECK(t.terminal->keyboardGrabber() == w);
 
         t.compare("base-interactive");
-        t.sendKey(Qt::Key_Up);
-        t.sendKey(Qt::Key_Left);
+        t.sendKey(Tui::Key_Up);
+        t.sendKey(Tui::Key_Left);
         t.compare("move-up-left");
-        t.sendKey(Qt::Key_Escape);
+        t.sendKey(Tui::Key_Escape);
         t.compare("base-noninteractive");
         CHECK(windowFacet->isManuallyPlaced() == initialManually);
         CHECK(t.terminal->keyboardGrabber() == nullptr);
@@ -767,10 +767,10 @@ TEST_CASE("window-interactivegeometry", "") {
         CHECK(t.terminal->keyboardGrabber() == w);
 
         t.compare("base-interactive");
-        t.sendKey(Qt::Key_Up);
-        t.sendKey(Qt::Key_Left);
+        t.sendKey(Tui::Key_Up);
+        t.sendKey(Tui::Key_Left);
         t.compare("move-up-left");
-        t.sendKey(Qt::Key_Enter);
+        t.sendKey(Tui::Key_Enter);
         t.compare("noninteractive-left-up");
         CHECK(windowFacet->isManuallyPlaced() == true);
         CHECK(t.terminal->keyboardGrabber() == nullptr);
@@ -787,7 +787,7 @@ TEST_CASE("window-interactivegeometry", "") {
         CHECK(t.terminal->keyboardGrabber() == w);
 
         t.compare("base-interactive");
-        t.sendKey(Qt::Key_Escape);
+        t.sendKey(Tui::Key_Escape);
         t.compare("base-noninteractive");
         CHECK(windowFacet->isManuallyPlaced() == initialManually);
         CHECK(t.terminal->keyboardGrabber() == nullptr);
@@ -803,10 +803,10 @@ TEST_CASE("window-interactivegeometry", "") {
         CHECK(t.terminal->keyboardGrabber() == w);
 
         t.compare("base-interactive");
-        t.sendKey(Qt::Key_Up);
-        t.sendKey(Qt::Key_Left);
+        t.sendKey(Tui::Key_Up);
+        t.sendKey(Tui::Key_Left);
         t.compare("smaller-xy");
-        t.sendKey(Qt::Key_Escape);
+        t.sendKey(Tui::Key_Escape);
         t.compare("base-noninteractive");
         CHECK(windowFacet->isManuallyPlaced() == initialManually);
         CHECK(t.terminal->keyboardGrabber() == nullptr);
@@ -822,10 +822,10 @@ TEST_CASE("window-interactivegeometry", "") {
         CHECK(t.terminal->keyboardGrabber() == w);
 
         t.compare("base-interactive");
-        t.sendKey(Qt::Key_Up);
-        t.sendKey(Qt::Key_Left);
+        t.sendKey(Tui::Key_Up);
+        t.sendKey(Tui::Key_Left);
         t.compare("smaller-xy");
-        t.sendKey(Qt::Key_Enter);
+        t.sendKey(Tui::Key_Enter);
         t.compare("noninteractive-smaller-xy");
         CHECK(windowFacet->isManuallyPlaced() == true);
         CHECK(t.terminal->keyboardGrabber() == nullptr);
@@ -842,60 +842,60 @@ TEST_CASE("window-interactivegeometry", "") {
         CHECK(t.terminal->keyboardGrabber() == w);
 
         CHECK(w->geometry() == QRect{2, 1, 21, 8});
-        t.sendKey(Qt::Key_Left);
+        t.sendKey(Tui::Key_Left);
         CHECK(w->geometry() == QRect{1, 1, 21, 8});
-        t.sendKey(Qt::Key_Left);
+        t.sendKey(Tui::Key_Left);
         CHECK(w->geometry() == QRect{0, 1, 21, 8});
 
         // now crossing into clipping
-        t.sendKey(Qt::Key_Left);
+        t.sendKey(Tui::Key_Left);
         CHECK(w->geometry() == QRect{-1, 1, 21, 8});
-        t.sendKey(Qt::Key_Left);
+        t.sendKey(Tui::Key_Left);
         CHECK(w->geometry() == QRect{-2, 1, 21, 8});
-        t.sendKey(Qt::Key_Right);
-        t.sendKey(Qt::Key_Right);
-        t.sendKey(Qt::Key_Right);
-        t.sendKey(Qt::Key_Right);
-        t.sendKey(Qt::Key_Right);
+        t.sendKey(Tui::Key_Right);
+        t.sendKey(Tui::Key_Right);
+        t.sendKey(Tui::Key_Right);
+        t.sendKey(Tui::Key_Right);
+        t.sendKey(Tui::Key_Right);
         CHECK(w->geometry() == QRect{3, 1, 21, 8});
-        t.sendKey(Qt::Key_Right);
+        t.sendKey(Tui::Key_Right);
         CHECK(w->geometry() == QRect{4, 1, 21, 8});
 
         // now crossing into clipping
-        t.sendKey(Qt::Key_Right);
+        t.sendKey(Tui::Key_Right);
         CHECK(w->geometry() == QRect{5, 1, 21, 8});
-        t.sendKey(Qt::Key_Right);
+        t.sendKey(Tui::Key_Right);
         CHECK(w->geometry() == QRect{6, 1, 21, 8});
 
-        t.sendKey(Qt::Key_Left);
-        t.sendKey(Qt::Key_Left);
-        t.sendKey(Qt::Key_Left);
-        t.sendKey(Qt::Key_Left);
+        t.sendKey(Tui::Key_Left);
+        t.sendKey(Tui::Key_Left);
+        t.sendKey(Tui::Key_Left);
+        t.sendKey(Tui::Key_Left);
         CHECK(w->geometry() == QRect{2, 1, 21, 8});
 
-        t.sendKey(Qt::Key_Up);
+        t.sendKey(Tui::Key_Up);
         CHECK(w->geometry() == QRect{2, 0, 21, 8});
 
         // now crossing into clipping
-        t.sendKey(Qt::Key_Up);
+        t.sendKey(Tui::Key_Up);
         CHECK(w->geometry() == QRect{2, -1, 21, 8});
-        t.sendKey(Qt::Key_Up);
+        t.sendKey(Tui::Key_Up);
         CHECK(w->geometry() == QRect{2, -2, 21, 8});
 
-        t.sendKey(Qt::Key_Down);
-        t.sendKey(Qt::Key_Down);
-        t.sendKey(Qt::Key_Down);
+        t.sendKey(Tui::Key_Down);
+        t.sendKey(Tui::Key_Down);
+        t.sendKey(Tui::Key_Down);
 
-        t.sendKey(Qt::Key_Down);
+        t.sendKey(Tui::Key_Down);
         CHECK(w->geometry() == QRect{2, 2, 21, 8});
 
         // now crossing into clipping
-        t.sendKey(Qt::Key_Down);
+        t.sendKey(Tui::Key_Down);
         CHECK(w->geometry() == QRect{2, 3, 21, 8});
-        t.sendKey(Qt::Key_Down);
+        t.sendKey(Tui::Key_Down);
         CHECK(w->geometry() == QRect{2, 4, 21, 8});
 
-        t.sendKey(Qt::Key_Escape);
+        t.sendKey(Tui::Key_Escape);
         CHECK(windowFacet->isManuallyPlaced() == initialManually);
         CHECK(t.terminal->keyboardGrabber() == nullptr);
     }
@@ -911,43 +911,43 @@ TEST_CASE("window-interactivegeometry", "") {
 
         CHECK(w->geometry() == QRect{2, 1, 21, 8});
 
-        t.sendKey(Qt::Key_Left);
+        t.sendKey(Tui::Key_Left);
         CHECK(w->geometry() == QRect{2, 1, 20, 8});
-        t.sendKey(Qt::Key_Left);
+        t.sendKey(Tui::Key_Left);
         CHECK(w->geometry() == QRect{2, 1, 19, 8});
 
-        t.sendKey(Qt::Key_Right);
-        t.sendKey(Qt::Key_Right);
+        t.sendKey(Tui::Key_Right);
+        t.sendKey(Tui::Key_Right);
 
-        t.sendKey(Qt::Key_Up);
+        t.sendKey(Tui::Key_Up);
         CHECK(w->geometry() == QRect{2, 1, 21, 7});
-        t.sendKey(Qt::Key_Up);
+        t.sendKey(Tui::Key_Up);
         CHECK(w->geometry() == QRect{2, 1, 21, 6});
 
-        t.sendKey(Qt::Key_Down);
-        t.sendKey(Qt::Key_Down);
+        t.sendKey(Tui::Key_Down);
+        t.sendKey(Tui::Key_Down);
 
-        t.sendKey(Qt::Key_Down);
+        t.sendKey(Tui::Key_Down);
         CHECK(w->geometry() == QRect{2, 1, 21, 9});
 
         // now crossing into clipping
-        t.sendKey(Qt::Key_Down);
+        t.sendKey(Tui::Key_Down);
         CHECK(w->geometry() == QRect{2, 1, 21, 10});
-        t.sendKey(Qt::Key_Down);
+        t.sendKey(Tui::Key_Down);
         CHECK(w->geometry() == QRect{2, 1, 21, 11});
-        t.sendKey(Qt::Key_Down);
+        t.sendKey(Tui::Key_Down);
         CHECK(w->geometry() == QRect{2, 1, 21, 12});
 
-        t.sendKey(Qt::Key_Right);
+        t.sendKey(Tui::Key_Right);
         CHECK(w->geometry() == QRect{2, 1, 22, 12});
-        t.sendKey(Qt::Key_Right);
+        t.sendKey(Tui::Key_Right);
         CHECK(w->geometry() == QRect{2, 1, 23, 12});
-        t.sendKey(Qt::Key_Right);
+        t.sendKey(Tui::Key_Right);
         CHECK(w->geometry() == QRect{2, 1, 24, 12});
-        t.sendKey(Qt::Key_Right);
+        t.sendKey(Tui::Key_Right);
         CHECK(w->geometry() == QRect{2, 1, 25, 12});
 
-        t.sendKey(Qt::Key_Escape);
+        t.sendKey(Tui::Key_Escape);
         CHECK(windowFacet->isManuallyPlaced() == initialManually);
         CHECK(t.terminal->keyboardGrabber() == nullptr);
     }
@@ -967,26 +967,26 @@ TEST_CASE("window-interactivegeometry", "") {
         CHECK(windowFacet->isManuallyPlaced() == true);
         CHECK(t.terminal->keyboardGrabber() == w);
 
-        t.sendKey(Qt::Key_Left);
+        t.sendKey(Tui::Key_Left);
         REQUIRE(w->geometry() == QRect{10, 3, 4, 5});
 
-        t.sendKey(Qt::Key_Left);
+        t.sendKey(Tui::Key_Left);
         REQUIRE(w->geometry() == QRect{10, 3, 3, 5});
 
         // Now at absolute minimum allowed width
-        t.sendKey(Qt::Key_Left);
+        t.sendKey(Tui::Key_Left);
         REQUIRE(w->geometry() == QRect{10, 3, 3, 5});
 
-        t.sendKey(Qt::Key_Up);
+        t.sendKey(Tui::Key_Up);
         REQUIRE(w->geometry() == QRect{10, 3, 3, 4});
-        t.sendKey(Qt::Key_Up);
+        t.sendKey(Tui::Key_Up);
         REQUIRE(w->geometry() == QRect{10, 3, 3, 3});
 
         // Now at absolute minimum allowed height
-        t.sendKey(Qt::Key_Up);
+        t.sendKey(Tui::Key_Up);
         REQUIRE(w->geometry() == QRect{10, 3, 3, 3});
 
-        t.sendKey(Qt::Key_Escape);
+        t.sendKey(Tui::Key_Escape);
         CHECK(windowFacet->isManuallyPlaced() == initialManually);
         CHECK(t.terminal->keyboardGrabber() == nullptr);
     }
@@ -1006,24 +1006,24 @@ TEST_CASE("window-interactivegeometry", "") {
         CHECK(windowFacet->isManuallyPlaced() == true);
         CHECK(t.terminal->keyboardGrabber() == w);
 
-        t.sendKey(Qt::Key_Left);
+        t.sendKey(Tui::Key_Left);
         REQUIRE(w->geometry() == QRect{9, 2, 6, 7});
 
-        t.sendKey(Qt::Key_Left);
+        t.sendKey(Tui::Key_Left);
         REQUIRE(w->geometry() == QRect{9, 2, 5, 7});
 
         // Now at minimum allowed width
-        t.sendKey(Qt::Key_Left);
+        t.sendKey(Tui::Key_Left);
         REQUIRE(w->geometry() == QRect{9, 2, 5, 7});
 
-        t.sendKey(Qt::Key_Up);
+        t.sendKey(Tui::Key_Up);
         REQUIRE(w->geometry() == QRect{9, 2, 5, 6});
 
         // Now at minimum allowed height
-        t.sendKey(Qt::Key_Up);
+        t.sendKey(Tui::Key_Up);
         REQUIRE(w->geometry() == QRect{9, 2, 5, 6});
 
-        t.sendKey(Qt::Key_Escape);
+        t.sendKey(Tui::Key_Escape);
         CHECK(windowFacet->isManuallyPlaced() == initialManually);
         CHECK(t.terminal->keyboardGrabber() == nullptr);
     }
@@ -1043,24 +1043,24 @@ TEST_CASE("window-interactivegeometry", "") {
         CHECK(windowFacet->isManuallyPlaced() == true);
         CHECK(t.terminal->keyboardGrabber() == w);
 
-        t.sendKey(Qt::Key_Right);
+        t.sendKey(Tui::Key_Right);
         REQUIRE(w->geometry() == QRect{9, 2, 8, 7});
 
-        t.sendKey(Qt::Key_Right);
+        t.sendKey(Tui::Key_Right);
         REQUIRE(w->geometry() == QRect{9, 2, 9, 7});
 
         // Now at maximum allowed width
-        t.sendKey(Qt::Key_Right);
+        t.sendKey(Tui::Key_Right);
         REQUIRE(w->geometry() == QRect{9, 2, 9, 7});
 
-        t.sendKey(Qt::Key_Down);
+        t.sendKey(Tui::Key_Down);
         REQUIRE(w->geometry() == QRect{9, 2, 9, 8});
 
         // Now at maximum allowed height
-        t.sendKey(Qt::Key_Down);
+        t.sendKey(Tui::Key_Down);
         REQUIRE(w->geometry() == QRect{9, 2, 9, 8});
 
-        t.sendKey(Qt::Key_Escape);
+        t.sendKey(Tui::Key_Escape);
         CHECK(windowFacet->isManuallyPlaced() == initialManually);
         CHECK(t.terminal->keyboardGrabber() == nullptr);
     }
@@ -1290,42 +1290,42 @@ TEST_CASE("window-visual", "") {
         }
 
         SECTION("top-border") {
-            w->setBorderEdges(Qt::TopEdge);
+            w->setBorderEdges(Tui::TopEdge);
             t->compare();
         }
 
         SECTION("bottom-border") {
-            w->setBorderEdges(Qt::BottomEdge);
+            w->setBorderEdges(Tui::BottomEdge);
             t->compare();
         }
 
         SECTION("left-border") {
-            w->setBorderEdges(Qt::LeftEdge);
+            w->setBorderEdges(Tui::LeftEdge);
             t->compare();
         }
 
         SECTION("right-border") {
-            w->setBorderEdges(Qt::RightEdge);
+            w->setBorderEdges(Tui::RightEdge);
             t->compare();
         }
 
         SECTION("top-left-border") {
-            w->setBorderEdges(Qt::TopEdge | Qt::LeftEdge);
+            w->setBorderEdges(Tui::TopEdge | Tui::LeftEdge);
             t->compare();
         }
 
         SECTION("top-right-border") {
-            w->setBorderEdges(Qt::TopEdge | Qt::RightEdge);
+            w->setBorderEdges(Tui::TopEdge | Tui::RightEdge);
             t->compare();
         }
 
         SECTION("bottom-left-border") {
-            w->setBorderEdges(Qt::BottomEdge | Qt::LeftEdge);
+            w->setBorderEdges(Tui::BottomEdge | Tui::LeftEdge);
             t->compare();
         }
 
         SECTION("bottom-right-border") {
-            w->setBorderEdges(Qt::BottomEdge | Qt::RightEdge);
+            w->setBorderEdges(Tui::BottomEdge | Tui::RightEdge);
             t->compare();
         }
     };
@@ -1467,23 +1467,23 @@ TEST_CASE("window-layout", "") {
 
     struct B {
         std::string name;
-        Qt::Edges borderEdges;
+        Tui::Edges borderEdges;
         int left;
         int top;
         int horizontal;
         int vertical;
     };
 
-    auto border = GENERATE(B{"all",  Qt::TopEdge | Qt::RightEdge | Qt::BottomEdge | Qt::LeftEdge, 1, 1, 2, 2},
+    auto border = GENERATE(B{"all",  Tui::TopEdge | Tui::RightEdge | Tui::BottomEdge | Tui::LeftEdge, 1, 1, 2, 2},
                            B{"none",         {}, 0, 0, 0, 0},
-                           B{"top",          Qt::TopEdge, 0, 1, 0, 1},
-                           B{"bottom",       Qt::BottomEdge, 0, 0, 0, 1},
-                           B{"left",         Qt::LeftEdge, 1, 0, 1, 0},
-                           B{"right",        Qt::RightEdge, 0, 0, 1, 0},
-                           B{"top+left",     Qt::TopEdge | Qt::LeftEdge, 1, 1, 1, 1},
-                           B{"top+right",    Qt::TopEdge | Qt::RightEdge, 0, 1, 1, 1},
-                           B{"bottom+left",  Qt::BottomEdge | Qt::LeftEdge, 1, 0, 1, 1},
-                           B{"bottom+right", Qt::BottomEdge | Qt::RightEdge, 0, 0, 1, 1}
+                           B{"top",          Tui::TopEdge, 0, 1, 0, 1},
+                           B{"bottom",       Tui::BottomEdge, 0, 0, 0, 1},
+                           B{"left",         Tui::LeftEdge, 1, 0, 1, 0},
+                           B{"right",        Tui::RightEdge, 0, 0, 1, 0},
+                           B{"top+left",     Tui::TopEdge | Tui::LeftEdge, 1, 1, 1, 1},
+                           B{"top+right",    Tui::TopEdge | Tui::RightEdge, 0, 1, 1, 1},
+                           B{"bottom+left",  Tui::BottomEdge | Tui::LeftEdge, 1, 0, 1, 1},
+                           B{"bottom+right", Tui::BottomEdge | Tui::RightEdge, 0, 0, 1, 1}
                   );
 
     bool focus = GENERATE(true, false);
@@ -1520,70 +1520,70 @@ TEST_CASE("window-tab", "") {
 
     SECTION("no children") {
         w->setFocus();
-        t.sendKey(Qt::Key_Tab);
-        t.sendKey(Qt::Key_Tab, Qt::ShiftModifier);
+        t.sendKey(Tui::Key_Tab);
+        t.sendKey(Tui::Key_Tab, Tui::ShiftModifier);
     }
 
     SECTION("one child") {
         auto child1 = new StubWidget(w);
-        child1->setFocusPolicy(Qt::StrongFocus);
+        child1->setFocusPolicy(Tui::StrongFocus);
         child1->setFocus();
 
         CHECK(t.terminal->focusWidget() == child1);
-        t.sendKey(Qt::Key_Tab);
+        t.sendKey(Tui::Key_Tab);
         CHECK(t.terminal->focusWidget() == child1);
-        t.sendKey(Qt::Key_Tab, Qt::ShiftModifier);
+        t.sendKey(Tui::Key_Tab, Tui::ShiftModifier);
         CHECK(t.terminal->focusWidget() == child1);
     }
 
     SECTION("three children") {
         auto child1 = new StubWidget(w);
-        child1->setFocusPolicy(Qt::StrongFocus);
+        child1->setFocusPolicy(Tui::StrongFocus);
         child1->setFocus();
         auto child2 = new StubWidget(w);
-        child2->setFocusPolicy(Qt::StrongFocus);
+        child2->setFocusPolicy(Tui::StrongFocus);
         auto child3 = new StubWidget(w);
-        child3->setFocusPolicy(Qt::StrongFocus);
+        child3->setFocusPolicy(Tui::StrongFocus);
 
         CHECK(t.terminal->focusWidget() == child1);
-        t.sendKey(Qt::Key_Tab);
+        t.sendKey(Tui::Key_Tab);
         CHECK(t.terminal->focusWidget() == child2);
-        t.sendKey(Qt::Key_Tab);
+        t.sendKey(Tui::Key_Tab);
         CHECK(t.terminal->focusWidget() == child3);
-        t.sendKey(Qt::Key_Tab);
+        t.sendKey(Tui::Key_Tab);
         CHECK(t.terminal->focusWidget() == child1);
-        t.sendKey(Qt::Key_Tab, Qt::ShiftModifier);
+        t.sendKey(Tui::Key_Tab, Tui::ShiftModifier);
         CHECK(t.terminal->focusWidget() == child3);
-        t.sendKey(Qt::Key_Tab, Qt::ShiftModifier);
+        t.sendKey(Tui::Key_Tab, Tui::ShiftModifier);
         CHECK(t.terminal->focusWidget() == child2);
-        t.sendKey(Qt::Key_Tab, Qt::ShiftModifier);
+        t.sendKey(Tui::Key_Tab, Tui::ShiftModifier);
         CHECK(t.terminal->focusWidget() == child1);
     }
 
     SECTION("three children with order set") {
         auto child1 = new StubWidget(w);
-        child1->setFocusPolicy(Qt::StrongFocus);
+        child1->setFocusPolicy(Tui::StrongFocus);
         child1->setFocus();
         child1->setFocusOrder(12);
         auto child2 = new StubWidget(w);
-        child2->setFocusPolicy(Qt::StrongFocus);
+        child2->setFocusPolicy(Tui::StrongFocus);
         child2->setFocusOrder(6);
         auto child3 = new StubWidget(w);
-        child3->setFocusPolicy(Qt::StrongFocus);
+        child3->setFocusPolicy(Tui::StrongFocus);
         child3->setFocusOrder(32);
 
         CHECK(t.terminal->focusWidget() == child1);
-        t.sendKey(Qt::Key_Tab);
+        t.sendKey(Tui::Key_Tab);
         CHECK(t.terminal->focusWidget() == child3);
-        t.sendKey(Qt::Key_Tab);
+        t.sendKey(Tui::Key_Tab);
         CHECK(t.terminal->focusWidget() == child2);
-        t.sendKey(Qt::Key_Tab);
+        t.sendKey(Tui::Key_Tab);
         CHECK(t.terminal->focusWidget() == child1);
-        t.sendKey(Qt::Key_Tab, Qt::ShiftModifier);
+        t.sendKey(Tui::Key_Tab, Tui::ShiftModifier);
         CHECK(t.terminal->focusWidget() == child2);
-        t.sendKey(Qt::Key_Tab, Qt::ShiftModifier);
+        t.sendKey(Tui::Key_Tab, Tui::ShiftModifier);
         CHECK(t.terminal->focusWidget() == child3);
-        t.sendKey(Qt::Key_Tab, Qt::ShiftModifier);
+        t.sendKey(Tui::Key_Tab, Tui::ShiftModifier);
         CHECK(t.terminal->focusWidget() == child1);
     }
 }
@@ -1627,12 +1627,12 @@ TEST_CASE("window-auto-placement", "") {
     w->setGeometry({0, 0, 10, 4});
 
     SECTION("setup") {
-        w->setDefaultPlacement(Qt::AlignCenter);
+        w->setDefaultPlacement(Tui::AlignCenter);
         CHECK(w->geometry() == QRect{46, 14, 10, 4});
     }
 
     SECTION("resize") {
-        w->setDefaultPlacement(Qt::AlignCenter);
+        w->setDefaultPlacement(Tui::AlignCenter);
         CHECK(w->geometry() == QRect{46, 14, 10, 4});
 
         w->setGeometry({46, 14, 20, 6});
@@ -1643,14 +1643,14 @@ TEST_CASE("window-auto-placement", "") {
         Tui::ZWidget testParent;
         testParent.setGeometry({0, 0, 40, 40});
 
-        w->setDefaultPlacement(Qt::AlignCenter);
+        w->setDefaultPlacement(Tui::AlignCenter);
 
         w->setParent(&testParent);
         CHECK(w->geometry() == QRect{16, 19, 10, 4});
     }
 
     SECTION("newly visible") {
-        w->setDefaultPlacement(Qt::AlignCenter);
+        w->setDefaultPlacement(Tui::AlignCenter);
 
         w->setVisible(false);
 
@@ -1671,12 +1671,12 @@ TEST_CASE("window-auto-placement-container", "") {
     w->setGeometry({0, 0, 10, 4});
 
     SECTION("setup") {
-        w->setDefaultPlacement(Qt::AlignCenter);
+        w->setDefaultPlacement(Tui::AlignCenter);
         CHECK(w->geometry() == QRect{0, 0, 10, 4});
     }
 
     SECTION("resize") {
-        w->setDefaultPlacement(Qt::AlignCenter);
+        w->setDefaultPlacement(Tui::AlignCenter);
         CHECK(w->geometry() == QRect{0, 0, 10, 4});
 
         w->setGeometry({46, 14, 20, 6});
@@ -1687,14 +1687,14 @@ TEST_CASE("window-auto-placement-container", "") {
         Tui::ZWidget testParent;
         testParent.setGeometry({0, 0, 40, 40});
 
-        w->setDefaultPlacement(Qt::AlignCenter);
+        w->setDefaultPlacement(Tui::AlignCenter);
 
         w->setParent(&testParent);
         CHECK(w->geometry() == QRect{0, 0, 10, 4});
     }
 
     SECTION("newly visible") {
-        w->setDefaultPlacement(Qt::AlignCenter);
+        w->setDefaultPlacement(Tui::AlignCenter);
 
         w->setVisible(false);
 
@@ -1729,20 +1729,20 @@ TEST_CASE("window-auto-placement-overriden-facet", "") {
 
     DiagnosticMessageChecker msg;
     msg.expectMessage("ZWindow::setDefaultPlacement calls with overriden WindowFacet do nothing.");
-    w->setDefaultPlacement(Qt::AlignCenter);
+    w->setDefaultPlacement(Tui::AlignCenter);
     msg.tillHere();
 
     w->setGeometry({0, 0, 10, 4});
 
     SECTION("setup") {
-        w->f.setDefaultPlacement(Qt::AlignCenter, {0, 0});
+        w->f.setDefaultPlacement(Tui::AlignCenter, {0, 0});
         // this does not trigger automatic placement on its own
         CHECK(w->geometry().x() == 0);
         CHECK(w->geometry().y() == 0);
     }
 
     SECTION("resize") {
-        w->f.setDefaultPlacement(Qt::AlignCenter, {0, 0});
+        w->f.setDefaultPlacement(Tui::AlignCenter, {0, 0});
         // this does not trigger automatic placement on its own
         CHECK(w->geometry().x() == 0);
         CHECK(w->geometry().y() == 0);
@@ -1756,7 +1756,7 @@ TEST_CASE("window-auto-placement-overriden-facet", "") {
         Tui::ZWidget testParent;
         testParent.setGeometry({0, 0, 40, 40});
 
-        w->f.setDefaultPlacement(Qt::AlignCenter, {0, 0});
+        w->f.setDefaultPlacement(Tui::AlignCenter, {0, 0});
 
         w->setParent(&testParent);
         CHECK(w->geometry().x() == 16);
@@ -1764,7 +1764,7 @@ TEST_CASE("window-auto-placement-overriden-facet", "") {
     }
 
     SECTION("newly visible") {
-        w->f.setDefaultPlacement(Qt::AlignCenter, {0, 0});
+        w->f.setDefaultPlacement(Tui::AlignCenter, {0, 0});
 
         w->setVisible(false);
 
