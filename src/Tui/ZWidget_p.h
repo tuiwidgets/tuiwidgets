@@ -51,7 +51,7 @@ public:
     void unsetTerminal();
     void setManagingTerminal(ZTerminal *terminal);
 
-    bool isFocusable() const { return effectivelyEnabled && effectivelyVisible && focusPolicy != Qt::FocusPolicy::NoFocus; }
+    bool isTabFocusable() const { return effectivelyEnabled && effectivelyVisible && (focusPolicy & Tui::FocusPolicy::TabFocus); }
 
     void updateEffectivelyEnabledRecursively();
     void updateEffectivelyVisibleRecursively();

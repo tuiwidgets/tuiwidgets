@@ -911,7 +911,7 @@ namespace {
 
     bool canFocusAndUpdateTarget(ZWidget const *&c, bool subTree, bool last) {
         if (!subTree) {
-            if (!ZWidgetPrivate::get(c)->isFocusable()) {
+            if (!ZWidgetPrivate::get(c)->isTabFocusable()) {
                 return false;
             }
         } else {

@@ -353,7 +353,7 @@ TEST_CASE("root-sendkey-to-root3") {
     }
 
     SECTION("unfocusable") {
-        int policy = GENERATE(0, 1, 2, 3);
+        int policy = GENERATE(0, 1, 2, 3, 4);
         CAPTURE(policy);
         if (policy == 0) {
             sw3.setFocusPolicy(Qt::FocusPolicy::NoFocus);
@@ -363,6 +363,8 @@ TEST_CASE("root-sendkey-to-root3") {
             sw3.setEnabled(false);
         } else if (policy == 3) {
             sw3.setVisible(false);
+        } else if (policy == 4) {
+            sw3.setFocusPolicy(Qt::FocusPolicy::ClickFocus);
         }
 
         t.sendKey(Qt::Key_F6);
@@ -381,8 +383,8 @@ TEST_CASE("root-sendkey-to-root3") {
         CHECK(sw3.focus() == false);
     }
 
-    SECTION("change-fucuspolicy") {
-        Qt::FocusPolicy policy = GENERATE(Qt::FocusPolicy::TabFocus, Qt::FocusPolicy::ClickFocus, Qt::FocusPolicy::WheelFocus, Qt::FocusPolicy::StrongFocus);
+    SECTION("change-focuspolicy") {
+        Tui::FocusPolicy policy = GENERATE(Qt::FocusPolicy::TabFocus, Qt::FocusPolicy::WheelFocus, Qt::FocusPolicy::StrongFocus);
         CAPTURE(policy);
         sw3.setFocusPolicy(policy);
         t.sendKey(Qt::Key_F6);
