@@ -100,6 +100,7 @@ using Qt::AlignTop;
 using Qt::AlignBottom;
 using Qt::AlignVCenter;
 using Qt::AlignHCenter;
+using Qt::AlignCenter;
 
 using Qt::ShortcutContext;
 using Qt::WidgetShortcut;
