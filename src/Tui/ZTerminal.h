@@ -62,8 +62,8 @@ public:
         OffScreen& operator=(const OffScreen&);
 
     public:
-        OffScreen withCapability(ZSymbol capability);
-        OffScreen withoutCapability(ZSymbol capability);
+        OffScreen withCapability(ZSymbol capability) const;
+        OffScreen withoutCapability(ZSymbol capability) const;
 
     private:
         friend class OffScreenData;

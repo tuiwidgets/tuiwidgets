@@ -1228,13 +1228,13 @@ ZTerminal::OffScreen::OffScreen(const ZTerminal::OffScreen&) = default;
 ZTerminal::OffScreen::~OffScreen() = default;
 ZTerminal::OffScreen& ZTerminal::OffScreen::operator=(const ZTerminal::OffScreen&) = default;
 
-ZTerminal::OffScreen ZTerminal::OffScreen::withCapability(ZSymbol capability) {
+ZTerminal::OffScreen ZTerminal::OffScreen::withCapability(ZSymbol capability) const {
     OffScreen ret = *this;
     OffScreenData::get(&ret)->capabilities[capability] = true;
     return ret;
 }
 
-ZTerminal::OffScreen ZTerminal::OffScreen::withoutCapability(ZSymbol capability) {
+ZTerminal::OffScreen ZTerminal::OffScreen::withoutCapability(ZSymbol capability) const {
     OffScreen ret = *this;
     OffScreenData::get(&ret)->capabilities[capability] = false;
     return ret;
