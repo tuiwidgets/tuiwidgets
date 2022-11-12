@@ -12,6 +12,7 @@ preamble = """
 data = """
 QObject cpp:class 1 qobject.html QObject
 QObject::event cpp:function 1 qobject.html#event QObject::event
+QObject::deleteLater cpp:function 1 qobject.html#deleteLater QObject::deleteLater
 QString cpp:class 1 qstring.html QString
 QPoint cpp:class 1 qpoint.html QPoint
 QFlags cpp:class 1 qflags.html QFlags
@@ -89,6 +90,7 @@ Qt::Key_unknown cpp:enum 1 qt.html#Key-enum Key_unknown
 QSet cpp:class 1 qset.html QSet
 QCoreApplication::quit cpp:function 1 qcoreapplication.html#quit QCoreApplication::quit
 QEvent::Type cpp:enum 1 qevent.html#Type-enum QEvent::Type
+QEvent::isAccepted cpp:function 1 qevent.html#accepted-prop QEvent::isAccepted
 Qt::CheckState cpp:enum 1 qt.html#CheckState-enum CheckState
 Qt::Unchecked cpp:enum 1 qt.html#CheckState-enum Unchecked
 Qt::PartiallyChecked cpp:enum 1 qt.html#CheckState-enum PartiallyChecked
@@ -112,20 +114,38 @@ Qt::TopEdge cpp:enum 1 qt.html#Edge-enum TopEdge
 Qt::LeftEdge cpp:enum 1 qt.html#Edge-enum LeftEdge
 Qt::RightEdge cpp:enum 1 qt.html#Edge-enum RightEdge
 Qt::BottomEdge cpp:enum 1 qt.html#Edge-enum BottomEdge
-QEvent::isAccepted cpp:function 1 qevent.html#accepted-prop QEvent::isAccepted
 QByteArray cpp:class 1 qbytearray.html QByteArray
+QAbstractItemModel cpp:class 1 qabstractitemmodel.html QAbstractItemModel
+QModelIndex cpp:class 1 qmodelindex.html QModelIndex
+QItemSelectionModel cpp:class 1 qitemselectionmodel.html QItemSelectionModel
+QVariant cpp:class 1 qvariant.html QVariant
+QAbstractTableModel cpp:class 1 qabstracttablemodel.html QAbstractTableModel
+QVector cpp:class 1 qvector.html QVector
+Qt::DisplayRole cpp:enumerator 1 qt.html#ItemDataRole-enum DisplayRole
 """[1:]
 
 # Templates don't seem to work with intershinx without complaining about missing references or adding entries for
 # each template with all used template parameters...
 template_hacks = """
 QFlags<Tui::ZTerminal::Option> cpp:class 1 qflags.html QFlags
+QFlags<Tui::ZTextAttribute> cpp:class 1 qflags.html QFlags
+QFlags<Tui::ZTextOption::Flag> cpp:class 1 qflags.html QFlags
+QFlags<Tui::ZWindow::Option> cpp:class 1 qflags.html QFlags
 QSet<Tui::ZWidget*> cpp:class 1 qset.html QSet
 QSet<Tui::ZSymbol> cpp:class 1 qset.html QSet
 QSet<QString> cpp:class 1 qset.html QSet
-QList<Tui::ZPalette::RuleCmd> cpp:class 1 qlist.html QList
 QList<Tui::ZPalette::ColorDef> cpp:class 1 qlist.html QList
+QList<Tui::ZPalette::RuleCmd> cpp:class 1 qlist.html QList
 QList<Tui::ZPalette::RuleDef> cpp:class 1 qlist.html QList
+QList<Tui::ZTextOption::Tab> cpp:class 1 qlist.html QList
+QList<Tui::ZMenuItem> cpp:class 1 qlist.html QList
+QList<int> cpp:class 1 qlist.html QList
+QVector<Tui::ZMenuItem> cpp:class 1 qvector.html QVector
+QVector<Tui::ZFormatRange> cpp:class 1 qvector.html QVector
+QVector<QMap<int, QVariant>> cpp:class 1 qvector.html QVector
+QVector<Tui::Misc::AbstractTableModelTrackBy::Row> cpp:class 1 qvector.html QVector
+QVector<ZMenuItem> cpp:class 1 qvector.html QVector
+QMap<int, QVariant> cpp:class 1 qmap.html QMap
 """[1:]
 
 data += template_hacks
