@@ -54,6 +54,12 @@ TEST_CASE("surrogateescape decode truncated sequence 2") {
     CHECK(res == QString::fromUtf16(expected.data(), expected.size()));
 }
 
+TEST_CASE("surrogateescape decode null byte") {
+    std::array<char16_t, 1> expected = {0x00};
+    QString res = Tui::Misc::SurrogateEscape::decode(QByteArray("\x00", 1));
+    CHECK(res == QString::fromUtf16(expected.data(), expected.size()));
+}
+
 TEST_CASE("surrogateescape decode low surrogate to surrogate escapes") {
     std::array<char16_t, 3> expected = {0xdced, 0xdcb0, 0xdc80};
     QString res = Tui::Misc::SurrogateEscape::decode(QByteArray("\xed\xb0\x80"));
