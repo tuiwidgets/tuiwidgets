@@ -3,3 +3,4 @@ Jinja2
 sphinx >=5,<6
 sphinx-autobuild
 sphinxcontrib-images
+beautifulsoup4

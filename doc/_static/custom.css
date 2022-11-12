@@ -1,0 +1,173 @@
+dl.macro dt { text-indent: -120px; margin-left: 120px; }
+dl.function dt { text-indent: -120px; margin-left: 120px; }
+dl.type dt { text-indent: -120px; margin-left: 120px; }
+
+div.sphinxsidebar li.tw-subsection > a { font-weight: bold; }
+div.sphinxsidebar li.tw-subsection:not(.current) > a::before { content: "▶ "; font-size: 80%; }
+div.sphinxsidebar li.tw-subsection.current > a::before { content: "▼ "; font-size: 80%; }
+div.sphinxsidebar li.tw-subsection.tw-pseudosection-open > a::before { content: "▼ "; font-size: 80%; }
+
+div.sphinxsidebar li.tw-subsection > ul { list-style: none; margin-left: 0px; background-color: rgba(0, 0, 0, 0.03); }
+div.sphinxsidebar li > a.current { background-color: rgba(255,255,0, 0.2); }
+
+div.sphinxsidebar li.tw-pseudosection-item { background-color: rgba(0, 0, 0, 0.03); }
+div.sphinxsidebar .tw-pseudosection-hidden { display: none; }
+
+div.sphinxsidebar li.toctree-l2 { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+div.sphinxsidebar li.toctree-l2:hover { overflow: visible; }
+
+div.sphinxsidebar li.toctree-l2 > a:hover { backdrop-filter: blur(100px); }
+
+
+.hidden-references {
+    visibility:hidden;
+    height: 0px;
+}
+
+div .hidden-references + p {
+    margin-top: 0px;
+}
+
+table.noborder {
+    border: none;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+}
+
+table.noborder > tbody > tr > td {
+    border: none;
+}
+
+table.noborder > thead > tr > th {
+    border: none;
+}
+
+/*.signal .sig-paren:after {
+    color: #f00;
+    content: "signal"
+}*/
+
+/*.signal .sig > span:last-child {
+    color: #f00;
+    content: "signal"
+}*/
+
+/* use with functions */
+.tw-signal > .sig > span:last-of-type:after {
+  color: #00866d;
+  content: "signal";
+  font-size: 60%;
+  vertical-align: top;
+  margin-left: 0.4em;
+}
+
+.tw-static > .sig > span:last-of-type:after {
+  color: #00866d;
+  content: "static";
+  font-size: 60%;
+  vertical-align: top;
+  margin-left: 0.4em;
+}
+
+
+.tw-virtual > .sig > span:last-of-type:after {
+  color: #00866d;
+  content: "virtual";
+  font-size: 60%;
+  vertical-align: top;
+  margin-left: 0.4em;
+}
+
+.tw-pure-virtual > .sig > span:last-of-type:after {
+  color: #00866d;
+  content: "pure virtual";
+  font-size: 60%;
+  vertical-align: top;
+  margin-left: 0.4em;
+}
+
+.tw-noconv > .sig > span:last-of-type:after {
+  color: #00866d;
+  content: "noconv";
+  font-size: 60%;
+  vertical-align: top;
+  margin-left: 0.4em;
+}
+
+/* used with classes */
+
+.tw-facet > .sig > span.descname:after {
+  color: #00866d;
+  content: "facet";
+  font-size: 60%;
+  vertical-align: top;
+  margin-left: 0.4em;
+}
+
+.tw-facet-impl > .sig > span.descname:after {
+  color: #00866d;
+  content: "facet-impl";
+  font-size: 60%;
+  vertical-align: top;
+  margin-left: 0.4em;
+}
+
+/* misc */
+
+figure.align-default.tw-figure-left {
+    margin: 0.5em; /* from figure rule */
+    text-align: start;
+}
+
+.tw-float-right {
+    float: right;
+}
+
+.tw-invisible {
+    display: none;
+}
+
+.tw-midspacebefore {
+    margin-top: 1em;
+}
+
+ul.tw-flex-imgs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-around;
+    list-style: none;
+}
+
+ul.tw-flex-imgs > li {
+    flex: 1 0 auto;
+}
+
+dl.cpp.function, dl.tw-spaceafter {
+    margin-bottom: 0.5em;
+}
+
+kbd:not(.compound) {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 60%;
+    margin: 0 .1em;
+    padding: .1em .6em;
+    line-height: 1.5;
+    color: #232629;
+    text-shadow: 0 1px 0 var(#fff);
+    background-color: #e3e6e8;;
+    border: 1px solid #9fa6ad;
+    border-radius: 3px;
+    box-shadow: 0 1px 1px #0c0d0e26,inset 0 1px 0 0 #fff;
+    overflow-wrap: break-word;
+}
+
+.tw-colorchip {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    vertical-align: middle;
+    border-radius: 0.4em;
+    border: solid black 1px;
+}

@@ -5,6 +5,6 @@ if [ ! -e ../../sphinx-v5/bin/sphinx-build ]; then
     exit 1
 fi
 
-../../sphinx-v5/bin/sphinx-build -b html . _build -a -d _doctrees -n -E
+../../sphinx-v5/bin/sphinx-build -b html . _build -a -d _doctrees -n -E "$@"
 
 ./sphinxlint.py --disable "trailing-whitespace" --enable default-role
