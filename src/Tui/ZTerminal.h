@@ -171,7 +171,7 @@ public:
     void dispatchPasteEvent(ZPasteEvent &translated);
 
 protected:
-    std::unique_ptr<ZKeyEvent> translateKeyEvent(const ZTerminalNativeEvent &nativeEvent);
+    virtual std::unique_ptr<ZKeyEvent> translateKeyEvent(const ZTerminalNativeEvent &nativeEvent);
 
 
 public Q_SLOTS:
