@@ -72,15 +72,18 @@ public:
 
     class TerminalConnectionDelegate {
     public:
+        TerminalConnectionDelegate();
+        virtual ~TerminalConnectionDelegate();
+
+        TerminalConnectionDelegate &operator=(const TerminalConnectionDelegate&) = delete;
+
+    public:
         virtual void write(const char *data, int length) = 0;
         virtual void flush() = 0;
         virtual void restoreSequenceUpdated(const char *data, int len) = 0;
         virtual void deinit(bool awaitingResponse) = 0;
         virtual void pause();
         virtual void unpause();
-
-    protected:
-        ~TerminalConnectionDelegate();
     };
 
     class TerminalConnectionPrivate;

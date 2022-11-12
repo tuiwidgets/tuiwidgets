@@ -198,8 +198,12 @@ const ZKeySequencePrivate *ZKeySequencePrivate::get(const ZKeySequence *keyseq) 
 }
 
 ZKeySequence::ZKeySequence() = default;
+ZKeySequence::ZKeySequence(const ZKeySequence&) = default;
 
 ZKeySequence::~ZKeySequence() = default;
+
+ZKeySequence& ZKeySequence::operator=(const ZKeySequence&) = default;
+
 
 ZKeySequence ZKeySequence::forMnemonic(const QString &c) {
     ZKeySequence s;
@@ -260,8 +264,12 @@ const ZPendingKeySequenceCallbacksPrivate *ZPendingKeySequenceCallbacksPrivate::
 }
 
 ZPendingKeySequenceCallbacks::ZPendingKeySequenceCallbacks() = default;
+ZPendingKeySequenceCallbacks::ZPendingKeySequenceCallbacks(const ZPendingKeySequenceCallbacks&) = default;
 
 ZPendingKeySequenceCallbacks::~ZPendingKeySequenceCallbacks() = default;
+
+ZPendingKeySequenceCallbacks& ZPendingKeySequenceCallbacks::operator=(const ZPendingKeySequenceCallbacks&) = default;
+
 
 void ZPendingKeySequenceCallbacks::setPendingSequenceStarted(std::function<void ()> callback) {
     auto *const p = tuiwidgets_impl();

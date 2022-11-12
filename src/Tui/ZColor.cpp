@@ -10,6 +10,11 @@
 
 TUIWIDGETS_NS_START
 
+ZColor::ZColor() = default;
+ZColor::ZColor(const ZColor&) = default;
+ZColor& ZColor::operator=(const ZColor&) = default;
+
+
 ZColor::ZColor(int r, int g, int b)
     : val(TERMPAINT_RGB_COLOR_OFFSET | static_cast<uint8_t>(r) << 16 | static_cast<uint8_t>(g) << 8 | static_cast<uint8_t>(b))
 {
@@ -508,8 +513,16 @@ bool ZColor::operator!=(const ZColor &other) const {
 ZColorHSV::ZColorHSV() {
 }
 
+ZColorHSV::ZColorHSV(const ZColorHSV&) = default;
+
 ZColorHSV::ZColorHSV(double hue, double saturation, double value) : _hue(hue), _saturation(saturation), _value(value) {
 }
+
+ZColorHSV::~ZColorHSV() {
+}
+
+ZColorHSV& ZColorHSV::operator=(const ZColorHSV&) = default;
+
 
 double ZColorHSV::hue() const {
     return _hue;

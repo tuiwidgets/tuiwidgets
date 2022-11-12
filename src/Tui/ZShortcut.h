@@ -22,7 +22,10 @@ class ZPendingKeySequenceCallbacksPrivate;
 class TUIWIDGETS_EXPORT ZPendingKeySequenceCallbacks {
 public:
     ZPendingKeySequenceCallbacks();
+    ZPendingKeySequenceCallbacks(const ZPendingKeySequenceCallbacks&);
     ~ZPendingKeySequenceCallbacks();
+
+    ZPendingKeySequenceCallbacks& operator=(const ZPendingKeySequenceCallbacks&);
 
 public:
     void setPendingSequenceStarted(std::function<void()> callback);
@@ -40,7 +43,10 @@ class ZKeySequencePrivate;
 class TUIWIDGETS_EXPORT ZKeySequence {
 public:
     ZKeySequence();
+    ZKeySequence(const ZKeySequence&);
     ~ZKeySequence();
+
+    ZKeySequence& operator=(const ZKeySequence&);
 
 public:
     // FIXME Massive changes needed

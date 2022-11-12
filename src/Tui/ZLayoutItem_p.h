@@ -9,7 +9,7 @@
 
 TUIWIDGETS_NS_START
 
-class TUIWIDGETS_EXPORT ZWidgetLayoutItem : public ZLayoutItem {
+class ZWidgetLayoutItem : public ZLayoutItem {
 public:
     ZWidgetLayoutItem(ZWidget *widget) : widget(widget) {}
     ~ZWidgetLayoutItem() override;

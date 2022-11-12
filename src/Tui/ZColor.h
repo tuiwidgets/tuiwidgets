@@ -48,7 +48,11 @@ enum class TerminalColor : int {
 class TUIWIDGETS_EXPORT ZColorHSV {
 public:
     ZColorHSV();
+    ZColorHSV(const ZColorHSV&);
     ZColorHSV(double hue, double saturation, double value);
+    ~ZColorHSV();
+
+    ZColorHSV& operator=(const ZColorHSV&);
 
 public:
     double hue() const;
@@ -79,12 +83,16 @@ public:
     };
 
 public:
-    ZColor() = default;
+    ZColor();
+    ZColor(const ZColor&);
     ZColor(int r, int g, int b);
     ZColor(Private::GlobalColorRGB globalColor);
     ZColor(TerminalColor color);
     ~ZColor();
 
+    ZColor& operator=(const ZColor&);
+
+public:
     ColorType colorType() const;
 
     // Only for colorType() == ColorType::RGB

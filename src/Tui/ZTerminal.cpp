@@ -1249,6 +1249,9 @@ void ZTerminal::TerminalConnectionDelegate::pause() {
 void ZTerminal::TerminalConnectionDelegate::unpause() {
 }
 
+ZTerminal::TerminalConnectionDelegate::TerminalConnectionDelegate() {
+}
+
 ZTerminal::TerminalConnectionDelegate::~TerminalConnectionDelegate() {
 }
 

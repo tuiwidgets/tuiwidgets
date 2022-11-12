@@ -16,6 +16,9 @@ class ZWindowFacetPrivate;
 class TUIWIDGETS_EXPORT ZWindowFacet : public QObject {
     Q_OBJECT
 public:
+    ~ZWindowFacet() override;
+
+public:
     virtual bool isExtendViewport() const;
     virtual bool isManuallyPlaced() const;
     virtual void autoPlace(const QSize &available, ZWidget *self);
@@ -40,7 +43,6 @@ protected:
 protected:
     ZWindowFacet();
     ZWindowFacet(std::unique_ptr<ZWindowFacetPrivate> pimpl);
-    ~ZWindowFacet() override;
 
     std::unique_ptr<ZWindowFacetPrivate> tuiwidgets_pimpl_ptr;
 

@@ -38,7 +38,7 @@ public:
 
     class Tab {
     public:
-        Tab();
+        Tab() {};
         Tab(int pos, TabType tabType) : position(pos), type(tabType) {}
 
     public:

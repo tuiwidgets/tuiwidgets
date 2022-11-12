@@ -21,6 +21,8 @@ public:
     ZLayoutItem();
     virtual ~ZLayoutItem();
 
+    ZLayoutItem &operator=(const ZLayoutItem&) = delete;
+
 public:
     virtual void setGeometry(QRect r) = 0;
     virtual QSize sizeHint() const = 0;

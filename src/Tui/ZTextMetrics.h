@@ -19,7 +19,7 @@ class ZTextMetricsPrivate;
 
 class TUIWIDGETS_EXPORT ZTextMetrics {
 public:
-    ZTextMetrics(const ZTextMetrics& other);
+    ZTextMetrics(const ZTextMetrics &other);
     virtual ~ZTextMetrics();
 
 public:

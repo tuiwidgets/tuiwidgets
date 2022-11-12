@@ -52,6 +52,7 @@ namespace ZEventType {
 
 class TUIWIDGETS_EXPORT ZEvent : public QEvent {
 public:
+    ZEvent(const ZEvent&) = delete; // to allow this (like QEvent) this class would need to be rewritten to support copying
     virtual ~ZEvent();
 
 protected:

@@ -16,6 +16,7 @@ class TUIWIDGETS_EXPORT ZDefaultWidgetManager : public QObject {
 
 public:
     ZDefaultWidgetManager();
+    ~ZDefaultWidgetManager() override;
 
 public:
     virtual void setDefaultWidget(ZWidget *w) = 0;
@@ -34,9 +35,6 @@ protected:
     void customEvent(QEvent *event) override;
     void connectNotify(const QMetaMethod &signal) override;
     void disconnectNotify(const QMetaMethod &signal) override;
-
-protected:
-    ~ZDefaultWidgetManager() override;
 };
 
 TUIWIDGETS_NS_END
