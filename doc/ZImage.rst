@@ -7,16 +7,16 @@ ZImage
 
    ZImage allows keeping terminal output in a memory buffer for later usage or to store and load.
 
-   **constructors**
+   **Constructors**
 
    | :cpp:func:`ZImage(const Tui::ZTerminal *terminal, int width, int height)> <void Tui::ZImage::ZImage(const Tui::ZTerminal *terminal, int width, int height)>`
 
-   **static functions**
+   **Static Functions**
 
    | :cpp:func:`~std::unique_ptr<Tui::ZImage> Tui::ZImage::fromFile(const Tui::ZTerminal *terminal, const QString &fileName)`
    | :cpp:func:`~std::unique_ptr<Tui::ZImage> Tui::ZImage::fromByteArray(const Tui::ZTerminal *terminal, QByteArray data)`
 
-   **functions**
+   **Functions**
 
    | :cpp:func:`~int Tui::ZImage::height() const`
    | :cpp:func:`~Tui::ZPainter Tui::ZImage::painter()`

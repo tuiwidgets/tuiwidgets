@@ -69,6 +69,25 @@ On the other hand, a widget can have a local palette overriding colors for this 
 The predefined palettes currently assume that most controls are used as children of a window.
 If controls are used without a window, colors for these controls need to setup manually.
 
+.. _ControlMarkup:
+
+Markup
+------
+
+Some widgets support using a simple markup for defining their text contents.
+
+Currently the only supported tag is the ``m`` tag which allows specifing a mnemonic part of the text that is highlighted
+and used to generate a keyboard shortcut for the widget from.
+
+When setting the contents in the constructor markup interpretation is usually enabled by prefixing the string
+with an additional argument with the value :cpp:var:`Tui::withMarkup`.
+When working with an already existing instance, there is usually a ``setMarkup`` method to set text interpreted as
+markup.
+
+The markup language is based on the basic html syntax with elements starting with a tag in the form of ``<m>`` and
+terminating with an end tag in the form of ``</m>``.
+
+If the actual text contents should contain a ``<`` character it needs to be escaped using ``&lt;``.
 
 Root / Windows
 --------------

@@ -219,6 +219,12 @@ But to ease preparing the widget tree before actually connecting it to the termi
 the newly attached widget tree is scanned for the widget with the most recent call to setFocus which is both
 enabled and visible to take focus.
 
+When a widget is set as main widget on the terminal and when the terminal size changes the size of the main widget
+will be set to the size of the terminal (or its minimum size if that is larger).
+The main widget will always be placed in the top left corner of the terminal and the position part of the widget's
+geometry is ignored.
+
+
 .. _term_viewport:
 
 Viewport
@@ -284,8 +290,8 @@ An example is the linux system terminal that is restricted to 256 or at most 512
 .. _term_introspection:
 
 
-behavior
----------
+Behavior
+--------
 
 If widget tree does not handle :kbd:`Ctrl+L` the terminal will handle it by calling :cpp:func:`~void Tui::ZTerminal::forceRepaint()`
 as most TUI applications allow using :kbd:`Ctrl+L` to force refresh the terminal if another application or some bug has left
@@ -328,7 +334,7 @@ As keyboard focus is a terminal scoped state, the signal :cpp:func:`~Tui::ZTermi
 to observe the focus moving from one widget to another widget.
 
 The state of resolution if multi key shortcuts can be observed via callbacks registered using
-:cpp:func:`~void Tui::ZTerminal::registerPendingKeySequenceCallbacks(const ZPendingKeySequenceCallbacks &callbacks)`.
+:cpp:func:`~void Tui::ZTerminal::registerPendingKeySequenceCallbacks(const Tui::ZPendingKeySequenceCallbacks &callbacks)`.
 
 And the progression through rendering cycles of the application can be monitored using the signals
 :cpp:func:`~Tui::ZTerminal::afterRendering()` and :cpp:func:`~Tui::ZTerminal::beforeRendering()`.
@@ -431,7 +437,7 @@ ZTerminal
    | :cpp:func:`ZPainter painter()`
    | :cpp:func:`bool isPaused() const`
    | :cpp:func:`void pauseOperation()`
-   | :cpp:func:`void registerPendingKeySequenceCallbacks(const ZPendingKeySequenceCallbacks &callbacks)`
+   | :cpp:func:`void registerPendingKeySequenceCallbacks(const Tui::ZPendingKeySequenceCallbacks &callbacks)`
    | :cpp:func:`void requestLayout(ZWidget *w)`
    | :cpp:func:`void resize(int width, int height)`
    | :cpp:func:`void setAutoDetectTimeoutMessage(const QString &message)`
@@ -547,7 +553,10 @@ Members
 .. rst-class:: tw-signal
 .. cpp:function:: void beforeRendering()
 
-   TODO
+   This signal is emitted just before rendering and layout.
+
+   This signal can be used to update display state right before a render cycle is done, when there is not suitable
+   signal or event to trigger updateing.
 
 .. rst-class:: tw-static
 .. cpp:function:: static bool isDefaultTerminalAvailable()
@@ -600,8 +609,8 @@ Members
 .. cpp:function:: void dispatchKeyboardEvent(ZKeyEvent &translated)
 
    For testing prefer using
-   :cpp:func:`Tui::ZTest::sendText <void Tui::ZTest::sendText(Tui::ZTerminal *terminal, const QString &text, Qt::KeyboardModifiers modifiers)>`
-   or :cpp:func:`Tui::ZTest::sendKey <void Tui::ZTest::sendKey(Tui::ZTerminal *terminal, Qt::Key key, Qt::KeyboardModifiers modifiers)>`
+   :cpp:func:`Tui::ZTest::sendText <void Tui::ZTest::sendText(Tui::ZTerminal *terminal, const QString &text, Tui::KeyboardModifiers modifiers)>`
+   or :cpp:func:`Tui::ZTest::sendKey <void Tui::ZTest::sendKey(Tui::ZTerminal *terminal, Tui::Key key, Tui::KeyboardModifiers modifiers)>`
    instead.
 
    The function allows injecting a artifical :cpp:class:`Tui::ZKeyEvent` into the application as if it had been send
@@ -708,7 +717,9 @@ Members
 
 .. cpp:function:: ZWidget *keyboardGrabber() const
 
-   TODO
+   Returns the current widget that has grabbed the keyboard if any.
+
+   Widgets can grab the keyboard using :cpp:func:`void Tui::ZWidget::grabKeyboard()`.
 
 .. cpp:function:: void setMainWidget(ZWidget *w)
 .. cpp:function:: ZWidget *mainWidget() const
@@ -719,6 +730,11 @@ Members
 
    If a new main widget is set, various widget related state in the ZTerminal instance is cleared (e.g. focus,
    keyboard grab, pending layouting).
+
+   The geometry of the main widget overwritten by the terminal size in most cases.
+   The size of the main widget can be influenced by setting the widget's minimum size.
+   The position of the widget's geometry is ignored and the widget is always placed in the top-left corner of the
+   terminal.
 
 .. cpp:function:: ZPainter painter()
 
@@ -736,15 +752,21 @@ Members
 
    See :ref:`term_pause` for details.
 
-.. cpp:function:: void registerPendingKeySequenceCallbacks(const ZPendingKeySequenceCallbacks &callbacks)
+.. cpp:function:: void registerPendingKeySequenceCallbacks(const Tui::ZPendingKeySequenceCallbacks &callbacks)
 
-   TODO
+   The ZPendingKeySequenceCallbacks allows monitoring in progress multi step shortcuts.
+
+   See :cpp:class:`Tui::ZPendingKeySequenceCallbacks` for details.
 
 .. cpp:function:: bool isLayoutPending() const
 .. cpp:function:: void requestLayout(ZWidget *w)
 .. cpp:function:: void maybeRequestLayout(ZWidget *w)
 
-   TODO
+   These functions can be used to manage layout cycles.
+   They are mostly used by :cpp:class:`Tui::ZLayout`, but could be used to in implementations of other layout systems too.
+
+   ..
+      TODO more details
 
 .. cpp:function:: void resize(int width, int height)
 

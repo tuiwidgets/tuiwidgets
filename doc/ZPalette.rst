@@ -105,7 +105,7 @@ palettes.
       Returns ``true`` if not colors or rules are set in this palette.
 
    .. rst-class:: tw-static
-   .. cpp:function:: ZColor getColor(ZWidget *targetWidget, ZImplicitSymbol x) const
+   .. cpp:function:: ZColor getColor(ZWidget *targetWidget, ZImplicitSymbol x)
 
       Return a named color for a target widget.
       If the color was not defined it returns red (#ff0000) as placeholder.

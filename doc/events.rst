@@ -46,7 +46,7 @@ Tui Widgets defines getter for the type values for its events. The Tui Widgets e
    the empty string.
 
    In both cases the application can get the modifier keys pressed when the key input happend by reading
-   :cpp:func:`Qt::KeyboardModifiers Tui::ZKeyEvent::modifiers() const`.
+   :cpp:func:`Tui::KeyboardModifiers Tui::ZKeyEvent::modifiers() const`.
 
    Tui Widgets sends the key events in the accepted state (see :cpp:func:`QEvent::isAccepted()`).
    If the application passes the handling of the key event to the
@@ -93,7 +93,7 @@ Tui Widgets defines getter for the type values for its events. The Tui Widgets e
 
    Widgets can override :cpp:func:`void Tui::ZWidget::focusInEvent(Tui::ZFocusEvent *event)` to handle this event.
 
-   The widget can query the focus reason using :cpp:func:`Qt::FocusReason Tui::ZFocusEvent::reason() const`
+   The widget can query the focus reason using :cpp:func:`Tui::FocusReason Tui::ZFocusEvent::reason() const`
 
 .. cpp:function:: Tui::ZEventType::focusOut()
 
@@ -101,7 +101,7 @@ Tui Widgets defines getter for the type values for its events. The Tui Widgets e
 
    Widgets can override :cpp:func:`void Tui::ZWidget::focusOutEvent(Tui::ZFocusEvent *event)` to handle this event.
 
-   The widget can query the focus reason using :cpp:func:`Qt::FocusReason Tui::ZFocusEvent::reason() const`
+   The widget can query the focus reason using :cpp:func:`Tui::FocusReason Tui::ZFocusEvent::reason() const`
 
 .. cpp:function:: Tui::ZEventType::move()
 
@@ -123,7 +123,7 @@ Tui Widgets defines getter for the type values for its events. The Tui Widgets e
 
 .. cpp:function:: Tui::ZEventType::otherChange()
 
-   This event is send to every QObject in widget tree on some changes (:cpp:class:`Tui::ZOtherChangeEvent`).
+   This event is sent to every QObject in widget tree on some changes (:cpp:class:`Tui::ZOtherChangeEvent`).
 
    The application can use :cpp:func:`bool Tui::ZOtherChangeEvent::match(const QEvent *event, Tui::ZSymbol changed)` to
    match the event against a type of change.
@@ -145,9 +145,9 @@ Tui Widgets defines getter for the type values for its events. The Tui Widgets e
    Used as query to decide if a window should be closed (:cpp:class:`Tui::ZCloseEvent`).
 
    Classes derived from :cpp:class:`Tui::ZWindow` can override
-   :cpp:func:`void Tui::ZWindow::closeEvent(ZCloseEvent *event)` to handle this event.
+   :cpp:func:`void Tui::ZWindow::closeEvent(Tui::ZCloseEvent *event)` to handle this event.
 
-   TODO details when documenting ZWindow.
+   See the section on the :ref:`close request protcol <ZWindow_close_requests>` for details.
 
 .. cpp:function:: Tui::ZEventType::updateRequest()
 
@@ -203,6 +203,14 @@ The following Qt signals are used by Tui Widgets:
    If the effective visibility changed the widget will have received a :cpp:func:`Tui::ZEventType::hide()` event before
    this event.
 
+.. rst-class:: tw-spaceafter
+.. _qevent_enablechanged:
+.. adhoc-def:: QEvent::EnabledChange
+
+   Informs a widget that its enabled state has changed.
+
+   This event is sent whenever the the effective enabled state is changed.
+
 ..
   TOOD
   QEvent::ParentAboutToChange
@@ -250,7 +258,7 @@ ZKeyEvent
 
    See :cpp:func:`Tui::ZEventType::key()` for usage details.
 
-   .. cpp:function:: ZKeyEvent(int key, Qt::KeyboardModifiers modifiers, const QString &text)
+   .. cpp:function:: ZKeyEvent(int key, Tui::KeyboardModifiers modifiers, const QString &text)
 
        Creates a :cpp:func:`Tui::ZEventType::key()` event using the key ``key``, text ``text`` and
        modifiers ``modifiers``.
@@ -263,7 +271,7 @@ ZKeyEvent
 
       Returns the text associated with the event.
 
-   .. cpp:function:: Qt::KeyboardModifiers modifiers() const
+   .. cpp:function:: Tui::KeyboardModifiers modifiers() const
 
       Returns the modifiers associated with the event.
 
@@ -290,15 +298,15 @@ ZFocusEvent
 
    See :cpp:func:`Tui::ZEventType::focusIn()` and :cpp:func:`Tui::ZEventType::focusOut()` for usage details.
 
-   .. cpp:function:: ZFocusEvent(Tui::ZFocusEvent::FocusIn, Qt::FocusReason reason = Qt::OtherFocusReason)
+   .. cpp:function:: ZFocusEvent(Tui::ZFocusEvent::FocusIn, Tui::FocusReason reason = Tui::OtherFocusReason)
 
       Creates a :cpp:func:`Tui::ZEventType::focusIn()` event using reason ``reason``.
 
-   .. cpp:function:: ZFocusEvent(Tui::ZFocusEvent::FocusOut, Qt::FocusReason reason = Qt::OtherFocusReason)
+   .. cpp:function:: ZFocusEvent(Tui::ZFocusEvent::FocusOut, Tui::FocusReason reason = Tui::OtherFocusReason)
 
       Creates a :cpp:func:`Tui::ZEventType::focusOut()` event using reason ``reason``.
 
-   .. cpp:function:: Qt::FocusReason reason() const
+   .. cpp:function:: Tui::FocusReason reason() const
 
       Returns the focus reason associated with the event.
 
@@ -393,15 +401,15 @@ ZRawSequenceEvent
 
    See :cpp:func:`Tui::ZEventType::rawSequence()` and :cpp:func:`Tui::ZEventType::pendingRawSequence()` for usage details.
 
-   .. cpp:function:: ZRawSequenceEvent(QString seq)
+   .. cpp:function:: ZRawSequenceEvent(QByteArray seq)
 
       Creates a :cpp:func:`Tui::ZEventType::rawSequence()` event using ``seq`` as sequence.
 
-   .. cpp:function:: ZRawSequenceEvent(Pending, QString seq)
+   .. cpp:function:: ZRawSequenceEvent(Pending, QByteArray seq)
 
       Creates a :cpp:func:`Tui::ZEventType::pendingRawSequence()` event using ``seq`` as sequence.
 
-   .. cpp:function:: QString sequence() const
+   .. cpp:function:: QByteArray sequence() const
 
       Returns the sequence associated with the event.
 

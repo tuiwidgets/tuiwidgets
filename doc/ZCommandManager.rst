@@ -22,10 +22,17 @@ ZCommandNotifier
 
    ZCommandNotifier is not copyable or movable. It does not define comparision operators.
 
-   .. cpp:function:: explicit ZCommandNotifier(ZImplicitSymbol command, QObject *parent, Qt::ShortcutContext context = Qt::ApplicationShortcut)
+   ZCommandNotifier creates a command (potentially local to a widget or window).
+   The :cpp:func:`void activated()` signal must be connected to define what the command does.
+
+   **Constructors**
+
+   .. cpp:function:: explicit ZCommandNotifier(ZImplicitSymbol command, QObject *parent, Tui::ShortcutContext context = Tui::ApplicationShortcut)
 
       Creates a ZCommandNotifier instance for command ``command``.
       The command notifier will be active for commands triggered in the context ``context`` relative to ``parent``.
+
+   **Functions**
 
    .. cpp:function:: ZSymbol command() const
 
@@ -45,6 +52,8 @@ ZCommandNotifier
 
       Returns true if the currently focused widget satisfies the context of this command notifier.
 
+   **Signals**
+
    .. rst-class:: tw-signal
    .. cpp:function:: void activated()
 
@@ -63,8 +72,28 @@ ZCommandManager
 
    ZCommandManager is not copyable or movable. It does not define comparision operators.
 
+   ZCommandManager is used to implement widgets that display and trigger commands.
+   It is also used in the implementation of :cpp:class:`Tui::ZCommandNotifier`.
+
    .. cpp:function:: void registerCommandNotifier(ZCommandNotifier *notifier)
+
+      Used internally in :cpp:class:`Tui::ZCommandNotifier`.
+
    .. cpp:function:: bool isCommandEnabled(ZSymbol command) const
+
+      Queries the effective enabled state of a command.
+
+      The state depends on the currently focused widget and on the state of the :cpp:class:`Tui::ZCommandNotifier`
+      instances for the command ``command``.
+
    .. cpp:function:: void activateCommand(ZSymbol command)
+
+      Activates the command ``command`` if possible.
+
+      Which (if any) :cpp:class:`Tui::ZCommandNotifier` instance is triggered depends on the currently focused widget
+      and on the state of the applicable instance.
+
    .. rst-class:: tw-signal
    .. cpp:function:: commandStateChanged(ZSymbol command)
+
+      This signal is emitted when the effective state of command ``command`` changes.

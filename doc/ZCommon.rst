@@ -10,25 +10,38 @@ The ``ZCommon.h`` header contains types, enums and constants shared by various c
 
    This is actually a namespace.
 
+.. rst-class:: tw-invisible
+.. cpp:class:: Tui::Misc
+
+   This is actually a namespace.
+
 .. rst-class:: tw-midspacebefore
 .. cpp:enum:: Tui::ZItemDataRole
 
    .. cpp:enumerator:: LeftDecorationRole
 
-      TODO
+      Item role used with :cpp:class:`Tui::ZListView` to indicate the contents of the left decoration.
+
+      Type: :cpp:class:`QString`
 
    .. cpp:enumerator:: LeftDecorationFgRole
 
-      TODO
+      Item role used with :cpp:class:`Tui::ZListView` to indicate the foreground color of the left decoration.
+
+      Type: :cpp:class:`Tui::ZColor`
 
    .. cpp:enumerator:: LeftDecorationBgRole
 
-      TODO
+      Item role used with :cpp:class:`Tui::ZListView` to indicate the background color of the left decoration.
+
+      Type: :cpp:class:`Tui::ZColor`
 
    .. cpp:enumerator:: LeftDecorationSpaceRole
 
-      TODO
+      Item role used with :cpp:class:`Tui::ZListView` to indicate amount of space between the left decoration (if any)
+      and the item text.
 
+      Type: int
 
 .. rst-class:: tw-midspacebefore
 .. cpp:enum-class:: Tui::CursorStyle
@@ -49,8 +62,10 @@ The ``ZCommon.h`` header contains types, enums and constants shared by various c
 
       Use bar cursor style if supported
 
+.. rst-class:: tw-invisible
+.. cpp:type:: Tui::ZTextAttributes = QFlags<Tui::ZTextAttribute>
+
 .. rst-class:: tw-midspacebefore
-.. cpp:class:: Tui:: ZTextAttributes
 .. cpp:enum-class:: Tui::ZTextAttribute
 
    .. cpp:enumerator:: Bold
@@ -63,14 +78,13 @@ The ``ZCommon.h`` header contains types, enums and constants shared by various c
    .. cpp:enumerator:: UnderlineDouble
    .. cpp:enumerator:: UnderlineCurly
 
-..
-  TODO ZTextAttributes ?
-
 
 .. rst-class:: tw-midspacebefore
 .. cpp:var:: static constexpr int Tui::Erased = 127
 
    Character value for the special erased state.
+
+   On supported terminals trailing erased cells in a line will not add whitespace when copying text from the terminal.
 
 .. rst-class:: tw-midspacebefore
 .. cpp:class:: Tui::WithMarkupTag
@@ -81,7 +95,10 @@ The ``ZCommon.h`` header contains types, enums and constants shared by various c
 Aliases from Qt
 ---------------
 
-TODO
+Tui Widgets shares some enums with Qt.
+For many enums commonly used with widgets they are reexported in ``Tui`` namespace for more consistent usage.
+In some cases Qt defines more choices than what is supported with Tui Widgets, in these cases only the supported
+choices are reexported here.
 
 .. cpp:type:: Tui::CheckState = Qt::CheckState
 .. cpp:enumerator:: Tui::Unchecked = Qt::Unchecked
@@ -189,12 +206,13 @@ Private Types
 .. cpp:class:: template<> Tui::Private::ZMoFunc<void(QEvent*)>
 .. cpp:class:: template<> Tui::Private::ZMoFunc<bool()>
 
-   TODO
-
+   This private type is used to store callable objects internally.
 
 .. cpp:class:: Tui::Private
 
-   TODO
+   Namespace for private objects.
+
+   Do not use members of this namespace in application code.
 
 
 .. rst-class:: tw-invisible

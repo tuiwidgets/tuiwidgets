@@ -1,5 +1,8 @@
 .. _ZSymbol:
 
+ZSymbol
+=======
+
 Tui Widgets uses strings as identifiers in various places.
 Using strings is helpful for namespace management when multiple independent developers create libraries and
 identfiers are widely scoped.
@@ -9,9 +12,6 @@ so that simple integer comparisons can be done after lookup.
 
 ZSymbol is used for storage and in places where implicit conversation from QString is not desired.
 In constract ZImplicitSymbol can be used where ease of use requires implicit conversion.
-
-ZSymbol
-=======
 
 .. c:macro:: TUISYM_LITERAL(x)
 

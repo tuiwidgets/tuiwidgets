@@ -1,3 +1,5 @@
+.. _Getting_Started:
+
 Getting started
 ===============
 
@@ -10,6 +12,8 @@ An applications typically uses a mix of predefined widgets and application defin
 
 A simple dialog with a button
 -----------------------------
+
+.. figure:: tpi/demo_gettingstarted.tpi
 
 First you need to include the pkg-config dependency named ``TuiWidgets`` into
 your application's build. Next include the needed headers into your source:

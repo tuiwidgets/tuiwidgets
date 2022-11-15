@@ -69,14 +69,16 @@ They allow specifing how the available space is allocated to the widgets.
 Focus
 -----
 
-Keyboard input is processed by the widget that currently has focus.
+Keyboard input and paste events are processed by the widget that currently has focus.
 Focus is a per terminal property.
 The focus can be placed on a widget by calling
-:cpp:func:`setFocus() <void Tui::ZWidget::setFocus(Qt::FocusReason reason)>`.
+:cpp:func:`setFocus() <void Tui::ZWidget::setFocus(Tui::FocusReason reason)>`.
 
-In a window focus can be switched by the user using :kbd:`Tab` and :kbd:`Shift+Tab`.
+In a :ref:`window <ZWindow>`, focus can be switched by the user using :kbd:`Tab` and :kbd:`Shift+Tab`.
 This cycles through visible and enabled widgets that have a
-:cpp:func:`focus policy <void Tui::ZWidget::setFocusPolicy(Qt::FocusPolicy policy)>` that allows for keyboard focusing.
+:cpp:func:`focus policy <void Tui::ZWidget::setFocusPolicy(Tui::FocusPolicy policy)>` that allows for keyboard focusing.
+
+:cpp:class:`Tui::ZRoot` implements switching focus between windows using :kbd:`F6` and :kbd:`Shift+F6`.
 
 Focus order can be setup using :cpp:func:`~void Tui::ZWidget::setFocusOrder(int order)`.
 For widgets with the same focus order value, focus follows the stacking order from bottom to top.
@@ -85,10 +87,24 @@ In addition to using the keyboard to move in the focus among the focus order the
 :cpp:func:`ZWidget *Tui::ZWidget::placeFocus(bool last)`,
 :cpp:func:`ZWidget *Tui::ZWidget::nextFocusable()` and
 :cpp:func:`ZWidget *Tui::ZWidget::prevFocusable()`
-can be used for foucs management.
+can be used for focus management.
+
+Widgets optionally can act as focus containers.
+This modifies how focus inside such widgets is handled.
+
+For widgets that act as windows the focus container mode :cpp:enumerator:`Tui::FocusContainerMode::Cycle` can be used
+to restrict focus changes by :kbd:`Tab`/:kbd:`Shift+Tab` and via
+:cpp:func:`ZWidget *Tui::ZWidget::nextFocusable()`/:cpp:func:`ZWidget *Tui::ZWidget::prevFocusable()` from moving the
+focus outside of the widget.
+If the last focusable widget inside the widget marked with the mode was focused last the next widget to focus will
+be the first focusable widget in the container.
+Reverse focus movement works respectivly.
+
+To restrict the scope of the effects of the focus order property the focus container mode
+:cpp:enumerator:`Tui::FocusContainerMode::SubOrdering` can be used.
 
 ..
-  TODO: Document focus container modes
+  TODO: say more about sub ordering mode?
 
 Widgets can be enabled, that is ready for user interaction or disabled.
 Similarily to how visibility works, enabled is a local setting but only is effective when the parent is also effecivly
@@ -105,7 +121,7 @@ A widget is connected to a terminal if itself is the main widget of a terminal o
 widget of a terminal.
 
 Fully functional focus handling depends on the terminal, although unconnected widgets keep a note on calling
-:cpp:func:`setFocus() <void Tui::ZWidget::setFocus(Qt::FocusReason reason = Qt::OtherFocusReason)>`, as a fallback
+:cpp:func:`setFocus() <void Tui::ZWidget::setFocus(Tui::FocusReason reason = Tui::OtherFocusReason)>`, as a fallback
 for the special case that a widget tree is constructed before setting the terminal's main widget.
 Apart from this minimal support, focus, keyboard grabs, cursor configuration and even text measuring are not available
 without a terminal.
@@ -140,7 +156,7 @@ The widget behavior can then be customized by overriding virtual functions.
 To customize rendering of the widget override :cpp:func:`~void Tui::ZWidget::paintEvent(Tui::ZPaintEvent *event)`.
 To customize input handling override :cpp:func:`~void Tui::ZWidget::keyEvent(Tui::ZKeyEvent *event)` and
 :cpp:func:`~void Tui::ZWidget::pasteEvent(Tui::ZPasteEvent *event)`.
-Also set the :cpp:func:`focus policy <void Tui::ZWidget::setFocusPolicy(Qt::FocusPolicy policy)>` to receive input.
+Also set the :cpp:func:`focus policy <void Tui::ZWidget::setFocusPolicy(Tui::FocusPolicy policy)>` to receive input.
 
 To customize reactions to changes in widget state use
 :cpp:func:`~void Tui::ZWidget::focusInEvent(Tui::ZFocusEvent *event)`,
@@ -160,7 +176,7 @@ It is often useful to setup
 :cpp:func:`~void Tui::ZWidget::setMaximumSize(QSize s)`,
 :cpp:func:`~void Tui::ZWidget::setFixedSize(QSize s)`,
 :cpp:func:`~void Tui::ZWidget::setFocusMode(FocusContainerMode mode)`,
-:cpp:func:`~void Tui::ZWidget::setFocusPolicy(Qt::FocusPolicy policy)`,
+:cpp:func:`~void Tui::ZWidget::setFocusPolicy(Tui::FocusPolicy policy)`,
 :cpp:func:`~void Tui::ZWidget::setSizePolicyH(Tui::SizePolicy policy)`,
 :cpp:func:`~void Tui::ZWidget::setSizePolicyV(Tui::SizePolicy policy)` and
 :cpp:func:`~void Tui::ZWidget::setStackingLayer(int layer)`
@@ -193,7 +209,7 @@ ZWidget
    | :cpp:func:`bool focus() const`
    | :cpp:func:`FocusContainerMode focusMode() const`
    | :cpp:func:`int focusOrder() const`
-   | :cpp:func:`Qt::FocusPolicy focusPolicy() const`
+   | :cpp:func:`Tui::FocusPolicy focusPolicy() const`
    | :cpp:func:`QRect geometry() const`
    | :cpp:func:`ZColor getColor(const ZImplicitSymbol &x)`
    | :cpp:func:`void grabKeyboard()`
@@ -238,10 +254,10 @@ ZWidget
    | :cpp:func:`void setEnabled(bool e)`
    | :cpp:func:`void setFixedSize(QSize s)`
    | :cpp:func:`void setFixedSize(int w, int h)`
-   | :cpp:func:`void setFocus(Qt::FocusReason reason = Qt::OtherFocusReason)`
+   | :cpp:func:`void setFocus(Tui::FocusReason reason = Tui::OtherFocusReason)`
    | :cpp:func:`void setFocusMode(FocusContainerMode mode)`
    | :cpp:func:`void setFocusOrder(int order)`
-   | :cpp:func:`void setFocusPolicy(Qt::FocusPolicy policy)`
+   | :cpp:func:`void setFocusPolicy(Tui::FocusPolicy policy)`
    | :cpp:func:`void setGeometry(const QRect &geometry)`
    | :cpp:func:`void setLayout(ZLayout *l)`
    | :cpp:func:`void setMaximumSize(QSize s)`
@@ -316,13 +332,45 @@ Members
 .. cpp:function:: bool isLocallyEnabled() const
 .. cpp:function:: void setEnabled(bool e)
 
+   The enabled state describes if a widget is accepting user interaction.
+   Commonly widgets that are disabled (i.e. not enabled) have a visible difference to their enabled state.
+   Tui Widgets does not send either :cpp:func:`Tui::ZEventType::key()` or :cpp:func:`Tui::ZEventType::paste()`
+   events to disabled widgets.
 
+   A widget is enabled if itself and all its parents are enabled.
+   The local enabled state of the widget is availabe by calling ``isLocallyEnabled`` and can be changed by
+   ``setEnabled``.
+
+   ``setEnabled`` only directly effects the state returned by ``isEnabled`` if the parent widget's effectivly enabled
+   state (the return value of ``isEnabled``) was already :cpp:expr:`true`.
+
+   Only changes to the effective enabled state trigger an event.
+   The event sent is :ref:`QEvent::EnabledChange <qevent_enablechanged>`.
+
+   If a change in the effective enabled state of a focused widget results in it beeing disabled, it looses its focus
+   and the focus is either moved to the next focusable widget or if no such widget exists the focus is removed.
 
 .. cpp:function:: bool isVisible() const
 .. cpp:function:: bool isLocallyVisible() const
 .. cpp:function:: void setVisible(bool v)
 
+   The visiblity of a widget describes if the widget is rendered.
+   Even if a widget is visible according to this property it can still be occluded by a widget higher in the stacking
+   order or be in a position that is not visible to the user.
 
+   A widget is visible if itself and all its parents are visible.
+   The local visibility state of the widget is availabe by calling ``isLocallyVisible`` and can be changed by
+   ``setVisibile``.
+
+   ``setVisible`` only directly effects the state returned by ``isVisible`` if the parent widget was already visible.
+   Changing the local visibility state can trigger two kinds of events.
+   Changes in the local visibility state trigger the events :ref:`QEvent::ShowToParent <qevent_showtoparent>` and
+   :ref:`QEvent::HideToParent <qevent_hidetoparent>`.
+   Changes to the effective visibility state (the return value of ``isVisible``) result in delivery of the events
+   :cpp:func:`Tui::ZEventType::show()` and :cpp:func:`Tui::ZEventType::hide()`.
+
+   If a change in the effective visibility state of a focused widget results in it beeing no longer visible, it looses
+   its focus and the focus is either moved to the next focusable widget or if no such widget exists the focus is removed.
 
 .. cpp:function:: void setStackingLayer(int layer)
 .. cpp:function:: int stackingLayer() const
@@ -372,7 +420,7 @@ Members
    See :cpp:enum:`Tui::SizePolicy` for details.
 
 .. rst-class:: tw-virtual
-.. cpp:function:: virtual QSize sizeHint() const
+.. cpp:function:: QSize sizeHint() const
 
    Returns the calculated size of the widget.
 
@@ -382,21 +430,26 @@ Members
    The meaning depends on the set size policy.
 
 .. rst-class:: tw-virtual
-.. cpp:function:: virtual QSize minimumSizeHint() const
+.. cpp:function:: QSize minimumSizeHint() const
 
    Returns the calculated minimum size of the widget.
 
 .. cpp:function:: QSize effectiveSizeHint() const
 .. cpp:function:: QSize effectiveMinimumSize() const
 .. rst-class:: tw-virtual
-.. cpp:function:: virtual QRect layoutArea() const
+.. cpp:function:: QRect layoutArea() const
 
    Returns a QRect describing the area in the widget that should be used for layouts to place the child widgets.
 
 .. cpp:function:: ZLayout *layout() const
 .. cpp:function:: void setLayout(ZLayout *l)
 
-   TODO: See layout
+   The layout of a widget allows automatically placing child widgets in the widget's layout area.
+
+   If a layout is set it will control the size request of the widget based on the size requests of the widgets in
+   the layout.
+
+   See also: :ref:`ZLayout`
 
 .. cpp:function:: void showCursor(QPoint position)
 
@@ -439,12 +492,12 @@ Members
    layout of this widget or its direct children change.
    It should never be needed to call this when just using a widget.
 
-.. cpp:function:: void setFocus(Qt::FocusReason reason = Qt::OtherFocusReason)
+.. cpp:function:: void setFocus(Tui::FocusReason reason = Tui::OtherFocusReason)
 
    Requests focus for the widget.
 
-.. cpp:function:: void setFocusPolicy(Qt::FocusPolicy policy)
-.. cpp:function:: Qt::FocusPolicy focusPolicy() const
+.. cpp:function:: void setFocusPolicy(Tui::FocusPolicy policy)
+.. cpp:function:: Tui::FocusPolicy focusPolicy() const
 
    The focus policy determines how this widget can gain focus.
    If the focus policy contains
@@ -473,11 +526,25 @@ Members
 .. cpp:function:: const ZPalette &palette() const
 .. cpp:function:: void setPalette(const ZPalette &pal)
 
-   TODO
+   A widgets palette sets or modifies the palette colors for a widget and its decendents.
+
+   Usually the root of the widget tree needs a palette that sets up all the standard colors for an application.
+   This is usually done by using :cpp:class:`Tui::ZRoot` as root widget.
+
+   Other widgets don't need to have a palette set, but it can be useful to set a palette for changing colors of
+   specific widgets. In that case the usual way is to retrieve the palette, set some overriding color definitions and
+   set the resulting palette on the widget.
+
+   See :ref:`ZPalette` for details.
 
 .. cpp:function:: ZColor getColor(const ZImplicitSymbol &x)
 
-   TODO
+   Get a specific palette color named by ``x``.
+
+   If the color is not properly defined this function will just return red as an error indicator.
+   Many colors are only defined for widgets that are contained in windows.
+
+   This internally uses :cpp:func:`ZColor Tui::ZPalette::getColor(ZWidget *targetWidget, ZImplicitSymbol x)`.
 
 .. cpp:function:: QStringList paletteClass() const
 .. cpp:function:: void setPaletteClass(QStringList classes)
@@ -533,9 +600,15 @@ Members
 
    Returns the first/last widget in the widget and its decendents that can take focus or nullptr of no such widget exists.
 
-.. cpp:function:: virtual ZWidget *resolveSizeHintChain()
+.. rst-class:: tw-virtual
+.. cpp:function:: ZWidget *resolveSizeHintChain()
 
-   TODO
+   Applications can override this function to customize which widgets are considered linked by chained layouts for
+   layout cycles.
+
+   The base implementation considers widgets to be linked to their parent if the parent has a layout set.
+
+   Application should only need to override this if they implement automatic widget layouting without using layouts.
 
 .. cpp:function:: void setCommandManager(ZCommandManager *cmd)
 .. cpp:function:: ZCommandManager *commandManager() const
@@ -621,41 +694,41 @@ Related Types
 
    The enum describes how layout should allocate space to an item.
 
-.. cpp:enumerator:: Fixed
+   .. cpp:enumerator:: Fixed
 
-   The item should be be kept at the size indicated by the size hint.
+      The item should be be kept at the size indicated by the size hint.
 
-.. cpp:enumerator:: Minimum
+   .. cpp:enumerator:: Minimum
 
-   The size hint is the minimum acceptable size.
+      The size hint is the minimum acceptable size.
 
-.. cpp:enumerator:: Maximum
+   .. cpp:enumerator:: Maximum
 
-   The size hint is the maximum acceptable size.
+      The size hint is the maximum acceptable size.
 
-.. cpp:enumerator:: Preferred
+   .. cpp:enumerator:: Preferred
 
-   The item can shrink and expand.
+      The item can shrink and expand.
 
-.. cpp:enumerator:: Expanding
+   .. cpp:enumerator:: Expanding
 
-   The item can shrink and expand.
-   Items with this policy should be preferred over items with other policies when expanding.
+      The item can shrink and expand.
+      Items with this policy should be preferred over items with other policies when expanding.
 
 .. cpp:enum:: Tui::FocusContainerMode
 
    If not ``None`` the widget with this mode is a focus container.
 
-.. cpp:enumerator:: None
+   .. cpp:enumerator:: None
 
-   The widget is not a focus container.
+      The widget is not a focus container.
 
-.. cpp:enumerator:: Cycle
+   .. cpp:enumerator:: Cycle
 
-   A widget with this mode will not pass focus to the parent widget or to its siblings.
-   Use this for windows and dialogs.
+      A widget with this mode will not pass focus to the parent widget or to its siblings.
+      Use this for windows and dialogs.
 
-.. cpp:enumerator:: SubOrdering
+   .. cpp:enumerator:: SubOrdering
 
-   A widget with this mode will determine focus order locally using the focus order property.
-   If all widgets inside this widgets are passed throught it will pass focus to the parent widget or to its siblings.
+      A widget with this mode will determine focus order locally using the focus order property.
+      If all widgets inside this widgets are passed throught it will pass focus to the parent widget or to its siblings.

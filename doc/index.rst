@@ -72,7 +72,7 @@ It's known to work on
  * and more.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Contents:
 
    getting-started
@@ -92,7 +92,10 @@ It's known to work on
    ZSymbol
    ZTextMetrics
    ZTest
-   ZWindow
+   boxlayouts
+   widgets
+   misc
+   qtlogging
 
 
 Curent Status

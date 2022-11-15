@@ -9,15 +9,15 @@ The ZShortcut class allows to bind a signal to a keyboard shortcut.
 .. cpp:class:: Tui::ZKeySequence
 
    .. cpp:function:: static ZKeySequence forMnemonic(const QString &c);
-   .. cpp:function:: static ZKeySequence forKey(int key, Qt::KeyboardModifiers modifiers = {});
-   .. cpp:function:: static ZKeySequence forShortcut(const QString &c, Qt::KeyboardModifiers modifiers = Qt::ControlModifier);
-   .. cpp:function:: static ZKeySequence forShortcutSequence(const QString &c, Qt::KeyboardModifiers modifiers, const QString &c2, Qt::KeyboardModifiers modifiers2);
-   .. cpp:function:: static ZKeySequence forShortcutSequence(const QString &c, Qt::KeyboardModifiers modifiers, int key2, Qt::KeyboardModifiers modifiers2);
+   .. cpp:function:: static ZKeySequence forKey(int key, Tui::KeyboardModifiers modifiers = {});
+   .. cpp:function:: static ZKeySequence forShortcut(const QString &c, Tui::KeyboardModifiers modifiers = Tui::ControlModifier);
+   .. cpp:function:: static ZKeySequence forShortcutSequence(const QString &c, Tui::KeyboardModifiers modifiers, const QString &c2, Tui::KeyboardModifiers modifiers2);
+   .. cpp:function:: static ZKeySequence forShortcutSequence(const QString &c, Tui::KeyboardModifiers modifiers, int key2, Tui::KeyboardModifiers modifiers2);
 
 
 .. cpp:class:: Tui::ZShortcut : public QObject
 
-   .. cpp:function:: explicit ZShortcut(const ZKeySequence &key, ZWidget *parent, Qt::ShortcutContext context = Qt::WindowShortcut)
+   .. cpp:function:: explicit ZShortcut(const ZKeySequence &key, ZWidget *parent, Tui::ShortcutContext context = Tui::WindowShortcut)
 
       Creates a ZShortcut instance for sequence ``key``.
       The shortcut will be active for keyboard input in the context ``context`` relative to ``parent``.
@@ -60,7 +60,7 @@ ZPendingKeySequenceCallbacks
    The ZPendingKeySequenceCallbacks allows monitoring in progress multi step shortcuts.
 
    Monitoring is activated using
-   :cpp:func:`void Tui::ZTerminal::registerPendingKeySequenceCallbacks(const ZPendingKeySequenceCallbacks &callbacks)`.
+   :cpp:func:`void Tui::ZTerminal::registerPendingKeySequenceCallbacks(const Tui::ZPendingKeySequenceCallbacks &callbacks)`.
 
    .. cpp:function:: void setPendingSequenceStarted(std::function<void()> callback)
 
