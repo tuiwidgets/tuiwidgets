@@ -257,6 +257,8 @@ test_files = [
   'tests/textline/textline.cpp',
   'tests/textstyle.cpp',
   'tests/viewport/moveviewport.cpp',
+  'tests/widget/widget-focus-order.cpp',
+  'tests/widget/widget.cpp',
   'tests/window/dialog.cpp',
   'tests/window/window.cpp',
   'tests/windowcontainer.cpp',
