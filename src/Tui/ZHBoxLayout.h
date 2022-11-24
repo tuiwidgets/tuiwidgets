@@ -54,7 +54,7 @@ protected:
     void disconnectNotify(const QMetaMethod &signal) override;
 
 private:
-    std::unique_ptr<ZHBoxLayoutPrivate> p;
+    TUIWIDGETS_DECLARE_PRIVATE(ZHBoxLayout)
 };
 
 TUIWIDGETS_NS_END

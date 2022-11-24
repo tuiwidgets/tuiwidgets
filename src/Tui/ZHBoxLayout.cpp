@@ -3,6 +3,7 @@
 #include "ZHBoxLayout.h"
 
 #include "Layout_p.h"
+#include "ZLayout_p.h"
 
 TUIWIDGETS_NS_START
 
@@ -12,14 +13,14 @@ using Private::boxLayouter;
 using Private::mergePolicy;
 
 
-class ZHBoxLayoutPrivate {
+class ZHBoxLayoutPrivate : public ZLayoutPrivate {
 public:
     std::vector<std::unique_ptr<ZLayoutItem>> items;
     int spacing = 0;
 };
 
 ZHBoxLayout::ZHBoxLayout()
-    : p(std::make_unique<ZHBoxLayoutPrivate>())
+    : ZLayout(nullptr, std::make_unique<ZHBoxLayoutPrivate>())
 {
 }
 
@@ -27,37 +28,45 @@ ZHBoxLayout::~ZHBoxLayout() {
 }
 
 int ZHBoxLayout::spacing() const {
+    auto *const p = tuiwidgets_impl();
     return p->spacing;
 }
 
 void ZHBoxLayout::setSpacing(int sp) {
+    auto *const p = tuiwidgets_impl();
     p->spacing = std::max(sp, 0);
     relayout();
 }
 
 void ZHBoxLayout::addWidget(ZWidget *w) {
+    auto *const p = tuiwidgets_impl();
     p->items.emplace_back(ZLayoutItem::wrapWidget(w));
     relayout();
 }
 
 void ZHBoxLayout::add(ZLayout *l) {
+    auto *const p = tuiwidgets_impl();
     p->items.emplace_back(l);
     l->setParent(this);
     relayout();
 }
 
 void ZHBoxLayout::addSpacing(int size) {
+    auto *const p = tuiwidgets_impl();
     p->items.emplace_back(std::make_unique<SpacerLayoutItem>(size, 0, SizePolicy::Fixed, SizePolicy::Minimum));
     relayout();
 }
 
 void ZHBoxLayout::addStretch() {
+    auto *const p = tuiwidgets_impl();
     p->items.emplace_back(std::make_unique<SpacerLayoutItem>(0, 0, SizePolicy::Expanding, SizePolicy::Minimum));
     relayout();
 }
 
 
 void ZHBoxLayout::setGeometry(QRect toFill) {
+    auto *const p = tuiwidgets_impl();
+
     const int width = toFill.width();
     const int height = toFill.height();
 
@@ -88,6 +97,8 @@ void ZHBoxLayout::setGeometry(QRect toFill) {
 }
 
 QSize ZHBoxLayout::sizeHint() const {
+    auto *const p = tuiwidgets_impl();
+
     int hintSize = 0;
     int hintOther = 0;
     int numSpacer = 0;
@@ -112,6 +123,8 @@ QSize ZHBoxLayout::sizeHint() const {
 }
 
 SizePolicy ZHBoxLayout::sizePolicyH() const {
+    auto *const p = tuiwidgets_impl();
+
     SizePolicy policy = SizePolicy::Fixed;
     for (auto &item: p->items) {
         if (!item->isVisible()) {
@@ -124,6 +137,8 @@ SizePolicy ZHBoxLayout::sizePolicyH() const {
 }
 
 SizePolicy ZHBoxLayout::sizePolicyV() const {
+    auto *const p = tuiwidgets_impl();
+
     SizePolicy policy = SizePolicy::Fixed;
     for (auto &item: p->items) {
         if (!item->isVisible()) {
@@ -136,6 +151,8 @@ SizePolicy ZHBoxLayout::sizePolicyV() const {
 }
 
 bool ZHBoxLayout::isVisible() const {
+    auto *const p = tuiwidgets_impl();
+
     for (auto &item: p->items) {
         if (item->isVisible()) {
             return true;
