@@ -25,6 +25,7 @@ public:
 
 public:
     virtual void widgetEvent(QEvent *event);
+    virtual void removeWidgetRecursively(ZWidget *widget) = 0;
     ZLayout *layout() override;
 
     ZWidget *parentWidget() const;
@@ -43,6 +44,7 @@ public:
 
 protected:
     void relayout();
+    bool removeWidgetRecursivelyHelper(ZLayoutItem *layoutItem, ZWidget *widget);
 
 protected:
     // protected virtuals from base class override everything for later ABI compatibility

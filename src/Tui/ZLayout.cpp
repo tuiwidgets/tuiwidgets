@@ -60,6 +60,12 @@ void ZLayout::widgetEvent(QEvent *event) {
             ZLayoutPrivate::markAsAlreadyLayouted(term, w);
             setGeometry(w->layoutArea());
         }
+    } else if (event->type() == QEvent::ChildRemoved) {
+        auto ev = static_cast<QChildEvent*>(event);
+        auto w = qobject_cast<ZWidget*>(ev->child());
+        if (w) {
+            removeWidgetRecursively(w);
+        }
     }
 }
 
@@ -113,6 +119,17 @@ void ZLayout::relayout() {
             term->requestLayout(w);
         }
     }
+}
+
+bool ZLayout::removeWidgetRecursivelyHelper(ZLayoutItem *layoutItem, ZWidget *widget) {
+    if (layoutItem->widget() == widget) {
+        delete layoutItem;
+        return true;
+    }
+    if (ZLayout *sublayout = layoutItem->layout()) {
+        sublayout->removeWidgetRecursively(widget);
+    }
+    return false;
 }
 
 void ZLayout::timerEvent(QTimerEvent *event) {

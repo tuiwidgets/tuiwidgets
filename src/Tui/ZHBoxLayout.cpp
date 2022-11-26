@@ -96,6 +96,9 @@ void ZHBoxLayout::setGeometry(QRect toFill) {
     boxLayouter(place, getHint, getPolicy, getIsSpacer, visibleItems.size(), width, p->spacing);
 }
 
+void ZHBoxLayout::removeWidgetRecursively(ZWidget *widget) {
+}
+
 QSize ZHBoxLayout::sizeHint() const {
     auto *const p = tuiwidgets_impl();
 

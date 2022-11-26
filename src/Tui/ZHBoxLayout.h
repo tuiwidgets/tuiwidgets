@@ -33,6 +33,7 @@ public:
     void addStretch();
 
     void setGeometry(QRect toFill) override;
+    void removeWidgetRecursively(ZWidget *widget) override;
     QSize sizeHint() const override;
     SizePolicy sizePolicyH() const override;
     SizePolicy sizePolicyV() const override;

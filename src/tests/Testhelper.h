@@ -90,6 +90,7 @@ private:
 class StubLayout : public Tui::ZLayout {
 public:
     void setGeometry(QRect g) override { stubGeometry = g; };
+    void removeWidgetRecursively(Tui::ZWidget *) override { }
     QSize sizeHint() const override { return stubSizeHint; };
     Tui::SizePolicy sizePolicyH() const override { return stubSizePolicyH; };
     Tui::SizePolicy sizePolicyV() const override { return stubSizePolicyV; };

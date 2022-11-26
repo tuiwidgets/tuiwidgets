@@ -25,6 +25,7 @@ public:
     void setTopBorderWidget(ZWidget *w, Tui::Alignment align = Tui::AlignHCenter);
 
     void setGeometry(QRect toFill) override;
+    void removeWidgetRecursively(ZWidget *widget) override;
     QSize sizeHint() const override;
 
     int topBorderLeftAdjust() const;

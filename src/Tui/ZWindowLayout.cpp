@@ -91,6 +91,9 @@ void ZWindowLayout::setGeometry(QRect toFill) {
     }
 }
 
+void ZWindowLayout::removeWidgetRecursively(ZWidget *widget) {
+}
+
 QSize ZWindowLayout::sizeHint() const {
     auto *const p = tuiwidgets_impl();
     QSize size;

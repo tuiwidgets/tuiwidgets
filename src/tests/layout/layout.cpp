@@ -22,8 +22,28 @@ public:
         this->r = r;
     }
 
+    void removeWidgetRecursively(Tui::ZWidget *w) override {
+        removeWidgetRecursivelyCalls.append(w);
+    }
+
     void relayout() {
         Tui::ZLayout::relayout();
+    }
+
+    // ---
+    QList<Tui::ZWidget*> removeWidgetRecursivelyCalls;
+
+    void runRemoveWidgetRecursivelyHelperTests() {
+        Tui::ZWidget w;
+        Tui::ZLayoutItem *rawItem = Tui::ZLayoutItem::wrapWidget(&w).release();
+        // should free rawItem and signal to forget the pointer.
+        CHECK(removeWidgetRecursivelyHelper(rawItem, &w) == true);
+
+        Layout innerLayout;
+        // should recurse but not request forgetting this item
+        CHECK(removeWidgetRecursivelyHelper(&innerLayout, &w) == false);
+        REQUIRE(innerLayout.removeWidgetRecursivelyCalls.size() == 1);
+        CHECK(innerLayout.removeWidgetRecursivelyCalls[0] == &w);
     }
 };
 
@@ -54,6 +74,28 @@ TEST_CASE("layout-deleted-before-widget") {
     Tui::ZWidget w;
     Layout layout;
     w.setLayout(&layout);
+}
+
+TEST_CASE("layout-removeWidgetRecursivelyHelper") {
+    Testhelper t("unsued", "unused", 16, 5);
+
+    Layout layout;
+    layout.runRemoveWidgetRecursivelyHelperTests();
+}
+
+
+TEST_CASE("layout-removeWidgetRecursively") {
+    Testhelper t("unsued", "unused", 16, 5);
+
+    Layout *layout = new Layout();
+    Tui::ZWidget inner;
+    Tui::ZWidget outer;
+    outer.setLayout(layout);
+    inner.setParent(&outer);
+    CHECK(layout->removeWidgetRecursivelyCalls.size() == 0);
+    inner.setParent(nullptr);
+    REQUIRE(layout->removeWidgetRecursivelyCalls.size() == 1);
+    CHECK(layout->removeWidgetRecursivelyCalls[0] == &inner);
 }
 
 TEST_CASE("layout-widget") {
