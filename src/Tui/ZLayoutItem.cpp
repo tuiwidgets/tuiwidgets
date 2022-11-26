@@ -23,38 +23,38 @@ ZWidgetLayoutItem::~ZWidgetLayoutItem() {
 }
 
 void ZWidgetLayoutItem::setGeometry(QRect r) {
-    if (widget) {
-        widget->setGeometry(r);
+    if (_widget) {
+        _widget->setGeometry(r);
     }
 }
 
 QSize ZWidgetLayoutItem::sizeHint() const {
-    if (widget) {
-        return widget->effectiveSizeHint();
+    if (_widget) {
+        return _widget->effectiveSizeHint();
     } else {
         return {};
     }
 }
 
 SizePolicy ZWidgetLayoutItem::sizePolicyH() const {
-    if (widget) {
-        return widget->sizePolicyH();
+    if (_widget) {
+        return _widget->sizePolicyH();
     } else {
         return SizePolicy::Fixed;
     }
 }
 
 SizePolicy ZWidgetLayoutItem::sizePolicyV() const {
-    if (widget) {
-        return widget->sizePolicyV();
+    if (_widget) {
+        return _widget->sizePolicyV();
     } else {
         return SizePolicy::Fixed;
     }
 }
 
 bool ZWidgetLayoutItem::isVisible() const {
-    if (widget) {
-        return widget->isLocallyVisible();
+    if (_widget) {
+        return _widget->isLocallyVisible();
     } else {
         return false;
     }

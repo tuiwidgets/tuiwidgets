@@ -11,7 +11,7 @@ TUIWIDGETS_NS_START
 
 class ZWidgetLayoutItem : public ZLayoutItem {
 public:
-    ZWidgetLayoutItem(ZWidget *widget) : widget(widget) {}
+    ZWidgetLayoutItem(ZWidget *widget) : _widget(widget) {}
     ~ZWidgetLayoutItem() override;
 
 public:
@@ -22,7 +22,7 @@ public:
     bool isVisible() const override;
 
 private:
-    QPointer<ZWidget> widget;
+    QPointer<ZWidget> _widget;
 };
 
 TUIWIDGETS_NS_END
