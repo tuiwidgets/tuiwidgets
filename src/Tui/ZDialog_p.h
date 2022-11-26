@@ -18,7 +18,7 @@ public:
     ~ZDialogPrivate() override;
 
 public:
-    mutable ZBasicDefaultWidgetManager defaultWidgetManager{pub()};
+    mutable ZBasicDefaultWidgetManager defaultWidgetManager{pub_ptr};
     bool alreadyShown = false;
 
     TUIWIDGETS_DECLARE_PUBLIC(ZDialog)
