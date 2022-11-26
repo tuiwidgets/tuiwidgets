@@ -20,6 +20,7 @@ public:
     SizePolicy sizePolicyH() const override;
     SizePolicy sizePolicyV() const override;
     bool isVisible() const override;
+    ZWidget *widget() override;
 
 private:
     QPointer<ZWidget> _widget;

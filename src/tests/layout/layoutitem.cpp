@@ -45,6 +45,15 @@ TEST_CASE("layoutitem-base") {
         CHECK(li->isSpacer() == false);
     }
 
+    SECTION("layout") {
+        CHECK(li->layout() == nullptr);
+    }
+
+    SECTION("widget") {
+        CHECK(li->widget() == w.get());
+    }
+
+
     w = nullptr;
 
     SECTION("setGeometry-null-widget") {
@@ -70,6 +79,14 @@ TEST_CASE("layoutitem-base") {
 
     SECTION("isSpacer-null-widget") {
         CHECK(li->isSpacer() == false);
+    }
+
+    SECTION("layout-null-widget") {
+        CHECK(li->layout() == nullptr);
+    }
+
+    SECTION("widget-null-widget") {
+        CHECK(li->widget() == nullptr);
     }
 
 }

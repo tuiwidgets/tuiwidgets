@@ -32,6 +32,9 @@ public:
 
     virtual bool isSpacer() const;
 
+    virtual ZWidget *widget();
+    virtual ZLayout *layout();
+
     static std::unique_ptr<ZLayoutItem> wrapWidget(ZWidget *widget);
 };
 

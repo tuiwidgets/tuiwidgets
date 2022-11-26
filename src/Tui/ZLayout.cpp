@@ -63,6 +63,10 @@ void ZLayout::widgetEvent(QEvent *event) {
     }
 }
 
+ZLayout *ZLayout::layout() {
+    return this;
+}
+
 ZWidget *ZLayout::parentWidget() const {
     QObject *p = parent();
     while (p) {

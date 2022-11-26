@@ -25,6 +25,7 @@ public:
 
 public:
     virtual void widgetEvent(QEvent *event);
+    ZLayout *layout() override;
 
     ZWidget *parentWidget() const;
 

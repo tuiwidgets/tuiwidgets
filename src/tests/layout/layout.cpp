@@ -35,6 +35,8 @@ TEST_CASE("layout-base") {
     CHECK(layout.sizePolicyH() == Tui::SizePolicy::Preferred);
     CHECK(layout.sizePolicyV() == Tui::SizePolicy::Preferred);
     CHECK(layout.isVisible() == true);
+    CHECK(layout.widget() == nullptr);
+    CHECK(layout.layout() == &layout);
 
     layout.relayout();
 }

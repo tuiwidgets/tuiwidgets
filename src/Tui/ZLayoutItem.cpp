@@ -15,6 +15,14 @@ bool ZLayoutItem::isSpacer() const {
     return false;
 }
 
+ZWidget *ZLayoutItem::widget() {
+    return nullptr;
+}
+
+ZLayout *ZLayoutItem::layout() {
+    return nullptr;
+}
+
 std::unique_ptr<ZLayoutItem> ZLayoutItem::wrapWidget(ZWidget *widget) {
     return std::make_unique<ZWidgetLayoutItem>(widget);
 }
@@ -58,6 +66,10 @@ bool ZWidgetLayoutItem::isVisible() const {
     } else {
         return false;
     }
+}
+
+ZWidget *ZWidgetLayoutItem::widget() {
+    return _widget.data();
 }
 
 TUIWIDGETS_NS_END
