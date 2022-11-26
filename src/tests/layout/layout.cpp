@@ -29,7 +29,7 @@ public:
 
 TEST_CASE("layout-base") {
     Layout layout;
-    CHECK(layout.widget() == nullptr);
+    CHECK(layout.parentWidget() == nullptr);
     layout.setGeometry({0, 0, 0, 0});
     CHECK(layout.sizeHint() == QSize());
     CHECK(layout.sizePolicyH() == Tui::SizePolicy::Preferred);
@@ -57,7 +57,7 @@ TEST_CASE("layout-widget") {
 
     SECTION("setLayout") {
         w.setLayout(&layout);
-        CHECK(layout.widget() == &w);
+        CHECK(layout.parentWidget() == &w);
     }
 
     SECTION("setLayout-stacked") {
@@ -66,15 +66,15 @@ TEST_CASE("layout-widget") {
         Layout layout2;
         layout2.setParent(&layout);
 
-        CHECK(layout2.widget() == &w);
+        CHECK(layout2.parentWidget() == &w);
     }
 
     SECTION("setLayout-new-layout") {
         w.setLayout(&layout);
         w2.setLayout(&layout);
 
-        CHECK(layout.widget() == &w2);
-        CHECK(layout.widget() != &w);
+        CHECK(layout.parentWidget() == &w2);
+        CHECK(layout.parentWidget() != &w);
     }
 }
 

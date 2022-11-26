@@ -33,7 +33,7 @@ ZLayout::~ZLayout() {
 void ZLayout::widgetEvent(QEvent *event) {
     if (event->type() == ZEventType::resize()
           || ZOtherChangeEvent::match(event, TUISYM_LITERAL("terminal"))) {
-        ZWidget *w = widget();
+        ZWidget *w = parentWidget();
         if (w) {
             ZTerminal *term = w->terminal();
             if (term) {
@@ -41,7 +41,7 @@ void ZLayout::widgetEvent(QEvent *event) {
             }
         }
     } else if (event->type() == QEvent::LayoutRequest) {
-        ZWidget *w = widget();
+        ZWidget *w = parentWidget();
         ZTerminal *term = w->terminal();
         ZWidget *chainRoot = w->resolveSizeHintChain();
 
@@ -63,7 +63,7 @@ void ZLayout::widgetEvent(QEvent *event) {
     }
 }
 
-ZWidget *ZLayout::widget() const {
+ZWidget *ZLayout::parentWidget() const {
     QObject *p = parent();
     while (p) {
         ZWidget *w = qobject_cast<ZWidget*>(p);
@@ -102,7 +102,7 @@ bool ZLayout::isSpacer() const {
 }
 
 void ZLayout::relayout() {
-    ZWidget *w = widget();
+    ZWidget *w = parentWidget();
     if (w) {
         auto *term = w->terminal();
         if (term) {

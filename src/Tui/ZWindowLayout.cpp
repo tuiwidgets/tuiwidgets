@@ -52,7 +52,7 @@ void ZWindowLayout::setTopBorderWidget(ZWidget *w, Tui::Alignment align) {
 
 void ZWindowLayout::setGeometry(QRect toFill) {
     auto *const p = tuiwidgets_impl();
-    ZWidget* w = widget();
+    ZWidget* w = parentWidget();
     if (!w) return; // inconsistent state, just bail out
 
     if (p->m_centralItem) {
@@ -95,7 +95,7 @@ QSize ZWindowLayout::sizeHint() const {
     auto *const p = tuiwidgets_impl();
     QSize size;
 
-    ZWindow* w = qobject_cast<ZWindow*>(widget());
+    ZWindow* w = qobject_cast<ZWindow*>(parentWidget());
 
     const bool closeBtn = w && w->borderEdges() & Tui::TopEdge && w->options() & ZWindow::CloseButton;
 
