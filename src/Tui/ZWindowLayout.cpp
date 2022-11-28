@@ -33,24 +33,28 @@ void ZWindowLayout::setCentral(ZLayoutItem *li) {
         li->layout()->setParent(this);
     }
     p->m_centralItem.reset(li);
+    relayout();
 }
 
 void ZWindowLayout::setRightBorderWidget(ZWidget *w, Tui::Alignment align) {
     auto *const p = tuiwidgets_impl();
     p->m_rightBorder.reset(ZLayoutItem::wrapWidget(w).release());
     p->m_rightBorderAlign = align;
+    relayout();
 }
 
 void ZWindowLayout::setBottomBorderWidget(ZWidget *w, Tui::Alignment align) {
     auto *const p = tuiwidgets_impl();
     p->m_bottomBorder.reset(ZLayoutItem::wrapWidget(w).release());
     p->m_bottomBorderAlign = align;
+    relayout();
 }
 
 void ZWindowLayout::setTopBorderWidget(ZWidget *w, Tui::Alignment align) {
     auto *const p = tuiwidgets_impl();
     p->m_topBorder.reset(ZLayoutItem::wrapWidget(w).release());
     p->m_topBorderAlign = align;
+    relayout();
 }
 
 void ZWindowLayout::setGeometry(QRect toFill) {
