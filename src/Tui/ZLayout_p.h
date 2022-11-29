@@ -30,6 +30,18 @@ public:
     static bool ensureLayoutGenData(ZTerminal *term);
 };
 
+namespace Private {
+
+struct DeleteUnlessLayout {
+    void operator()(ZLayoutItem *item) {
+        if (!item->layout()) {
+            delete item;
+        }
+    }
+};
+
+}
+
 TUIWIDGETS_NS_END
 
 #endif // TUIWIDGETS_ZLAYOUT_P_INCLUDED

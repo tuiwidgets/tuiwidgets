@@ -17,12 +17,12 @@ public:
     ~ZWindowLayoutPrivate() override = default;
 
 public:
-    std::unique_ptr<ZLayoutItem> m_centralItem;
-    std::unique_ptr<ZLayoutItem> m_rightBorder;
+    std::unique_ptr<ZLayoutItem, Private::DeleteUnlessLayout> m_centralItem;
+    std::unique_ptr<ZLayoutItem, Private::DeleteUnlessLayout> m_rightBorder;
     Tui::Alignment m_rightBorderAlign = Tui::Alignment();
-    std::unique_ptr<ZLayoutItem> m_bottomBorder;
+    std::unique_ptr<ZLayoutItem, Private::DeleteUnlessLayout> m_bottomBorder;
     Tui::Alignment m_bottomBorderAlign = Tui::Alignment();
-    std::unique_ptr<ZLayoutItem> m_topBorder;
+    std::unique_ptr<ZLayoutItem, Private::DeleteUnlessLayout> m_topBorder;
     Tui::Alignment m_topBorderAlign = Tui::Alignment();
     int m_topBorderLeftAdjust = 0;
     int m_topBorderRightAdjust = 0;

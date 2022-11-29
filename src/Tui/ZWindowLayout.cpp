@@ -24,29 +24,32 @@ ZWindowLayout::~ZWindowLayout() {
 
 void ZWindowLayout::setCentralWidget(ZWidget *w) {
     auto *const p = tuiwidgets_impl();
-    p->m_centralItem = ZLayoutItem::wrapWidget(w);
+    p->m_centralItem.reset(ZLayoutItem::wrapWidget(w).release());
 }
 
 void ZWindowLayout::setCentral(ZLayoutItem *li) {
     auto *const p = tuiwidgets_impl();
+    if (li->layout()) {
+        li->layout()->setParent(this);
+    }
     p->m_centralItem.reset(li);
 }
 
 void ZWindowLayout::setRightBorderWidget(ZWidget *w, Tui::Alignment align) {
     auto *const p = tuiwidgets_impl();
-    p->m_rightBorder = ZLayoutItem::wrapWidget(w);
+    p->m_rightBorder.reset(ZLayoutItem::wrapWidget(w).release());
     p->m_rightBorderAlign = align;
 }
 
 void ZWindowLayout::setBottomBorderWidget(ZWidget *w, Tui::Alignment align) {
     auto *const p = tuiwidgets_impl();
-    p->m_bottomBorder = ZLayoutItem::wrapWidget(w);
+    p->m_bottomBorder.reset(ZLayoutItem::wrapWidget(w).release());
     p->m_bottomBorderAlign = align;
 }
 
 void ZWindowLayout::setTopBorderWidget(ZWidget *w, Tui::Alignment align) {
     auto *const p = tuiwidgets_impl();
-    p->m_topBorder = ZLayoutItem::wrapWidget(w);
+    p->m_topBorder.reset(ZLayoutItem::wrapWidget(w).release());
     p->m_topBorderAlign = align;
 }
 
@@ -92,6 +95,20 @@ void ZWindowLayout::setGeometry(QRect toFill) {
 }
 
 void ZWindowLayout::removeWidgetRecursively(ZWidget *widget) {
+    auto *const p = tuiwidgets_impl();
+
+    auto apply = [&](std::unique_ptr<ZLayoutItem, Private::DeleteUnlessLayout> &layoutItem) {
+        if (layoutItem && removeWidgetRecursivelyHelper(layoutItem.get(), widget)) {
+            layoutItem.release();
+        }
+    };
+
+    apply(p->m_centralItem);
+    apply(p->m_rightBorder);
+    apply(p->m_bottomBorder);
+    apply(p->m_topBorder);
+
+    relayout();
 }
 
 QSize ZWindowLayout::sizeHint() const {
@@ -216,6 +233,22 @@ void ZWindowLayout::setBottomBorderRightAdjust(int bottomBorderRightAdjust) {
     relayout();
 }
 
+void ZWindowLayout::childEvent(QChildEvent *event) {
+    auto *const p = tuiwidgets_impl();
+
+    ZLayout *removedLayout;
+    if (event->removed() && (removedLayout = qobject_cast<ZLayout*>(event->child()))) {
+        if (removedLayout == p->m_centralItem.get()) {
+            p->m_centralItem.release();
+            p->m_centralItem = nullptr;
+            relayout();
+        }
+    }
+
+
+    ZLayout::childEvent(event);
+}
+
 SizePolicy ZWindowLayout::sizePolicyH() const {
     return ZLayout::sizePolicyH();
 }
@@ -246,10 +279,6 @@ void ZWindowLayout::widgetEvent(QEvent *event) {
 
 void ZWindowLayout::timerEvent(QTimerEvent *event) {
     ZLayout::timerEvent(event);
-}
-
-void ZWindowLayout::childEvent(QChildEvent *event) {
-    ZLayout::childEvent(event);
 }
 
 void ZWindowLayout::customEvent(QEvent *event) {

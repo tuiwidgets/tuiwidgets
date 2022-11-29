@@ -47,9 +47,10 @@ public:
     void widgetEvent(QEvent *event) override;
 
 protected:
+    void childEvent(QChildEvent *event) override;
+
     // protected virtuals from base class override everything for later ABI compatibility
     void timerEvent(QTimerEvent *event) override;
-    void childEvent(QChildEvent *event) override;
     void customEvent(QEvent *event) override;
     void connectNotify(const QMetaMethod &signal) override;
     void disconnectNotify(const QMetaMethod &signal) override;

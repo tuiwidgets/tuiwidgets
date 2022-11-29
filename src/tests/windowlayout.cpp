@@ -693,3 +693,77 @@ TEST_CASE("windowlayout-nested-layout", "") {
     CHECK(widgetR.geometry() == QRect(0, 0, 0, 0));
     CHECK(widgetB.geometry() == QRect(0, 0, 0, 0));
 }
+
+TEST_CASE("windowlayout-lifetime", "") {
+
+    Testhelper t("unsued", "unused", 16, 5);
+
+    Tui::ZWindowLayout *layout = new Tui::ZWindowLayout();
+
+    Tui::ZWidget outer;
+    outer.setLayout(layout);
+
+    SECTION("child-widget-reparented") {
+        auto *w1 = new Tui::ZWidget(&outer);
+        w1->setMinimumSize(10, 10);
+        layout->setCentralWidget(w1);
+        CHECK(layout->sizeHint() == QSize{10, 10});
+        w1->setParent(nullptr);
+        CHECK(layout->sizeHint() == QSize{0, 0});
+        delete w1;
+    }
+
+    SECTION("child-layout-reparented") {
+        auto *innerLayout = new Tui::ZVBoxLayout();
+        auto *w1 = new Tui::ZWidget(&outer);
+        w1->setMinimumSize(10, 10);
+        innerLayout->addWidget(w1);
+        layout->setCentral(innerLayout);
+        CHECK(layout->sizeHint() == QSize{10, 10});
+        innerLayout->setParent(nullptr);
+        CHECK(layout->sizeHint() == QSize{0, 0});
+        delete innerLayout;
+    }
+
+    SECTION("child-widget-in-sublayout-reparented") {
+        auto *innerLayout = new Tui::ZVBoxLayout();
+        auto *w1 = new Tui::ZWidget(&outer);
+        w1->setMinimumSize(10, 10);
+        innerLayout->addWidget(w1);
+        layout->setCentral(innerLayout);
+        CHECK(layout->sizeHint() == QSize{10, 10});
+        w1->setParent(nullptr);
+        CHECK(layout->sizeHint() == QSize{0, 0});
+        delete w1;
+    }
+
+    SECTION("r-child-widget-reparented") {
+        auto *w1 = new Tui::ZWidget(&outer);
+        w1->setMinimumSize(10, 10);
+        layout->setRightBorderWidget(w1);
+        CHECK(layout->sizeHint() == QSize{1, 12});
+        w1->setParent(nullptr);
+        CHECK(layout->sizeHint() == QSize{0, 0});
+        delete w1;
+    }
+
+    SECTION("b-child-widget-reparented") {
+        auto *w1 = new Tui::ZWidget(&outer);
+        w1->setMinimumSize(10, 10);
+        layout->setBottomBorderWidget(w1);
+        CHECK(layout->sizeHint() == QSize{12, 1});
+        w1->setParent(nullptr);
+        CHECK(layout->sizeHint() == QSize{0, 0});
+        delete w1;
+    }
+
+    SECTION("t-child-widget-reparented") {
+        auto *w1 = new Tui::ZWidget(&outer);
+        w1->setMinimumSize(10, 10);
+        layout->setTopBorderWidget(w1);
+        CHECK(layout->sizeHint() == QSize{12, 1});
+        w1->setParent(nullptr);
+        CHECK(layout->sizeHint() == QSize{0, 0});
+        delete w1;
+    }
+}

@@ -14,7 +14,7 @@ using Private::mergePolicy;
 
 class ZVBoxLayoutPrivate : public ZLayoutPrivate {
 public:
-    std::vector<std::unique_ptr<ZLayoutItem>> items;
+    std::vector<std::unique_ptr<ZLayoutItem, Private::DeleteUnlessLayout>> items;
     int spacing = 0;
 };
 
@@ -39,26 +39,26 @@ void ZVBoxLayout::setSpacing(int sp) {
 
 void ZVBoxLayout::addWidget(ZWidget *w) {
     auto *const p = tuiwidgets_impl();
-    p->items.emplace_back(ZLayoutItem::wrapWidget(w));
+    p->items.emplace_back(ZLayoutItem::wrapWidget(w).release());
     relayout();
 }
 
 void ZVBoxLayout::add(ZLayout *l) {
     auto *const p = tuiwidgets_impl();
-    p->items.emplace_back(l);
     l->setParent(this);
+    p->items.emplace_back(l);
     relayout();
 }
 
 void ZVBoxLayout::addSpacing(int size) {
     auto *const p = tuiwidgets_impl();
-    p->items.emplace_back(std::make_unique<SpacerLayoutItem>(0, size, SizePolicy::Minimum, SizePolicy::Fixed));
+    p->items.emplace_back(new SpacerLayoutItem(0, size, SizePolicy::Minimum, SizePolicy::Fixed));
     relayout();
 }
 
 void ZVBoxLayout::addStretch() {
     auto *const p = tuiwidgets_impl();
-    p->items.emplace_back(std::make_unique<SpacerLayoutItem>(0, 0, SizePolicy::Minimum, SizePolicy::Expanding));
+    p->items.emplace_back(new SpacerLayoutItem(0, 0, SizePolicy::Minimum, SizePolicy::Expanding));
     relayout();
 }
 
@@ -95,6 +95,17 @@ void ZVBoxLayout::setGeometry(QRect toFill) {
 }
 
 void ZVBoxLayout::removeWidgetRecursively(ZWidget *widget) {
+    auto *const p = tuiwidgets_impl();
+
+    for (size_t i = 0; i < p->items.size(); i++) {
+        if (removeWidgetRecursivelyHelper(p->items[i].get(), widget)) {
+            // item was already deleted
+            p->items[i].release();
+            p->items.erase(p->items.begin() + i);
+            relayout();
+            break;
+        }
+    }
 }
 
 QSize ZVBoxLayout::sizeHint() const {
@@ -162,6 +173,23 @@ bool ZVBoxLayout::isVisible() const {
     return false;
 }
 
+void ZVBoxLayout::childEvent(QChildEvent *event) {
+    auto *const p = tuiwidgets_impl();
+
+    ZLayout *removedLayout;
+    if (event->removed() && (removedLayout = qobject_cast<ZLayout*>(event->child()))) {
+        for (size_t i = 0; i < p->items.size(); i++) {
+            if (p->items[i].get() == removedLayout) {
+                p->items.erase(p->items.begin() + i);
+                relayout();
+                break;
+            }
+        }
+    }
+
+    return ZLayout::childEvent(event);
+}
+
 bool ZVBoxLayout::isSpacer() const {
     return false;
 }
@@ -180,10 +208,6 @@ void ZVBoxLayout::widgetEvent(QEvent *event) {
 
 void ZVBoxLayout::timerEvent(QTimerEvent *event) {
     return ZLayout::timerEvent(event);
-}
-
-void ZVBoxLayout::childEvent(QChildEvent *event) {
-    return ZLayout::childEvent(event);
 }
 
 void ZVBoxLayout::customEvent(QEvent *event) {

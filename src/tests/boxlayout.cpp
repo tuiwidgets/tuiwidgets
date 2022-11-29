@@ -5,6 +5,7 @@
 
 #include "catchwrapper.h"
 
+#include <QPointer>
 #include <QSet>
 
 #include "Tui/ZTest.h"
@@ -1262,6 +1263,67 @@ TEST_CASE("boxlayout-visible", "") {
     }
     SECTION("hbox") {
         Tui::ZHBoxLayout layout;
+        tests(layout);
+    }
+}
+
+TEST_CASE("boxlayout-lifetime", "") {
+
+    Testhelper t("unsued", "unused", 16, 5);
+
+    auto tests = [&](auto *layout) {
+
+        Tui::ZWidget outer;
+        outer.setLayout(layout);
+
+        SECTION("child-widget-reparented") {
+            auto *w1 = new Tui::ZWidget(&outer);
+            w1->setMinimumSize(10, 10);
+            layout->addWidget(w1);
+            CHECK(layout->sizeHint() == QSize{10, 10});
+            w1->setParent(nullptr);
+            CHECK(layout->sizeHint() == QSize{0, 0});
+            delete w1;
+        }
+
+        SECTION("child-layout-reparented") {
+            auto *innerLayout = new Tui::ZVBoxLayout();
+            auto *w1 = new Tui::ZWidget(&outer);
+
+            QPointer<Tui::ZVBoxLayout> innerLayoutWatch = innerLayout;
+            QPointer<Tui::ZWidget> w1Watch = w1;
+
+            w1->setMinimumSize(10, 10);
+            innerLayout->addWidget(w1);
+            layout->add(innerLayout);
+            CHECK(layout->sizeHint() == QSize{10, 10});
+            innerLayout->setParent(nullptr);
+            CHECK(layout->sizeHint() == QSize{0, 0});
+            CHECK(!innerLayoutWatch.isNull());
+            CHECK(!w1Watch.isNull());
+            delete innerLayout;
+            CHECK(!w1Watch.isNull());
+        }
+
+        SECTION("child-widget-in-sublayout-reparented") {
+            auto *innerLayout = new Tui::ZVBoxLayout();
+            auto *w1 = new Tui::ZWidget(&outer);
+            w1->setMinimumSize(10, 10);
+            innerLayout->addWidget(w1);
+            layout->add(innerLayout);
+            CHECK(layout->sizeHint() == QSize{10, 10});
+            w1->setParent(nullptr);
+            CHECK(layout->sizeHint() == QSize{0, 0});
+            delete w1;
+        }
+    };
+
+    SECTION("vbox") {
+        auto *layout = new Tui::ZVBoxLayout();
+        tests(layout);
+    }
+    SECTION("hbox") {
+        auto *layout = new Tui::ZHBoxLayout();
         tests(layout);
     }
 }

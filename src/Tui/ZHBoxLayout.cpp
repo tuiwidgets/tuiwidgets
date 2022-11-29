@@ -12,10 +12,9 @@ using Private::placeWidgetInCell;
 using Private::boxLayouter;
 using Private::mergePolicy;
 
-
 class ZHBoxLayoutPrivate : public ZLayoutPrivate {
 public:
-    std::vector<std::unique_ptr<ZLayoutItem>> items;
+    std::vector<std::unique_ptr<ZLayoutItem, Private::DeleteUnlessLayout>> items;
     int spacing = 0;
 };
 
@@ -40,29 +39,28 @@ void ZHBoxLayout::setSpacing(int sp) {
 
 void ZHBoxLayout::addWidget(ZWidget *w) {
     auto *const p = tuiwidgets_impl();
-    p->items.emplace_back(ZLayoutItem::wrapWidget(w));
+    p->items.emplace_back(ZLayoutItem::wrapWidget(w).release());
     relayout();
 }
 
 void ZHBoxLayout::add(ZLayout *l) {
     auto *const p = tuiwidgets_impl();
-    p->items.emplace_back(l);
     l->setParent(this);
+    p->items.emplace_back(l);
     relayout();
 }
 
 void ZHBoxLayout::addSpacing(int size) {
     auto *const p = tuiwidgets_impl();
-    p->items.emplace_back(std::make_unique<SpacerLayoutItem>(size, 0, SizePolicy::Fixed, SizePolicy::Minimum));
+    p->items.emplace_back(new SpacerLayoutItem(size, 0, SizePolicy::Fixed, SizePolicy::Minimum));
     relayout();
 }
 
 void ZHBoxLayout::addStretch() {
     auto *const p = tuiwidgets_impl();
-    p->items.emplace_back(std::make_unique<SpacerLayoutItem>(0, 0, SizePolicy::Expanding, SizePolicy::Minimum));
+    p->items.emplace_back(new SpacerLayoutItem(0, 0, SizePolicy::Expanding, SizePolicy::Minimum));
     relayout();
 }
-
 
 void ZHBoxLayout::setGeometry(QRect toFill) {
     auto *const p = tuiwidgets_impl();
@@ -97,6 +95,17 @@ void ZHBoxLayout::setGeometry(QRect toFill) {
 }
 
 void ZHBoxLayout::removeWidgetRecursively(ZWidget *widget) {
+    auto *const p = tuiwidgets_impl();
+
+    for (size_t i = 0; i < p->items.size(); i++) {
+        if (removeWidgetRecursivelyHelper(p->items[i].get(), widget)) {
+            // item was already deleted
+            p->items[i].release();
+            p->items.erase(p->items.begin() + i);
+            relayout();
+            break;
+        }
+    }
 }
 
 QSize ZHBoxLayout::sizeHint() const {
@@ -164,6 +173,23 @@ bool ZHBoxLayout::isVisible() const {
     return false;
 }
 
+void ZHBoxLayout::childEvent(QChildEvent *event) {
+    auto *const p = tuiwidgets_impl();
+
+    ZLayout *removedLayout;
+    if (event->removed() && (removedLayout = qobject_cast<ZLayout*>(event->child()))) {
+        for (size_t i = 0; i < p->items.size(); i++) {
+            if (p->items[i].get() == removedLayout) {
+                p->items.erase(p->items.begin() + i);
+                relayout();
+                break;
+            }
+        }
+    }
+
+    return ZLayout::childEvent(event);
+}
+
 bool ZHBoxLayout::isSpacer() const {
     return false;
 }
@@ -182,10 +208,6 @@ void ZHBoxLayout::widgetEvent(QEvent *event) {
 
 void ZHBoxLayout::timerEvent(QTimerEvent *event) {
     return ZLayout::timerEvent(event);
-}
-
-void ZHBoxLayout::childEvent(QChildEvent *event) {
-    return ZLayout::childEvent(event);
 }
 
 void ZHBoxLayout::customEvent(QEvent *event) {
