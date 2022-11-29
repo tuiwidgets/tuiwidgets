@@ -1346,12 +1346,18 @@ void ZWidget::moveEvent(ZMoveEvent *event) {
     (void)event;
 }
 
-void ZWidget::timerEvent(QTimerEvent *event) {
-    QObject::timerEvent(event);
+void ZWidget::childEvent(QChildEvent *event) {
+    auto *const p = tuiwidgets_impl();
+
+    if (event->removed() && event->child() == p->layout) {
+        p->layout = nullptr;
+    }
+
+    QObject::childEvent(event);
 }
 
-void ZWidget::childEvent(QChildEvent *event) {
-    QObject::childEvent(event);
+void ZWidget::timerEvent(QTimerEvent *event) {
+    QObject::timerEvent(event);
 }
 
 void ZWidget::customEvent(QEvent *event) {

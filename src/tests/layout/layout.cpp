@@ -41,10 +41,19 @@ TEST_CASE("layout-base") {
     layout.relayout();
 }
 
-TEST_CASE("layout-before-widget") {
+TEST_CASE("layout-outlives-widget") {
     Layout layout;
     Tui::ZWidget w;
-    //w.setLayout(&layout); //TODO
+    w.setLayout(&layout);
+    layout.setParent(nullptr);
+}
+
+TEST_CASE("layout-deleted-before-widget") {
+    // Must not crash or trigger sanitizers
+
+    Tui::ZWidget w;
+    Layout layout;
+    w.setLayout(&layout);
 }
 
 TEST_CASE("layout-widget") {
