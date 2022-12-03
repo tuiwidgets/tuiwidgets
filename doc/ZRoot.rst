@@ -70,7 +70,7 @@ parts of the root widget by using the keyboard to scroll the viewport.
 See :ref:`term_viewport` for details.
 
 If any child widget of ZRoot implements the :cpp:class:`Tui::ZWindowFacet` and its
-:cpp:func:`~bool Tui::ZWindowFacet::isExtendViewport() const` returns true the minimal size for the root widget is
+:cpp:func:`~bool Tui::ZWindowFacet::isExtendViewport() const` returns :cpp:expr:`true` the minimal size for the root widget is
 temporarily extended to include the whole child widget.
 This enables selected dialogs and menus to be usable even if the terminal is smaller than the widget.
 

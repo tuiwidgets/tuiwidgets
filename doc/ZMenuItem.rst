@@ -5,7 +5,7 @@ ZMenuItem
 
 Menu items are used by :cpp:class:`Tui::ZMenubar` and :cpp:class:`Tui::ZMenu`.
 
-A common way to create a menu structure using c++ initializer lists is:
+A common way to create a menu structure using C++ initializer lists is:
 
 .. literalinclude:: examples/widgets/menubar.cpp
     :start-after: // snippet-initlist-items-start

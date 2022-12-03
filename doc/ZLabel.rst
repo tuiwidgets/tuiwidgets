@@ -65,8 +65,8 @@ Behavior
 Labels by default don't accept focus, are one cell high and have a preferred vertical layout policy.
 The size request of a label is the length of the text plus 1 cells plus the contents margins.
 
-The effective enabled/disabled status for its visual appearance is the AND combination of both its own status and
-the "buddy" widget's status(if a buddy is set).
+The effective enabled/disabled status for its visual appearance is the logical-AND combination of both its own status and
+the "buddy" widget's status (if a buddy is set).
 
 For its visual appearance the relevant focus status is that of its "buddy" widget, if there is no "buddy" widget, the
 label will always appear as unfocused.
@@ -116,21 +116,20 @@ ZLabel
    .. cpp:function:: QString text() const
    .. cpp:function:: void setText(const QString &text)
 
-      Using these functions the plain text content of the |control| can be get or set.
+      Get or set the plain text content of the |control|.
 
       When set the shortcut is also reset.
 
-      When the content of the |control| was most recently set using setMarkup the returned text is empty.
-
+      When the content of the |control| was most recently set using :cpp:func:`setMarkup` the returned text is empty.
 
    .. cpp:function:: QString markup() const
    .. cpp:function:: void setMarkup(const QString &markup)
 
-      Using these functions the text content of the |control| can be set using markup or retrieved.
+      Get or set the text content of the |control| using markup.
 
       When set the shortcut is also reset, if the markup contains a mnemonic it is setup as new shortcut.
 
-      When the content of the |control| was most recently set using setText the returned markup is empty.
+      When the content of the |control| was most recently set using :cpp:func:`setText` the returned markup is empty.
 
    .. cpp:function:: Tui::ZWidget *buddy() const
    .. cpp:function:: void setBuddy(Tui::ZWidget *buddy)

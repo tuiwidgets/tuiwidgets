@@ -28,7 +28,7 @@ The title could be a file name or similar location or a title for an action, etc
 
 Currently windows are the only parts of Tui Widgets that have a predefinied palette class that assigns palette colors
 for the widgets typically used in dialogs and other windows (classes "window" and "dialog").
-Thus make sure to place widgets not explicitly designed to work outside windows into a window.
+Thus make sure to place widgets into a window that are not explicitly designed to work outside windows.
 
 If the default look of the window does not suit your application, not setting a title, disabling all border edges and
 possibly overriding the palette colors for the window will yield a window like widget that does not enforce any
@@ -45,7 +45,7 @@ or by overriding :cpp:func:`~QVector<ZMenuItem> Tui::ZWindow::systemMenu()` the 
 Borders
 -------
 
-Which edges show border decorations is configurable using
+It is configurable which edges show border decorations using
 :cpp:func:`setBorderEdges(Tui::Edges borders) <void Tui::ZWindow::setBorderEdges(Tui::Edges borders)>`.
 The close indicator and the title are only visible if the top edge border is enabled.
 

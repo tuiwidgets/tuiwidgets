@@ -61,7 +61,7 @@ Nested
 
 
 Nesting layouts allows for more complex arrangements of widgets.
-It is imporant to select in which order the items are nested, because nested box layouts do not create a grid, but
+It is important to consider in which order the items are nested, because nested box layouts do not create a grid, but
 each layout's items are layouted individually.
 
 ZVBoxLayout
@@ -77,7 +77,7 @@ ZVBoxLayout
 
       The ``spacing`` determines the amount of blank cells betweeen layouted items.
 
-      It does not apply if one of the adjecent items itself is a spacer(according to
+      It does not apply if one of the adjacent items itself is a spacer (according to
       :cpp:func:`bool Tui::ZLayoutItem::isSpacer() const`).
 
    .. cpp:function:: void addWidget(ZWidget *w)
@@ -91,12 +91,12 @@ ZVBoxLayout
    .. cpp:function:: void addSpacing(int size)
 
       Add manual spacing of ``size`` blank cells.
-      Spacing set via :cpp:func::``void setSpacing(int sp)`` does not apply for this spacing.
+      Spacing set via :cpp:func::`void setSpacing(int sp)`` does not apply for this spacing.
 
    .. cpp:function:: void addStretch()
 
       Add a stretch item that acts like a spring in the layout and takes additional space with the same priority as
-      :cpp:enumerator::``Expanding <Tui::SizePolicy::Expanding>`` items.
+      :cpp:enumerator:`Expanding <Tui::SizePolicy::Expanding>` items.
 
 
 ZHBoxLayout
@@ -112,7 +112,7 @@ ZHBoxLayout
 
       The ``spacing`` determines the amount of blank cells betweeen layouted items.
 
-      It does not apply if one of the adjecent items itself is a spacer(according to
+      It does not apply if one of the adjacent items itself is a spacer (according to
       :cpp:func:`bool Tui::ZLayoutItem::isSpacer() const`).
 
    .. cpp:function:: void addWidget(ZWidget *w)
@@ -126,9 +126,9 @@ ZHBoxLayout
    .. cpp:function:: void addSpacing(int size)
 
       Add manual spacing of ``size`` blank cells.
-      Spacing set via :cpp:func::``void setSpacing(int sp)`` does not apply for this spacing.
+      Spacing set via :cpp:func::`void setSpacing(int sp)` does not apply for this spacing.
 
    .. cpp:function:: void addStretch()
 
       Add a stretch item that acts like a spring in the layout and takes additional space with the same priority as
-      :cpp:enumerator::``Expanding <Tui::SizePolicy::Expanding>`` items.
+      :cpp:enumerator::`Expanding <Tui::SizePolicy::Expanding>` items.

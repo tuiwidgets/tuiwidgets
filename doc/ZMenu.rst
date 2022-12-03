@@ -80,7 +80,7 @@ The menu ensures that its parent widget has a :ref:`command manager <ZCommandMan
 When activated the menu bar grabs the keyboard.
 It then allows the user to browse the menu and activate the menu items.
 
-(ZMenu does not support support use as popup menu when disabled)
+(ZMenu does not support use as popup menu when disabled)
 
 Palette
 -------

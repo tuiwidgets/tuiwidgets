@@ -87,7 +87,7 @@ Members
    |clipandtransform|
 
    When using the overloads using ``std::string`` or ``char*`` the string has to be passed in utf-8 form.
-   When using the overload using ``char16_t``` the string has to be passed in utf-16 form.
+   When using the overload using ``char16_t`` the string has to be passed in utf-16 form.
 
 .. cpp:function:: void writeWithAttributes(int x, int y, const QString &string, Tui::ZColor fg, Tui::ZColor bg, Tui::ZTextAttributes attr)
 .. cpp:function:: void writeWithAttributes(int x, int y, const QChar *string, int size, Tui::ZColor fg, Tui::ZColor bg, Tui::ZTextAttributes attr)
@@ -108,7 +108,7 @@ Members
    |clipandtransform|
 
    When using the overloads using ``std::string`` or ``char*`` the string has to be passed in utf-8 form.
-   When using the overload using ``char16_t``` the string has to be passed in utf-16 form.
+   When using the overload using ``char16_t`` the string has to be passed in utf-16 form.
 
 
 .. cpp:function:: void clear(Tui::ZColor fg, Tui::ZColor bg, Tui::ZTextAttributes attr = {})

@@ -32,7 +32,7 @@ palettes.
    .. rst-class:: tw-static
    .. cpp:function:: Tui::ZPalette::ZPalette black()
 
-      Monochomish palette using mostly grey levels.
+      Monochrome-ish palette using mostly grey levels.
 
 
    .. cpp:class:: ColorDef
@@ -52,11 +52,11 @@ palettes.
 
       .. cpp:enumerator:: Publish
 
-         The changes in the rule apply to the widget with the given palette classes and all descendents.
+         The changes in the rule apply to the widget with the given palette classes and all descendants.
 
       .. cpp:enumerator:: Local
 
-         The change in the command apply only to the widget with the given palette classes, colors descendents are
+         The change in the command apply only to the widget with the given palette classes, colors descendants are
          not changed.
 
    .. cpp:class:: RuleCmd
@@ -65,7 +65,7 @@ palettes.
 
       .. cpp:member:: Tui::ZPalette::Type type
 
-         Type of change, either locally or including descendents.
+         Type of change, either locally or including descendants.
 
       .. cpp:member:: Tui::ZImplicitSymbol name
 
@@ -89,14 +89,14 @@ palettes.
    .. cpp:function:: void setColors(QList<Tui::ZPalette::ColorDef> newColors)
 
       Define colors for symbols as specified in ``newColors``.
-      The defined colors take effect for the widget given this palette and its decendents unless overriden later.
+      The defined colors take effect for the widget given this palette and its descendants unless overriden later.
 
    .. cpp:function:: addRules(QList<Tui::ZPalette::RuleDef> newRules)
 
       Define color assignment rules as specified in ``newRules``.
       Existing rules are not removed.
 
-      The rules take effect on the widget given this plaette and its decendents.
+      The rules take effect on the widget given this plaette and its descendants.
 
       Rules with more more classes to match override assignments by rules with less classes to match.
 
@@ -108,10 +108,10 @@ palettes.
    .. cpp:function:: ZColor getColor(ZWidget *targetWidget, ZImplicitSymbol x)
 
       Return a named color for a target widget.
-      If the color was not defined it returns red (#ff0000) as placeholder.
+      If the color was not defined it returns red (``#ff0000``) as placeholder.
 
-      This is the backend for :cpp:func:`ZColor Tui::ZWidget::getColor(const ZImplicitSymbol &x)`.
-      It is usually easier to use the wrapper in ZWidget.
+      This is the backend for :cpp:func:`ZColor Tui::ZWidget::getColor(const ZImplicitSymbol &x)`,
+      which applications should use instead.
 
 
 Palette Symbols
@@ -119,7 +119,7 @@ Palette Symbols
 
 The predefined palettes assume most widgets are inside windows (or dialogs).
 
-Symbols avaiable without a window:
+Symbols available without a window:
 
 .. list-table::
    :header-rows: 1

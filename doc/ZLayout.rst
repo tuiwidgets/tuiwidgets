@@ -6,11 +6,11 @@ ZLayout
 Tui Widgets uses classes derived from :cpp:class:`Tui::ZLayout` to dynamically place widgets based on a specified
 structure and the widgets requested size and layout policies.
 
-Layouts can be nested to achive a composed structure.
+Layouts can be nested to achieve a composed structure.
 If a widget has a layout set (using :cpp:func:`void Tui::ZWidget::setLayout(ZLayout *l)` then children connected
 to that layout will be automatically placed.
 
-For layouts to properly layout widgets the parent of the widget and the widget anchestor of the layout need to match.
+For layouts to properly layout widgets the parent of the widget and the widget ancestor of the layout need to match.
 
 Using Layouts
 -------------
@@ -29,7 +29,7 @@ Implementing Layouts
 --------------------
 
 Custom Layouts derive from :cpp:class:`Tui::ZLayout`.
-They need to store the widgets and layouts added to them. For this storage is it often useful to use
+They need to store the widgets and layouts added to them. For this storage it is useful to use
 :cpp:class:`Tui::ZLayoutItem` as abstraction to handle widgets and sub-layouts with the same code.
 
 The layout should reimplement :cpp:func:`QSize Tui::ZLayoutItem::sizeHint() const`,
@@ -42,7 +42,7 @@ with the rectangle available for the layout to allocated its items.
 Although it is named like a setter, typical implementations don't save ``r`` but sub allocate the space to the items
 in the layout and call setGeometry with the individual allocation on each item.
 
-When items of a layout change (in number or properties) or layout parameters (like spacing, etc) change the layout
+When items of a layout change (in number or properties) or layout parameters (spacing, etc) change the layout
 should call :cpp:func:`void Tui::ZLayout::relayout()` to trigger a new layout cycle and get called back later to
 update its items' layout.
 
@@ -66,7 +66,7 @@ ZLayout
 
    .. cpp:function:: ZWidget *widget() const
 
-      Returns the widget anchestor of this layout or nullptr if none exists.
+      Returns the widget ancestor of this layout or :cpp:expr:`nullptr` if none exists.
 
    **Protected Functions**
 
@@ -141,7 +141,7 @@ ZLayoutItem
    .. rst-class:: tw-static
    .. cpp:function:: bool isSpacer() const
 
-      Returns true if the item counts as a spacer.
+      Returns :cpp:expr:`true` if the item counts as a spacer.
 
    .. rst-class:: tw-static
    .. cpp:function:: std::unique_ptr<ZLayoutItem> wrapWidget(ZWidget *widget)

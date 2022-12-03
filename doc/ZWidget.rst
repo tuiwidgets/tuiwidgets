@@ -14,7 +14,7 @@ Size, Position and Visibility
 
 The root widget of a widget tree needs to be connected to a :cpp:class:`Tui::ZTerminal` instance using the
 :cpp:func:`~void Tui::ZTerminal::setMainWidget(ZWidget *w)` function.
-It's position is fixed to cover the terminal.
+Its position is fixed to cover the terminal.
 
 All other widgets have a parent widget and have a position relative to the parent.
 The position specifies the  top-left cell the widget starts in.
@@ -55,7 +55,8 @@ Often it is convinient to have the placement of widgets in a parent automated.
 This allows exact placement to automatically adapt to changes to the size of the widget and avoids doing position
 calculations manually or adhoc in the code using the widgets.
 This automated placement is done by so called "layouts".
-Layouts like ... and ... are classes derived from :cpp:class:`Tui::ZLayout`.
+Layouts like :cpp:class:`Tui::ZHBoxLayout` and
+:cpp:class:`Tui::ZVBoxLayout` are classes derived from :cpp:class:`Tui::ZLayout`.
 Each widget can have one top level layout set using :cpp:func:`~void Tui::ZWidget::setLayout(ZLayout *l)`.
 Then child widgets can be added to that layout (or one of its nested layouts) using layout specific functions.
 
@@ -106,12 +107,12 @@ To restrict the scope of the effects of the focus order property the focus conta
 ..
   TODO: say more about sub ordering mode?
 
-Widgets can be enabled, that is ready for user interaction or disabled.
+Widgets can be enabled, that is ready for user interaction, or disabled.
 Similarily to how visibility works, enabled is a local setting but only is effective when the parent is also effecivly
 enabled.
 
 Sometimes a widget needs to override focus handling and temporarily route all keyboard input to itself.
-This can be achived by initiation a keyboard grab using :cpp:func:`~void Tui::ZWidget::grabKeyboard()`.
+This can be achieved by initiation of a keyboard grab using :cpp:func:`~void Tui::ZWidget::grabKeyboard()`.
 
 Terminal
 --------
@@ -130,7 +131,7 @@ without a terminal.
 Usage of widgets
 ----------------
 
-Generally a widget is created with a parent as a constructor parameter an then either manually placed using
+Generally a widget is created with a parent as a constructor parameter and then either manually placed using
 :cpp:func:`~void Tui::ZWidget::setGeometry(const QRect &geometry)` or placed using a layout.
 
 
@@ -142,7 +143,8 @@ of its parents.
 In some situations the colors can also be influenced by the palette class set on a widget or one of its parents.
 
 When using widgets in a window focus order if determined by :cpp:func:`void Tui::ZWidget::setFocusOrder(int order)`,
-where widgets with the same focus order are reached in order of their z-order from bottom to top.
+where widgets with the same focus order are reached in order of their z-order from bottom (smaller values) to
+top (larger values).
 
 Defining custom widgets
 -----------------------
@@ -301,7 +303,7 @@ Members
 
 .. cpp:function:: ZWidget *parentWidget() const
 
-   Returns the QObject parent if it is a widget or nullptr otherwise.
+   Returns the QObject parent if it is a widget or :cpp:expr:`nullptr` otherwise.
 
 .. cpp:function:: void setParent(ZWidget *newParent)
 
@@ -427,7 +429,7 @@ Members
    This is used by the layout system when placing the widget.
 
    When implementing widgets, override this to return the preferred size of the widget.
-   The meaning depends on the set size policy.
+   The meaning depends on the set :cpp:enum:`size policy <Tui::SizePolicy>`.
 
 .. rst-class:: tw-virtual
 .. cpp:function:: QSize minimumSizeHint() const
@@ -562,26 +564,26 @@ Members
 
 .. cpp:function:: bool isAncestorOf(const ZWidget *child) const
 
-   Returns ``true`` if ``child`` is an anchestor of this widget.
-   If the widget is passed as ``child`` it returns true too.
+   Returns ``true`` if ``child`` is an ancestor of this widget.
+   If the widget is passed as ``child`` it returns :cpp:expr:`true` too.
 
 .. cpp:function:: bool isEnabledTo(const ZWidget *ancestor) const
 
-   Returns true if all widgets on the path from the widget to ``anchestor`` (excluding ``anchestor``, but including the
-   widget) are locally enabled.
+   Returns :cpp:expr:`true` if all widgets on the path from the widget to ``ancestor`` (excluding ``ancestor``, but
+   including the widget) are locally enabled.
 
 .. cpp:function:: bool isVisibleTo(const ZWidget *ancestor) const
 
-   Returns true if all widgets on the path from the widget to ``anchestor`` (excluding ``anchestor``, but including the
-   widget) are locally visible.
+   Returns :cpp:expr:`true` if all widgets on the path from the widget to ``ancestor`` (excluding ``ancestor``, but
+   including the widget) are locally visible.
 
 .. cpp:function:: bool focus() const
 
-   Returns true if the widget has focus.
+   Returns :cpp:expr:`true` if the widget has focus.
 
 .. cpp:function:: bool isInFocusPath() const
 
-   Returns true if the widget or any of its decendents has focus.
+   Returns :cpp:expr:`true` if the widget or any of its descendants has focus.
 
 .. cpp:function:: QPoint mapFromTerminal(const QPoint &pos)
 .. cpp:function:: QPoint mapToTerminal(const QPoint &pos)
@@ -593,12 +595,12 @@ Members
 .. cpp:function:: ZWidget const *nextFocusable() const
 .. cpp:function:: ZWidget *nextFocusable()
 
-   Returns the next/previous widget in the focus order or nullptr if no such widget exists.
+   Returns the next/previous widget in the focus order or :cpp:expr:`nullptr` if no such widget exists.
 
 .. cpp:function:: const ZWidget *placeFocus(bool last = false) const
 .. cpp:function:: ZWidget *placeFocus(bool last = false)
 
-   Returns the first/last widget in the widget and its decendents that can take focus or nullptr of no such widget exists.
+   Returns the first/last widget in the widget and its decendents that can take focus or :cpp:expr:`nullptr` of no such widget exists.
 
 .. rst-class:: tw-virtual
 .. cpp:function:: ZWidget *resolveSizeHintChain()
@@ -619,7 +621,7 @@ Members
 
    If no command manager is associated with the widget, sets a new :cpp:class:`ZCommandManager` instance.
 
-   It then returns the existing or newly created command mananger.
+   It then returns the existing or newly created command manager.
 
 .. rst-class:: tw-virtual
 .. cpp:function:: QObject *facet(const QMetaObject &metaObject) const

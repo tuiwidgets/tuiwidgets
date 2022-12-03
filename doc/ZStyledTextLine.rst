@@ -45,7 +45,7 @@ ZStyledTextLine is a helper class to implement display of text with :ref:`markup
 
    .. cpp:function:: bool hasParsingError() const
 
-      Returns true, iff there was a problem parsing the markup.
+      Returns :cpp:expr:`true`, iff there was a problem parsing the markup.
 
    .. cpp:function:: int width(const ZTextMetrics &metrics) const
 

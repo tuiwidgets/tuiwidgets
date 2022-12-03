@@ -13,7 +13,7 @@ or a terminal specified by the application.
 Startup
 -------
 
-As soon as the message loop runs after creating an instance of ZTerminal, terminal auto detection is started.
+As soon as the message loop runs after creating an instance of ``ZTerminal``, terminal auto detection is started.
 Also the terminal is setup for operations with Tui Widgets.
 If a :ref:`main widget <term_mainwidget>` is set when the terminal detection finishes, a terminal change event
 is delivered to all widgets in the main widgets' widget tree.
@@ -25,14 +25,14 @@ or :cpp:func:`~Tui::ZTerminal::incompatibleTerminalDetected()` was used.
 
 If terminal auto detection takes too long a message is printed to the terminal.
 The application can override this message using :cpp:func:`~Tui::ZTerminal::setAutoDetectTimeoutMessage`
-or disable it using DisableAutoDetectTimeoutMessage.
+or disable it using :cpp:enumerator:`~Tui::ZTerminal::Option::DisableAutoDetectTimeoutMessage`.
 
 .. _term_options:
 
 Options
 -------
 
-Most constructors of ZTerminal take an ``options`` parameter that allows customizing the terminal's behavior.
+Most constructors of ``ZTerminal`` take an ``options`` parameter that allows customizing the terminal's behavior.
 
 Some of these options only apply to terminals connected directly through a kernel device.
 
@@ -68,7 +68,7 @@ Some of these options only apply to terminals connected directly through a kerne
       The terminal will be restored to the state before the terminal was connected and the application stopped.
 
       When the application is resumed back into the foreground (e.g. by using ``fg`` in the shell) the terminal
-      will be reconfigured for usage with ZTerminal and the application resumes when passing through the event loop
+      will be reconfigured for usage with ``ZTerminal`` and the application resumes when passing through the event loop
       the next time.
 
       This option is only available for terminals connected directly through a kernel device that is acting as
@@ -90,7 +90,7 @@ Some of these options only apply to terminals connected directly through a kerne
 
    .. cpp:enumerator:: DisableAutoResize
 
-      By default ZTerminal reacts to the signal SIGWINCH from the kernel by adjusting the internal representation of
+      By default ``ZTerminal`` reacts to the signal SIGWINCH from the kernel by adjusting the internal representation of
       the terminal to the new size.
       If this option is included in the terminal's options the internal state will not be adjusted.
 
@@ -99,7 +99,7 @@ Some of these options only apply to terminals connected directly through a kerne
 
    .. cpp:enumerator:: DisableAlternativeScreen
 
-      By default ZTerminal switches the terminal to the alternate screen if supported.
+      By default ``ZTerminal`` switches the terminal to the alternate screen if supported.
       This means that the application will not overwrite the contents of the terminal and the terminal view will be
       restored after the instance is destroyed.
 
@@ -108,7 +108,7 @@ Some of these options only apply to terminals connected directly through a kerne
 
    .. cpp:enumerator:: DisableAutoDetectTimeoutMessage
 
-      By default ZTerminal displays a message if the terminal auto detection take longer than 10 seconds.
+      By default ``ZTerminal`` displays a message if the terminal auto detection takes longer than 10 seconds.
       See :cpp:func:`~void Tui::ZTerminal::setAutoDetectTimeoutMessage(const QString &message)` for details about setting that
       message.
 
@@ -116,17 +116,17 @@ Some of these options only apply to terminals connected directly through a kerne
 
    .. cpp:enumerator:: ForceIncompatibleTerminals
 
-      If the terminal autodetection result is that the terminal is not compatible with ZTerminal then by default, it
+      If the terminal autodetection result is that the terminal is not compatible with ``ZTerminal`` then by default, it
       will not proceed to initialize the terminal any further.
       Further by default the application will be terminated with a message.
       The termination can be prevented by connecting to the signal :cpp:func:`~Tui::ZTerminal::incompatibleTerminalDetected()`.
 
-      If this option is included in the terminal's options then this check will be skipped and ZTerminal will try to
+      If this option is included in the terminal's options then this check will be skipped and ``ZTerminal`` will try to
       use the terminal anyway.
 
    .. cpp:enumerator:: DisableTaggedPaste
 
-      By default ZTerminal will setup supported terminals to generate :cpp:class:`Tui::ZPasteEvent` events when the
+      By default ``ZTerminal`` will setup supported terminals to generate :cpp:class:`Tui::ZPasteEvent` events when the
       user pastes text from the clipboard instead of generating key events.
 
       If this option is included in the terminal's options then the terminal is left for paste events at the setting
@@ -134,12 +134,12 @@ Some of these options only apply to terminals connected directly through a kerne
 
    .. cpp:enumerator:: DebugDisableBufferedIo
 
-      By default ZTerminal uses internal buffering for terminal output and flushes the output buffer after doing a
+      By default ``ZTerminal`` uses internal buffering for terminal output and flushes the output buffer after doing a
       refresh. This option allows disabling this buffering when debugging problems in the low level output handling.
 
    .. cpp:enumerator:: ConservativeTrueColorOutput
 
-      By default ZTerminal will send RGB terminal colors used by the application to the terminal as RGB colors when
+      By default ``ZTerminal`` will send RGB terminal colors used by the application to the terminal as RGB colors when
       the terminal is likely to support those colors.
 
       If this option is included in the terminal's options then RGB colors are converted to indexed colors for some
@@ -147,7 +147,7 @@ Some of these options only apply to terminals connected directly through a kerne
 
 If none of the :cpp:enumerator:`~Tui::ZTerminal::Option::AllowInterrupt`,
 :cpp:enumerator:`~Tui::ZTerminal::Option::AllowSuspend` and :cpp:enumerator:`~Tui::ZTerminal::Option::AllowQuit`
-options are active the terminal might be switched into an advanced keyboard mode that supports additional keyboard
+options are active the terminal might be switched into an advanced keyboard mode that supports additional key
 combinations or keys.
 
 Terminal connection options
@@ -161,13 +161,13 @@ application was run from. It uses the first file descriptor that is a terminal s
 and the process' controlling terminal.
 If no such terminal is found the application is terminated by calling :cpp:func:`QCoreApplication::quit()`.
 The application can avoid termination by using :cpp:func:`~Tui::ZTerminal::isDefaultTerminalAvailable()` to avoid
-constructing a ZTerminal instance when no terminal is available.
+constructing a ``ZTerminal`` instance when no terminal is available.
 
 Terminal from file descriptor
 .............................
 
 Using the constructor that takes :cpp:struct:`~Tui::ZTerminal::FileDescriptor` as parameter the application can
-connect the ZTerminal instance to a terminal represented by the given file descriptor.
+connect the ``ZTerminal`` instance to a terminal represented by the given file descriptor.
 The application has to ensure that the file descriptor actually is a terminal (:manpage:`isatty(3)`) and is both
 readable and writable.
 
@@ -175,7 +175,7 @@ Offscreen terminal
 ..................
 
 Using the constructor that takes :cpp:struct:`~Tui::ZTerminal::OffScreen` as parameter the application can create
-a ZTerminal instance that is not connected to an actual terminal, but instead does not display anything.
+a ``ZTerminal`` instance that is not connected to an actual terminal, but instead does not display anything.
 
 This can be useful for example for testing or as null instance when an application that should be runnable without a
 terminal does not have access to an actual terminal.
@@ -184,7 +184,7 @@ Custom terminal connection
 ..........................
 
 Using the constructor that takes :cpp:struct:`~Tui::ZTerminal::TerminalConnection` as parameter the application
-can create a ZTerminal instance that uses methods of :cpp:struct:`~Tui::ZTerminal::TerminalConnection` and
+can create a ``ZTerminal`` instance that uses methods of :cpp:struct:`~Tui::ZTerminal::TerminalConnection` and
 an instance of an application supplied class derived from
 :cpp:struct:`~Tui::ZTerminal::TerminalConnectionDelegate` for all terminal communication.
 
@@ -194,8 +194,8 @@ internally implemented ssh connections or other custom transports.
 Shutdown
 --------
 
-The destructor of the terminal instance will restore the terminal to its configuration before ZTerminal started using
-the terminal. Additionally ZTerminal installs signal handlers to restore the terminal if the application crashes.
+The destructor of the terminal instance will restore the terminal to its configuration before ``ZTerminal`` started using
+the terminal. Additionally ``ZTerminal`` installs signal handlers to restore the terminal if the application crashes.
 
 If on the other hand the application is using the default terminal connection and the terminal gets disconnected, the
 application is terminated by calling :cpp:func:`QCoreApplication::quit()`, unless the application connects to the
@@ -216,11 +216,12 @@ After receiving that event the widgets can be used through the terminal connecti
 
 The keyboard focus is a terminal scoped property.
 But to ease preparing the widget tree before actually connecting it to the terminal when the main widget is set,
-the newly attached widget tree is scanned for the widget with the most recent call to setFocus which is both
-enabled and visible to take focus.
+the newly attached widget tree is scanned for the widget with the most recent call to
+:cpp:func:`~void Tui::ZWidget::setFocus(Tui::FocusReason reason = Tui::OtherFocusReason)` which is both enabled and
+visible to take focus.
 
-When a widget is set as main widget on the terminal and when the terminal size changes the size of the main widget
-will be set to the size of the terminal (or its minimum size if that is larger).
+If a widget is set as main widget of the terminal, its size will be set to the size of the terminal
+(or its minimum size if that is larger) when the terminal size changes.
 The main widget will always be placed in the top left corner of the terminal and the position part of the widget's
 geometry is ignored.
 
@@ -230,17 +231,17 @@ geometry is ignored.
 Viewport
 --------
 
-If the terminal size is smaller than the minimum size indicated by the main widget, ZTerminal will switch into
+If the terminal size is smaller than the minimum size indicated by the main widget, ``ZTerminal`` will switch into
 viewport mode.
 In viewport mode the application is rendered to a buffer that is larger than the actual terminal size and the terminal
 will view a selectable part of that buffer.
 
 The minimum size used for this is determined by taking the larger value (in each dimension) of the sizes returned by
 :cpp:func:`QSize Tui::ZWidget::minimumSize() const` and :cpp:func:`virtual QSize Tui::ZWidget::minimumSizeHint() const`.
-Some root widgets (like ZRoot) allow dynamically expanding the minimum size to be large enough to display specially
-marked windows.
+Some root widgets (like :cpp:class:`Tui::ZRoot`) allow dynamically expanding the minimum size to be large enough to
+display specially marked windows.
 
-If the viewport mode is active, ZTerminal will display the text "F6 Scroll" in the lower left corner of the terminal.
+If the viewport mode is active, ``ZTerminal`` will display the text "F6 Scroll" in the lower left corner of the terminal.
 Pressing :kbd:`F6` will switch to viewport scroll mode with the text "←↑→↓ ESC" in the lower left corner.
 In viewport scroll mode, the part of the application that is visible in the terminal can be adjusted using the arrow
 keys.
@@ -252,7 +253,7 @@ Any other key will be ignored.
 Terminal information
 --------------------
 
-Certain information about the terminal connected to a ZTerminal instance is available with calling functions on it.
+Certain information about the terminal connected to a ``ZTerminal`` instance is available with calling functions on it.
 
 The size of the connected terminal is available from :cpp:func:`~int Tui::ZTerminal::width() const`
 and :cpp:func:`~int Tui::ZTerminal::height() const`.
@@ -312,7 +313,7 @@ See :ref:`term_viewport` for behavior details of this mode.
 Introspection
 -------------
 
-Sometimes it is desired to read back the actually produces output from the ZTerminal instance.
+Sometimes it is desired to read back the actually produced output from the ``ZTerminal`` instance.
 For example for testing of widget or infrastructure code.
 
 For this purpose the functions :cpp:func:`~ZImage Tui::ZTerminal::grabCurrentImage() const`,
@@ -328,7 +329,7 @@ It is possible to get notified after each render cycle by connecting to the
 Observing application state
 ---------------------------
 
-Through the ZTerminal instance it is possible to observe events in the running application.
+Through the ``ZTerminal`` instance it is possible to observe events in the running application.
 
 As keyboard focus is a terminal scoped state, the signal :cpp:func:`~Tui::ZTerminal::focusChanged()` can be used
 to observe the focus moving from one widget to another widget.
@@ -344,9 +345,9 @@ And the progression through rendering cycles of the application can be monitored
 Standalone usage
 ----------------
 
-It is also possible (but unusual) to use a ZTerminal instance without widgets.
+It is also possible (but unusual) to use a ``ZTerminal`` instance without widgets.
 In this case :cpp:func:`~ZPainter Tui::ZTerminal::painter()` can be used to directly paint on the buffer of the
-ZTerminal instance and flush this buffer to the connected terminal by using
+``ZTerminal`` instance and flush this buffer to the connected terminal by using
 :cpp:func:`~void Tui::ZTerminal::updateOutput()` or
 :cpp:func:`~void Tui::ZTerminal::updateOutputForceFullRepaint()`.
 
@@ -361,22 +362,22 @@ using
 Pause / Unpause operation
 -------------------------
 
-It is possible to pause usage of the terminal by a ZTerminal instance by calling :cpp:func:`~void Tui::ZTerminal::pauseOperation()`.
-This restores the terminal mode to the state before ZTerminal started using the terminal and enables using the terminal
+It is possible to pause usage of the terminal by a ``ZTerminal`` instance by calling :cpp:func:`~void Tui::ZTerminal::pauseOperation()`.
+This restores the terminal mode to the state before ``ZTerminal`` started using the terminal and enables using the terminal
 for running other applications that access the terminal.
 
-If the application wants to return to using the terminal with ZTerminal it should call
+If the application wants to return to using the terminal with ``ZTerminal`` it should call
 :cpp:func:`~void Tui::ZTerminal::unpauseOperation()`.
 
 
 Layout infrastructure
 ---------------------
 
-The ZTerminal instance also acts as a central point for coordination of layout updates.
+The ``ZTerminal`` instance also acts as a central point for coordination of layout updates.
 Usually applications use the layout infrastructure through interfaces in :cpp:class:`Tui::ZWidget` and
-:cpp:class:`Tui::ZLayout` (and for testing in Tui::ZTest).
+:cpp:class:`Tui::ZLayout` (and for testing in :cpp:class:`Tui::ZTest`).
 
-Layout work is normally deferred using the event loop to reduce costly relayout cycles.
+By default, layout work is deferred using the event loop to reduce costly relayout cycles.
 :cpp:class:`Tui::ZWidget` and :cpp:class:`Tui::ZLayout` register widgets to be relayouted in the next cycle by calling
 :cpp:func:`~void Tui::ZTerminal::maybeRequestLayout(ZWidget *w)`
 or :cpp:func:`~void Tui::ZTerminal::requestLayout(ZWidget *w)`.
@@ -384,9 +385,9 @@ or :cpp:func:`~void Tui::ZTerminal::requestLayout(ZWidget *w)`.
 The function :cpp:func:`~bool Tui::ZTerminal::isLayoutPending() const` can be used to observe if a layout cycle
 is pending.
 
-While normally it is sufficient to let ZTerminal schedule the next layout cycle an application can force running a
+While normally it is sufficient to let ``ZTerminal`` schedule the next layout cycle, an application can force running a
 pending layout cycle immediately by calling :cpp:func:`~void Tui::ZTerminal::doLayout()`.
-When calling this function care should be taken to call it only from code that can not be itself be triggered by
+When calling this function care should be taken to call it only from code that cannot be itself be triggered by
 a layout cycle to avoid recursion.
 
 Components that need to cache information scoped to a layout cycle can use
@@ -489,7 +490,7 @@ Members
 
    Construct an instance connected to the terminal the application was started from.
 
-   The instance uses ``parent`` as parent. The parent is only used for qt style automatic deletion and may be nullptr.
+   The instance uses ``parent`` as parent. The parent is only used for Qt style automatic deletion and may be :cpp:expr:`nullptr`.
 
    See :ref:`term_startup` for details on terminal instance startup and :ref:`term_options` for details on the supported
    options.
@@ -503,7 +504,7 @@ Members
    The application has to ensure that the file descriptor contained in ``fd`` is kept open for at least as long as
    the instance using it exists.
 
-   The instance uses ``parent`` as parent. The parent is only used for qt style automatic deletion and may be nullptr.
+   The instance uses ``parent`` as parent. The parent is only used for Qt style automatic deletion and may be :cpp:expr:`nullptr`.
 
    See :ref:`term_startup` for details on terminal instance startup and :ref:`term_options` for details on the supported
    options.
@@ -514,7 +515,7 @@ Members
 
    Terminal auto detection is skipped. Terminal capabilities will be taken from ``offscreen``.
 
-   The instance uses ``parent`` as parent. The parent is only used for qt style automatic deletion and may be nullptr.
+   The instance uses ``parent`` as parent. The parent is only used for Qt style automatic deletion and may be :cpp:expr:`nullptr`.
 
 .. cpp:function:: ZTerminal(TerminalConnection *connection, Options options, QObject *parent = nullptr)
 
@@ -529,7 +530,7 @@ Members
    The application has to ensure that the ``connection`` instance is kept valid for at least as long as the instance
    using it exists.
 
-   The instance uses ``parent`` as parent. The parent is only used for qt style automatic deletion and may be nullptr.
+   The instance uses ``parent`` as parent. The parent is only used for Qt style automatic deletion and may be :cpp:expr:`nullptr`.
 
    See :ref:`term_startup` for details on terminal instance startup and :ref:`term_options` for details on the supported
    options.
@@ -638,7 +639,7 @@ Members
 
 .. cpp:function:: ZWidget *focusWidget() const
 
-   Returns the widget which currently has the keyboard focus or ``nullptr`` if no widget has focus.
+   Returns the widget which currently has the keyboard focus or :cpp:expr:`nullptr` if no widget has focus.
 
 .. cpp:function:: void forceRepaint()
 
@@ -674,7 +675,7 @@ Members
 
 .. cpp:function:: int height() const
 
-   This function return the current height of the terminal as seen by ZTerminal.
+   This function return the current height of the terminal as seen by ``ZTerminal``.
 
    If :cpp:enumerator:`Tui::ZTerminal::Option::DisableAutoResize` is not in effect the height should match the
    actual terminal height unless the application has overridden the height using
@@ -707,7 +708,7 @@ Members
    This signal is emitted when a incompatible terminal is detected.
 
    If :cpp:enumerator:`Tui::ZTerminal::Option::ForceIncompatibleTerminals` is not in effect and this signal is not
-   connected ZTerminal will output an error message and the application will be terminated
+   connected ``ZTerminal`` will output an error message and the application will be terminated
    using :cpp:func:`QCoreApplication::quit()`.
    If the signal is connected the terminal will still not be initialized but the application is free to handle the
    problem in another way like displaying a custom error message or proceeding without using Tui Widgets.
@@ -724,11 +725,11 @@ Members
 .. cpp:function:: void setMainWidget(ZWidget *w)
 .. cpp:function:: ZWidget *mainWidget() const
 
-   The main window is the root of the widget tree connected to this ZTerminal instance.
+   The main window is the root of the widget tree connected to this ``ZTerminal`` instance.
 
    For details see :ref:`term_mainwidget`.
 
-   If a new main widget is set, various widget related state in the ZTerminal instance is cleared (e.g. focus,
+   If a new main widget is set, various widget related state in the ``ZTerminal`` instance is cleared (e.g. focus,
    keyboard grab, pending layouting).
 
    The geometry of the main widget overwritten by the terminal size in most cases.
@@ -738,7 +739,7 @@ Members
 
 .. cpp:function:: ZPainter painter()
 
-   Returns a painter that allows modifying the the ZTerminal side terminal buffer directly.
+   Returns a painter that allows modifying the the ``ZTerminal`` side terminal buffer directly.
 
    |standalone-or-ar|
 
@@ -770,8 +771,8 @@ Members
 
 .. cpp:function:: void resize(int width, int height)
 
-   Clears and resizes the ZTerminal side terminal buffer.
-   The ZTerminal side terminal buffer should be sized to match the size of the actual terminal and many parts of
+   Clears and resizes the ``ZTerminal`` side terminal buffer.
+   The ``ZTerminal`` side terminal buffer should be sized to match the size of the actual terminal and many parts of
    Tui Widgets assume that this holds true.
 
 .. rst-class:: tw-signal
@@ -781,10 +782,10 @@ Members
    :cpp:func:`ZTerminal(FileDescriptor fd, Options options, QObject *parent = nullptr) <void Tui::ZTerminal::ZTerminal(FileDescriptor fd, Options options, QObject *parent = nullptr)>`
    is lost.
 
-   After this signal is emitted ZTerminal will no longer be able to do any updates or receive input from the formerly
+   After this signal is emitted ``ZTerminal`` will no longer be able to do any updates or receive input from the formerly
    connected terminal.
 
-   If the signal is not connected ZTerminal will terminate the application using :cpp:func:`QCoreApplication::quit()`
+   If the signal is not connected ``ZTerminal`` will terminate the application using :cpp:func:`QCoreApplication::quit()`
    instead.
 
 .. cpp:function:: ZTextMetrics textMetrics() const
@@ -802,19 +803,19 @@ Members
 
 .. cpp:function:: void updateOutput()
 
-   Send the current contents of the ZTerminal side terminal buffer to the terminal with an incremental update.
+   Send the current contents of the ``ZTerminal`` side terminal buffer to the terminal with an incremental update.
 
    |standalone|
 
 .. cpp:function:: void updateOutputForceFullRepaint()
 
-   Send the current contents of the ZTerminal side terminal buffer to the terminal with an full (non incremental) update.
+   Send the current contents of the ``ZTerminal`` side terminal buffer to the terminal with an full (non incremental) update.
 
    |standalone|
 
 .. cpp:function:: int width() const
 
-   This function return the current width of the terminal as seen by ZTerminal.
+   This function return the current width of the terminal as seen by ``ZTerminal``.
 
    If :cpp:enumerator:`Tui::ZTerminal::Option::DisableAutoResize` is not in effect the width should match the
    actual terminal width unless the application has overridden the width using
@@ -852,6 +853,8 @@ Nested Types
 .. rst-class:: tw-midspacebefore
 .. cpp:struct:: Tui::ZTerminal::OffScreen
 
+   This class is copyable and assignable.
+
    This class is used to configure details of the offscreen mode of :cpp:class:`Tui::ZTerminal`.
 
    .. cpp:function:: OffScreen(int width, int height)
@@ -873,11 +876,6 @@ Nested Types
       Unknown capabilities are ignored.
 
       See :ref:`term_capabilites` for possible capabilities.
-
-   .. cpp:function:: OffScreen(const OffScreen&)
-   .. cpp:function:: OffScreen& operator=(const OffScreen&)
-
-      This class is copyable.
 
 .. rst-class:: tw-midspacebefore
 .. cpp:struct:: Tui::ZTerminal::TerminalConnection
@@ -914,8 +912,8 @@ Nested Types
    .. cpp:function:: void setBackspaceIsX08(bool val)
 
       Set how the backspace key is send by the terminal.
-      if ``val`` is true, the terminal is expected to send a 0x08 character for backspace.
-      if ``val`` is false, the terminal is expected to send a 0x7f character for backspace.
+      if ``val`` is :cpp:expr:`true`, the terminal is expected to send a 0x08 character for backspace.
+      if ``val`` is :cpp:expr:`false`, the terminal is expected to send a 0x7f character for backspace.
 
       If the terminal connection originates from a kernel terminal device ``val`` should be the ``true`` if the
       terminal is setup with ``termios.c_cc[VERASE] == 0x08``.
@@ -965,7 +963,7 @@ Nested Types
       uncleanly. For example in a client/server setup where a client forwards a terminal connection and the server is
       running the Tui Widgets application is would be good to move the restore sequence to the client.
 
-      If the terminal instance is destroyed cleanly (i.e. the destructor of ZTerminal is run) this sequence should not
+      If the terminal instance is destroyed cleanly (i.e. the destructor of ``ZTerminal`` is run) this sequence should not
       be sent to the terminal, as the clean shutdown already handles this.
 
    .. rst-class:: tw-pure-virtual
@@ -974,7 +972,7 @@ Nested Types
       The terminal instance calls this function on clean shutdown.
 
       if ``awaitingResponse`` is set the terminal will likely still send replies to query sequences sent by the
-      ZTerminal instance. The delegate might try catch these replies by reading and discarding all terminal input
+      ``ZTerminal`` instance. The delegate might try catch these replies by reading and discarding all terminal input
       for a limited time.
 
    .. rst-class:: tw-virtual

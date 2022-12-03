@@ -21,7 +21,7 @@ labels or windows.
            Logical structure
 
       - .. thumbnail:: stack-3d.png
-           :title: Layers in 3d view
+           :title: Layers in 3d view (click to zoom)
            :show_caption: True
 
 The direct children of a widget are stacked in a given order.
@@ -39,7 +39,7 @@ Usually, an application has one instance of this class that is connected to the 
 but one application interacting with multiple terminals is supported as well.
 For a widget tree to be usable it needs to be connected to a terminal using the ``setMainWidget`` method.
 
-``ZTerminal`` also manages state such as the currently focused widget, which is common to a whole terminal.
+``ZTerminal`` also manages terminal wide state, such as the currently focused widget.
 
 
 Palette
@@ -74,14 +74,14 @@ If controls are used without a window, colors for these controls need to setup m
 Markup
 ------
 
-Some widgets support using a simple markup for defining their text contents.
+There are widgets that support using a simple markup for defining their text contents.
 
 Currently the only supported tag is the ``m`` tag which allows specifing a mnemonic part of the text that is highlighted
 and used to generate a keyboard shortcut for the widget from.
 
 When setting the contents in the constructor markup interpretation is usually enabled by prefixing the string
 with an additional argument with the value :cpp:var:`Tui::withMarkup`.
-When working with an already existing instance, there is usually a ``setMarkup`` method to set text interpreted as
+When working with an already existing instance, there is a ``setMarkup`` method to set text interpreted as
 markup.
 
 The markup language is based on the basic html syntax with elements starting with a tag in the form of ``<m>`` and
@@ -92,8 +92,9 @@ If the actual text contents should contain a ``<`` character it needs to be esca
 Root / Windows
 --------------
 
-While not required, ``ZRoot`` and windows (e.g. ``ZWindow`` and ``ZDialog``) create a window based structure for
+``ZRoot`` and windows (e.g. ``ZWindow`` and ``ZDialog``) create a window based structure for
 an application.
+However applications are not required to use these classes and can implement their own alternatives.
 Each window is a (possibly overlapping) rectangular part of the terminal that has an optional title
 and can optionally be rearranged in the terminal.
 By using :kbd:`F6` (and :kbd:`Shift+F6`) the user can switch between windows.
@@ -111,7 +112,7 @@ ZSymbol
 
 Tui Widgets uses strings as identifiers in various places.
 Using strings is helpful for namespace management when multiple independent developers create libraries and
-identfiers are widely scoped.
+identifiers are widely scoped.
 To reduce possible performance impact of many string comparisons, strings are converted to ``ZSymbol`` instances.
 The ``ZSymbol`` system maintains an internal mapping of all strings used as symbols to integer values,
 so that simple integer comparisons can be done after lookup.

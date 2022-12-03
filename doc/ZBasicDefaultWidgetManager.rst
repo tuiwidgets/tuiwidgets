@@ -12,7 +12,7 @@ ZBasicDefaultWindowManager
    it stores one decendent of the dialog as default widget.
 
    :cpp:func:`bool Tui::ZDefaultWidgetManager::isDefaultWidgetActive() const` is reimplemented to
-   return true iff there is a default widget and the widgets in the path of the currently focused
+   return :cpp:expr:`true` iff there is a default widget and the widgets in the path of the currently focused
    widget to the dialog don't accept :kbd:`Enter`.
 
    If a widget accepts :kbd:`Enter` is determined by sending a ZEventType::queryAcceptsEnter event

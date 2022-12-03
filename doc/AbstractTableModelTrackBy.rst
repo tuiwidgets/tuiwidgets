@@ -13,7 +13,7 @@ This class is intended for small to medium sized models.
 As example the following code creates a model based on a filesystem directory assuming file name are stable identifiers
 in this case.
 
-A instance is created with the type of the identifier/key to use and how many columns the model should have:
+An instance is created with the type of the identifier/key to use and how many columns the model should have:
 
 .. literalinclude:: examples/modeltrackby/modeltrackby.cpp
     :caption: setup

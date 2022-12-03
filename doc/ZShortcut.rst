@@ -57,21 +57,21 @@ ZPendingKeySequenceCallbacks
 
 .. cpp:class:: Tui::ZPendingKeySequenceCallbacks
 
-   The ZPendingKeySequenceCallbacks allows monitoring in progress multi step shortcuts.
+   The ZPendingKeySequenceCallbacks allows monitoring in-progress multi-step shortcuts.
 
    Monitoring is activated using
    :cpp:func:`void Tui::ZTerminal::registerPendingKeySequenceCallbacks(const Tui::ZPendingKeySequenceCallbacks &callbacks)`.
 
    .. cpp:function:: void setPendingSequenceStarted(std::function<void()> callback)
 
-      Set a callback to be called when a multi step shortcut is started.
+      Set a callback to be called when a multi-step shortcut is started.
 
    .. cpp:function:: void setPendingSequenceFinished(std::function<void(bool matched)> callback)
 
-      Set a callback to be called when a multi step shortcut is finished.
+      Set a callback to be called when a multi-step shortcut is finished.
 
       The ``matched`` parameter of the callback will be ``true`` if the input did match a active shortcut.
 
    .. cpp:function:: void setPendingSequenceUpdated(std::function<void()> callback)
 
-      Set a callback to be called when a further keystroke for a multi step shortcut is input.
+      Set a callback to be called when a further keystroke for a multi-step shortcut is input.

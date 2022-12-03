@@ -84,7 +84,7 @@ In ``(4)`` the ``quit`` method is implemented.
 It simply calls ``quit`` of QCoreApplication to exit the event loop started in the last line of the ``main()`` function.
 
 You might have noticed the use of raw ``new`` in the example code.
-While unusual in modern c++ code, this is the right thing to do within the qt object model,
+While unusual in modern C++ code, this is the right thing to do within the Qt object model,
 as long as the objects have a parent QObject set.
 The parent automatically deletes the child objects in its destructor.
 Memory leaks are therefore avoided.

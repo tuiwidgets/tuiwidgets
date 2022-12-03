@@ -11,7 +11,6 @@ Misc
    ZFormatRange
    ZMenuItem
    ZStyledTextLine
-   ZTextLayout
    ZTextOption
    ZTextStyle
    ZValuePtr

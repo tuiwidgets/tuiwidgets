@@ -47,14 +47,14 @@ Members
 
    Load an terminal image from the file named ``fileName`` and using the terminal characteristics from ``terminal``.
 
-   Returns ``nullptr`` if the file could not be read or parsing failed.
+   Returns :cpp:expr:`nullptr` if the file could not be read or parsing failed.
 
 .. rst-class:: tw-static
 .. cpp:function:: std::unique_ptr<Tui::ZImage> fromByteArray(const Tui::ZTerminal *terminal, QByteArray data)
 
    Load an terminal image from memory buffer ``data`` and using the terminal characteristics from ``terminal``.
 
-   Returns ``nullptr`` if the parsing failed.
+   Returns :cpp:expr:`nullptr` if the parsing failed.
 
 .. cpp:function:: int width() const
 .. cpp:function:: int height() const
@@ -66,17 +66,17 @@ Members
 
    Save the contents of the image to file ``fileName``.
 
-   Returns true on success.
+   Returns :cpp:expr:`true` on success.
 
 .. cpp:function:: QByteArray saveToByteArray() const
 
-   Save the contents of the image to a memory buffer and returns it as QByteArray.
+   Save the contents of the image to a memory buffer and returns it as :cpp:class:`QByteArray`.
 
 .. cpp:function:: QString peekText(int x, int y, int *left, int *right) const
 
    Get text of cluster covering the cell at position ``x``, ``y``.
 
-   If not nullptr, ``left`` and ``right`` will be set to the left most respectivly right most cell covered
+   If not :cpp:expr:`nullptr`, ``left`` and ``right`` will be set to the left most respectivly right most cell covered
    by the cluster.
 
 .. cpp:function:: Tui::ZColor peekForground(int x, int y) const
@@ -93,7 +93,7 @@ Members
 
 .. cpp:function:: bool peekSoftwrapMarker(int x, int y) const
 
-   Returns ``true`` if the cell at position ``x``, ``y`` contains a softwrap marker.
+   Returns :cpp:expr:`true` if the cell at position ``x``, ``y`` contains a softwrap marker.
 
 .. cpp:function:: Tui::ZTextAttributes peekAttributes(int x, int y) const
 

@@ -6,7 +6,7 @@ ZTextMetrics
 .. cpp:class:: Tui::ZTextMetrics
 
    ZTextMetrics allows measureing the size of a given text and how it is placed into cells.
-   As the details of this process depend on the charateristics of the specific terminal instances of ZTextMetrics
+   As the details of this process depend on the charateristics of the specific terminal instance, ZTextMetrics
    can only be obtained directly (by :cpp:func:`ZTextMetrics Tui::ZTerminal::textMetrics() const`)
    or indirectly (by :cpp:func:`ZTextMetrics Tui::ZPainter::textMetrics() const`) from a terminal.
 

@@ -1,5 +1,8 @@
 .. _ZWindowFacet:
 
+ZWindowFacet
+============
+
 Widgets that act like a type of window should return a implementation of ``ZWindowFacet`` from
 :cpp:func:`QObject *Tui::ZWidget::facet(const QMetaObject &metaObject) const` when queried for this facet.
 This enables additional window behavior.
@@ -8,7 +11,7 @@ The window facet also is the interface to place a window into a :cpp:class:`Tui:
 container to take control over the placement of the window and to add items to the window's system menu.
 
 ZWindowFacet
-============
+------------
 
 .. rst-class:: tw-facet
 .. cpp:class:: Tui::ZWindowFacet : public QObject
@@ -18,7 +21,7 @@ ZWindowFacet
    .. rst-class:: tw-virtual
    .. cpp:function:: bool isExtendViewport() const
 
-      If this function returns true and the window does not fit into the terminal size, the viewport mode of
+      If this function returns :cpp:expr:`true` and the window does not fit into the terminal size, the viewport mode of
       :cpp:class:`Tui::ZTerminal` will be enabled to allow scrolling to view all parts of the window.
 
       The base class always returns :cpp:expr:`false`.
@@ -26,11 +29,11 @@ ZWindowFacet
    .. rst-class:: tw-virtual
    .. cpp:function:: bool isManuallyPlaced() const
 
-      If this function returns true, the window will be considered as manually placed and automatic placement will be
-      disabled.
+      If this function returns :cpp:expr:`true`, the window will be considered as manually placed and automatic placement
+      will be disabled.
 
-      The base class always returns the last value passed to :cpp:func:`void setManuallyPlaced(bool manual)` or true if
-      that function was not called yet.
+      The base class always returns the last value passed to :cpp:func:`void setManuallyPlaced(bool manual)` or
+      :cpp:expr:`true` if that function was not called yet.
 
    .. rst-class:: tw-virtual
    .. cpp:function:: void autoPlace(const QSize &available, ZWidget *self)

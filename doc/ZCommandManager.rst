@@ -12,7 +12,7 @@ The two main classes of the command system are :cpp:class:`Tui::ZCommandManager`
 User interface elements get the command manager instance from a suitable :cpp:class:`Tui::ZWidget` and use it to
 get information about the command (e.g. if it is currently enabled) and to trigger the command.
 
-Application code creates a :cpp:class:`Tui::ZCommandNotifier` instance with a parent in the widget hierarchie to
+Application code creates a :cpp:class:`Tui::ZCommandNotifier` instance with a parent in the widget hierarchy to
 interact with the command system. It can then set the enabled state of the command and bind to the activated signal.
 
 ZCommandNotifier
@@ -50,7 +50,7 @@ ZCommandNotifier
 
    .. cpp:function:: bool isContextSatisfied() const
 
-      Returns true if the currently focused widget satisfies the context of this command notifier.
+      Returns :cpp:expr:`true` if the currently focused widget satisfies the context of this command notifier.
 
    **Signals**
 

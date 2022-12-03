@@ -26,12 +26,12 @@ The following color indicies are usually divided into a color cube and a ramp of
 The rgb colors allow direct usage of given rgb color values.
 The colors use 8 bit resolution for each color channel.
 But of course some terminals internally use lower resolution.
-If Tui Widgets know the terminal does not support rgb color it internally translates them to indexed colors, most
-terminals support those.
+If Tui Widgets knows the terminal does not support rgb color it internally translates them to indexed colors, because
+most terminals support those.
 
 Of course terminals differ in support for color kinds.
 Also in some situations users expect the application to use named colors to fit with their selected color theming.
-Thus Tui Widgets exposes all color kinds discusses and lets the application select which colors to use.
+Thus Tui Widgets exposes all color kinds discussed above and lets the application select which colors to use.
 Although the default palette uses rgb colors and the automatic conversion.
 
 If the application uses RGB colors, it can additionally use the :cpp:class:`Tui::ZColorHSV` class to ease calculation of
@@ -124,7 +124,7 @@ related colors.
      - white
 
 
-The following RGB colors are predefined as constants for application use in Tui::Colors:
+The following RGB colors are predefined as constants for application use in ``Tui::Colors``:
 
 .. list-table:: predefined rgb values
    :header-rows: 1

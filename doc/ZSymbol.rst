@@ -11,7 +11,7 @@ The ZSymbol system maintains an internal mapping of all strings used as symbols 
 so that simple integer comparisons can be done after lookup.
 
 ZSymbol is used for storage and in places where implicit conversation from QString is not desired.
-In constract ZImplicitSymbol can be used where ease of use requires implicit conversion.
+In contrast ZImplicitSymbol can be used where ease of use requires implicit conversion.
 
 .. c:macro:: TUISYM_LITERAL(x)
 
@@ -42,7 +42,7 @@ In constract ZImplicitSymbol can be used where ease of use requires implicit con
 
    .. cpp:function:: friend unsigned int qHash(const ZSymbol &key)
 
-      Returns a hash for qt's hash based data types.
+      Returns a hash for Qt's hash based data types.
 
 .. rst-class:: tw-midspacebefore
 .. cpp:class:: Tui::ZImplicitSymbol : public Tui::ZSymbol

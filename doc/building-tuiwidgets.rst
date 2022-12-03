@@ -3,8 +3,8 @@ Building Tui Widgets
 
 (You can skip this section if you are using a prebuild Tui Widgets library, e.g. from your linux distribution)
 
-Prerequists
------------
+Prerequisites
+-------------
 
 You need a working C++17 compiler, `meson <https://mesonbuild.com/>`_, `ninja <https://ninja-build.org/>`_
 and an installation of `QtCore <https://www.qt.io/>`_.

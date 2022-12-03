@@ -20,7 +20,7 @@ ZTextLine
 
 ZTextLine is a widget that simply displays a single line of text.
 
-In constrast to :ref:`labels <ZLabel>` it does not reserve a cell as focus indicator and does not support forwarding
+In contrast to :ref:`labels <ZLabel>` it does not reserve a cell as focus indicator and does not support forwarding
 focus to a "buddy" widget nor does it support showing a keyboard shortcut.
 
 See also: :cpp:class:`Tui::ZLabel`, :cpp:class:`Tui::ZTextLayout`
@@ -81,16 +81,16 @@ ZTextLine
    .. cpp:function:: QString text() const
    .. cpp:function:: void setText(const QString &text)
 
-      Using these functions the plain text content of the |control| can be get or set.
+      Get or set the plain text content of the |control|.
 
-      When the content of the |control| was most recently set using setMarkup the returned text is empty.
+      When the content of the |control| was most recently set using :cpp:func:`setMarkup` the returned text is empty.
 
    .. cpp:function:: QString markup() const
    .. cpp:function:: void setMarkup(const QString &markup)
 
-      Using these functions the text content of the |control| can be set using markup or retrieved.
+      Get or set the text content of the |control| using markup.
 
-      When the content of the |control| was most recently set using setText the returned markup is empty.
+      When the content of the |control| was most recently set using :cpp:func:`setText` the returned markup is empty.
 
 
 .. |control| replace:: text line widget

@@ -18,15 +18,17 @@ ZCheckBox
      in disabled state
 
 
-A checkbox allow users to select or deselect an option.
+A checkbox allows users to select or deselect an option.
 In contrast to :ref:`radiobuttons <ZRadioButton>` each checkbox has an independent state.
 The state can be toggled by using :kbd:`Space` or if set by using a keyboard mnemonic.
 
 The key to toggle the checkbox is usually shown highlighted when set using :ref:`markup <ControlMarkup>` to set its text.
 
-A checkbox usually is either checked or unchecked.
-But when the checkbox shows an attribute for a collection of items where the value is not uniform across all items there
-is a third "partially checked" status that allows the application to indicate a "do not change" option.
+A checkbox is either checked or unchecked.
+If the tristate attribute is enabled it additionally supports a third partially checked state.
+The partially checked state is commonly used when a checkbox represents a summary of multiple states and it's
+represented states contain both checked and unchecked values.
+A checkbox shown as partially checked by convention indicates that none of the represented substates will be altered.
 
 .. rst-class:: tw-flex-imgs
 
@@ -122,20 +124,20 @@ ZCheckBox
    .. cpp:function:: QString text() const;
    .. cpp:function:: void setText(const QString &text);
 
-      Using these functions the plain text content of the |control| can be get or set.
+      Get or set the plain text content of the |control|.
 
       When set the shortcut is also reset.
 
-      When the content of the |control| was most recently set using setMarkup the returned text is empty.
+      When the content of the |control| was most recently set using :cpp:func:`setMarkup` the returned text is empty.
 
    .. cpp:function:: QString markup() const;
    .. cpp:function:: void setMarkup(const QString &markup);
 
-      Using these functions the text content of the |control| can be set using markup or retrieved.
+      Get or set the text content of the |control| using markup.
 
       When set the shortcut is also reset, if the markup contains a mnemonic it is setup as new shortcut.
 
-      When the content of the |control| was most recently set using setText the returned markup is empty.
+      When the content of the |control| was most recently set using :cpp:func:`setText` the returned markup is empty.
 
    .. cpp:function:: Tui::CheckState checkState() const;
    .. cpp:function:: void setCheckState(Tui::CheckState state);
@@ -148,7 +150,7 @@ ZCheckBox
    .. cpp:function:: bool isTristate() const;
    .. cpp:function:: void setTristate(bool tristate = true);
 
-      If the tristate attribute is false the checkbox alternates between the states :cpp:enumerator:`Tui::Unchecked` and
+      If the tristate attribute is :cpp:expr:`false` the checkbox alternates between the states :cpp:enumerator:`Tui::Unchecked` and
       :cpp:enumerator:`Tui::Checked`.
 
       If tristate is enabled it cycles through the states :cpp:enumerator:`Tui::Unchecked`,

@@ -22,7 +22,7 @@ ZButton
      as dialog default
 
 
-A button allows users to trigger actions in the application and is a common used widget in dialog boxes.
+A button allows users to trigger actions in the application and is a commonly used widget in dialog boxes.
 A button can be activated by focusing it and pressing :kbd:`Enter` or if set by using a keyboard mnemonic.
 
 In a dialog one button can be setup as default button that can also be activated by pressing :kbd:`Enter` in another
@@ -126,20 +126,20 @@ ZButton
    .. cpp:function:: QString text() const
    .. cpp:function:: void setText(const QString &t)
 
-      Using these functions the plain text content of the |control| can be get or set.
+      Get or set the plain text content of the |control|.
 
       When set the shortcut is also reset.
 
-      When the content of the |control| was most recently set using setMarkup the returned text is empty.
+      When the content of the |control| was most recently set using :cpp:func:`setMarkup` the returned text is empty.
 
    .. cpp:function:: QString markup() const
    .. cpp:function:: void setMarkup(const QString &m)
 
-      Using these functions the text content of the |control| can be set using markup or retrieved.
+      Get or set the text content of the |control| using markup.
 
       When set the shortcut is also reset, if the markup contains a mnemonic it is setup as new shortcut.
 
-      When the content of the |control| was most recently set using setText the returned markup is empty.
+      When the content of the |control| was most recently set using :cpp:func:`setText` the returned markup is empty.
 
    .. cpp:function:: void setShortcut(const Tui::ZKeySequence &key)
 

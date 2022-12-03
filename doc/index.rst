@@ -24,6 +24,10 @@ Features
 * does not use global variables/singletons whenever possible and can handle multiple terminals in one process
 * permissively licensed: Boost Software License 1.0 (but Qt licensing is stricter)
 
+
+Curent Status
+-------------
+
 Planned:
 
 * ABI stability is planned (but breaking changes are still happening)
@@ -93,16 +97,10 @@ It's known to work on
    ZTextMetrics
    ZTest
    boxlayouts
+   ZTextLayout
    widgets
    misc
    qtlogging
-
-
-Curent Status
--------------
-
-Known pending changes:
- * layout memory management is unflexible and crash prone.
 
 
 Indices and tables

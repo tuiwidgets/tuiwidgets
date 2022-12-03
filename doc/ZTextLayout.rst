@@ -3,15 +3,15 @@
 ZTextLayout
 ===========
 
-ZTextLayout allows outputing text with features not directly supported by the text output functions in
+ZTextLayout allows outputting text with features not directly supported by the text output functions in
 :cpp:class:`Tui::ZPainter` and also allows mapping from visual coordinates to text position
 and adjusting text positions by letter/cluster or words.
 It supports using different color and attributes for part of the text, line breaks, line wrapping and more.
 
-It is a low level class and is intended to for use in widgets that render text manually.
+It is a low level class and is intended for use in widgets that render text manually.
 
-The most basic usage is to construct the class using the terminal's or painter's text metrics and the text to display
-and calling :cpp:func:`void Tui::ZTextLayout::doLayout(int width)`.
+The most basic usage is to construct the class using the terminal's or painter's text metrics together with the text to
+display and then calling :cpp:func:`void Tui::ZTextLayout::doLayout(int width)`.
 
 After the layouting is done, the other instance methods can be used to display the text and to query information from
 the layout.
@@ -92,7 +92,7 @@ passing it the position and the base text style.
       Layouts the text using ``width`` as layout width.
 
       This function creates as many lines as needed to display the text using width ``width``.
-      All lines are created at x position 0 and with y position starting from 0 and incremented by one for each line.
+      Lines are created at position ``(x, y) = (0, line number)`` where line number increments for each new line.
 
       After calling this function, functions to draw using the layout or to query layout details can be used.
 
@@ -131,7 +131,7 @@ passing it the position and the base text style.
       It uses ``style`` for text not covered by a item in ``ranges`` and ``formattingChars`` for formating characters
       not covered by a item in ``ranges`` (if enabled in the options).
 
-      If nullptr is passed as ``formattingChars``, it defaults to ``style``.
+      If :cpp:expr:`nullptr` is passed as ``formattingChars``, it defaults to ``style``.
 
       The last format range in ``ranges`` that matches a part of the text is used to format that text.
 
@@ -199,7 +199,7 @@ passing it the position and the base text style.
 
    .. cpp:function:: bool isValidCursorPosition(int pos) const
 
-      After layout, returns true iff the position ``pos`` (in code units) is a valid cursor position in the current
+      After layout, returns :cpp:expr:`true` iff the position ``pos`` (in code units) is a valid cursor position in the current
       text.
 
       A cursor position is valid if it is neither negative nor greater than the text lenght and it falls on a cluster

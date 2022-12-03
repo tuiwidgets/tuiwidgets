@@ -3,7 +3,7 @@
 Qt Logging
 ==========
 
-Qt logs warnings using the qt logging infrastructure.
+Qt logs warnings using the Qt logging infrastructure.
 This can even happen in production code.
 As the default logging setup in Qt logs to stderr, it will interact poorly with Tui Widgets.
 
