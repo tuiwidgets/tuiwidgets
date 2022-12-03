@@ -28,6 +28,7 @@ Example
 .. literalinclude:: examples/widgets/root.cpp
     :start-after: // snippet-start
     :end-before:  // snippet-end
+    :dedent:
 
 See :ref:`Getting_Started` for an example overriding :cpp:func:`~void Tui::ZRoot::terminalChanged()` to setup the
 user interface.

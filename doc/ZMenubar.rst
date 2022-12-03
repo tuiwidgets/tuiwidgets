@@ -45,6 +45,8 @@ Example
 .. literalinclude:: examples/widgets/menubar.cpp
     :start-after: // snippet-start
     :end-before:  // snippet-end
+    :dedent:
+
 
 Keyboard Usage
 --------------

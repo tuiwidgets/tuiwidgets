@@ -42,6 +42,7 @@ Example
 .. literalinclude:: examples/widgets/label.cpp
     :start-after: // snippet-start
     :end-before:  // snippet-end
+    :dedent:
 
 
 Keyboard Usage

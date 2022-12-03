@@ -37,12 +37,14 @@ Example
 .. literalinclude:: examples/widgets/radiobuttons.cpp
     :start-after: // snippet-start
     :end-before:  // snippet-end
+    :dedent:
 
 With two groups:
 
 .. literalinclude:: examples/widgets/radiobuttons.cpp
     :start-after: // snippet-2group-start
     :end-before:  // snippet-2group-end
+    :dedent:
 
 
 Keyboard Usage

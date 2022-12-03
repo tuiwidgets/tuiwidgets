@@ -10,6 +10,7 @@ A common way to create a menu structure using C++ initializer lists is:
 .. literalinclude:: examples/widgets/menubar.cpp
     :start-after: // snippet-initlist-items-start
     :end-before:  // snippet-initlist-items-end
+    :dedent:
 
 
 .. cpp:class:: Tui::ZMenuItem

@@ -47,12 +47,14 @@ Using internal item storage:
 .. literalinclude:: examples/widgets/listview.cpp
     :start-after: // snippet-start
     :end-before:  // snippet-end
+    :dedent:
 
 Using items from a external :cpp:class:`QAbstractItemModel`:
 
 .. literalinclude:: examples/widgets/listview.cpp
     :start-after: // snippet-model-start
     :end-before:  // snippet-model-end
+    :dedent:
 
 
 Keyboard Usage

@@ -105,6 +105,7 @@ Example
 .. literalinclude:: examples/widgets/window.cpp
     :start-after: // snippet-start
     :end-before:  // snippet-end
+    :dedent:
 
 .. _ZWindow_keys:
 

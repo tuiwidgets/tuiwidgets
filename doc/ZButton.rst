@@ -37,6 +37,7 @@ Example
 .. literalinclude:: examples/widgets/button.cpp
     :start-after: // snippet-start
     :end-before:  // snippet-end
+    :dedent:
 
 
 Keyboard Usage

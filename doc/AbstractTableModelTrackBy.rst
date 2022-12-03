@@ -19,6 +19,7 @@ An instance is created with the type of the identifier/key to use and how many c
     :caption: setup
     :start-after: // snippet-setup-start
     :end-before:  // snippet-setup-end
+    :dedent:
 
 It can then be updated as data comes in and changes:
 
@@ -26,6 +27,7 @@ It can then be updated as data comes in and changes:
     :caption: setup
     :start-after: // snippet-update-start
     :end-before:  // snippet-update-end
+    :dedent:
 
 Here ``files`` is the data to update the model to.
 The code transforms the data into a :cpp:class:`QVector` of :cpp:class:`Tui::Misc::AbstractTableModelTrackBy::Row`

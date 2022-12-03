@@ -47,6 +47,7 @@ Example
 .. literalinclude:: examples/widgets/checkbox.cpp
     :start-after: // snippet-start
     :end-before:  // snippet-end
+    :dedent:
 
 
 Keyboard Usage
