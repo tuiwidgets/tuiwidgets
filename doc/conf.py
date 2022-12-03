@@ -109,6 +109,19 @@ class AdhocDef(SphinxDirective):
         self.state.nested_parse(self.content, self.content_offset, contentnode)
         return [node]
 
+class CollapsableDef(SphinxDirective):
+
+    has_content = True
+    required_arguments = 1
+    final_argument_whitespace = True
+
+    def run(self):
+        node = collapsable()
+        node.summary = self.arguments[0]
+        self.state.nested_parse(self.content, self.content_offset, node)
+        return [node]
+
+
 from sphinx.util.osutil import ensuredir
 import subprocess
 import hashlib
@@ -192,8 +205,10 @@ def html_page_context(app, pagename, templatename, context, doctree):
 
 def setup(app):
     app.add_directive('adhoc-def', AdhocDef)
+    app.add_directive('collapsable', CollapsableDef)
     app.add_role('colorchip', colorchip_role)
     app.add_node(colorchip, html=(visit_colorchip, depart_colorchip))
+    app.add_node(collapsable, html=(visit_collapsable, depart_collapsable))
 
     app.add_transform(TpiConverter)
 

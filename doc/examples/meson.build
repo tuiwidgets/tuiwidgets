@@ -20,6 +20,7 @@ executable('modeltrackby', ['modeltrackby/modeltrackby.cpp'],
            dependencies : [qt5_dep, tuiwidgets_dep])
 
 widget_files = [
+  'widgets/boxlayout.cpp',
   'widgets/button.cpp',
   'widgets/checkbox.cpp',
   'widgets/dialog.cpp',

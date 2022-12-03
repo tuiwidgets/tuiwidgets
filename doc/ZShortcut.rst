@@ -47,6 +47,9 @@ The ZShortcut class allows to bind a signal to a keyboard shortcut.
 
    .. cpp:function:: bool matches(ZWidget *focusWidget, const ZKeyEvent *event) const
 
+      Returns true iff the the key event ``event`` matches the shortcut or its first key in multi key shortcuts
+      and the context for the shortcut is satisfied.
+
    .. rst-class:: tw-signal
    .. cpp:function:: void activated()
 

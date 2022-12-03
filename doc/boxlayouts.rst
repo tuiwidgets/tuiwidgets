@@ -32,10 +32,29 @@ Stretch
 
    Horizontal box layout with stretch before 2 buttons
 
+.. collapsable:: Example Code
+
+   .. literalinclude:: examples/widgets/boxlayout.cpp
+       :start-after: // snippet-stretchstart-start
+       :end-before:  // snippet-stretchstart-end
+       :dedent:
+
+.. raw:: html
+
+   <p>&nbsp;</p>
+
 .. rst-class:: tw-figure-left
 .. figure:: tpi/boxlayouts-stretch-mid.tpi
 
    Horizontal box layout with stretch between 2 buttons
+
+.. collapsable:: Example Code
+
+   .. literalinclude:: examples/widgets/boxlayout.cpp
+       :start-after: // snippet-stretchmid-start
+       :end-before:  // snippet-stretchmid-end
+       :dedent:
+
 
 Stretch elements allow creating space between items in the layout that expands to fill the available width.
 
@@ -54,11 +73,28 @@ Nested
 
    Horizontal box layout nested within vertial box layout.
 
+.. collapsable:: Example Code
+
+   .. literalinclude:: examples/widgets/boxlayout.cpp
+       :start-after: // snippet-nestedvh-start
+       :end-before:  // snippet-nestedvh-end
+       :dedent:
+
+.. raw:: html
+
+   <p>&nbsp;</p>
+
 .. rst-class:: tw-figure-left
 .. figure:: tpi/boxlayouts-nested2.tpi
 
    Vertial box layout nested within horizontal box layout.
 
+.. collapsable:: Example Code
+
+   .. literalinclude:: examples/widgets/boxlayout.cpp
+       :start-after: // snippet-nestedhv-start
+       :end-before:  // snippet-nestedhv-end
+       :dedent:
 
 Nesting layouts allows for more complex arrangements of widgets.
 It is important to consider in which order the items are nested, because nested box layouts do not create a grid, but
@@ -67,7 +103,7 @@ each layout's items are layouted individually.
 ZVBoxLayout
 -----------
 
-.. cpp:class:: Tui::ZHBoxLayout
+.. cpp:class:: Tui::ZHBoxLayout : public Tui::ZLayout
 
    This layout arranges items horizontally.
    Items are placed from left to right.
@@ -102,7 +138,7 @@ ZVBoxLayout
 ZHBoxLayout
 -----------
 
-.. cpp:class:: Tui::ZVBoxLayout
+.. cpp:class:: Tui::ZVBoxLayout : public Tui::ZLayout
 
    This layout arranges items vertically.
    Items are placed from top to bottom.

@@ -18,6 +18,7 @@ div.sphinxsidebar li.toctree-l2:hover { overflow: visible; }
 
 div.sphinxsidebar li.toctree-l2 > a:hover { backdrop-filter: blur(100px); }
 
+details > summary > span { cursor: pointer; border-bottom: 1px dotted #004B6B; }
 
 .hidden-references {
     visibility:hidden;

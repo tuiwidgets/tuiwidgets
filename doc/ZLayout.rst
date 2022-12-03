@@ -46,6 +46,13 @@ When items of a layout change (in number or properties) or layout parameters (sp
 should call :cpp:func:`void Tui::ZLayout::relayout()` to trigger a new layout cycle and get called back later to
 update its items' layout.
 
+The stored pointers to widgets and sub layouts should removed when the referenced items are deleted or reparented.
+For widgets, implementing
+:cpp:func:`removeWidgetRecursively <void Tui::ZLayout::removeWidgetRecursively(Tui::ZWidget *widget)>` is enough, as the
+layout infrastructure calls it when a widget needs to be removed.
+For sub-layouts the layout has to override :cpp:func:`QObject::childEvent` and filter removal
+events for :cpp:class:`Tui::ZLayout` children and implement removal itself.
+
 ZLayout
 -------
 
@@ -64,7 +71,15 @@ ZLayout
 
       When overriding this function in a derived class make sure to always call the base function.
 
-   .. cpp:function:: ZWidget *widget() const
+   .. rst-class:: tw-pure-virtual
+   .. cpp:function:: void removeWidgetRecursively(Tui::ZWidget *widget)
+
+      Remove the widget ``widget`` from the layout and all its sub-layouts.
+
+      This is needed to properly handle widgets that get destroyed or reparented out of the widget that contains the
+      layout.
+
+   .. cpp:function:: ZWidget *parentWidget() const
 
       Returns the widget ancestor of this layout or :cpp:expr:`nullptr` if none exists.
 
@@ -104,6 +119,19 @@ ZLayout
       Returns :cpp:expr:`false`.
 
 
+   **Protected Functions**
+
+   .. cpp:function:: bool removeWidgetRecursivelyHelper(ZLayoutItem *layoutItem, ZWidget *widget)
+
+      Helper for implementing :cpp:func:`removeWidgetRecursively`.
+
+      If the layout internally uses :cpp:class:`Tui::ZLayoutItem` to abstract storage of items, it can use
+      this helper to implement :cpp:func:`removeWidgetRecursively`.
+      In most cases calling this function for each stored layout item and forgetting that item if the function returns
+      :cpp:expr:`true` should be sufficient.
+
+      If the function returns :cpp:expr:`true`, the item ``layoutItem`` was already deleted.
+
 ZLayoutItem
 -----------
 
@@ -138,10 +166,27 @@ ZLayoutItem
 
       Returns if the item is currently visible and thus should be allocated space.
 
-   .. rst-class:: tw-static
+   .. rst-class:: tw-virtual
    .. cpp:function:: bool isSpacer() const
 
       Returns :cpp:expr:`true` if the item counts as a spacer.
+
+   .. rst-class:: tw-virtual
+   .. cpp:function:: ZWidget *widget()
+
+      Returns the wrapped widget of the layout item or :cpp:expr:`nullptr` if no widget is wrapped.
+
+      Should only be implemented by the class used in the implementation of :cpp:func:`wrapWidget` or classes that
+      can be threated exactly the same.
+
+      The base implementation always returns :cpp:expr:`nullptr`.
+
+   .. rst-class:: tw-virtual
+   .. cpp:function:: ZLayout *layout()
+
+      Returns :cpp:expr:`this` cast to :cpp:expr:`ZLayout*` iff this instance is in fact a :cpp:class:`Tui::ZLayout`.
+
+      The base implementation always returns :cpp:expr:`nullptr`.
 
    .. rst-class:: tw-static
    .. cpp:function:: std::unique_ptr<ZLayoutItem> wrapWidget(ZWidget *widget)

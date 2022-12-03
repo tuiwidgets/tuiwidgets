@@ -462,6 +462,9 @@ Members
    * If this widget has focus and the keyboard focus is not grabbed, or the widget is the grabbing widget
    * The cursor is inside the clipping region of the widget and all its parent widgets.
 
+   This function can only be used while handling the :cpp:func:`void paintEvent(Tui::ZPaintEvent *event)`
+   because the cursor position is reset at the start of each rendering cycle.
+
 .. cpp:function:: CursorStyle cursorStyle() const
 .. cpp:function:: void setCursorStyle(CursorStyle style)
 
@@ -473,6 +476,9 @@ Members
 
    The color used to display the cursor in this widget.
    Support of this depends on the terminal's capabilities.
+
+   The range for ``r``, ``g``, ``b`` for setting a cursor color is 0 - 255.
+   A special value of :cpp:expr:`(-1, -1, -1)` represents using the terminal default cursor color.
 
 .. cpp:function:: ZTerminal *terminal() const
 

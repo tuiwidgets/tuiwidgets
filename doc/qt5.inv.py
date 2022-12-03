@@ -13,6 +13,7 @@ data = """
 QObject cpp:class 1 qobject.html QObject
 QObject::event cpp:function 1 qobject.html#event QObject::event
 QObject::deleteLater cpp:function 1 qobject.html#deleteLater QObject::deleteLater
+QObject::childEvent cpp:function 1 qobject.html#childEvent QObject::childEvent
 QString cpp:class 1 qstring.html QString
 QPoint cpp:class 1 qpoint.html QPoint
 QFlags cpp:class 1 qflags.html QFlags
