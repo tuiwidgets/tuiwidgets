@@ -59,12 +59,14 @@ void ZTextLayout::doLayout(int width) {
     int y = 0;
     while (true) {
         ZTextLineRef line = createLine();
-        line.setLineWidth(width);
-        line.setPosition({0, y});
 
         if (!line.isValid()) {
             break;
         }
+
+        line.setLineWidth(width);
+        line.setPosition({0, y});
+
         ++y;
     }
     endLayout();
