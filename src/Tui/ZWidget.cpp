@@ -690,9 +690,15 @@ void ZWidget::resetCursorColor() {
 void ZWidget::setCursorColor(int r, int g, int b) {
     auto *const p = tuiwidgets_impl();
     if (p->cursorColorR == r && p->cursorColorG == g && p->cursorColorB == b) return;
-    p->cursorColorR = r;
-    p->cursorColorG = g;
-    p->cursorColorB = b;
+    if (r < 0 || g < 0 || b < 0) {
+        p->cursorColorR = -1;
+        p->cursorColorG = -1;
+        p->cursorColorB = -1;
+        return;
+    }
+    p->cursorColorR = std::max(0, std::min(r, 255));
+    p->cursorColorG = std::max(0, std::min(g, 255));
+    p->cursorColorB = std::max(0, std::min(b, 255));
     update();
 }
 
