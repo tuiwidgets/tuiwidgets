@@ -1038,6 +1038,7 @@ void ZTerminal::dispatchPasteEvent(ZPasteEvent &translated) {
     } else {
         QPointer<ZWidget> w = tuiwidgets_impl()->focus();
         while (w) {
+            translated.accept();
             bool processed = QCoreApplication::sendEvent(w, &translated);
             if ((processed && translated.isAccepted()) || !w) {
                 break;
