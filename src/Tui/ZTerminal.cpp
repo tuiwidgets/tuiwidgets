@@ -277,6 +277,8 @@ void ZTerminalPrivate::resetTestLayoutRequestTracker() {
 
 void ZTerminalPrivate::processPaintingAndUpdateOutput(bool fullRepaint) {
     if (mainWidgetFullyAttached()) {
+        Q_EMIT pub()->beforeRendering();
+
         if (pub()->isLayoutPending()) {
             pub()->doLayout();
         }
@@ -689,7 +691,6 @@ void ZTerminal::update() {
 
 void ZTerminal::forceRepaint() {
     auto *const p = tuiwidgets_impl();
-    Q_EMIT beforeRendering();
     p->processPaintingAndUpdateOutput(true);
 }
 
