@@ -69,13 +69,13 @@ class TUIWIDGETS_EXPORT ZRawSequenceEvent : public ZEvent {
 public:
     class Pending{}; static constexpr Pending pending {};
 
-    ZRawSequenceEvent(QString seq);
-    ZRawSequenceEvent(Pending, QString seq);
+    ZRawSequenceEvent(QByteArray seq);
+    ZRawSequenceEvent(Pending, QByteArray seq);
     ~ZRawSequenceEvent() override;
 
 
 public:
-    QString sequence() const;
+    QByteArray sequence() const;
 
 private:
     TUIWIDGETS_DECLARE_PRIVATE(ZRawSequenceEvent)

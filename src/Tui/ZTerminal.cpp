@@ -522,7 +522,7 @@ void ZTerminalPrivate::inputFromConnection(const char *data, int length) {
     awaitingResponse = false;
 
     termpaint_terminal_add_input_data(terminal, data, length);
-    QString peek = QString::fromUtf8(termpaint_terminal_peek_input_buffer(terminal), termpaint_terminal_peek_input_buffer_length(terminal));
+    QByteArray peek = QByteArray(termpaint_terminal_peek_input_buffer(terminal), termpaint_terminal_peek_input_buffer_length(terminal));
     if (peek.length()) {
         ZRawSequenceEvent event(ZRawSequenceEvent::pending, peek);
         QCoreApplication::sendEvent(pub(), &event);
@@ -551,7 +551,7 @@ void ZTerminal::TerminalConnection::terminalInput(const char *data, int length) 
 _Bool ZTerminalPrivate::raw_filter(void *user_data, const char *data, unsigned length, _Bool overflow) {
     // TODO what to do about _overflow?
     ZTerminal *that = static_cast<ZTerminal*>(user_data);
-    QString rawSequence = QString::fromUtf8(data, length);
+    QByteArray rawSequence = QByteArray(data, length);
     ZRawSequenceEvent event{rawSequence};
     return QCoreApplication::sendEvent(that, &event);
 }

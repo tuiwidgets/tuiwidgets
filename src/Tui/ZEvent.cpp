@@ -92,12 +92,12 @@ ZEvent::~ZEvent() {
 }
 
 
-ZRawSequenceEvent::ZRawSequenceEvent(QString seq)
+ZRawSequenceEvent::ZRawSequenceEvent(QByteArray seq)
     : ZEvent(ZEventType::rawSequence(), std::make_unique<ZRawSequenceEventPrivate>(seq))
 {
 }
 
-ZRawSequenceEvent::ZRawSequenceEvent(Pending, QString seq)
+ZRawSequenceEvent::ZRawSequenceEvent(Pending, QByteArray seq)
     : ZEvent(ZEventType::pendingRawSequence(), std::make_unique<ZRawSequenceEventPrivate>(seq))
 {
 }
@@ -105,11 +105,11 @@ ZRawSequenceEvent::ZRawSequenceEvent(Pending, QString seq)
 ZRawSequenceEvent::~ZRawSequenceEvent() {
 }
 
-QString ZRawSequenceEvent::sequence() const {
+QByteArray ZRawSequenceEvent::sequence() const {
     return tuiwidgets_impl()->sequence;
 }
 
-ZRawSequenceEventPrivate::ZRawSequenceEventPrivate(QString seq)
+ZRawSequenceEventPrivate::ZRawSequenceEventPrivate(QByteArray seq)
     : sequence(seq)
 {
 }

@@ -23,9 +23,9 @@ public:
 
 class ZRawSequenceEventPrivate : public ZEventPrivate {
 public:
-    ZRawSequenceEventPrivate(QString seq);
+    ZRawSequenceEventPrivate(QByteArray seq);
     ~ZRawSequenceEventPrivate() override;
-    QString sequence;
+    QByteArray sequence;
 };
 
 class ZTerminalNativeEventPrivate : public ZEventPrivate {
