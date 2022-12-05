@@ -62,6 +62,20 @@ TEST_CASE("textoption", "") {
         CHECK(to->tabArray().at(0) == 32);
         CHECK(to->tabArray().at(1) == 42);
     }
+
+    SECTION("tabs-sort") {
+        QList<Tui::ZTextOption::Tab> t = { Tui::ZTextOption::Tab(42, Tui::ZTextOption::LeftTab),
+                                           Tui::ZTextOption::Tab(32, Tui::ZTextOption::LeftTab)};
+        to->setTabs(t);
+        REQUIRE(to->tabs().size() == 2);
+        CHECK(to->tabs().at(0).position == 32);
+        CHECK(to->tabs().at(0).type == Tui::ZTextOption::LeftTab);
+        CHECK(to->tabs().at(1).position == 42);
+        CHECK(to->tabs().at(1).type == Tui::ZTextOption::LeftTab);
+        CHECK(to->tabArray().at(0) == 32);
+        CHECK(to->tabArray().at(1) == 42);
+    }
+
     SECTION("tabArray") {
         QList<int> t = { 32, 42 };
         to->setTabArray(t);
@@ -73,6 +87,19 @@ TEST_CASE("textoption", "") {
         CHECK(to->tabs().at(1).position == 42);
         CHECK(to->tabs().at(1).type == Tui::ZTextOption::LeftTab);
     }
+
+    SECTION("tabArray-sorts") {
+        QList<int> t = { 42, 32 };
+        to->setTabArray(t);
+        REQUIRE(to->tabArray().size() == 2);
+        CHECK(to->tabArray().at(0) == 32);
+        CHECK(to->tabArray().at(1) == 42);
+        CHECK(to->tabs().at(0).position == 32);
+        CHECK(to->tabs().at(0).type == Tui::ZTextOption::LeftTab);
+        CHECK(to->tabs().at(1).position == 42);
+        CHECK(to->tabs().at(1).type == Tui::ZTextOption::LeftTab);
+    }
+
     SECTION("wrapMode") {
         to->setWrapMode(Tui::ZTextOption::WrapMode::NoWrap);
         CHECK(to->wrapMode() == Tui::ZTextOption::WrapMode::NoWrap);

@@ -34,10 +34,14 @@ void ZTextOption::setFlags(ZTextOption::Flags flags) {
 
 void ZTextOption::setTabArray(const QList<int> &tabStops) {
     auto *const p = tuiwidgets_impl();
-    p->tabs.clear();
-    p->tabs.reserve(tabStops.size());
 
-    for (int stop: tabStops) {
+    auto tabStopsSorted = tabStops;
+    std::sort(tabStopsSorted.begin(), tabStopsSorted.end());
+
+    p->tabs.clear();
+    p->tabs.reserve(tabStopsSorted.size());
+
+    for (int stop: tabStopsSorted) {
         p->tabs.append(ZTextOption::Tab(stop, LeftTab));
     }
 }
@@ -54,7 +58,12 @@ int ZTextOption::tabStopDistance() const {
 
 void ZTextOption::setTabs(const QList<ZTextOption::Tab> &tabStops) {
     auto *const p = tuiwidgets_impl();
-    p->tabs = tabStops;
+
+    auto tabStopsSorted = tabStops;
+    std::sort(tabStopsSorted.begin(), tabStopsSorted.end(),
+              [](const auto &a, const auto &b) { return a.position < b.position; });
+
+    p->tabs = tabStopsSorted;
 }
 
 QList<int> ZTextOption::tabArray() const {
