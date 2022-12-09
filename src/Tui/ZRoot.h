@@ -26,6 +26,7 @@ public:
     void activatePreviousWindow();
 
     virtual void raiseOnActivate(ZWidget *w);
+
     QRect layoutArea() const override;
     QSize minimumSizeHint() const override;
 
