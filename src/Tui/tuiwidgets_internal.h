@@ -65,6 +65,9 @@
 #define TUIWIDGETS_NODISCARD(x)
 #endif
 
+#define TUIWIDGETS_NODISCARD_GETTER TUIWIDGETS_NODISCARD("This is a getter, not using the result is likely an error")
+#define TUIWIDGETS_NODISCARD_NOSIDEEFFECT TUIWIDGETS_NODISCARD("This function has no side effects, not using the result is likely an error")
+
 TUIWIDGETS_NS_START
 namespace Private {
 template <typename TOCONTRAINT, typename EXPECTEDTYPE>

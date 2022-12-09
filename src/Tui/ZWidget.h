@@ -54,34 +54,47 @@ protected:
     std::unique_ptr<ZWidgetPrivate> tuiwidgets_pimpl_ptr;
 
 public:
+    TUIWIDGETS_NODISCARD_GETTER
     ZWidget *parentWidget() const { return static_cast<ZWidget*>(parent()); }
     void setParent(ZWidget *newParent);
+    TUIWIDGETS_NODISCARD_GETTER
     QRect geometry() const;
     void setGeometry(const QRect &geometry);
+    TUIWIDGETS_NODISCARD_GETTER
     QRect rect() const;
+    TUIWIDGETS_NODISCARD_GETTER
     QRect contentsRect() const;
+    TUIWIDGETS_NODISCARD_GETTER
     bool isEnabled() const; // includes enabled state of parents
+    TUIWIDGETS_NODISCARD_GETTER
     bool isLocallyEnabled() const;
     void setEnabled(bool e);
+    TUIWIDGETS_NODISCARD_GETTER
     bool isVisible() const; // includes visible state of parents
+    TUIWIDGETS_NODISCARD_GETTER
     bool isLocallyVisible() const;
     void setVisible(bool v);
     void setStackingLayer(int layer);
+    TUIWIDGETS_NODISCARD_GETTER
     int stackingLayer() const;
     void raise();
     void lower();
     void stackUnder(ZWidget *w);
 
+    TUIWIDGETS_NODISCARD_GETTER
     QSize minimumSize() const;
     void setMinimumSize(QSize s);
     void setMinimumSize(int w, int h);
+    TUIWIDGETS_NODISCARD_GETTER
     QSize maximumSize() const;
     void setMaximumSize(QSize s);
     void setMaximumSize(int w, int h);
     void setFixedSize(QSize s);
     void setFixedSize(int w, int h);
+    TUIWIDGETS_NODISCARD_GETTER
     SizePolicy sizePolicyH() const;
     void setSizePolicyH(SizePolicy policy);
+    TUIWIDGETS_NODISCARD_GETTER
     SizePolicy sizePolicyV() const;
     void setSizePolicyV(SizePolicy policy);
     virtual QSize sizeHint() const;
@@ -89,6 +102,7 @@ public:
     QSize effectiveSizeHint() const;
     QSize effectiveMinimumSize() const;
     virtual QRect layoutArea() const;
+    TUIWIDGETS_NODISCARD_GETTER
     ZLayout *layout() const;
     void setLayout(ZLayout *l);
 
@@ -99,24 +113,32 @@ public:
     void updateGeometry();
 
     void setFocusPolicy(Tui::FocusPolicy policy);
+    TUIWIDGETS_NODISCARD_GETTER
     Tui::FocusPolicy focusPolicy() const;
     void setFocusMode(FocusContainerMode mode);
+    TUIWIDGETS_NODISCARD_GETTER
     FocusContainerMode focusMode() const;
     void setFocusOrder(int order);
+    TUIWIDGETS_NODISCARD_GETTER
     int focusOrder() const;
 
+    TUIWIDGETS_NODISCARD_GETTER
     QMargins contentsMargins() const;
     void setContentsMargins(QMargins m);
 
+    TUIWIDGETS_NODISCARD_GETTER
     const ZPalette &palette() const;
     void setPalette(const ZPalette &pal);
+    TUIWIDGETS_NODISCARD_NOSIDEEFFECT
     ZColor getColor(const ZImplicitSymbol &x);
 
+    TUIWIDGETS_NODISCARD_GETTER
     QStringList paletteClass() const;
     void setPaletteClass(QStringList classes);
     void addPaletteClass(const QString &clazz);
     void removePaletteClass(const QString &clazz);
 
+    TUIWIDGETS_NODISCARD_GETTER
     CursorStyle cursorStyle() const;
     void setCursorStyle(CursorStyle style);
     void resetCursorColor();
@@ -130,10 +152,13 @@ public:
     bool isAncestorOf(const ZWidget *child) const;
     bool isEnabledTo(const ZWidget *ancestor) const;
     bool isVisibleTo(const ZWidget *ancestor) const;
+    TUIWIDGETS_NODISCARD_GETTER
     bool focus() const;
     bool isInFocusPath() const;
 
+    TUIWIDGETS_NODISCARD_NOSIDEEFFECT
     QPoint mapFromTerminal(const QPoint &pos);
+    TUIWIDGETS_NODISCARD_NOSIDEEFFECT
     QPoint mapToTerminal(const QPoint &pos);
 
     ZWidget const *prevFocusable() const;
@@ -145,6 +170,7 @@ public:
 
     virtual ZWidget *resolveSizeHintChain();
 
+    TUIWIDGETS_NODISCARD_GETTER
     ZCommandManager *commandManager() const;
     ZCommandManager *ensureCommandManager();
     void setCommandManager(ZCommandManager *cmd);
