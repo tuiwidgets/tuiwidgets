@@ -100,3 +100,6 @@ ZDialog
    .. cpp:function:: void reject()
 
       Hides the dialog and triggers emission of the :cpp:func:`~void Tui::ZDialog::rejected()` signal.
+
+      If the :cpp:enumerator:`Tui::ZWindow::Option::DeleteOnClose` option is set, the dialog is also deleted using
+      :cpp:func:`QObject::deleteLater`.

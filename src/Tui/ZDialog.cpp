@@ -35,8 +35,12 @@ QObject *ZDialog::facet(const QMetaObject &metaObject) const {
 }
 
 void ZDialog::reject() {
+    auto *const p = tuiwidgets_impl();
     setVisible(false);
     rejected();
+    if (p->options & ZWindow::Option::DeleteOnClose) {
+        deleteLater();
+    }
 }
 
 void ZDialog::keyEvent(ZKeyEvent *event) {

@@ -4,6 +4,7 @@
 
 #include "../catchwrapper.h"
 
+#include <QPointer>
 #include <QTimer>
 
 #include <Tui/ZHBoxLayout.h>
@@ -260,5 +261,17 @@ TEST_CASE("dialog-behavior") {
         CHECK(recorder.noMoreSignal());
         CHECK(catcher.queue.size() == 0);
     }
+
+    SECTION("reject-delete-on-close") {
+        dlg->setOptions(Tui::ZWindow::Option::DeleteOnClose);
+        QPointer<Tui::ZWidget> sensor = dlg;
+        dlg->reject();
+        CHECK(recorder.consumeFirst(&Tui::ZDialog::rejected));
+        CHECK(recorder.noMoreSignal());
+        CHECK(catcher.queue.size() == 0);
+        QCoreApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
+        CHECK(sensor.isNull());
+    }
+
 }
 

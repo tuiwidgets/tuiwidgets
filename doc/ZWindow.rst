@@ -399,7 +399,7 @@ ZWindow
       The close event that is sent uses ``skipChecks`` as checks to skip.
 
       If the window is closed the window is set to invisible.
-      If the :cpp:enumerator:`Tui::ZWindow::Option::DeleteOnClose` option is set, the windows is also deleted using
+      If the :cpp:enumerator:`Tui::ZWindow::Option::DeleteOnClose` option is set, the window is also deleted using
       :cpp:func:`QObject::deleteLater`.
 
    **Protected Functions**
