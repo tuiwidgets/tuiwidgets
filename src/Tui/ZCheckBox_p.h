@@ -19,7 +19,7 @@ public:
 
 public:
     ZStyledTextLine styledText;
-    Tui::CheckState state = Tui::Unchecked;
+    CheckState state = Unchecked;
     bool tristate = false;
 };
 

@@ -112,9 +112,9 @@ public:
     void update();
     void updateGeometry();
 
-    void setFocusPolicy(Tui::FocusPolicy policy);
+    void setFocusPolicy(FocusPolicy policy);
     TUIWIDGETS_NODISCARD_GETTER
-    Tui::FocusPolicy focusPolicy() const;
+    FocusPolicy focusPolicy() const;
     void setFocusMode(FocusContainerMode mode);
     TUIWIDGETS_NODISCARD_GETTER
     FocusContainerMode focusMode() const;
@@ -144,7 +144,7 @@ public:
     void resetCursorColor();
     void setCursorColor(int r, int b, int g);
 
-    void setFocus(Tui::FocusReason reason = Tui::OtherFocusReason);
+    void setFocus(FocusReason reason = OtherFocusReason);
     void grabKeyboard();
     void grabKeyboard(Private::ZMoFunc<void(QEvent*)> handler);
     void releaseKeyboard();

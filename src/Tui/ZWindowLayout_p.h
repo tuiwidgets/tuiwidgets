@@ -19,11 +19,11 @@ public:
 public:
     std::unique_ptr<ZLayoutItem, Private::DeleteUnlessLayout> m_centralItem;
     std::unique_ptr<ZLayoutItem, Private::DeleteUnlessLayout> m_rightBorder;
-    Tui::Alignment m_rightBorderAlign = Tui::Alignment();
+    Alignment m_rightBorderAlign = Alignment();
     std::unique_ptr<ZLayoutItem, Private::DeleteUnlessLayout> m_bottomBorder;
-    Tui::Alignment m_bottomBorderAlign = Tui::Alignment();
+    Alignment m_bottomBorderAlign = Alignment();
     std::unique_ptr<ZLayoutItem, Private::DeleteUnlessLayout> m_topBorder;
-    Tui::Alignment m_topBorderAlign = Tui::Alignment();
+    Alignment m_topBorderAlign = Alignment();
     int m_topBorderLeftAdjust = 0;
     int m_topBorderRightAdjust = 0;
     int m_rightBorderTopAdjust = 0;

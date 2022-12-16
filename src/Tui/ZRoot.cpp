@@ -67,7 +67,7 @@ void ZRoot::focusWindowHelper(bool forward) {
         if (arm) {
             ZWidget *w = win->placeFocus();
             if (w) {
-                w->setFocus(Tui::FocusReason::ActiveWindowFocusReason);
+                w->setFocus(FocusReason::ActiveWindowFocusReason);
                 raiseOnActivate(win);
                 found = true;
                 break;
@@ -78,7 +78,7 @@ void ZRoot::focusWindowHelper(bool forward) {
         }
     }
     if (!found && first) {
-        first->placeFocus()->setFocus(Tui::FocusReason::ActiveWindowFocusReason);
+        first->placeFocus()->setFocus(FocusReason::ActiveWindowFocusReason);
         raiseOnActivate(first);
     }
 }
@@ -89,8 +89,8 @@ void ZRoot::paintEvent(ZPaintEvent *event) {
 }
 
 void ZRoot::keyEvent(ZKeyEvent *event) {
-    if (event->key() == Tui::Key_F6 && (event->modifiers() == 0 || event->modifiers() == Tui::ShiftModifier)) {
-        focusWindowHelper(event->modifiers() != Tui::ShiftModifier);
+    if (event->key() == Key_F6 && (event->modifiers() == 0 || event->modifiers() == ShiftModifier)) {
+        focusWindowHelper(event->modifiers() != ShiftModifier);
     } else {
         ZWidget::keyEvent(event);
     }

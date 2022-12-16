@@ -16,7 +16,7 @@ TUIWIDGETS_NS_START
 
 namespace ZTest {
 
-    TUIWIDGETS_EXPORT void sendText(ZTerminal *terminal, const QString &text, Tui::KeyboardModifiers modifiers) {
+    TUIWIDGETS_EXPORT void sendText(ZTerminal *terminal, const QString &text, KeyboardModifiers modifiers) {
         if (text == QStringLiteral(" ")) {
             qFatal("sendText can not be used with \" \", use sendKey instead.");
             return;
@@ -26,16 +26,16 @@ namespace ZTest {
             return;
         }
 
-        ZKeyEvent event(Tui::Key_unknown, modifiers, text);
+        ZKeyEvent event(Key_unknown, modifiers, text);
         terminal->dispatchKeyboardEvent(event);
     }
 
-    TUIWIDGETS_EXPORT void sendKey(ZTerminal *terminal, Tui::Key key, Tui::KeyboardModifiers modifiers) {
+    TUIWIDGETS_EXPORT void sendKey(ZTerminal *terminal, Key key, KeyboardModifiers modifiers) {
         ZKeyEvent event(key, modifiers, {});
         terminal->dispatchKeyboardEvent(event);
     }
 
-    TUIWIDGETS_EXPORT void sendKeyToWidget(ZWidget *w, Tui::Key key, Tui::KeyboardModifiers modifiers) {
+    TUIWIDGETS_EXPORT void sendKeyToWidget(ZWidget *w, Key key, KeyboardModifiers modifiers) {
         ZKeyEvent event(key, modifiers, {});
         w->event(&event);
     }

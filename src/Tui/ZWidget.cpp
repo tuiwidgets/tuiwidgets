@@ -579,12 +579,12 @@ void ZWidget::updateGeometry() {
     }
 }
 
-void ZWidget::setFocusPolicy(Tui::FocusPolicy policy) {
+void ZWidget::setFocusPolicy(FocusPolicy policy) {
     auto *const p = tuiwidgets_impl();
     p->focusPolicy = policy;
 }
 
-Tui::FocusPolicy ZWidget::focusPolicy() const {
+FocusPolicy ZWidget::focusPolicy() const {
     auto *const p = tuiwidgets_impl();
     return p->focusPolicy;
 }
@@ -702,7 +702,7 @@ void ZWidget::setCursorColor(int r, int g, int b) {
     update();
 }
 
-void ZWidget::setFocus(Tui::FocusReason reason) {
+void ZWidget::setFocus(FocusReason reason) {
     auto *const p = tuiwidgets_impl();
     auto *const term = terminal();
     p->focusCount = ++ZTerminalPrivate::focusCounter;
@@ -1332,14 +1332,14 @@ void ZWidget::pasteEvent(ZPasteEvent *event) {
 
 void ZWidget::focusInEvent(ZFocusEvent *event) {
     (void)event;
-    if (focusPolicy() != Tui::NoFocus) {
+    if (focusPolicy() != NoFocus) {
         update();
     }
 }
 
 void ZWidget::focusOutEvent(ZFocusEvent *event) {
     (void)event;
-    if (focusPolicy() != Tui::NoFocus) {
+    if (focusPolicy() != NoFocus) {
         update();
     }
 }

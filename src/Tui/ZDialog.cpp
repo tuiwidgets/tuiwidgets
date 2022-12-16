@@ -45,9 +45,9 @@ void ZDialog::reject() {
 
 void ZDialog::keyEvent(ZKeyEvent *event) {
     auto *const p = tuiwidgets_impl();
-    if (event->key() == Tui::Key_Escape && event->modifiers() == 0) {
+    if (event->key() == Key_Escape && event->modifiers() == 0) {
         reject();
-    } else if (event->key() == Tui::Key_Enter && event->modifiers() == 0) {
+    } else if (event->key() == Key_Enter && event->modifiers() == 0) {
         if (p->defaultWidgetManager.defaultWidget()) {
             p->defaultWidgetManager.defaultWidget()->event(event);
         }
@@ -65,7 +65,7 @@ void ZDialog::showHandler() {
         p->alreadyShown = true;
         if (geometry().isNull()) {
             setGeometry(QRect({}, effectiveSizeHint()));
-            setDefaultPlacement(Tui::AlignCenter);
+            setDefaultPlacement(AlignCenter);
             ZWindowFacet *windowFacet = static_cast<ZWindowFacet*>(facet(ZWindowFacet::staticMetaObject));
             if (windowFacet) {
                 if (!windowFacet->isManuallyPlaced()) {

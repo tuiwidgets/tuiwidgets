@@ -23,7 +23,7 @@ public:
     bool isContextActive(QObject *par, ZWidget *focusWidget) const;
 
 public:
-    Tui::ShortcutContext context;
+    ShortcutContext context;
     ZKeySequence key;
     bool enabled = true;
 
@@ -44,12 +44,12 @@ public:
 public:
     QString forMnemonic;
     QString forShortcut;
-    Tui::KeyboardModifiers modifiers = {};
+    KeyboardModifiers modifiers = {};
     int forKey = 0;
 
     // for two part sequences
     QString forShortcut2;
-    Tui::KeyboardModifiers modifiers2 = {};
+    KeyboardModifiers modifiers2 = {};
     int forKey2 = 0;
 };
 

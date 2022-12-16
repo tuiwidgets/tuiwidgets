@@ -52,12 +52,12 @@ public:
 public:
     // FIXME Massive changes needed
     static ZKeySequence forMnemonic(const QString &c);
-    static ZKeySequence forKey(int key, Tui::KeyboardModifiers modifiers = {});
-    static ZKeySequence forShortcut(const QString &c, Tui::KeyboardModifiers modifiers = Tui::ControlModifier);
-    static ZKeySequence forShortcutSequence(const QString &c, Tui::KeyboardModifiers modifiers,
-                                            const QString &c2, Tui::KeyboardModifiers modifiers2);
-    static ZKeySequence forShortcutSequence(const QString &c, Tui::KeyboardModifiers modifiers,
-                                            int key2, Tui::KeyboardModifiers modifiers2);
+    static ZKeySequence forKey(int key, KeyboardModifiers modifiers = {});
+    static ZKeySequence forShortcut(const QString &c, KeyboardModifiers modifiers = ControlModifier);
+    static ZKeySequence forShortcutSequence(const QString &c, KeyboardModifiers modifiers,
+                                            const QString &c2, KeyboardModifiers modifiers2);
+    static ZKeySequence forShortcutSequence(const QString &c, KeyboardModifiers modifiers,
+                                            int key2, KeyboardModifiers modifiers2);
 
 protected:
     ZValuePtr<ZKeySequencePrivate> tuiwidgets_pimpl_ptr;
@@ -72,7 +72,7 @@ class TUIWIDGETS_EXPORT ZShortcut : public QObject {
     Q_OBJECT
 public:
     //explicit ZShortcut(ZWidget *parent = 0);
-    explicit ZShortcut(const ZKeySequence &key, ZWidget *parent, Tui::ShortcutContext context = Tui::WindowShortcut);
+    explicit ZShortcut(const ZKeySequence &key, ZWidget *parent, ShortcutContext context = WindowShortcut);
     virtual ~ZShortcut() override;
 
 public:

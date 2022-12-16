@@ -110,13 +110,13 @@ private:
 
 class TUIWIDGETS_EXPORT ZKeyEvent : public ZEvent {
 public:
-    ZKeyEvent(int key, Tui::KeyboardModifiers modifiers, const QString &text);
+    ZKeyEvent(int key, KeyboardModifiers modifiers, const QString &text);
     ~ZKeyEvent() override;
 
 public:
     int key() const;
     QString text() const;
-    Tui::KeyboardModifiers modifiers() const;
+    KeyboardModifiers modifiers() const;
 
 private:
     TUIWIDGETS_DECLARE_PRIVATE(ZKeyEvent)
@@ -138,12 +138,12 @@ class TUIWIDGETS_EXPORT ZFocusEvent : public ZEvent {
 public:
     class FocusIn{}; static constexpr FocusIn focusIn {};
     class FocusOut{}; static constexpr FocusOut focusOut {};
-    ZFocusEvent(FocusIn, Tui::FocusReason reason = Tui::OtherFocusReason);
-    ZFocusEvent(FocusOut, Tui::FocusReason reason = Tui::OtherFocusReason);
+    ZFocusEvent(FocusIn, FocusReason reason = OtherFocusReason);
+    ZFocusEvent(FocusOut, FocusReason reason = OtherFocusReason);
     ~ZFocusEvent() override;
 
 public:
-    Tui::FocusReason reason() const;
+    FocusReason reason() const;
 
 private:
     TUIWIDGETS_DECLARE_PRIVATE(ZFocusEvent)

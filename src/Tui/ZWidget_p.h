@@ -51,7 +51,7 @@ public:
     void unsetTerminal();
     void setManagingTerminal(ZTerminal *terminal);
 
-    bool isTabFocusable() const { return effectivelyEnabled && effectivelyVisible && (focusPolicy & Tui::FocusPolicy::TabFocus); }
+    bool isTabFocusable() const { return effectivelyEnabled && effectivelyVisible && (focusPolicy & FocusPolicy::TabFocus); }
 
     void updateEffectivelyEnabledRecursively();
     void updateEffectivelyVisibleRecursively();
@@ -60,7 +60,7 @@ public:
 
     // variables
     QRect geometry;
-    Tui::FocusPolicy focusPolicy = Tui::NoFocus;
+    FocusPolicy focusPolicy = NoFocus;
     FocusContainerMode focusMode = FocusContainerMode::None;
     int focusOrder = 0;
     int stackingLayer = 0;

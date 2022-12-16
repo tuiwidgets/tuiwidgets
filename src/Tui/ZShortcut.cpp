@@ -26,7 +26,7 @@ const ZShortcutPrivate *ZShortcutPrivate::get(const ZShortcut *shortcut) {
     return shortcut->tuiwidgets_impl();
 }
 
-ZShortcut::ZShortcut(const ZKeySequence &key, ZWidget *parent, Tui::ShortcutContext context)
+ZShortcut::ZShortcut(const ZKeySequence &key, ZWidget *parent, ShortcutContext context)
     : QObject(parent), tuiwidgets_pimpl_ptr(std::make_unique<ZShortcutPrivate>())
 {
     auto *const p = tuiwidgets_impl();
@@ -73,10 +73,10 @@ void ZShortcut::setEnabledDelegate(Private::ZMoFunc<bool()>&& delegate) {
 
 bool ZShortcutPrivate::isContextActive(QObject *par, ZWidget *focusWidget) const {
     switch (context) {
-        case Tui::WidgetShortcut:
+        case WidgetShortcut:
             return focusWidget == par;
             break;
-        case Tui::WidgetWithChildrenShortcut:
+        case WidgetWithChildrenShortcut:
             while (focusWidget) {
                 if (focusWidget == par) {
                     return true;
@@ -84,7 +84,7 @@ bool ZShortcutPrivate::isContextActive(QObject *par, ZWidget *focusWidget) const
                 focusWidget = focusWidget->parentWidget();
             }
             break;
-        case Tui::WindowShortcut:
+        case WindowShortcut:
             {
                 ZWidget *window = focusWidget;
                 if (!window) {
@@ -108,7 +108,7 @@ bool ZShortcutPrivate::isContextActive(QObject *par, ZWidget *focusWidget) const
                 }
             }
             break;
-        case Tui::ApplicationShortcut:
+        case ApplicationShortcut:
             return true;
             break;
     }
@@ -121,7 +121,7 @@ bool ZShortcut::matches(ZWidget *focusWidget, const ZKeyEvent *event) const {
     bool keyMatches = false;
     auto *const kp = p->key.tuiwidgets_impl();
     if (kp->forMnemonic.size()) {
-        if (event->modifiers() == Tui::AltModifier && event->text().toLower() == kp->forMnemonic.toLower()) {
+        if (event->modifiers() == AltModifier && event->text().toLower() == kp->forMnemonic.toLower()) {
             keyMatches = true;
         }
     } else if (kp->forKey != 0) {
@@ -212,7 +212,7 @@ ZKeySequence ZKeySequence::forMnemonic(const QString &c) {
     return s;
 }
 
-ZKeySequence ZKeySequence::forKey(int key, Tui::KeyboardModifiers modifiers) {
+ZKeySequence ZKeySequence::forKey(int key, KeyboardModifiers modifiers) {
     ZKeySequence s;
     auto *const p = s.tuiwidgets_impl();
     p->forKey = key;
@@ -220,7 +220,7 @@ ZKeySequence ZKeySequence::forKey(int key, Tui::KeyboardModifiers modifiers) {
     return s;
 }
 
-ZKeySequence ZKeySequence::forShortcut(const QString &c, Tui::KeyboardModifiers modifiers) {
+ZKeySequence ZKeySequence::forShortcut(const QString &c, KeyboardModifiers modifiers) {
     ZKeySequence s;
     auto *const p = s.tuiwidgets_impl();
     p->forShortcut = c;
@@ -228,7 +228,7 @@ ZKeySequence ZKeySequence::forShortcut(const QString &c, Tui::KeyboardModifiers 
     return s;
 }
 
-ZKeySequence ZKeySequence::forShortcutSequence(const QString &c, Tui::KeyboardModifiers modifiers, const QString &c2, Tui::KeyboardModifiers modifiers2) {
+ZKeySequence ZKeySequence::forShortcutSequence(const QString &c, KeyboardModifiers modifiers, const QString &c2, KeyboardModifiers modifiers2) {
     ZKeySequence s;
     auto *const p = s.tuiwidgets_impl();
     p->forShortcut = c;
@@ -238,7 +238,7 @@ ZKeySequence ZKeySequence::forShortcutSequence(const QString &c, Tui::KeyboardMo
     return s;
 }
 
-ZKeySequence ZKeySequence::forShortcutSequence(const QString &c, Tui::KeyboardModifiers modifiers, int key2, Tui::KeyboardModifiers modifiers2) {
+ZKeySequence ZKeySequence::forShortcutSequence(const QString &c, KeyboardModifiers modifiers, int key2, KeyboardModifiers modifiers2) {
     ZKeySequence s;
     auto *const p = s.tuiwidgets_impl();
     p->forShortcut = c;

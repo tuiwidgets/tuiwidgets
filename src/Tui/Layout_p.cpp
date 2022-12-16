@@ -39,7 +39,7 @@ bool SpacerLayoutItem::isSpacer() const {
 }
 
 
-void placeWidgetInCell(int x, int y, int width, int height, ZLayoutItem *w, Tui::Alignment align) {
+void placeWidgetInCell(int x, int y, int width, int height, ZLayoutItem *w, Alignment align) {
     QSize sizeHint = w->sizeHint().expandedTo({0, 0});
     QRect allocation;
 
@@ -54,14 +54,14 @@ void placeWidgetInCell(int x, int y, int width, int height, ZLayoutItem *w, Tui:
         allocation.moveLeft(x);
         allocation.setWidth(width);
     } else {
-        if ((align & Tui::AlignHorizontal_Mask)
+        if ((align & AlignHorizontal_Mask)
             || (w->sizePolicyH() == SizePolicy::Fixed || w->sizePolicyH() == SizePolicy::Maximum)) {
             // use sizeHint without expansion for aligned elements and non expanding policies.
             allocation.setWidth(sizeHint.width());
-            if (align & Tui::AlignHCenter) {
+            if (align & AlignHCenter) {
                 int spaceRemaining = width - sizeHint.width();
                 allocation.moveLeft(x + spaceRemaining / 2);
-            } else if (align & Tui::AlignRight) {
+            } else if (align & AlignRight) {
                 allocation.moveLeft(x + width - sizeHint.width());
             } else {
                 allocation.moveLeft(x);
@@ -78,14 +78,14 @@ void placeWidgetInCell(int x, int y, int width, int height, ZLayoutItem *w, Tui:
         allocation.moveTop(y);
         allocation.setHeight(height);
     } else {
-        if ((align & Tui::AlignVertical_Mask)
+        if ((align & AlignVertical_Mask)
             || (w->sizePolicyV() == SizePolicy::Fixed || w->sizePolicyV() == SizePolicy::Maximum)) {
             // use sizeHint without expansion for aligned elements and non expanding policies.
             allocation.setHeight(sizeHint.height());
-            if (align & Tui::AlignVCenter) {
+            if (align & AlignVCenter) {
                 int spaceRemaining = height - sizeHint.height();
                 allocation.moveTop(y + spaceRemaining / 2);
-            } else if (align & Tui::AlignBottom) {
+            } else if (align & AlignBottom) {
                 allocation.moveTop(y + height - sizeHint.height());
             } else {
                 allocation.moveTop(y);

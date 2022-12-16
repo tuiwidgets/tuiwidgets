@@ -31,7 +31,7 @@ namespace Private {
         QSize _size;
     };
 
-    void placeWidgetInCell(int x, int y, int width, int height, ZLayoutItem *w, Tui::Alignment align);
+    void placeWidgetInCell(int x, int y, int width, int height, ZLayoutItem *w, Alignment align);
 
     template <typename Place, typename GetHint, typename GetPolicy, typename GetIsSpacer>
     static void boxLayouter(Place &place, GetHint &getHint, GetPolicy &getPolicy, GetIsSpacer &getIsSpacer,

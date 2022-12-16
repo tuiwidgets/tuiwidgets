@@ -10,7 +10,7 @@
 TUIWIDGETS_NS_START
 
 ZButton::ZButton(ZWidget *parent) : ZWidget(parent, std::make_unique<ZButtonPrivate>(this)) {
-    setFocusPolicy(Tui::StrongFocus);
+    setFocusPolicy(StrongFocus);
     setSizePolicyV(SizePolicy::Fixed);
     setSizePolicyH(SizePolicy::Minimum);
 }
@@ -159,7 +159,7 @@ void ZButton::click() {
 }
 
 void ZButton::keyEvent(ZKeyEvent *event) {
-    if (isEnabled() && (event->key() == Tui::Key_Space || event->key() == Tui::Key_Enter) && event->modifiers() == 0) {
+    if (isEnabled() && (event->key() == Key_Space || event->key() == Key_Enter) && event->modifiers() == 0) {
         setFocus();
         event->accept();
         clicked();

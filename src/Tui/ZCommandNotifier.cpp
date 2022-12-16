@@ -14,11 +14,11 @@
 TUIWIDGETS_NS_START
 
 ZCommandNotifier::ZCommandNotifier(ZImplicitSymbol command, QObject *parent)
-    : ZCommandNotifier(command, parent, Tui::ApplicationShortcut)
+    : ZCommandNotifier(command, parent, ApplicationShortcut)
 {
 }
 
-ZCommandNotifier::ZCommandNotifier(ZImplicitSymbol command, QObject *parent, Tui::ShortcutContext context)
+ZCommandNotifier::ZCommandNotifier(ZImplicitSymbol command, QObject *parent, ShortcutContext context)
     : QObject(parent), tuiwidgets_pimpl_ptr(std::make_unique<ZCommandNotifierPrivate>())
 {
     auto *const p = tuiwidgets_impl();
@@ -26,7 +26,7 @@ ZCommandNotifier::ZCommandNotifier(ZImplicitSymbol command, QObject *parent, Tui
     p->context = context;
     probeParents();
     p->connectToTerminal(this);
-    if (context != Tui::ApplicationShortcut) {
+    if (context != ApplicationShortcut) {
         p->updateContextSatisfied(this);
     }
     enabledChanged(p->enabled && p->contextSatisfied);
@@ -44,7 +44,7 @@ ZCommandNotifierPrivate::~ZCommandNotifierPrivate() {
 }
 
 void ZCommandNotifierPrivate::connectToTerminal(ZCommandNotifier *pub) {
-    if (context != Tui::ApplicationShortcut) {
+    if (context != ApplicationShortcut) {
         ZWidget *pw = qobject_cast<ZWidget*>(pub->parent());
         if (pw) {
             ZTerminal *term = pw->terminal();
@@ -81,10 +81,10 @@ void ZCommandNotifierPrivate::updateContextSatisfied(ZCommandNotifier *pub) {
         return;
     }
     switch (context) {
-        case Tui::WidgetShortcut:
+        case WidgetShortcut:
             contextSatisfied = (focusWidget == par);
             break;
-        case Tui::WidgetWithChildrenShortcut:
+        case WidgetWithChildrenShortcut:
             contextSatisfied = false;
             while (focusWidget) {
                 if (focusWidget == par) {
@@ -94,7 +94,7 @@ void ZCommandNotifierPrivate::updateContextSatisfied(ZCommandNotifier *pub) {
                 focusWidget = focusWidget->parentWidget();
             }
             break;
-        case Tui::WindowShortcut:
+        case WindowShortcut:
             {
                 contextSatisfied = false;
                 ZWidget *window = focusWidget;
@@ -119,7 +119,7 @@ void ZCommandNotifierPrivate::updateContextSatisfied(ZCommandNotifier *pub) {
                 }
             }
             break;
-        case Tui::ApplicationShortcut:
+        case ApplicationShortcut:
             contextSatisfied = true;
             break;
     }
@@ -134,7 +134,7 @@ ZSymbol ZCommandNotifier::command() const {
     return p->command;
 }
 
-Tui::ShortcutContext ZCommandNotifier::context() const {
+ShortcutContext ZCommandNotifier::context() const {
     auto *const p = tuiwidgets_impl();
     return p->context;
 }

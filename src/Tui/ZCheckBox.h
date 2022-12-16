@@ -27,8 +27,8 @@ public:
     QString markup() const;
     void setMarkup(const QString &markup);
 
-    Tui::CheckState checkState() const;
-    void setCheckState(Tui::CheckState state);
+    CheckState checkState() const;
+    void setCheckState(CheckState state);
 
     bool isTristate() const;
     void setTristate(bool tristate = true);
@@ -42,7 +42,7 @@ public Q_SLOTS:
     void toggle();
 
 Q_SIGNALS:
-    void stateChanged(Tui::CheckState state);
+    void stateChanged(CheckState state);
 
 protected:
     void paintEvent(ZPaintEvent *event) override;

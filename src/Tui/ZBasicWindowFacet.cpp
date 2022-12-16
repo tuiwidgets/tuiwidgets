@@ -35,11 +35,11 @@ void ZBasicWindowFacet::autoPlace(const QSize &available, ZWidget *self) {
         rect.setWidth(width);
         rect.setHeight(height);
 
-        switch (p->alignment & Tui::AlignHorizontal_Mask) {
-        case Tui::AlignLeft:
+        switch (p->alignment & AlignHorizontal_Mask) {
+        case AlignLeft:
             rect.moveLeft(0);
             break;
-        case Tui::AlignRight:
+        case AlignRight:
             rect.moveRight(available.width() - 1);
             break;
         default:
@@ -47,11 +47,11 @@ void ZBasicWindowFacet::autoPlace(const QSize &available, ZWidget *self) {
             break;
         }
 
-        switch (p->alignment & Tui::AlignVertical_Mask) {
-        case Tui::AlignTop:
+        switch (p->alignment & AlignVertical_Mask) {
+        case AlignTop:
             rect.moveTop(0);
             break;
-        case Tui::AlignBottom:
+        case AlignBottom:
             rect.moveBottom(available.height() - 1);
             break;
         default:
@@ -72,7 +72,7 @@ void ZBasicWindowFacet::autoPlace(const QSize &available, ZWidget *self) {
     }
 }
 
-void ZBasicWindowFacet::setDefaultPlacement(Tui::Alignment align, QPoint displace) {
+void ZBasicWindowFacet::setDefaultPlacement(Alignment align, QPoint displace) {
     auto *const p = tuiwidgets_impl();
     p->alignment = align;
     p->displacement = displace;
