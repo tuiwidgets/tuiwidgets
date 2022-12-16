@@ -48,7 +48,7 @@ void ZShortcutManager::removeShortcut(ZShortcut *s) {
 bool ZShortcutManager::process(const ZKeyEvent *event) {
     ZWidget *focusWidget = terminal->focusWidget();
 
-    if (focusWidget) {
+    if (focusWidget || terminal->mainWidget()) {
         for (const auto &key: twoPartShortcuts.keys()) {
             if (key.c.size() && event->text() == key.c && event->modifiers() == key.modifiers) {
                 activateTwoPart(key);
@@ -76,10 +76,11 @@ bool ZShortcutManager::process(const ZKeyEvent *event) {
 
 void ZShortcutManager::activateTwoPart(const Key &prefix) {
     ZWidget *focusWidget = terminal->focusWidget();
+    QPointer<ZWidget> grabWidget = terminal->focusWidget() ? terminal->focusWidget() : terminal->mainWidget();
     for (auto &callbacks : pendingCallbacks) {
         ZPendingKeySequenceCallbacksPrivate::get(&callbacks)->started();
     }
-    focusWidget->grabKeyboard([this, prefix, focusWidget] (QEvent* event) {
+    grabWidget->grabKeyboard([this, prefix, focusWidget, grabWidget] (QEvent* event) {
         if (event->type() == ZEventType::key()) {
             auto *keyEvent = static_cast<ZKeyEvent*>(event);
             QVector<QPointer<ZShortcut>> matching;
@@ -97,7 +98,9 @@ void ZShortcutManager::activateTwoPart(const Key &prefix) {
                     matching.append(s);
                 }
             }
-            focusWidget->releaseKeyboard();
+            if (grabWidget) {
+                grabWidget->releaseKeyboard();
+            }
             if (matching.size() == 1) {
                 matching[0]->activated();
             } else if (matching.size() > 1) {
