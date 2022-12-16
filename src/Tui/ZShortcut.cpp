@@ -6,9 +6,10 @@
 #include <Tui/ZWidget_p.h>
 #include <Tui/ZWidget.h>
 
-#include <Tui/ZTerminal_p.h>
 #include <Tui/ZShortcutManager_p.h>
 #include <Tui/ZSymbol.h>
+#include <Tui/ZTerminal_p.h>
+#include <Tui/ZWindowFacet.h>
 
 TUIWIDGETS_NS_START
 
@@ -91,7 +92,7 @@ bool ZShortcutPrivate::isContextActive(QObject *par, ZWidget *focusWidget) const
                     return false;
                 }
                 while (window) {
-                    if (window->paletteClass().contains(QStringLiteral("window"))) {
+                    if (window->facet(ZWindowFacet::staticMetaObject)) {
                         break;
                     }
                     window = window->parentWidget();
