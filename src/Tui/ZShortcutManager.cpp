@@ -75,7 +75,7 @@ bool ZShortcutManager::process(const ZKeyEvent *event) {
 }
 
 void ZShortcutManager::activateTwoPart(const Key &prefix) {
-    ZWidget *focusWidget = terminal->focusWidget();
+    QPointer<ZWidget> focusWidget = terminal->focusWidget();
     QPointer<ZWidget> grabWidget = terminal->focusWidget() ? terminal->focusWidget() : terminal->mainWidget();
     for (auto &callbacks : pendingCallbacks) {
         ZPendingKeySequenceCallbacksPrivate::get(&callbacks)->started();
