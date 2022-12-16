@@ -118,9 +118,17 @@ bool ZShortcutPrivate::isContextActive(QObject *par, ZWidget *focusWidget) const
 
 bool ZShortcut::matches(ZWidget *focusWidget, const ZKeyEvent *event) const {
     auto *const p = tuiwidgets_impl();
-    if (!isEnabled()) return false;
-    bool keyMatches = false;
     auto *const kp = p->key.tuiwidgets_impl();
+
+    if (!isEnabled()) return false;
+
+    if (kp->forShortcut2.size() || kp->forKey2) {
+        // sequence shortcuts never match a single key press, ZShortcutManager directly accesses privates to handle
+        // those for now.
+        return false;
+    }
+
+    bool keyMatches = false;
     if (kp->forMnemonic.size()) {
         if (event->modifiers() == AltModifier && event->text().toLower() == kp->forMnemonic.toLower()) {
             keyMatches = true;
