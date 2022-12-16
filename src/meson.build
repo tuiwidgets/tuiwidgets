@@ -248,6 +248,7 @@ test_files = [
   'tests/radiobutton/radiobutton.cpp',
   'tests/root/root.cpp',
   'tests/styledtextline/styledtextline.cpp',
+  'tests/shortcut.cpp',
   'tests/surrogateescape.cpp',
   'tests/symbol/symbol.cpp',
   'tests/textlayout/formatrange.cpp',
