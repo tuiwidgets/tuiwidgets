@@ -107,7 +107,7 @@ Tui Widgets defines getter for the type values for its events. The Tui Widgets e
 
    Informs a widget that its position relative to its parents has changed (:cpp:class:`Tui::ZMoveEvent`).
 
-   Widgets can override :cpp:func:`void Tui::ZWidget::resizeEvent(Tui::ZResizeEvent *event)` to handle this event.
+   Widgets can override :cpp:func:`void Tui::ZWidget::moveEvent(Tui::ZMoveEvent *event)` to handle this event.
 
    The widget can query the previous position using :cpp:func:`QPoint Tui::ZMoveEvent::oldPos() const` and the
    new position using :cpp:func:`QPoint Tui::ZMoveEvent::pos() const`.
@@ -177,7 +177,7 @@ Tui Widgets defines getter for the type values for its events. The Tui Widgets e
    Applications that need to customize low level terminal handling can intercept it by subclassing ZTerminal or using
    an event filter.
 
-The following Qt signals are used by Tui Widgets:
+The following Qt events are used by Tui Widgets:
 
 .. rst-class:: tw-spaceafter
 .. adhoc-def:: QEvent::LayoutRequest
