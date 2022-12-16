@@ -22,6 +22,8 @@ The ZShortcut class allows to bind a signal to a keyboard shortcut.
       Creates a ZShortcut instance for sequence ``key``.
       The shortcut will be active for keyboard input in the context ``context`` relative to ``parent``.
 
+      ``parent`` must not be :cpp:expr:`nullptr`.
+
       Useful values for ``key`` are:
 
       * ``ZKeySequence::forKey(key[, modifiers])``
