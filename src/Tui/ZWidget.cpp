@@ -382,19 +382,27 @@ void ZWidget::lower() {
 
 void ZWidget::stackUnder(ZWidget *w) {
     if (!parentWidget()) return;
+    if (this == w) return;
     QList<QObject*> &list = parentWidget()->d_ptr->children;
     if (list.size() <= 1) return;
-    int to = list.indexOf(w);
-    if (to < 1) return;
-    --to;
-    while (to > 0) {
-        ZWidget *const candidate = qobject_cast<ZWidget*>(list.at(to));
-        if (candidate->stackingLayer() <= stackingLayer()) {
-            break;
-        }
-        --to;
+
+    if (w->stackingLayer() < stackingLayer()) {
+        lower();
+        return;
     }
-    list.move(list.indexOf(this), to);
+
+    if (w->stackingLayer() > stackingLayer()) {
+        raise();
+        return;
+    }
+
+    // direct access does not trigger parent change side effects!
+    list.removeOne(this);
+
+    int to = list.indexOf(w);
+
+    // direct access does not trigger parent change side effects!
+    list.insert(std::max(0, to), this);
     update();
 }
 
