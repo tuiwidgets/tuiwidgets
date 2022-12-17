@@ -12,6 +12,8 @@
 #include <Tui/ZTextMetrics.h>
 #include <Tui/ZWindow.h>
 
+namespace {
+
 class TestWidget : public Tui::ZWidget {
     public:
         using Tui::ZWidget::ZWidget;
@@ -29,6 +31,7 @@ class TestWidget : public Tui::ZWidget {
         }
 };
 
+}
 
 TEST_CASE("styledtextline-base", "") {
     Testhelper t("styledtextline", "styledtextline-base", 9, 2);
