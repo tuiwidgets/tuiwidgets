@@ -22,25 +22,24 @@
 
 #include "../Testhelper.h"
 
-class TestBackgroundWidget : public Tui::ZWidget {
-public:
-    explicit TestBackgroundWidget(Tui::ZWidget *parent) : Tui::ZWidget(parent) {}
-
-protected:
-    void paintEvent(Tui::ZPaintEvent *event) override {
-        Tui::ZWidget::paintEvent(event);
-        auto *painter = event->painter();
-        int w = geometry().width();
-        int h = geometry().height();
-        for(int i = 0; i <= h; i++) {
-            painter->writeWithColors(0, i, QStringLiteral("␥").repeated(w),
-                                     Tui::ZColor::fromRgb(0xfe, 0xfd, 0xfc), Tui::ZColor::fromRgb(0x23, 0x23, 0x23));
-        }
-    }
-};
-
-
 namespace {
+
+    class TestBackgroundWidget : public Tui::ZWidget {
+    public:
+        explicit TestBackgroundWidget(Tui::ZWidget *parent) : Tui::ZWidget(parent) {}
+
+    protected:
+        void paintEvent(Tui::ZPaintEvent *event) override {
+            Tui::ZWidget::paintEvent(event);
+            auto *painter = event->painter();
+            int w = geometry().width();
+            int h = geometry().height();
+            for(int i = 0; i <= h; i++) {
+                painter->writeWithColors(0, i, QStringLiteral("␥").repeated(w),
+                                         Tui::ZColor::fromRgb(0xfe, 0xfd, 0xfc), Tui::ZColor::fromRgb(0x23, 0x23, 0x23));
+            }
+        }
+    };
 
     class CustomWindowFacet : public Tui::ZWindowFacet {
     };
