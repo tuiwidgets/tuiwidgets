@@ -219,6 +219,10 @@ void ZWidgetPrivate::disperseFocus() {
         auto *const term = pub()->terminal();
         if (term) {
             auto *const terminal_priv = ZTerminalPrivate::get(term);
+
+            ZFocusEvent e {ZFocusEvent::focusOut, Tui::OtherFocusReason};
+            QCoreApplication::sendEvent(terminal_priv->focus(), &e);
+
             terminal_priv->setFocus(nullptr);
         }
     }
