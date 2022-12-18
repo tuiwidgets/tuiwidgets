@@ -10,6 +10,7 @@
 #include <Tui/ZSymbol.h>
 #include <Tui/ZTerminal.h>
 #include <Tui/ZWidget.h>
+#include <Tui/ZWindowFacet.h>
 
 TUIWIDGETS_NS_START
 
@@ -102,7 +103,7 @@ void ZCommandNotifierPrivate::updateContextSatisfied(ZCommandNotifier *pub) {
                     contextSatisfied = false;
                 }
                 while (window) {
-                    if (window->paletteClass().contains(QStringLiteral("window"))) {
+                    if (window->facet(ZWindowFacet::staticMetaObject)) {
                         break;
                     }
                     window = window->parentWidget();
