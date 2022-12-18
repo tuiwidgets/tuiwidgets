@@ -185,6 +185,9 @@ RecorderEvent EventRecorder::createEvent(const std::string &name) {
 }
 
 bool EventRecorder::noMoreEvents() {
+    if (!records.empty()) {
+        UNSCOPED_INFO("Next event would be " << records.front().event->name);
+    }
     return records.empty();
 }
 
