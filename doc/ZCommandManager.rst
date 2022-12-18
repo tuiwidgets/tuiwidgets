@@ -52,6 +52,9 @@ ZCommandNotifier
 
       Returns :cpp:expr:`true` if the currently focused widget satisfies the context of this command notifier.
 
+      The return value can be a bit out of date, as it is cached and is updated when e.g. focus changes or the just
+      before painting.
+
    **Signals**
 
    .. rst-class:: tw-signal
@@ -64,6 +67,9 @@ ZCommandNotifier
 
       This signal is emitted when the compound value of the enabled status combined (by logical and) the value of
       :cpp:func:`~bool Tui::ZCommandNotifier::isContextSatisfied() const` changes.
+
+      As the value of ``isContextSatisfied`` is cached and only updated at specific events this signal can be emitted
+      with a delay relative to the time when the change happens.
 
 ZCommandManager
 ---------------
