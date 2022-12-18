@@ -24,6 +24,7 @@ public:
     ~ZCommandManager() override;
 
     void registerCommandNotifier(ZCommandNotifier *notifier);
+    void deregisterCommandNotifier(ZCommandNotifier *notifier);
     bool isCommandEnabled(ZSymbol command) const;
     void activateCommand(ZSymbol command);
 

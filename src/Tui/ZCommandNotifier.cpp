@@ -162,19 +162,37 @@ bool ZCommandNotifier::isContextSatisfied() const {
 }
 
 void ZCommandNotifier::probeParents() {
+    auto *const p = tuiwidgets_impl();
+
+    QSet<ZCommandManager*> allManagers;
+
     ZWidget *w = qobject_cast<ZWidget*>(parent());
     while (w) {
         if (w->commandManager()) {
-            w->commandManager()->registerCommandNotifier(this);
+            allManagers.insert(w->commandManager());
         }
         w = w->parentWidget();
     }
+
+    for (auto *manager: allManagers - p->registrations) {
+        manager->registerCommandNotifier(this);
+        QObject::connect(manager, &QObject::destroyed, this, [manager, p] {
+            p->registrations.remove(manager);
+        });
+    }
+
+    for (auto *manager: p->registrations - allManagers) {
+        manager->deregisterCommandNotifier(this);
+    }
+
+    p->registrations = allManagers;
 }
 
 bool ZCommandNotifier::event(QEvent *event) {
     auto *const p = tuiwidgets_impl();
     if (event->type() == ZEventType::otherChange()) {
         if (!static_cast<ZOtherChangeEvent*>(event)->unchanged().contains(TUISYM_LITERAL("terminal"))) {
+            probeParents();
             p->connectToTerminal(this);
         }
     }

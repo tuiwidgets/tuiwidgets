@@ -82,6 +82,7 @@ ZCommandManager
    It is also used in the implementation of :cpp:class:`Tui::ZCommandNotifier`.
 
    .. cpp:function:: void registerCommandNotifier(ZCommandNotifier *notifier)
+   .. cpp:function:: void deregisterCommandNotifier(ZCommandNotifier *notifier)
 
       Used internally in :cpp:class:`Tui::ZCommandNotifier`.
 

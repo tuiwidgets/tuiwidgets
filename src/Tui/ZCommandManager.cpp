@@ -22,6 +22,29 @@ void ZCommandManager::registerCommandNotifier(ZCommandNotifier *notifier) {
     connect(notifier, &ZCommandNotifier::enabledChanged, this, &ZCommandManager::_tui_enabledChanged);
 }
 
+void ZCommandManager::deregisterCommandNotifier(ZCommandNotifier *notifier) {
+    auto *const p = tuiwidgets_impl();
+
+    const ZSymbol command = notifier->command();
+
+    notifier->disconnect(this);
+
+    if (!p->commandNotifiers.contains(command)) {
+        return;
+    }
+
+    QMutableVectorIterator<QPointer<ZCommandNotifier>> it(p->commandNotifiers[command]);
+    while (it.hasNext()) {
+        auto &ptr = it.next();
+        if (ptr == notifier) {
+            it.remove();
+        }
+    }
+    if (p->commandNotifiers[command].isEmpty()) {
+        p->commandNotifiers.remove(command);
+    }
+}
+
 void ZCommandManager::_tui_enabledChanged(bool s) {
     (void)s;
     ZSymbol command = static_cast<ZCommandNotifier*>(sender())->command();

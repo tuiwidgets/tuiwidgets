@@ -4,6 +4,10 @@
 #define TUIWIDGETS_ZCOMMANDNOTIFIER_P_INCLUDED
 
 #include "ZCommandNotifier.h"
+
+#include <QSet>
+
+#include "ZCommandManager.h"
 #include "ZSymbol.h"
 
 #include <Tui/tuiwidgets_internal.h>
@@ -25,6 +29,7 @@ public:
     ShortcutContext context = ApplicationShortcut;
     QMetaObject::Connection focusChangedConnection;
     QMetaObject::Connection beforeRenderingConnection;
+    QSet<ZCommandManager*> registrations;
 };
 
 TUIWIDGETS_NS_END
