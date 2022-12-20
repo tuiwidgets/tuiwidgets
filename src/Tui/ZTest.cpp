@@ -76,6 +76,7 @@ namespace ZTest {
             p->resetTestLayoutRequestTracker();
             throw;
         }
+        p->resetTestLayoutRequestTracker();
     }
 
 }
