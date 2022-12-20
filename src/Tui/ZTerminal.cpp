@@ -767,7 +767,7 @@ void ZTerminalPrivate::updateNativeTerminalState() {
     }
     if (iconTitleNeedsUpdate) {
         termpaint_terminal_set_icon_title(terminal, title.toUtf8().data(), TERMPAINT_TITLE_MODE_ENSURE_RESTORE);
-        iconTitleNeedsUpdate = true;
+        iconTitleNeedsUpdate = false;
     }
 }
 
