@@ -130,7 +130,11 @@ void ZTerminal::setCursorPosition(QPoint cursorPosition) {
 
 void ZTerminal::setCursorColor(int cursorColorR, int cursorColorG, int cursorColorB) {
     auto *const p = tuiwidgets_impl();
-    if (cursorColorR != -1) {
+    if (cursorColorR >= 0 && cursorColorG >= 0 && cursorColorB >= 0) {
+        cursorColorR = std::max(0, std::min(cursorColorR, 255));
+        cursorColorG = std::max(0, std::min(cursorColorG, 255));
+        cursorColorB = std::max(0, std::min(cursorColorB, 255));
+
         termpaint_terminal_set_color(p->terminal, TERMPAINT_COLOR_SLOT_CURSOR,
                                      cursorColorR,
                                      cursorColorG,
