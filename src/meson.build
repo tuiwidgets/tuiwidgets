@@ -254,6 +254,7 @@ test_files = [
   'tests/shortcut.cpp',
   'tests/surrogateescape.cpp',
   'tests/symbol/symbol.cpp',
+  'tests/terminal.cpp',
   'tests/textlayout/formatrange.cpp',
   'tests/textlayout/textlayout.cpp',
   'tests/textlayout/textoption.cpp',

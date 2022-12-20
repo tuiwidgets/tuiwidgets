@@ -25,11 +25,13 @@ TEST_CASE("viewport-resize", "") {
     SECTION("empty-16-5") {
         t.root->setMinimumSize(16, 5);
         t.compare("initial-prompt");
+        CHECK(t.root->geometry() == QRect{0, 0, 16, 5});
     }
 
     SECTION("empty-15-6") {
         t.root->setMinimumSize(15, 6);
         t.compare("initial-prompt");
+        CHECK(t.root->geometry() == QRect{0, 0, 15, 6});
     }
 
     SECTION("empty-16-6") {
