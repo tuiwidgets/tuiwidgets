@@ -626,7 +626,11 @@ void ZTerminal::setMainWidget(ZWidget *w) {
     if (p->mainWidget) {
         ZWidgetPrivate::get(p->mainWidget.data())->unsetTerminal();
         // clear all state relating to widgets
-        p->focusWidget = nullptr;
+        if (p->focusWidget) {
+            ZFocusEvent e {ZFocusEvent::focusOut, Tui::OtherFocusReason};
+            QCoreApplication::sendEvent(p->focusWidget->pub(), &e);
+        }
+        p->setFocus(nullptr);
         p->focusHistory.clear();
         p->keyboardGrabWidget = nullptr;
         p->keyboardGrabHandler = {};
