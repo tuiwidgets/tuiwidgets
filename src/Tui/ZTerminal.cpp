@@ -843,7 +843,7 @@ void ZTerminal::pauseOperation() {
     if (p->externalConnection) {
         termpaint_terminal_pause(p->terminal);
         p->externalConnection->delegate->pause();
-    } else {
+    } else if (p->inputNotifier) { // i.e. not offscreen terminal
         p->pauseTerminalForInternalConnection();
     }
     p->initState = ZTerminalPrivate::InitState::Paused;
@@ -855,7 +855,7 @@ void ZTerminal::unpauseOperation() {
     if (p->externalConnection) {
         termpaint_terminal_unpause(p->terminal);
         p->externalConnection->delegate->unpause();
-    } else {
+    } else if (p->inputNotifier) { // i.e. not offscreen terminal
         p->unpauseTerminalForInternalConnection();
     }
     p->initState = ZTerminalPrivate::InitState::Ready;
