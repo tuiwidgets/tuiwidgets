@@ -379,6 +379,11 @@ void ZTerminal::dispatcherIsAboutToBlock() {
                 w = w->focusHistory.prev;
             }
             if (!focusWasSet) {
+                // manual, because this ignores enabled and visible tests
+                if (p->focusWidget) {
+                    ZFocusEvent e {ZFocusEvent::focusOut, Tui::OtherFocusReason};
+                    QCoreApplication::sendEvent(p->focusWidget->pub(), &e);
+                }
                 p->setFocus(p->mainWidget.data());
             }
         }
