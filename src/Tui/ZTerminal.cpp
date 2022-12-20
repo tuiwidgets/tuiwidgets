@@ -800,7 +800,7 @@ void ZTerminal::updateOutputForceFullRepaint() {
         // already requested
     } else if (p->initState == ZTerminalPrivate::InitState::Ready) {
         p->updateNativeTerminalState();
-        termpaint_terminal_flush(tuiwidgets_impl()->terminal, true);
+        termpaint_terminal_flush(p->terminal, true);
     }
 }
 
