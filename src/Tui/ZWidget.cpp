@@ -509,7 +509,7 @@ QSize ZWidget::minimumSizeHint() const {
 
 QSize ZWidget::effectiveSizeHint() const {
     QSize s = sizeHint();
-    return s.expandedTo(minimumSize()).boundedTo(maximumSize());
+    return s.expandedTo(effectiveMinimumSize()).boundedTo(maximumSize());
 }
 
 QSize ZWidget::effectiveMinimumSize() const {
