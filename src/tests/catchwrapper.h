@@ -105,6 +105,15 @@ namespace Catch {
         }
     };
 
+
+    template<>
+    struct StringMaker<Tui::ZWidget*, void> {
+        static std::string convert(Tui::ZWidget *value) {
+            return QStringLiteral("(ZWidget at 0x%0%1)")
+                    .arg(QString::number(reinterpret_cast<intptr_t>(value), 16), value ? ": \"" + value->objectName() + "\"" : "")
+                    .toStdString();
+        }
+    };
 }
 
 #endif
