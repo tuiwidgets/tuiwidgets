@@ -915,8 +915,9 @@ namespace {
             if (!tmp) continue;
             if (tmp->focusMode() != FocusContainerMode::None) {
                 func(tmp, true);
+            } else {
+                forFocusTree(tmp, func);
             }
-            forFocusTree(tmp, func);
         }
     }
 
@@ -960,7 +961,7 @@ namespace {
             const qint64 focusOrder = (static_cast<qint64>(c->focusOrder()) << 32)
                     + position;
             ++position;
-            if (!canFocusAndUpdateTarget(c, subTree, false)) {
+            if (!canFocusAndUpdateTarget(c, subTree, true)) {
                 return;
             }
 
@@ -990,6 +991,12 @@ namespace {
         }
         if (highestFocusWidget && highestFocusOrder > currentFocusOrder) {
             return highestFocusWidget;
+        }
+        if (focusMode == FocusContainerMode::Cycle && currentFocus->focusMode() != Tui::FocusContainerMode::None) {
+            auto candidate = currentFocus->placeFocus(true);
+            if (candidate) {
+                return candidate;
+            }
         }
         return currentFocus;
     }
@@ -1048,6 +1055,12 @@ namespace {
         if (lowestFocusWidget && lowestFocusOrder < currentFocusOrder) {
             return lowestFocusWidget;
         }
+        if (focusMode == FocusContainerMode::Cycle && currentFocus->focusMode() != Tui::FocusContainerMode::None) {
+            auto candidate = currentFocus->placeFocus(false);
+            if (candidate) {
+                return candidate;
+            }
+        }
         return currentFocus;
     }
 }
@@ -1098,10 +1111,12 @@ ZWidget const *ZWidget::placeFocus(bool last) const {
     forFocusTree(this, [&] (ZWidget const *c, bool subTree) {
         const int focusOrder = ZWidgetPrivate::get(c)->focusOrder;
         if (last) {
-            if (focusOrder <= bestFocusOrder) {
+            // use last with given focus order
+            if (focusOrder < bestFocusOrder) {
                 return;
             }
         } else {
+            // use first with given focus order
             if (focusOrder >= bestFocusOrder) {
                 return;
             }
@@ -1109,6 +1124,7 @@ ZWidget const *ZWidget::placeFocus(bool last) const {
         if (!canFocusAndUpdateTarget(c, subTree, last)) {
             return;
         }
+
         bestFocusOrder = focusOrder;
         bestFocusWidget = c;
     });
