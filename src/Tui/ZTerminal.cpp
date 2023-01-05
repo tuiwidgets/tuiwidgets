@@ -1300,6 +1300,7 @@ void ZTerminalPrivate::initIntegrationCommon() {
 }
 
 void ZTerminalPrivate::initExternal(ZTerminal::TerminalConnectionPrivate *connection, ZTerminal::Options options) {
+    (void)options;
     if (connection->terminal != nullptr) {
         qWarning("ZTerminal: ZTerminal::TerminalConnection instance already associated with an ZTerminal instance. This will not work.");
         // Nothing much we can do except crash of making this a dummy instance. For now cowardly refuse to crash.

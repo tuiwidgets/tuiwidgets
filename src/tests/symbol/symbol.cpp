@@ -79,6 +79,7 @@ TEST_CASE("symbol-base") {
 }
 
 void implicitTest(Tui::ZImplicitSymbol s) {
+    (void)s;
 }
 
 TEST_CASE("implicit-symbol-base") {

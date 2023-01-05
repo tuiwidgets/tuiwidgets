@@ -118,7 +118,7 @@ TEST_CASE("shortcut-enable", "") {
     CAPTURE(context);
 
     Tui::ZWidget *w;
-    Tui::ZWidget *win;
+    Tui::ZWidget *win = nullptr;
     if (context != Tui::WindowShortcut) {
         w = new Tui::ZWidget(t.root);
     } else {

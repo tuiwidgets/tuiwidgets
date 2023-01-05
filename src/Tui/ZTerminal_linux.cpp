@@ -212,6 +212,7 @@ static void suspendHandler(void *data, PosixSignalFlags &flags, const siginfo_t 
 
 static void resumeHandler(void *data, PosixSignalFlags &flags, const siginfo_t *info, void *context) {
     // !!! signal handler code, only use async-safe calls (see signal-safety(7)) , no Qt at all.
+    Q_UNUSED(flags);
     Q_UNUSED(data);
     Q_UNUSED(info);
     Q_UNUSED(context);

@@ -306,7 +306,6 @@ void ZWidget::setStackingLayer(int layer) {
     if (p->stackingLayer == layer) {
         return;
     }
-    const int prevLayer = p->stackingLayer;
     p->stackingLayer = layer;
     if (!parentWidget()) return;
     QList<QObject*> &list = parentWidget()->d_ptr->children;

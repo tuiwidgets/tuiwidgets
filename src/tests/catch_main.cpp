@@ -53,7 +53,7 @@ struct QtDiagnosticsFallbackListener : Catch::TestEventListenerBase {
     // QCoreApplication::applicationFilePath. Outputting a log message without a QCoreApplication primes the logging
     // system without stumbling in that crash. This should not be here, but i don't have a good way to debug this right
     // now
-    void testRunStarting(const Catch::TestRunInfo &testRunInfo) override {
+    void testRunStarting(const Catch::TestRunInfo&) override {
         qWarning("Starting tests");
     }
 #endif

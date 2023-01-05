@@ -360,8 +360,6 @@ void ZWindow::paintEvent(ZPaintEvent *event) {
 }
 
 QVector<ZMenuItem> ZWindow::systemMenu() {
-    auto *const p = tuiwidgets_impl();
-
     QVector<ZMenuItem> ret;
 
     if (options() & MoveOption) {
