@@ -87,7 +87,7 @@ static void restoreSystemHandler(void *data, const siginfo_t *info, void *contex
     tcsetattr(restoreFd, TCSAFLUSH, &systemOriginalTerminalAttributes);
     const char *restoreEscape = systemRestoreEscape.load();
     if (restoreEscape) {
-        write(restoreFd, restoreEscape, strlen(restoreEscape));
+        (void)!write(restoreFd, restoreEscape, strlen(restoreEscape));
     }
 }
 
@@ -104,9 +104,9 @@ static void suspendHelper(bool tcattr) {
 
         const char *restoreEscape = systemRestoreEscape.load();
         if (restoreEscape) {
-            write(restoreFd, restoreEscape, strlen(restoreEscape));
+            (void)!write(restoreFd, restoreEscape, strlen(restoreEscape));
         }
-        write(restoreFd, "F_DUPFD_CLOEXEC failed, resume might be unreliable\r\n", strlen("F_DUPFD_CLOEXEC failed, resume might be unreliable\r\n"));
+        (void)!write(restoreFd, "F_DUPFD_CLOEXEC failed, resume might be unreliable\r\n", strlen("F_DUPFD_CLOEXEC failed, resume might be unreliable\r\n"));
         return;
     }
     int fd = -1;
@@ -129,9 +129,9 @@ static void suspendHelper(bool tcattr) {
 
             const char *restoreEscape = systemRestoreEscape.load();
             if (restoreEscape) {
-                write(restoreFd, restoreEscape, strlen(restoreEscape));
+                (void)!write(restoreFd, restoreEscape, strlen(restoreEscape));
             }
-            write(restoreFd, "opening of /dev/null failed, resume might be unreliable\r\n", strlen("opening of /dev/null failed, resume might be unreliable\r\n"));
+            (void)!write(restoreFd, "opening of /dev/null failed, resume might be unreliable\r\n", strlen("opening of /dev/null failed, resume might be unreliable\r\n"));
             return;
         } else {
             int tmp;
@@ -147,7 +147,7 @@ static void suspendHelper(bool tcattr) {
 
             const char *restoreEscape = systemRestoreEscape.load();
             if (restoreEscape) {
-                write(duppedFd, restoreEscape, strlen(restoreEscape));
+                (void)!write(duppedFd, restoreEscape, strlen(restoreEscape));
             }
 
             if (tcattr && tcgetpgrp(duppedFd) == getpgrp()) {
@@ -370,8 +370,8 @@ bool ZTerminalPrivate::setupFromControllingTerminal(ZTerminal::Options options) 
 void ZTerminalPrivate::showErrorWithoutTerminal(const QByteArray utf) {
     // Try on stderr first
     if (write(2, utf.data(), utf.size()) <= 0) {
-        // Retry on stdout
-        write(1, utf.data(), utf.size());
+        // Retry on stdout, but we can't really do anything about it if that fails too.
+        (void)!write(1, utf.data(), utf.size());
     }
 }
 
