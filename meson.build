@@ -15,6 +15,11 @@ add_project_arguments('-finput-charset=utf-8', '-fexec-charset=utf-8', language:
 termpaint_dep = dependency('termpaint')
 termpaint_image_dep = dependency('termpaint_image')
 
+catch2_dep = dependency('catch2', required : get_option('system-catch2'))
+if not catch2_dep.found()
+  catch2_dep = declare_dependency(include_directories: include_directories('third-party'))
+endif
+
 subdir('src')
 
 tuiwidgets_dep = declare_dependency(link_with: tuiwidgets, include_directories: ['src'])

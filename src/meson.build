@@ -186,7 +186,7 @@ import('pkgconfig').generate(
   subdirs: ['.']
 )
 
-testlib = static_library('testlib', 'tests/catch_main.cpp', dependencies: [qt5_dep])
+testlib = static_library('testlib', 'tests/catch_main.cpp', dependencies: [qt5_dep, catch2_dep])
 
 test_env = environment()
 test_env.set('TUIWIDGETS_TEST_DATA', meson.current_source_dir() / 'tests')
@@ -218,7 +218,7 @@ testinternal_files += [
 test('testtoolkitinternal',
   executable('testtoolkitinternal', testinternal_files,
     link_with: [tuiwidgets, testlib],
-    dependencies: [qt5_dep, termpaint_dep, termpaint_image_dep, posixsignalmanager_dep],
+    dependencies: [qt5_dep, termpaint_dep, termpaint_image_dep, posixsignalmanager_dep, catch2_dep],
     cpp_args: ['-fno-inline', silence_warnings]
   ),
   timeout: 240,
@@ -270,7 +270,7 @@ test_files = [
 test('testtoolkit',
   executable('testtoolkit', test_files,
     link_with: [tuiwidgets, testlib],
-    dependencies: [qt5_dep, termpaint_dep],
+    dependencies: [qt5_dep, termpaint_dep, catch2_dep],
     cpp_args: ['-fno-inline', silence_warnings]
   ),
   timeout: 240,

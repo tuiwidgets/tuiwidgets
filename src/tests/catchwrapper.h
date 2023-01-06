@@ -10,7 +10,7 @@
 #include <Tui/ZColor.h>
 #include <Tui/ZWidget.h>
 
-#include "../third-party/catch.hpp"
+#include <catch2/catch.hpp>
 
 namespace Catch {
     template<>

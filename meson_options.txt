@@ -1,0 +1,1 @@
+option('system-catch2', type : 'feature', value : 'disabled')
