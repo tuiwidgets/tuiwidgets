@@ -31,7 +31,6 @@ public:
 public:
     void setPendingSequenceStarted(std::function<void()> callback);
     void setPendingSequenceFinished(std::function<void(bool matched)> callback);
-    void setPendingSequenceUpdated(std::function<void()> callback);
 
 protected:
     ZValuePtr<ZPendingKeySequenceCallbacksPrivate> tuiwidgets_pimpl_ptr;
