@@ -112,7 +112,7 @@ protected:
                 CHECK(actual == expected);
             }
         } else {
-            UNSCOPED_INFO("Argument type mismatch on argument " << idx + 1);
+            UNSCOPED_INFO("Argument type mismatch on argument " << idx + 1 << " actual type " << actualArgs[idx].type().name());
             ok = false;
         }
         return ok && checkArgs(idx + 1, actualArgs, expectedRest...);
