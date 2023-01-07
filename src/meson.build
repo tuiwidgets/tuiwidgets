@@ -166,7 +166,8 @@ tui_cpp_args = [
   #'-Werror=old-style-cast'
 ]
 
-tuiwidgets_generated = qt5.preprocess(moc_headers: tuiwidgets_moc_headers, include_directories: '../src')
+tuiwidgets_generated = qt5.preprocess(moc_headers: tuiwidgets_moc_headers,
+  include_directories: include_directories('../src'))
 
 tuiwidgets = library('tuiwidgets', tuiwidgets_sources, tuiwidgets_generated,
   dependencies : [qt5_dep, termpaint_dep, termpaint_image_dep, posixsignalmanager_dep],
