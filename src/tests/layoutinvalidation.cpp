@@ -231,6 +231,55 @@ TEST_CASE("layoutinvalidation", "") {
         CHECK(chk.before == chk.after);
     }
 
+    SECTION("reparent in nested layout after initial layout") {
+        Tui::ZWidget outer(w);
+        outer.setObjectName("outer");
+
+        auto *layout = new Tui::ZVBoxLayout();
+        auto *w1 = new Tui::ZWidget(&outer);
+        w1->setObjectName("w1");
+        layout->addWidget(w1);
+
+
+        auto *layoutInner = new Tui::ZVBoxLayout();
+        auto *w1Inner = new StubWidget(w1);
+        w1Inner->setObjectName("w1Inner");
+        w1Inner->stubSizeHint = {20, 1};
+        layoutInner->addWidget(w1Inner);
+        w1->setLayout(layoutInner);
+        w1->setSizePolicyV(Tui::SizePolicy::Fixed);
+
+        auto *w2 = new StubWidget(&outer);
+        w2->setObjectName("w2");
+        w2->stubSizeHint = {20, 1};
+        layout->addWidget(w2);
+
+        auto *w3 = new StubWidget(&outer);
+        w3->setObjectName("w3");
+        w3->stubSizeHint = {20, 1};
+        layout->addWidget(w3);
+
+        outer.setGeometry({1, 1, 78, 48});
+        outer.setLayout(layout);
+
+        CHECK(t.terminal->isLayoutPending() == true);
+        t.terminal->doLayout();
+
+        CHECK(w2->geometry().y() != 0);
+
+        REQUIRE(t.terminal->isLayoutPending() == false);
+
+        w1Inner->setParent(nullptr);
+
+        REQUIRE(t.terminal->isLayoutPending() == true);
+        t.terminal->doLayout();
+
+        StabilityChecker chk;
+        chk.start(&outer);
+        CHECK(chk.before == chk.after);
+
+        delete w1Inner;
+    }
 }
 
 namespace {
