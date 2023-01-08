@@ -604,6 +604,11 @@ void ZTerminal::setMainWidget(ZWidget *w) {
     if (w == p->mainWidget.data()) {
         return;
     }
+    if (w->parentWidget()) {
+        // already in a widget tree and not root
+        return;
+    }
+
     if (p->mainWidget) {
         ZWidgetPrivate::get(p->mainWidget.data())->unsetTerminal();
         // clear all state relating to widgets

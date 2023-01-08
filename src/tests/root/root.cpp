@@ -87,6 +87,8 @@ TEST_CASE("root-resizeEvent") {
     auto mained = GENERATE(true, false);
     CAPTURE(mained);
     if (mained) {
+        // remove from current widget tree
+        root.setParent(nullptr);
         t.terminal->setMainWidget(&root);
         if (placed || containered) {
             CHECK(sw.windowFacet.autoPlaceCount == 0);
@@ -618,6 +620,8 @@ TEST_CASE("root-layoutArea") {
     }
 
     SECTION("inner is main, base") {
+        // remove from current widget tree
+        root.setParent(nullptr);
         t.terminal->setMainWidget(&root);
         t.render();
         CHECK(root.layoutArea() == QRect{0, 0, 40, 7});
@@ -646,6 +650,8 @@ TEST_CASE("root-layoutArea") {
         sw.setGeometry({0, 0, 50, 50});
         sw.windowFacet.extendViewport = true;
         CHECK(sw.windowFacet.isExtendViewport() == true);
+        // remove from current widget tree
+        root.setParent(nullptr);
         t.terminal->setMainWidget(&root);
         t.render();
         CHECK(root.geometry() == QRect{0, 0, 50, 50});
@@ -683,6 +689,8 @@ TEST_CASE("root-layoutArea-minimum") {
     }
 
     SECTION("inner is main") {
+        // remove from current widget tree
+        root.setParent(nullptr);
         t.terminal->setMainWidget(&root);
         t.render();
         CHECK(root.layoutArea() == QRect{0, 0, 15, 5});
@@ -697,6 +705,8 @@ TEST_CASE("root-layoutArea-minimum") {
 
     SECTION("inner is main, inner layout area == terminal size, outer as set") {
         t.root->setGeometry({1, 1, 2, 2});
+        // remove from current widget tree
+        root.setParent(nullptr);
         t.terminal->setMainWidget(&root);
         t.render();
         CHECK(root.layoutArea() == QRect{0, 0, 15, 5});
@@ -726,6 +736,8 @@ TEST_CASE("root-layoutArea-minimum") {
         sw.setGeometry({0, 0, 50, 50});
         sw.windowFacet.extendViewport = true;
         CHECK(sw.windowFacet.isExtendViewport() == true);
+        // remove from current widget tree
+        root.setParent(nullptr);
         t.terminal->setMainWidget(&root);
         t.render();
         CHECK(root.geometry() == QRect{0, 0, 50, 50});
