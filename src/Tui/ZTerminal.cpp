@@ -604,9 +604,14 @@ void ZTerminal::setMainWidget(ZWidget *w) {
     if (w == p->mainWidget.data()) {
         return;
     }
-    if (w->parentWidget()) {
+    if (w && w->parentWidget()) {
         // already in a widget tree and not root
         return;
+    }
+
+    if (w && ZWidgetPrivate::get(w)->terminal) {
+        // remove from previous terminal if it was the main widget elsewhere
+        ZWidgetPrivate::get(w)->terminal->setMainWidget(nullptr);
     }
 
     if (p->mainWidget) {
@@ -620,7 +625,7 @@ void ZTerminal::setMainWidget(ZWidget *w) {
         LayoutGenerationUpdaterScope generationUpdater(p->layoutGeneration);
     }
     tuiwidgets_impl()->mainWidget = w;
-    if (p->initState == ZTerminalPrivate::InitState::Ready || p->initState == ZTerminalPrivate::InitState::Paused) {
+    if (w && (p->initState == ZTerminalPrivate::InitState::Ready || p->initState == ZTerminalPrivate::InitState::Paused)) {
         p->attachMainWidgetStage2();
     }
 }
