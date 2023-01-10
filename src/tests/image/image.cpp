@@ -63,9 +63,24 @@ TEST_CASE("image", "") {
         Tui::ZImage image2(t.terminal.get(), 80, 11);
         CHECK(image2 != image);
 
-        image2 = *Tui::ZImage::fromFile(t.terminal.get(), fileName);
+        auto res = Tui::ZImage::fromFile(t.terminal.get(), fileName);
+        REQUIRE(res);
+        image2 = *res;
         CHECK(image2.size() == QSize{14, 4});
         CHECK(image2 == image);
+    }
+
+    SECTION("fromFile-invalid") {
+        QTemporaryFile tfile;
+        tfile.open();
+        tfile.close();
+        QString fileName = tfile.fileName();
+
+        Tui::ZImage image2(t.terminal.get(), 80, 11);
+        CHECK(image2 != image);
+
+        auto res = Tui::ZImage::fromFile(t.terminal.get(), fileName);
+        CHECK(!res);
     }
 
     SECTION("saveToByteArray") {
@@ -87,6 +102,12 @@ TEST_CASE("image", "") {
         CHECK(image2.size() == QSize{14, 4});
         CHECK(image2 == image);
     }
+
+    SECTION("fromByteArray-invalid") {
+        auto res = Tui::ZImage::fromByteArray(t.terminal.get(), QByteArray("{}"));
+        CHECK(!res);
+    }
+
     SECTION("peekText") {
         int l = 3, r = 4;
         CHECK(image.peekText(1, 2, &l, &r) == TERMPAINT_ERASED);
