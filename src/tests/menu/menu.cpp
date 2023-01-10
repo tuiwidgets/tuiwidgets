@@ -730,6 +730,14 @@ TEST_CASE("submenu", "") {
         t.compare();
     }
 
+    SECTION("geometry-w15-11-right3") {
+        t.sendChar("o", Tui::AltModifier);
+        t.sendKey(Tui::Key_Right);
+        t.sendKey(Tui::Key_Right);
+        t.sendKey(Tui::Key_Right);
+        t.compare("geometry-w15-11-left");
+    }
+
     SECTION("geometry-w15-11-right") {
         t.sendChar("o", Tui::AltModifier);
         t.sendKey(Tui::Key_Left);
@@ -1009,6 +1017,13 @@ TEST_CASE("popupmenu", "") {
         trigger = -1;
     });
 
+    Tui::ZCommandNotifier *kiloNotifier = new Tui::ZCommandNotifier("kilo", t.root);
+    kiloNotifier->setEnabled(false);
+    QObject::connect(kiloNotifier , &Tui::ZCommandNotifier::activated, [&trigger] {
+        CHECK(trigger == 3);
+        trigger = -1;
+    });
+
     new Tui::ZCommandNotifier("mega", t.root);
 
     auto *menu = new Tui::ZMenu(t.root);
@@ -1094,6 +1109,14 @@ TEST_CASE("popupmenu", "") {
         t.compare("esc");
     }
 
+    SECTION("enter-disabled") {
+        menu->setItems(items1);
+        menu->popup({1, 1});
+        t.render();
+        t.sendKey(Tui::Key_Enter);
+        t.compare("left");
+    }
+
     SECTION("F10") {
         menu->setItems(items1);
         menu->popup({1, 1});
@@ -1140,6 +1163,29 @@ TEST_CASE("popupmenu", "") {
         menu->popup({1, 1});
         t.sendKey(Tui::Key_Up);
         t.compare();
+    }
+
+    SECTION("key-down-down-up") {
+        menu->setItems(items2);
+        menu->popup({1, 1});
+        t.sendKey(Tui::Key_Down);
+        t.sendKey(Tui::Key_Down);
+        t.sendKey(Tui::Key_Up);
+        t.compare("key-down");
+    }
+
+    SECTION("key-left") {
+        menu->setItems(items1);
+        menu->popup({1, 1});
+        t.sendKey(Tui::Key_Left);
+        t.compare("left");
+    }
+
+    SECTION("key-right") {
+        menu->setItems(items1);
+        menu->popup({1, 1});
+        t.sendKey(Tui::Key_Right);
+        t.compare("left");
     }
 
     SECTION("fake-shortcut") {
