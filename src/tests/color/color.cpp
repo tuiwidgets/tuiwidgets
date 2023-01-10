@@ -199,6 +199,37 @@ TEST_CASE("zcolor - color types") {
         CHECK(color.terminalColorIndexed() == 0);
         CHECK(color.terminalColor() == Tui::TerminalColor::black);
     }
+
+    SECTION("compose-rgb") {
+        color = Tui::ZColor::fromTerminalColor(Tui::TerminalColor::black);
+
+        SECTION("red-green-blue") {
+            color.setRed(12);
+            CHECK(color == Tui::ZColor::fromRgb(12, 0, 0));
+            color.setGreen(45);
+            CHECK(color == Tui::ZColor::fromRgb(12, 45, 0));
+            color.setBlue(67);
+            CHECK(color == Tui::ZColor::fromRgb(12, 45, 67));
+        }
+
+        SECTION("green-blue-red") {
+            color.setGreen(68);
+            CHECK(color == Tui::ZColor::fromRgb(0, 68, 0));
+            color.setBlue(34);
+            CHECK(color == Tui::ZColor::fromRgb(0, 68, 34));
+            color.setRed(78);
+            CHECK(color == Tui::ZColor::fromRgb(78, 68, 34));
+        }
+
+        SECTION("blue-red-green") {
+            color.setBlue(92);
+            CHECK(color == Tui::ZColor::fromRgb(0, 0, 92));
+            color.setRed(83);
+            CHECK(color == Tui::ZColor::fromRgb(83, 0, 92));
+            color.setGreen(48);
+            CHECK(color == Tui::ZColor::fromRgb(83, 48, 92));
+        }
+    }
 }
 
 TEST_CASE("zcolor - guess rgb") {
