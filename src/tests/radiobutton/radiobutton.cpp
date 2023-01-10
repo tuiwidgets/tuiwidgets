@@ -609,3 +609,24 @@ TEST_CASE("radiobutton-multiparent", "") {
     }
 }
 
+TEST_CASE("radiobutton-mulichecked", "") {
+    // At this point, the two RadioButtons are clicked. The behavior was only documented here.
+    // It is probably correct that rb1 must no longer be active.
+    Testhelper t("radiobutton", "radiobutton-mulichecked", 15, 10);
+    Tui::ZWindow *w = new Tui::ZWindow(t.root);
+    w->setGeometry({0, 0, 15, 10});
+
+    SECTION("rb1-and-rb2-checked") {
+        Tui::ZWidget *a = new Tui::ZWidget(w);
+        a->setGeometry({1, 1, 13, 4});
+        Tui::ZRadioButton *rb1 = new Tui::ZRadioButton("rb1", a);
+        rb1->setGeometry({1, 1, 13, 1});
+        rb1->setChecked(true);
+        Tui::ZRadioButton *rb2 = new Tui::ZRadioButton("rb2", a);
+        rb2->setGeometry({1, 2, 13, 1});
+        rb2->setChecked(true);
+        CHECK(rb1->checked()); // should not be active
+        CHECK(rb2->checked());
+        t.compare();
+    }
+}
