@@ -1957,6 +1957,17 @@ TEST_CASE("textlayout", "") {
         CHECK(t.terminal->grabCursorPosition() == QPoint{1 + 4, 1 + 2});
     }
 
+    SECTION("showCursor-unlayouted") {
+        Widget w{t.root};
+        w.setFocus();
+        w.setGeometry({0, 0, 32, 5});
+        w.lay = layout.get();
+
+        w.cursorPos = 0;
+        t.render();
+        CHECK(t.terminal->grabCursorPosition() == QPoint{1, 1});
+    }
+
     SECTION("showCursor-newline") {
         layout->setText("abc\n"
                         "def\n");
