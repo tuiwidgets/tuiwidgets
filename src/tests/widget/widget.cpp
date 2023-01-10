@@ -1872,42 +1872,63 @@ TEST_CASE("widget-event-methods") {
         Tui::ZPaintEvent event{&painter};
         QCoreApplication::sendEvent(&widget, &event);
         CHECK(recorder.consumeFirst(widget.paintCalledEvent, &event));
+        CHECK(recorder.noMoreEvents());
     }
 
     SECTION("key event") {
         Tui::ZKeyEvent event{Tui::Key_F1, Tui::ControlModifier, ""};
         QCoreApplication::sendEvent(&widget, &event);
         CHECK(recorder.consumeFirst(widget.keyCalledEvent, &event));
+        CHECK(recorder.noMoreEvents());
+    }
+
+    SECTION("key event - disabled widget") {
+        Tui::ZKeyEvent event{Tui::Key_F1, Tui::ControlModifier, ""};
+        widget.setEnabled(false);
+        QCoreApplication::sendEvent(&widget, &event);
+        CHECK(recorder.noMoreEvents());
     }
 
     SECTION("paste event") {
         Tui::ZPasteEvent event{"some text"};
         QCoreApplication::sendEvent(&widget, &event);
         CHECK(recorder.consumeFirst(widget.pasteCalledEvent, &event));
+        CHECK(recorder.noMoreEvents());
+    }
+
+    SECTION("paste event - disabled widget") {
+        Tui::ZPasteEvent event{"some text"};
+        widget.setEnabled(false);
+        QCoreApplication::sendEvent(&widget, &event);
+        CHECK(recorder.noMoreEvents());
     }
 
     SECTION("focus in event") {
         Tui::ZFocusEvent event{Tui::ZFocusEvent::focusIn};
         QCoreApplication::sendEvent(&widget, &event);
         CHECK(recorder.consumeFirst(widget.focusInCalledEvent, &event));
+        CHECK(recorder.noMoreEvents());
     }
 
     SECTION("focus out event") {
         Tui::ZFocusEvent event{Tui::ZFocusEvent::focusOut};
         QCoreApplication::sendEvent(&widget, &event);
         CHECK(recorder.consumeFirst(widget.focusOutCalledEvent, &event));
+        CHECK(recorder.noMoreEvents());
     }
 
     SECTION("resize event") {
         Tui::ZResizeEvent event{{12, 12}, {4, 4}};
         QCoreApplication::sendEvent(&widget, &event);
         CHECK(recorder.consumeFirst(widget.resizeCalledEvent, &event));
+        CHECK(recorder.noMoreEvents());
     }
 
     SECTION("move event") {
         Tui::ZMoveEvent event{{12, 12}, {4, 4}};
         QCoreApplication::sendEvent(&widget, &event);
         CHECK(recorder.consumeFirst(widget.moveCalledEvent, &event));
+        CHECK(recorder.noMoreEvents());
     }
 
 }
