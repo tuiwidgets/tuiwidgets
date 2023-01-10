@@ -10,52 +10,63 @@ TEST_CASE("basicwindowfacet-base") {
     Tui::ZBasicWindowFacet facet;
 
     CHECK(facet.isManuallyPlaced() == true);
+    CHECK(facet.isExtendViewport() == false);
 
-    Tui::ZWidget w;
-    const QRect originalGeometry = {5, 7, 11, 13};
-    w.setGeometry(originalGeometry);
+    SECTION("extendViewport") {
+        facet.setExtendViewport(true);
+        CHECK(facet.isExtendViewport() == true);
 
-    facet.autoPlace({100, 30}, &w);
+        facet.setExtendViewport(false);
+        CHECK(facet.isExtendViewport() == false);
+    }
 
-    CHECK(w.geometry() == originalGeometry);
+    SECTION("placement") {
+        Tui::ZWidget w;
+        const QRect originalGeometry = {5, 7, 11, 13};
+        w.setGeometry(originalGeometry);
 
-    struct TestCase { std::string name; Tui::Alignment align; int x; int y; };
-    auto testCase = GENERATE(
-                TestCase{"top-left", Tui::AlignTop | Tui::AlignLeft, 0, 0},
-                TestCase{"top-center", Tui::AlignTop | Tui::AlignHCenter, 50 - 5, 0},
-                TestCase{"top-right", Tui::AlignTop | Tui::AlignRight, 89, 0},
-                TestCase{"center-left", Tui::AlignVCenter | Tui::AlignLeft, 0, 15 - 6},
-                TestCase{"center", Tui::AlignCenter, 50 - 5, 15 - 6},
-                TestCase{"center-right", Tui::AlignVCenter | Tui::AlignRight, 89, 15 - 6},
-                TestCase{"bottom-left", Tui::AlignBottom | Tui::AlignLeft, 0, 17},
-                TestCase{"bottom-center", Tui::AlignBottom | Tui::AlignHCenter, 50 - 5, 17},
-                TestCase{"bottom-right", Tui::AlignBottom | Tui::AlignRight, 89, 17}
-                );
+        facet.autoPlace({100, 30}, &w);
 
-    CAPTURE(testCase.name);
+        CHECK(w.geometry() == originalGeometry);
 
-    facet.setDefaultPlacement(testCase.align, {0, 0});
-    CHECK(facet.isManuallyPlaced() == false);
+        struct TestCase { std::string name; Tui::Alignment align; int x; int y; };
+        auto testCase = GENERATE(
+                    TestCase{"top-left", Tui::AlignTop | Tui::AlignLeft, 0, 0},
+                    TestCase{"top-center", Tui::AlignTop | Tui::AlignHCenter, 50 - 5, 0},
+                    TestCase{"top-right", Tui::AlignTop | Tui::AlignRight, 89, 0},
+                    TestCase{"center-left", Tui::AlignVCenter | Tui::AlignLeft, 0, 15 - 6},
+                    TestCase{"center", Tui::AlignCenter, 50 - 5, 15 - 6},
+                    TestCase{"center-right", Tui::AlignVCenter | Tui::AlignRight, 89, 15 - 6},
+                    TestCase{"bottom-left", Tui::AlignBottom | Tui::AlignLeft, 0, 17},
+                    TestCase{"bottom-center", Tui::AlignBottom | Tui::AlignHCenter, 50 - 5, 17},
+                    TestCase{"bottom-right", Tui::AlignBottom | Tui::AlignRight, 89, 17}
+                    );
 
-    facet.autoPlace({100, 30}, &w);
+        CAPTURE(testCase.name);
 
-    CHECK(w.geometry().size() == originalGeometry.size());
-    CHECK(w.geometry().x() == testCase.x);
-    CHECK(w.geometry().y() == testCase.y);
+        facet.setDefaultPlacement(testCase.align, {0, 0});
+        CHECK(facet.isManuallyPlaced() == false);
 
-    QPoint displacement = {-10, 11};
-    facet.setDefaultPlacement(testCase.align, displacement);
-    facet.autoPlace({100, 30}, &w);
+        facet.autoPlace({100, 30}, &w);
 
-    CHECK(w.geometry().size() == originalGeometry.size());
-    CHECK(w.geometry().x() == std::max(0, testCase.x + displacement.x()));
-    CHECK(w.geometry().y() == std::max(0, testCase.y + displacement.y()));
+        CHECK(w.geometry().size() == originalGeometry.size());
+        CHECK(w.geometry().x() == testCase.x);
+        CHECK(w.geometry().y() == testCase.y);
 
-    displacement = {5, -7};
-    facet.setDefaultPlacement(testCase.align, displacement);
-    facet.autoPlace({100, 30}, &w);
+        QPoint displacement = {-10, 11};
+        facet.setDefaultPlacement(testCase.align, displacement);
+        facet.autoPlace({100, 30}, &w);
 
-    CHECK(w.geometry().size() == originalGeometry.size());
-    CHECK(w.geometry().x() == std::max(0, testCase.x + displacement.x()));
-    CHECK(w.geometry().y() == std::max(0, testCase.y + displacement.y()));
+        CHECK(w.geometry().size() == originalGeometry.size());
+        CHECK(w.geometry().x() == std::max(0, testCase.x + displacement.x()));
+        CHECK(w.geometry().y() == std::max(0, testCase.y + displacement.y()));
+
+        displacement = {5, -7};
+        facet.setDefaultPlacement(testCase.align, displacement);
+        facet.autoPlace({100, 30}, &w);
+
+        CHECK(w.geometry().size() == originalGeometry.size());
+        CHECK(w.geometry().x() == std::max(0, testCase.x + displacement.x()));
+        CHECK(w.geometry().y() == std::max(0, testCase.y + displacement.y()));
+    }
 }
