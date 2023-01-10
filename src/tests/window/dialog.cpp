@@ -273,5 +273,9 @@ TEST_CASE("dialog-behavior") {
         CHECK(sensor.isNull());
     }
 
+    SECTION("unhandled") {
+        FAIL_CHECK_VEC(t.checkKeyEventBubbles(Tui::Key_Up));
+    }
+
 }
 
