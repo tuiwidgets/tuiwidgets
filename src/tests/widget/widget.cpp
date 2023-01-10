@@ -2563,7 +2563,18 @@ TEST_CASE("widget-setParent") {
             CHECK(recorder.consumeFirst(terminalChangeEvent));
             CHECK(recorder.noMoreEvents());
         }
+    }
 
+    SECTION("detach-from-previous-terminal") {
+        Tui::ZWidget newParent;
+        Tui::ZWidget widget;
+
+        t.terminal->setMainWidget(&widget);
+
+        CHECK(widget.terminal() == t.terminal.get());
+
+        widget.setParent(&newParent);
+        CHECK(widget.terminal() == nullptr);
     }
 }
 
