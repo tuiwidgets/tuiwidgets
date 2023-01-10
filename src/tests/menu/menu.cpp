@@ -648,10 +648,14 @@ TEST_CASE("menubar", "") {
 
 TEST_CASE("submenu", "") {
     Testhelper t("menu", "submenu", 30, 11);
-    Tui::ZWindow *w = new Tui::ZWindow(t.root);
+
+    QString attach = GENERATE("normal", "late-parent", "late-direct");
+    CAPTURE(attach);
+
+    Tui::ZWindow *w = new Tui::ZWindow(attach == "late-parent" ? nullptr : t.root);
     w->setGeometry({0, 0, 15, 11});
 
-    Tui::ZMenubar *m = new Tui::ZMenubar(w);
+    Tui::ZMenubar *m = new Tui::ZMenubar(attach == "late-direct" ? nullptr : w);
     m->setGeometry({0, 0, 15, 1});
 
     m->setItems({
@@ -701,6 +705,14 @@ TEST_CASE("submenu", "") {
     });
 
     new Tui::ZCommandNotifier("mega", m);
+
+    if (attach == "late-parent") {
+        w->setParent(t.root);
+    }
+
+    if (attach == "late-direct") {
+        m->setParent(w);
+    }
 
     SECTION("menu-window-facet-configuration") {
         t.sendChar("o", Tui::AltModifier);
