@@ -52,6 +52,16 @@ TEST_CASE("zcolor - base") {
         CHECK(color.colorType() == Tui::ZColor::Default);
         CHECK(color.nativeValue() == TERMPAINT_DEFAULT_COLOR);
         CHECK(color == Tui::ZColor());
+
+        // Using mismatched getters results in zero results.
+        CHECK(color.red() == 0);
+        CHECK(color.green() == 0);
+        CHECK(color.blue() == 0);
+        CHECK(color.redOrGuess() == 0x80);
+        CHECK(color.greenOrGuess() == 0x80);
+        CHECK(color.blueOrGuess() == 0x80);
+        CHECK(color.terminalColorIndexed() == 0);
+        CHECK(color.terminalColor() == Tui::TerminalColor::black);
     }
 
 }
@@ -108,6 +118,16 @@ TEST_CASE("zcolor - color types") {
 
         color = Tui::ZColor::fromTerminalColor(Tui::TerminalColor::brightYellow);
         CHECK(color.nativeValue() == static_cast<uint32_t>(TERMPAINT_COLOR_BRIGHT_YELLOW));
+
+        CHECK(color.redOrGuess() == 0xff);
+        CHECK(color.greenOrGuess() == 0xff);
+        CHECK(color.blueOrGuess() == 0x55);
+
+        // Using mismatched getters results in zero results.
+        CHECK(color.red() == 0);
+        CHECK(color.green() == 0);
+        CHECK(color.blue() == 0);
+        CHECK(color.terminalColorIndexed() == 0);
     }
 
     SECTION("named-number") {
@@ -126,6 +146,12 @@ TEST_CASE("zcolor - color types") {
         CHECK(color3.colorType() == Tui::ZColor::Terminal);
         CHECK(static_cast<int>(color3.terminalColor()) == testCase);
         CHECK(color3.nativeValue() == static_cast<uint32_t>(TERMPAINT_NAMED_COLOR + testCase));
+
+        // Using mismatched getters results in zero results.
+        CHECK(color.red() == 0);
+        CHECK(color.green() == 0);
+        CHECK(color.blue() == 0);
+        CHECK(color.terminalColorIndexed() == 0);
     }
 
     SECTION("indexed") {
@@ -134,6 +160,14 @@ TEST_CASE("zcolor - color types") {
         CHECK(color.colorType() == Tui::ZColor::TerminalIndexed);
         CHECK(color.terminalColorIndexed() == testCase);
         CHECK(color.nativeValue() == static_cast<uint32_t>(TERMPAINT_INDEXED_COLOR + testCase));
+
+        color = Tui::ZColor::fromTerminalColorIndexed(61+6);
+        CHECK(color.redOrGuess() == 95);
+        CHECK(color.greenOrGuess() == 135);
+        CHECK(color.blueOrGuess() == 175);
+
+        // Using mismatched getters results in zero results.
+        CHECK(color.terminalColor() == Tui::TerminalColor::black);
     }
 
     SECTION("rgb") {
@@ -160,6 +194,10 @@ TEST_CASE("zcolor - color types") {
         CHECK(color.blueOrGuess() == b);
 
         CHECK(color == color2);
+
+        // Using mismatched getters results in zero results.
+        CHECK(color.terminalColorIndexed() == 0);
+        CHECK(color.terminalColor() == Tui::TerminalColor::black);
     }
 }
 
