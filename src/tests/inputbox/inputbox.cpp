@@ -67,6 +67,10 @@ TEST_CASE("inputbox-base", "") {
         inputbox->setText("some text");
         CHECK(inputbox->text() == "some text");
 
+        // Trigger "no change" detection code path
+        inputbox->setText("some text");
+        CHECK(inputbox->text() == "some text");
+
         // \n is special internally, so test that explicitly too.
         inputbox->setText("\n\ntest\ntext\n");
         CHECK(inputbox->text() == "\n\ntest\ntext\n");
