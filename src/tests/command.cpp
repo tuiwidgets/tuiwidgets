@@ -102,7 +102,10 @@ TEST_CASE("command generated", "") {
     std::string attachment = GENERATE("direct", "late", "crossterminal");
     CAPTURE(attachment);
 
-    Tui::ZWidget *root = attachment == "direct" ? t.root : new Tui::ZWidget();
+    Tui::ZWidget pseudoRoot;
+    pseudoRoot.ensureCommandManager();
+
+    Tui::ZWidget *root = attachment == "direct" ? t.root : new Tui::ZWidget(&pseudoRoot);
 
     auto terminal2 = std::make_unique<Tui::ZTerminal>(Tui::ZTerminal::OffScreen{16, 5});
     Tui::ZRoot root2;
