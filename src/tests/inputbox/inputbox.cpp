@@ -853,6 +853,22 @@ TEST_CASE("inputbox-echomode", "") {
     }
 }
 
+TEST_CASE("inputbox-attach-terminal", "") {
+    Testhelper t("inputbox", "unused", 15, 5);
+    Tui::ZWindow *w = new Tui::ZWindow(t.root);
+    w->setGeometry({0, 0, 15, 5});
+
+    Tui::ZInputBox *inputbox = new Tui::ZInputBox();
+    inputbox->setText("a😁b");
+    inputbox->setCursorPosition(2);
+    CHECK(inputbox->cursorPosition() == 3);
+
+    // This should trigger readjustment of the cursor position using the terminal's text metrics.
+    inputbox->setParent(w);
+
+    CHECK(inputbox->cursorPosition() == 3);
+}
+
 TEST_CASE("inputbox-event", "") {
     Testhelper t("inputbox", "inputbox-event", 15, 5);
     Tui::ZWindow *w = new Tui::ZWindow(t.root);
