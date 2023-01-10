@@ -941,6 +941,23 @@ TEST_CASE("boxlayout-policy", "") {
             CHECK(rotate.getPolicyAcross(layout) == Tui::SizePolicy::Fixed);
         }
 
+        SECTION("one-plus-invisible") {
+            Tui::SizePolicy p1 = GENERATE(Tui::SizePolicy::Fixed,
+                                          Tui::SizePolicy::Expanding, Tui::SizePolicy::Preferred);
+            CAPTURE(p1);
+            StubLayout *item0 = new StubLayout();
+            rotate.setPolicyLayout(item0, Tui::SizePolicy::Expanding);
+            layout.add(item0);
+            item0->stubIsVisible = false;
+
+            StubLayout *item1 = new StubLayout();
+            rotate.setPolicyLayout(item1, p1);
+            layout.add(item1);
+
+            CHECK(rotate.getPolicyLayout(layout) == p1);
+            CHECK(rotate.getPolicyAcross(layout) == Tui::SizePolicy::Expanding);
+        }
+
         SECTION("two") {
             struct TestCase { int sourceLine; Tui::SizePolicy p1; Tui::SizePolicy p2; Tui::SizePolicy result; };
             auto testCase = GENERATE(
