@@ -391,6 +391,7 @@ TEST_CASE("shortcut generated", "") {
                                         "widget with children, focus on root",
                                         "widget with children, focus on sibling",
                                         "window, focus on root",
+                                        "window, no focus",
                                         "window, focus on non window sibling",
                                         "window, focus on sibling window");
         CAPTURE(testCase);
@@ -419,6 +420,11 @@ TEST_CASE("shortcut generated", "") {
             auto *win = new StubWindowWidget(root);
             widget = win;
             focus = root;
+            context = Tui::WindowShortcut;
+        } else if (testCase == "window, no focus") {
+            auto *win = new StubWindowWidget(root);
+            widget = win;
+            focus = nullptr;
             context = Tui::WindowShortcut;
         } else if (testCase == "window, focus on non window sibling") {
             auto *win = new StubWindowWidget(root);
