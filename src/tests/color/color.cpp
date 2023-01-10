@@ -373,9 +373,44 @@ TEST_CASE("zcolor - hsv") {
         CHECK(hsv.hue() == Approx(testCase.hsv.hue()).margin(0.258));
 
         auto color2 = Tui::ZColor::fromHsvStrict(hsv);
+        Tui::ZColorHSV hsv2 = hsv;
+        CHECK(hsv == hsv2);
+        CHECK(!(hsv != hsv2));
+        auto color3 = Tui::ZColor::fromHsv(hsv2);
+        CHECK(color2 == color3);
+
         CHECK(color2.red() == color.red());
         CHECK(color2.green() == color.green());
         CHECK(color2.blue() == color.blue());
+    }
+
+    SECTION("listed test cases - indexed colors") {
+        struct TestCase {
+            Tui::ZColor color;
+            Tui::ZColorHSV hsv;
+        };
+
+        auto testCase = GENERATE_COPY(
+                    TestCase{Tui::ZColor::fromTerminalColorIndexed(16), Tui::ZColorHSV(0, 0, 0)},
+                    TestCase{Tui::ZColor::fromTerminalColorIndexed(16 + 36 * 5 + 6 * 0 + 0), Tui::ZColorHSV(0, 1, 1)},
+                    TestCase{Tui::ZColor::fromTerminalColorIndexed(16 + 36 * 5 + 6 * 5 + 0), Tui::ZColorHSV(60, 1, 1)},
+                    TestCase{Tui::ZColor::fromTerminalColorIndexed(16 + 36 * 0 + 6 * 5 + 0), Tui::ZColorHSV(120, 1, 1)},
+                    TestCase{Tui::ZColor::fromTerminalColorIndexed(16 + 36 * 0 + 6 * 5 + 5), Tui::ZColorHSV(180, 1, 1)},
+                    TestCase{Tui::ZColor::fromTerminalColorIndexed(16 + 36 * 0 + 6 * 0 + 5), Tui::ZColorHSV(240, 1, 1)},
+                    TestCase{Tui::ZColor::fromTerminalColorIndexed(16 + 36 * 5 + 6 * 0 + 5), Tui::ZColorHSV(300, 1, 1)},
+                    TestCase{Tui::ZColor::fromTerminalColorIndexed(16 + 36 * 5 + 6 * 5 + 5), Tui::ZColorHSV(0, 0, 1)}
+        );
+        Tui::ZColor color = testCase.color;
+        CAPTURE(color.terminalColorIndexed());
+        auto hsv = color.toHsv();
+        REQUIRE(hsv.value() == Approx(testCase.hsv.value()).margin(5e-6));
+        REQUIRE(hsv.saturation() == Approx(testCase.hsv.saturation()).margin(0.00296));
+        CHECK(hsv.hue() == Approx(testCase.hsv.hue()).margin(0.258));
+
+        auto color2 = Tui::ZColor::fromHsvStrict(hsv);
+        CHECK(color2.red() == color.redOrGuess());
+        CHECK(color2.green() == color.greenOrGuess());
+        CHECK(color2.blue() == color.blueOrGuess());
     }
 
     SECTION("zcolor - grey value") {
@@ -387,6 +422,20 @@ TEST_CASE("zcolor - hsv") {
         REQUIRE(hsv.saturation() == 0);
         CHECK(hsv.hue() == 0);
         REQUIRE(hsv.value() == pow(testCase / 255., 2.2));
+    }
+
+    SECTION("compare") {
+        CHECK(Tui::ZColorHSV(100, 0.5, 0.2) == Tui::ZColorHSV(100, 0.5, 0.2));
+        CHECK(!(Tui::ZColorHSV(100, 0.5, 0.2) != Tui::ZColorHSV(100, 0.5, 0.2)));
+
+        CHECK(Tui::ZColorHSV(100, 0.5, 0.2) != Tui::ZColorHSV(101, 0.5, 0.2));
+        CHECK(!(Tui::ZColorHSV(100, 0.5, 0.2) == Tui::ZColorHSV(101, 0.5, 0.2)));
+
+        CHECK(Tui::ZColorHSV(100, 0.6, 0.2) != Tui::ZColorHSV(100, 0.5, 0.2));
+        CHECK(!(Tui::ZColorHSV(100, 0.6, 0.2) == Tui::ZColorHSV(100, 0.5, 0.2)));
+
+        CHECK(Tui::ZColorHSV(100, 0.5, 0.1) != Tui::ZColorHSV(100, 0.5, 0.2));
+        CHECK(!(Tui::ZColorHSV(100, 0.5, 0.1) == Tui::ZColorHSV(100, 0.5, 0.2)));
     }
 }
 
