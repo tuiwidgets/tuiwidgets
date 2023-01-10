@@ -410,6 +410,7 @@ TEST_CASE("inputbox-behavior", "") {
     }
 
     SECTION("char-CDEF-delete-5x1+2+2") {
+        t.sendKey(Tui::Key_Delete);
         t.sendChar("A");
         t.sendChar("B");
         t.sendChar("C");
@@ -432,6 +433,19 @@ TEST_CASE("inputbox-behavior", "") {
         t.sendChar("E");
         t.sendChar("F");
         t.sendKey(Tui::Key_Backspace);
+        t.sendKey(Tui::Key_Backspace);
+        CHECK(inputbox->cursorPosition() == 4);
+        CHECK(inputbox->text() == "ABCD");
+        t.compare("char-ABCD-5x1+2+2");
+    }
+
+    SECTION("backspace-charABCDX-backspace-5x1+2+2") {
+        t.sendKey(Tui::Key_Backspace);
+        t.sendChar("A");
+        t.sendChar("B");
+        t.sendChar("C");
+        t.sendChar("D");
+        t.sendChar("X");
         t.sendKey(Tui::Key_Backspace);
         CHECK(inputbox->cursorPosition() == 4);
         CHECK(inputbox->text() == "ABCD");
