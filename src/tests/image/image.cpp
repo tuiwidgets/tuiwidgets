@@ -143,4 +143,52 @@ TEST_CASE("image", "") {
         CHECK(image2.size() == QSize{14, 4});
         CHECK(image2.peekForground(1, 1) == Tui::ZColor{0xFF, 0xFF, 0xFF});
     }
+
+    SECTION("copy-on-write") {
+        CHECK(image.peekForground(1, 1) == Tui::ZColor{0xFF, 0xFF, 0xFF});
+
+        Tui::ZImage image2 = image;
+
+        CHECK(image.peekForground(1, 1) == Tui::ZColor{0xFF, 0xFF, 0xFF});
+        CHECK(image2.peekForground(1, 1) == Tui::ZColor{0xFF, 0xFF, 0xFF});
+
+        image2.painter().setForeground(1, 1, Tui::ZColor{0xFF, 0xAE, 0xFF});
+
+        CHECK(image.peekForground(1, 1) == Tui::ZColor{0xFF, 0xFF, 0xFF});
+        CHECK(image2.peekForground(1, 1) == Tui::ZColor{0xFF, 0xAE, 0xFF});
+    }
+
+    SECTION("copy-ctor-with-painter") {
+        CHECK(image.peekForground(1, 1) == Tui::ZColor{0xFF, 0xFF, 0xFF});
+
+        Tui::ZPainter painter = image.painter();
+
+        Tui::ZImage image2 = image;
+
+        CHECK(image.peekForground(1, 1) == Tui::ZColor{0xFF, 0xFF, 0xFF});
+        CHECK(image2.peekForground(1, 1) == Tui::ZColor{0xFF, 0xFF, 0xFF});
+
+        painter.setForeground(1, 1, Tui::ZColor{0xFF, 0xAE, 0xFF});
+
+        CHECK(image.peekForground(1, 1) == Tui::ZColor{0xFF, 0xAE, 0xFF});
+        CHECK(image2.peekForground(1, 1) == Tui::ZColor{0xFF, 0xFF, 0xFF});
+    }
+
+    SECTION("copy-operator-with-painter") {
+        CHECK(image.peekForground(1, 1) == Tui::ZColor{0xFF, 0xFF, 0xFF});
+
+        Tui::ZPainter painter = image.painter();
+
+        Tui::ZImage image2(t.terminal.get(), 80, 11);
+        image2 = image;
+
+        CHECK(image.peekForground(1, 1) == Tui::ZColor{0xFF, 0xFF, 0xFF});
+        CHECK(image2.peekForground(1, 1) == Tui::ZColor{0xFF, 0xFF, 0xFF});
+
+        painter.setForeground(1, 1, Tui::ZColor{0xFF, 0xAE, 0xFF});
+
+        CHECK(image.peekForground(1, 1) == Tui::ZColor{0xFF, 0xAE, 0xFF});
+        CHECK(image2.peekForground(1, 1) == Tui::ZColor{0xFF, 0xFF, 0xFF});
+    }
+
 }

@@ -155,7 +155,8 @@ ZPainter ZImage::painter() {
     auto *const p = tuiwidgets_pimpl_ptr.data();
     std::shared_ptr<char> token = p->hasPainter.lock();
     if (!token) {
-        token = std::make_shared<char>();
+        token = std::make_shared<char>(1);
+        p->hasPainter = token;
     }
     return ZPainter(std::make_unique<ZPainterPrivate>(p->surface,
                                                       termpaint_surface_width(p->surface),
