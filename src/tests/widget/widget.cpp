@@ -913,6 +913,17 @@ TEST_CASE("widget-stackingLayer") {
         CHECK(widget.children().indexOf(&child3) == 0);
     }
 
+    SECTION("StackingLayer-without-parent") {
+        Tui::ZWidget withoutParent;
+        withoutParent.lower();
+    }
+
+    SECTION("StackingLayer-single-child") {
+        Tui::ZWidget single{&child1};
+        single.lower();
+        CHECK(child1.children().indexOf(&single) == 0);
+    }
+
     SECTION("stackUnder1-3") {
         child1.stackUnder(&child3);
         layerConistencyCheck(&widget);
@@ -1038,6 +1049,11 @@ TEST_CASE("widget-stackingLayer") {
         CHECK(widget.children().indexOf(&child1) == 0);
         CHECK(widget.children().indexOf(&child2) == 1);
         CHECK(widget.children().indexOf(&child3) == 2);
+    }
+
+    SECTION("StackingLayer-without-parent") {
+        Tui::ZWidget withoutParent;
+        withoutParent.stackUnder(&withoutParent);
     }
 
     SECTION("setStackingLayer-from5to4") {
