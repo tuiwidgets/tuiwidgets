@@ -1018,6 +1018,16 @@ TEST_CASE("popupmenu", "") {
         CHECK(menu->stackingLayer() == 20000);
     }
 
+    SECTION("items") {
+        menu->setItems(items1);
+        auto retrievedItems = menu->items();
+        CHECK(retrievedItems.size() == 9);
+        CHECK(retrievedItems[0].markup() == "Kilo");
+        CHECK(retrievedItems[0].command() == Tui::ZImplicitSymbol("kilo"));
+        CHECK(retrievedItems[8].markup() == "Yotta");
+        CHECK(retrievedItems[8].command() == Tui::ZImplicitSymbol("yotta"));
+    }
+
     SECTION("menu-window-facet-configuration") {
         menu->setItems(items1);
         menu->popup({1, 1});
