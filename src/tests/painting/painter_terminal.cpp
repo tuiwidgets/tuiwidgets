@@ -28,6 +28,11 @@ public:
 TEST_CASE("painter-setCursor", "") {
     Testhelper t("unused", "unused", 15, 5);
 
+    SECTION("no-widget") {
+        // this has no effect, but must not crash
+        t.terminal->painter().setCursor(0, 0);
+    }
+
     SECTION("full") {
         TestWidget *w = new TestWidget(t.root);
         w->setGeometry({0, 0, 15, 5});
