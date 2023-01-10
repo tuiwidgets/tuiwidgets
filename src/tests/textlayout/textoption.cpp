@@ -292,4 +292,21 @@ TEST_CASE("textoption", "") {
         CHECK(to1.tabStopDistance() == 8);
         CHECK(to1.wrapMode() == Tui::ZTextOption::WrapMode::WrapAnywhere);
     }
+
+    SECTION("comparison") {
+        Tui::ZTextOption::Tab tab1;
+        Tui::ZTextOption::Tab tab2;
+        CHECK(tab1 == tab1);
+        CHECK(!(tab1 != tab1));
+
+        CHECK(tab1 == tab2);
+        CHECK(!(tab1 != tab2));
+
+        SECTION("changed positon") {
+            tab1.position = 5;
+            CHECK(tab1 != tab2);
+            CHECK(!(tab1 == tab2));
+        }
+
+    }
 }
