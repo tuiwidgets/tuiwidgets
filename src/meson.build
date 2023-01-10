@@ -246,6 +246,7 @@ test_files = [
   'tests/layout/layoutitem.cpp',
   'tests/layoutinvalidation.cpp',
   'tests/listview/listview.cpp',
+  'tests/loggers.cpp',
   'tests/menu/menu.cpp',
   'tests/painting/painter_terminal.cpp',
   'tests/radiobutton/radiobutton.cpp',
