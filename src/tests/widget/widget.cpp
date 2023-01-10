@@ -258,6 +258,10 @@ TEST_CASE("widget-getter-and-setter") {
     SECTION("setPaletteClass") {
         widget.setPaletteClass({"default"});
         CHECK(widget.paletteClass() == QStringList({"default"}));
+
+        // trigger no changes code path
+        widget.setPaletteClass({"default"});
+        CHECK(widget.paletteClass() == QStringList({"default"}));
     }
     SECTION("addPaletteClass") {
         widget.setPaletteClass({"default"});
@@ -785,6 +789,26 @@ TEST_CASE("widget-stackingLayer") {
         CHECK(child1.stackingLayer() == 1);
         CHECK(child2.stackingLayer() == 1);
         CHECK(child3.stackingLayer() == 1);
+    }
+
+    SECTION("noChangeStackingLayer") {
+        child2.setStackingLayer(1);
+        layerConistencyCheck(&widget);
+        CHECK(widget.stackingLayer() == 0);
+        CHECK(child1.stackingLayer() == 0);
+        CHECK(child2.stackingLayer() == 1);
+        CHECK(child3.stackingLayer() == 0);
+
+        CHECK(widget.children().indexOf(&child1) == 0);
+        CHECK(widget.children().indexOf(&child2) == 2);
+        CHECK(widget.children().indexOf(&child3) == 1);
+
+        // setting to same stacking layer must not raise the widget.
+        child1.setStackingLayer(0);
+
+        CHECK(widget.children().indexOf(&child1) == 0);
+        CHECK(widget.children().indexOf(&child2) == 2);
+        CHECK(widget.children().indexOf(&child3) == 1);
     }
 
     SECTION("StackingLayer-order12") {
