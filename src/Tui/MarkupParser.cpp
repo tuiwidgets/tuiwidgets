@@ -727,7 +727,7 @@ void MarkupParser::nextEvent() {
                     // we ignore the manifest / cache selection parts
                     insertionMode = IM_BeforeHead;
                 } else if (currentTokenIsTagEnd()) {
-                    if(t.tagName == U"head" || t.tagName == U"body" || t.tagName == U"html" || t.tagName == U"br") {
+                    if (t.tagName == U"head" || t.tagName == U"body" || t.tagName == U"html" || t.tagName == U"br") {
                         emitSyntheticElement(U"html");
                         openElements.append(U"html");
                         // we ignore the manifest / cache selection parts
@@ -759,7 +759,7 @@ void MarkupParser::nextEvent() {
                     // ??? Set the head element pointer to the newly created head element.
                     insertionMode = IM_InHead;
                 } else if (currentTokenIsTagEnd()) {
-                    if(t.tagName == U"head" || t.tagName == U"body" || t.tagName == U"html" || t.tagName == U"br") {
+                    if (t.tagName == U"head" || t.tagName == U"body" || t.tagName == U"html" || t.tagName == U"br") {
                         emitSyntheticElement(U"head");
                         openElements.append(U"head");
                         insertionMode = IM_InHead;

@@ -200,34 +200,34 @@ void ZInputBox::keyEvent(ZKeyEvent *event) {
             update();
         }
     } else if (event->key() == Key_Delete && event->modifiers() == 0) {
-        if(p->text.size() > 0) {
+        if (p->text.size() > 0) {
             int cpright = textlayout.nextCursorPosition(p->cursorPosition);
             p->text.remove(p->cursorPosition, cpright - p->cursorPosition);
             p->adjustScrollPosition();
             textChanged(unescapeNewLine(p->text));
             update();
         }
-    } else if(event->key() == Key_Left && event->modifiers() == 0) {
+    } else if (event->key() == Key_Left && event->modifiers() == 0) {
         if (p->cursorPosition > 0) {
             setCursorPosition(textlayout.previousCursorPosition(p->cursorPosition));
             p->adjustScrollPosition();
             update();
         }
-    } else if(event->key() == Key_Right && event->modifiers() == 0) {
+    } else if (event->key() == Key_Right && event->modifiers() == 0) {
         if (p->cursorPosition < p->text.size()) {
             setCursorPosition(textlayout.nextCursorPosition(p->cursorPosition));
             p->adjustScrollPosition();
             update();
         }
-    } else if(event->key() == Key_Home && event->modifiers() == 0) {
+    } else if (event->key() == Key_Home && event->modifiers() == 0) {
         setCursorPosition(0);
         p->adjustScrollPosition();
         update();
-    } else if(event->key() == Key_End && event->modifiers() == 0) {
+    } else if (event->key() == Key_End && event->modifiers() == 0) {
         setCursorPosition(p->text.size());
         p->adjustScrollPosition();
         update();
-    } else if(event->key() == Key_Insert && event->modifiers() == 0) {
+    } else if (event->key() == Key_Insert && event->modifiers() == 0) {
        setOverwriteMode(!p->overwriteMode);
     } else {
         ZWidget::keyEvent(event);

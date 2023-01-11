@@ -311,11 +311,11 @@ TEST_CASE("metrics - splitByColumns") {
                 TestCase{"a\xcc\x88\xcc\xa4\x62\x63", 1, 1, "a\xcc\x88\xcc\xa4"},
                 TestCase{ "\n😇NewLine", 1, 1, "\n" },
                 TestCase{ "\tTab", 1, 1, "\t" },
-                TestCase{ "¹1", 1,1, "¹" },
+                TestCase{ "¹1", 1, 1, "¹" },
                 TestCase{ QString(1, QChar(0)) + "null", 1, 1, QString(1, QChar(0)) },
-                TestCase{ "\x1b\x1b", 1,1, "\033" },
-                TestCase{ "", 0,0, "" },
-                TestCase{ "", 2,0, "" }
+                TestCase{ "\x1b\x1b", 1, 1, "\033" },
+                TestCase{ "", 0, 0, "" },
+                TestCase{ "", 2, 0, "" }
     );
 
     CAPTURE(kind);

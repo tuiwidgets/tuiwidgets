@@ -347,7 +347,7 @@ void ZTerminalPrivate::processPaintingAndUpdateOutput(bool fullRepaint) {
             ZPainter terminalPainter = pub()->painter();
             terminalPainter.clear(ZColor::defaultColor(), ZColor::defaultColor());
             terminalPainter.drawImage(viewportOffset.x(), viewportOffset.y(), *img);
-            if(viewportUI) {
+            if (viewportUI) {
                 terminalPainter.writeWithColors(0, termpaint_surface_height(surface) - 1, QStringLiteral("←↑→↓ ESC"),
                                                 ZColor::defaultColor(), ZColor::defaultColor());
             } else {
@@ -1083,13 +1083,13 @@ bool ZTerminalPrivate::viewportKeyEvent(ZKeyEvent *translated) {
             return false;
         } else if (translated->key() == Key_Escape) {
             viewportUI = false;
-        } else if(translated->key() == Key_Left) {
+        } else if (translated->key() == Key_Left) {
             viewportOffset.setX(viewportOffset.x() + 1);
-        } else if(translated->key() == Key_Right) {
+        } else if (translated->key() == Key_Right) {
             viewportOffset.setX(viewportOffset.x() - 1);
-        } else if(translated->key() == Key_Down) {
+        } else if (translated->key() == Key_Down) {
             viewportOffset.setY(viewportOffset.y() - 1);
-        } else if(translated->key() == Key_Up) {
+        } else if (translated->key() == Key_Up) {
             viewportOffset.setY(viewportOffset.y() + 1);
         }
         adjustViewportOffset();

@@ -50,8 +50,8 @@ namespace Catch {
     };
 
     template<>
-    struct StringMaker<std::tuple<int,int,int>, void> {
-        static std::string convert(std::tuple<int,int,int> const& value) {
+    struct StringMaker<std::tuple<int, int, int>, void> {
+        static std::string convert(std::tuple<int, int, int> const& value) {
             return QStringLiteral("(%0, %1, %2)").arg(
                         QString::number(std::get<0>(value)),
                         QString::number(std::get<1>(value)),

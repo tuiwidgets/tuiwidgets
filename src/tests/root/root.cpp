@@ -161,7 +161,7 @@ TEST_CASE("root-viewport") {
 
     Tui::ZRoot root;
     root.setParent(t.root);
-    root.setGeometry({0, 0,25,25});
+    root.setGeometry({0, 0, 25, 25});
     RootStubWidget sw(&root);
 
     // Add a non ZWidget object to check if that confuses anything

@@ -1166,7 +1166,7 @@ TEST_CASE("ZPainter: translateAndClip write") {
 
         for (int y = -2; y <= 3; y++) {
             for (int x = -2; x <= 3; x++) {
-                if(y == 0) continue;
+                if (y == 0) continue;
                 INFO("x, y: " << x << y);
                 writeWithColorsWrapper(kind, painter, x, y, "0123456789", Tui::TerminalColor::cyan, Tui::TerminalColor::green);
                 checkEmptyPlusSome(f.surface, {});
@@ -1222,7 +1222,7 @@ TEST_CASE("ZPainter: translateAndClip write") {
 
         for (int y = -2; y <= 3; y++) {
             for (int x = -2; x <= 3; x++) {
-                if(y == 0) continue;
+                if (y == 0) continue;
                 INFO("x, y: " << x << y);
                 writeWithAttributesWrapper(kind, painter, x, y, "0123456789", Tui::TerminalColor::cyan, Tui::TerminalColor::green, Tui::ZTextAttribute::Bold);
                 checkEmptyPlusSome(f.surface, {});

@@ -50,6 +50,7 @@ TEST_CASE("image", "") {
         CHECK(jobject.value("width").toInt() == 14);
         CHECK(jobject.value("height").toInt() == 4);
     }
+
     SECTION("fromFile") {
         QTemporaryFile tfile;
         tfile.open();
@@ -93,6 +94,7 @@ TEST_CASE("image", "") {
         CHECK(jobject.value("width").toInt() == 14);
         CHECK(jobject.value("height").toInt() == 4);
     }
+
     SECTION("fromByteArray") {
         image.painter().writeWithAttributes(1, 1, "stuff", {0xFF, 0xFF, 0xFF}, {0x80, 0x80, 0x80}, Tui::ZTextAttribute::Bold);
         QByteArray byteData = image.saveToByteArray();
@@ -118,43 +120,54 @@ TEST_CASE("image", "") {
         CHECK(l == 1);
         CHECK(r == 2);
     }
+
     SECTION("peekForground") {
         CHECK(image.peekForground(0, 0) == Tui::ZColor::defaultColor());
         CHECK(image.peekForground(-1, -1) == Tui::ZColor::defaultColor());
     }
+
     SECTION("peekBackground") {
         CHECK(image.peekBackground(0, 0) == Tui::ZColor::defaultColor());
         CHECK(image.peekBackground(-1, -1) == Tui::ZColor::defaultColor());
     }
+
     SECTION("peekDecoration") {
         CHECK(image.peekDecoration(0, 0) == Tui::ZColor::defaultColor());
         CHECK(image.peekDecoration(-1, -1) == Tui::ZColor::defaultColor());
     }
+
     SECTION("peekSoftwrapMarker") {
         CHECK(image.peekSoftwrapMarker(0, 0) == false);
         CHECK(image.peekSoftwrapMarker(-1, -1) == false);
     }
+
     SECTION("peekAttributes") {
         CHECK(image.peekAttributes(0, 0) == Tui::ZTextAttributes{});
         CHECK(image.peekAttributes(-1, -1) == Tui::ZTextAttributes{});
     }
+
     image.painter().writeWithAttributes(1, 1, "stuff", {0xFF, 0xFF, 0xFF}, {0x80, 0x80, 0x80}, Tui::ZTextAttribute::Bold);
-    image.painter().setSoftwrapMarker(0,1);
+    image.painter().setSoftwrapMarker(0, 1);
+
     SECTION("peekForground-with-stuff") {
         CHECK(image.peekForground(1, 1) == Tui::ZColor{0xFF, 0xFF, 0xFF});
     }
+
     SECTION("peekBackground-with-stuff") {
         CHECK(image.peekBackground(1, 1) == Tui::ZColor {0x80, 0x80, 0x80});
     }
     SECTION("peekDecoration-with-stuff") {
         CHECK(image.peekDecoration(1, 1) == Tui::ZColor::defaultColor());
     }
+
     SECTION("peekSoftwrapMarker-with-stuff") {
         CHECK(image.peekSoftwrapMarker(0, 1) == true);
     }
+
     SECTION("peekAttributes-with-stuff") {
         CHECK(image.peekAttributes(1, 1) == Tui::ZTextAttributes(Tui::ZTextAttribute::Bold));
     }
+
     SECTION("swap") {
         CHECK(image.size() == QSize{14, 4});
         Tui::ZImage image2(t.terminal.get(), 80, 11);

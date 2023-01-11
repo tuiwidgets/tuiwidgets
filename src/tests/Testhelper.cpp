@@ -62,17 +62,17 @@ static void nativeEvent(void *data, termpaint_event *event) {
 void Testhelper::sendKeyToZTerminal(QString key) {
     std::string action = "";
 
-    if(key.toLower() == QStringLiteral("↑")) {
+    if (key.toLower() == QStringLiteral("↑")) {
         action = "\033[A";
-    } else if(key.toLower() == QStringLiteral("↓")) {
+    } else if (key.toLower() == QStringLiteral("↓")) {
         action = "\033[B";
-    } else if(key.toLower() == QStringLiteral("→")) {
+    } else if (key.toLower() == QStringLiteral("→")) {
         action = "\033[C";
-    } else if(key.toLower() == QStringLiteral("←")) {
+    } else if (key.toLower() == QStringLiteral("←")) {
         action = "\033[D";
-    } else if(key.toLower() == QStringLiteral("f6")) {
+    } else if (key.toLower() == QStringLiteral("f6")) {
         action = "\033[17~";
-    } else if(key.toLower() == QStringLiteral("esc")) {
+    } else if (key.toLower() == QStringLiteral("esc")) {
         action = "\033\033[0n";
     }
 

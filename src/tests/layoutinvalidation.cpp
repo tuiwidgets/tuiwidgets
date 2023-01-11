@@ -78,7 +78,7 @@ struct SimpleLayout {
 TEST_CASE("layoutinvalidation", "") {
     Testhelper t("unused", "unused", 80, 50);
     TestBackground *w = new TestBackground(t.root);
-    w->setGeometry({0,0,80,50});
+    w->setGeometry({0, 0, 80, 50});
 
     t.terminal->doLayout(); // reset pending
 

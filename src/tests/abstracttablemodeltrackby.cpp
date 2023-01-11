@@ -116,7 +116,7 @@ TEST_CASE("abstracttablemodeltrackby-add-change-remove", "") {
     CHECK(model.rowCount() == 1);
     CHECK(model.index(0, 0).data().toString() == "row1.1");
 
-    CHECK(recorder.consumeFirst(&QAbstractItemModel::dataChanged, model.index(0,0), model.index(0,0), QVector<int>()));
+    CHECK(recorder.consumeFirst(&QAbstractItemModel::dataChanged, model.index(0, 0), model.index(0, 0), QVector<int>()));
     CHECK(recorder.noMoreSignal());
 
     QVector<Row> rows3 = {
