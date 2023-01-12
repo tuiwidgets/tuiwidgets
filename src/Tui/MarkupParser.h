@@ -17,7 +17,7 @@ TUIWIDGETS_NS_START
 
 namespace Private {
 
-class TUIWIDGETS_EXPORT MarkupTokenizer {
+class MarkupTokenizer {
 public:
     MarkupTokenizer(QString markup);
 
@@ -84,7 +84,7 @@ private:
 };
 
 
-class TUIWIDGETS_EXPORT MarkupParserBase {
+class MarkupParserBase {
 public:
     MarkupParserBase(QString markup);
 
@@ -209,7 +209,7 @@ protected:
     const DocumentEnd _documentEnd;
 };
 
-class TUIWIDGETS_EXPORT MarkupParser : public MarkupParserBase {
+class MarkupParser : public MarkupParserBase {
 public:
     MarkupParser(QString markup);
 

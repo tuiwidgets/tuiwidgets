@@ -82,8 +82,6 @@ tuiwidgets_public_headers = [
   'Tui/ZWindowFacet.h',
   'Tui/ZWindowLayout.h',
   'Tui/tuiwidgets_internal.h',
-  # not public, but needed until users are migrated from staging to toolkit proper
-  'Tui/MarkupParser.h',
 ]
 
 # private headers that are included by public headers (header only facilities)
