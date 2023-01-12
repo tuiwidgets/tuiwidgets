@@ -15,6 +15,7 @@
 
 #include "catchwrapper.h"
 #include "Testhelper.h"
+#include "vcheck_qobject.h"
 
 #include "eventrecorder.h"
 
@@ -45,6 +46,11 @@ TEST_CASE("terminal-base", "") {
         CHECK(terminal.title() == QString());
         CHECK(terminal.iconTitle() == QString());
         CHECK(terminal.autoDetectTimeoutMessage() == "Terminal auto detection is taking unusually long, press space to abort.");
+    }
+
+    SECTION("abi-vcheck") {
+        QObject base;
+        checkQObjectOverrides(&base, &terminal);
     }
 
     SECTION("title") {

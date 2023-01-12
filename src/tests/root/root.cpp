@@ -12,10 +12,16 @@
 #include "../catchwrapper.h"
 #include "../Testhelper.h"
 #include "../signalrecorder.h"
+#include "../vcheck_zwidget.h"
 
 TEST_CASE("root-base") {
     Tui::ZRoot root;
     CHECK(root.fillChar() == 127);
+
+    SECTION("abi-vcheck") {
+        Tui::ZWidget base;
+        checkZWidgetOverrides(&base, &root);
+    }
 
     SECTION("fillChar") {
         char space = ' ';

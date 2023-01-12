@@ -4,6 +4,7 @@
 
 #include "../catchwrapper.h"
 #include "../Testhelper.h"
+#include "../vcheck_zwidget.h"
 
 #include <Tui/ZPalette.h>
 
@@ -56,6 +57,11 @@ TEST_CASE("label-base", "") {
     }
 
     std::unique_ptr<Tui::ZLabel> l = std::make_unique<Tui::ZLabel>(w.get());
+
+    SECTION("abi-vcheck") {
+        Tui::ZWidget base;
+        checkZWidgetOverrides(&base, l.get());
+    }
 
     SECTION("get-set-text") {
         l->setText("m");

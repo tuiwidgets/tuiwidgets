@@ -8,6 +8,7 @@
 #include "Tui/ZTest.h"
 
 #include "Testhelper.h"
+#include "vcheck_qobject.h"
 
 #include "eventrecorder.h"
 
@@ -75,6 +76,11 @@ TEST_CASE("commandnotifier-base", "") {
     std::unique_ptr<Tui::ZWidget> w2 = parent ? std::make_unique<Tui::ZWidget>() : nullptr;
 
     Tui::ZCommandNotifier notifier("dummy", w2.get(), Tui::WidgetShortcut);
+
+    SECTION("abi-vcheck") {
+        QObject base;
+        checkQObjectOverrides(&base, &notifier);
+    }
 
     SECTION("enable") {
         CHECK(notifier.isEnabled() == true);
@@ -410,6 +416,11 @@ TEST_CASE("command signals") {
     Testhelper t("unsued", "unused", 16, 5);
 
     t.root->ensureCommandManager();
+
+    SECTION("abi-vcheck") {
+        QObject base;
+        checkQObjectOverrides(&base, t.root->commandManager());
+    }
 
     Tui::ZWidget w1{t.root};
     Tui::ZWidget w2{t.root};

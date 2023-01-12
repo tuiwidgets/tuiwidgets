@@ -14,6 +14,7 @@
 
 #include "../Testhelper.h"
 #include "../signalrecorder.h"
+#include "../vcheck_zwindow.h"
 
 namespace {
 class EventCatcher : public Tui::ZWidget {
@@ -51,6 +52,11 @@ TEST_CASE("dialog-base", "") {
     }
 
     std::unique_ptr<Tui::ZDialog> dlg = std::make_unique<Tui::ZDialog>(w.get());
+
+    SECTION("abi-vcheck") {
+        Tui::ZWindow base;
+        checkZWindowOverrides(&base, dlg.get());
+    }
 
     SECTION("defaults") {
         CHECK(dlg->focusMode() == Tui::FocusContainerMode::Cycle);

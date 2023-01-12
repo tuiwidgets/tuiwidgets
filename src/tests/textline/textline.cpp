@@ -4,6 +4,7 @@
 
 #include "../catchwrapper.h"
 #include "../Testhelper.h"
+#include "../vcheck_zwidget.h"
 
 #include <Tui/ZPalette.h>
 
@@ -57,6 +58,11 @@ TEST_CASE("textline-base", "") {
     }
 
     std::unique_ptr<Tui::ZTextLine> t = std::make_unique<Tui::ZTextLine>(w.get());
+
+    SECTION("abi-vcheck") {
+        Tui::ZWidget base;
+        checkZWidgetOverrides(&base, t.get());
+    }
 
     SECTION("get-set-text") {
         t->setText("m");

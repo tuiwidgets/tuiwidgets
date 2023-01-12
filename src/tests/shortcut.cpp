@@ -7,6 +7,7 @@
 #include "Tui/ZTest.h"
 
 #include "Testhelper.h"
+#include "vcheck_qobject.h"
 
 #include "eventrecorder.h"
 
@@ -39,6 +40,11 @@ public:
 TEST_CASE("shortcut-base", "") {
     Tui::ZWidget w;
     Tui::ZShortcut shortcut(Tui::ZKeySequence::forMnemonic("x"), &w, Tui::WidgetShortcut);
+
+    SECTION("abi-vcheck") {
+        QObject base;
+        checkQObjectOverrides(&base, &shortcut);
+    }
 
     SECTION("enable") {
         CHECK(shortcut.isEnabled() == true);

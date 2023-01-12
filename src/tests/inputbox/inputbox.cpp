@@ -6,6 +6,7 @@
 
 #include "../Testhelper.h"
 #include "../signalrecorder.h"
+#include "../vcheck_zwidget.h"
 
 TEST_CASE("inputbox-base", "") {
     bool parent = GENERATE(false, true);
@@ -49,6 +50,12 @@ TEST_CASE("inputbox-base", "") {
         CHECK(inputbox->text() == "default\ntext");
         CHECK(inputbox->cursorPosition() == 12);
         checkDefaultState(inputbox.get());
+    }
+
+    SECTION("abi-vcheck") {
+        std::unique_ptr<Tui::ZInputBox> inputbox = std::make_unique<Tui::ZInputBox>(w.get());
+        Tui::ZWidget base;
+        checkZWidgetOverrides(&base, inputbox.get());
     }
 
     SECTION("get-set-echomode") {

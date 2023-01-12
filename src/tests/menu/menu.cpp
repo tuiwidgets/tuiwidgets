@@ -13,6 +13,7 @@
 #include <Tui/ZWindowFacet.h>
 
 #include "../Testhelper.h"
+#include "../vcheck_zwidget.h"
 
 TEST_CASE("menuitem", "") {
 
@@ -375,6 +376,11 @@ TEST_CASE("menubar", "") {
     }
 
     Tui::ZMenubar *m = new Tui::ZMenubar(w);
+
+    SECTION("abi-vcheck") {
+        Tui::ZWidget base;
+        checkZWidgetOverrides(&base, m);
+    }
 
     SECTION("defaults") {
         CHECK(m->sizePolicyV() == Tui::SizePolicy::Fixed);
@@ -1031,6 +1037,11 @@ TEST_CASE("popupmenu", "") {
     SECTION("defaults") {
         FAIL_CHECK_VEC(checkWidgetsDefaultsExcept(menu, {DefaultException::StackingLayer}));
         CHECK(menu->stackingLayer() == 20000);
+    }
+
+    SECTION("abi-vcheck") {
+        Tui::ZWidget base;
+        checkZWidgetOverrides(&base, menu);
     }
 
     SECTION("items") {

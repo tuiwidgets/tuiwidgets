@@ -11,6 +11,23 @@
 #include "../catchwrapper.h"
 #include "../Testhelper.h"
 #include "../signalrecorder.h"
+#include "../vcheck_qobject.h"
+#include "../vcheck_zlayoutitem.h"
+
+namespace {
+class BaseWrapper : public Tui::ZLayoutItem {
+public:
+    using Tui::ZLayoutItem::ZLayoutItem;
+
+public:
+    void setGeometry(QRect) override { }
+    QSize sizeHint() const override { return {}; }
+    Tui::SizePolicy sizePolicyH() const override { return {}; }
+    Tui::SizePolicy sizePolicyV() const override { return {}; }
+    bool isVisible() const override { return {}; }
+};
+
+}
 
 class Layout : public Tui::ZLayout {
 public:
@@ -59,6 +76,13 @@ TEST_CASE("layout-base") {
     CHECK(layout.layout() == &layout);
 
     layout.relayout();
+
+    SECTION("abi-vcheck") {
+        QObject baseQObject;
+        BaseWrapper baseZLayoutItem;
+        checkQObjectOverrides(&baseQObject, &layout);
+        checkZLayoutItemOverrides(&baseZLayoutItem, &layout);
+    }
 }
 
 TEST_CASE("layout-outlives-widget") {

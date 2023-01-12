@@ -21,6 +21,7 @@
 #include <Tui/ZWindowFacet.h>
 
 #include "../Testhelper.h"
+#include "../vcheck_zwidget.h"
 
 namespace {
 
@@ -110,6 +111,11 @@ TEST_CASE("window-base", "") {
         Tui::ZWindow w2("Breakpoints");
         CHECK(w2.windowTitle() == "Breakpoints");
         checkDefaultState(&w);
+    }
+
+    SECTION("abi-vcheck") {
+        Tui::ZWidget base;
+        checkZWidgetOverrides(&base, &w);
     }
 
     SECTION("get-set-title") {

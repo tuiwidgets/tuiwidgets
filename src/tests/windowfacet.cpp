@@ -7,6 +7,7 @@
 #include <Tui/ZWidget.h>
 
 #include "catchwrapper.h"
+#include "vcheck_qobject.h"
 
 TEST_CASE("ZWindowFacet") {
     class TestClass : public Tui::ZWindowFacet {
@@ -15,6 +16,11 @@ TEST_CASE("ZWindowFacet") {
     };
 
     TestClass f;
+
+    SECTION("abi-vcheck") {
+        QObject base;
+        checkQObjectOverrides(&base, &f);
+    }
 
     SECTION("defaults-and-fixed") {
         CHECK(f.isExtendViewport() == false);

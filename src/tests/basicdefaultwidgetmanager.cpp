@@ -5,6 +5,7 @@
 #include "catchwrapper.h"
 
 #include "Testhelper.h"
+#include "vcheck_zdefaultwindowmanager.h"
 
 namespace {
 class StubEnterAcceptWidget : public Tui::ZWidget {
@@ -22,12 +23,25 @@ public:
 
     bool accepting = false;
 };
+
+class BaseWrapper : public Tui::ZDefaultWidgetManager {
+public:
+    void setDefaultWidget(Tui::ZWidget*) override {};
+    Tui::ZWidget *defaultWidget() const override { return nullptr; }
+    bool isDefaultWidgetActive() const override { return false; }
+};
+
 }
 
 TEST_CASE("dialogdefaultwidgetmananger-no-terminal", "") {
     Tui::ZWidget w;
 
     Tui::ZBasicDefaultWidgetManager manager{&w};
+
+    SECTION("abi-vcheck") {
+        BaseWrapper base;
+        checkZDefaultWidgetManagerOverrides(&base, &manager);
+    }
 
     SECTION("empty") {
         CHECK(manager.defaultWidget() == nullptr);

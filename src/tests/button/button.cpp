@@ -4,6 +4,7 @@
 
 #include "../catchwrapper.h"
 #include "../Testhelper.h"
+#include "../vcheck_zwidget.h"
 
 #include <Tui/ZPalette.h>
 #include <Tui/ZDefaultWidgetManager.h>
@@ -113,6 +114,11 @@ TEST_CASE("button-base") {
     }
 
     std::unique_ptr<Tui::ZButton> button = std::make_unique<Tui::ZButton>(w.get());
+
+    SECTION("abi-vcheck") {
+        Tui::ZWidget base;
+        checkZWidgetOverrides(&base, button.get());
+    }
 
     QObject::connect(button.get(), &Tui::ZButton::clicked, [] {
         FAIL("unexpected ZButton::clicked signal emission");

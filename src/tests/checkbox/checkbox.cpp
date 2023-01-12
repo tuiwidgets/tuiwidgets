@@ -4,6 +4,7 @@
 
 #include "../catchwrapper.h"
 #include "../Testhelper.h"
+#include "../vcheck_zwidget.h"
 
 #include <Tui/ZPalette.h>
 
@@ -60,6 +61,11 @@ TEST_CASE("checkbox-base", "") {
     }
 
     std::unique_ptr<Tui::ZCheckBox> cb = std::make_unique<Tui::ZCheckBox>(w.get());
+
+    SECTION("abi-vcheck") {
+        Tui::ZWidget base;
+        checkZWidgetOverrides(&base, cb.get());
+    }
 
     SECTION("toggle") {
         cb->toggle();

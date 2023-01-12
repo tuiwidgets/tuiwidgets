@@ -9,7 +9,7 @@
 #include "Tui/ZTest.h"
 
 #include "Testhelper.h"
-
+#include "vcheck_zlayout.h"
 
 #include <Tui/ZVBoxLayout.h>
 
@@ -28,6 +28,12 @@ TEST_CASE("windowlayout-base", "") {
         CHECK(layout.rightBorderBottomAdjust() == 0);
         CHECK(layout.bottomBorderLeftAdjust() == 0);
         CHECK(layout.bottomBorderRightAdjust() == 0);
+    }
+
+    SECTION("abi-vcheck") {
+        ZLayoutBaseWrapper base;
+        Tui::ZWindowLayout layout;
+        checkZLayoutOverrides(&base, &layout);
     }
 
     SECTION("topBorderLeftAdjust") {

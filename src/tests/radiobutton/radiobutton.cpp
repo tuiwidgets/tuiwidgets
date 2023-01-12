@@ -4,6 +4,7 @@
 
 #include "../catchwrapper.h"
 #include "../Testhelper.h"
+#include "../vcheck_zwidget.h"
 
 #include <Tui/ZPalette.h>
 
@@ -59,6 +60,11 @@ TEST_CASE("radiobutton-base", "") {
     }
 
     std::unique_ptr<Tui::ZRadioButton> rb = std::make_unique<Tui::ZRadioButton>(w.get());
+
+    SECTION("abi-vcheck") {
+        Tui::ZWidget base;
+        checkZWidgetOverrides(&base, rb.get());
+    }
 
     SECTION("toggle") {
         rb->toggle();

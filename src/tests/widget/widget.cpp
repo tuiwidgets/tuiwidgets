@@ -13,6 +13,8 @@
 #include "../Testhelper.h"
 #include "../eventrecorder.h"
 
+#include "../vcheck_qobject.h"
+
 namespace {
     class TestWidget : public Tui::ZWidget {
     public:
@@ -149,6 +151,11 @@ TEST_CASE("widget-base") {
 
         CHECK(w->focus() == false);
         CHECK(w->isInFocusPath() == false);
+    }
+
+    SECTION("abi-vcheck") {
+        QObject base;
+        checkQObjectOverrides(&base, w.get());
     }
 
     SECTION("no terminal") {

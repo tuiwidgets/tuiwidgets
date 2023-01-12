@@ -9,6 +9,7 @@
 #include "../catchwrapper.h"
 #include "../Testhelper.h"
 #include "../signalrecorder.h"
+#include "../vcheck_zwidget.h"
 
 namespace {
     class SimpleModel : public QAbstractListModel {
@@ -48,6 +49,11 @@ TEST_CASE("listview-base", "") {
     }
 
     std::unique_ptr<Tui::ZListView> lv = std::make_unique<Tui::ZListView>(w.get());
+
+    SECTION("abi-vcheck") {
+        Tui::ZWidget base;
+        checkZWidgetOverrides(&base, lv.get());
+    }
 
     SECTION("setItems") {
         lv->setItems({"a", "b", "x"});

@@ -5,12 +5,26 @@
 #include "../catchwrapper.h"
 
 #include "../Testhelper.h"
+#include "../vcheck_zwindowfacet.h"
+
+namespace {
+class BaseWrapper : public Tui::ZWindowFacet {
+public:
+    using Tui::ZWindowFacet::ZWindowFacet;
+};
+
+}
 
 TEST_CASE("basicwindowfacet-base") {
     Tui::ZBasicWindowFacet facet;
 
     CHECK(facet.isManuallyPlaced() == true);
     CHECK(facet.isExtendViewport() == false);
+
+    SECTION("abi-vcheck") {
+        BaseWrapper base;
+        checkZWindowFacetOverrides(&base, &facet);
+    }
 
     SECTION("extendViewport") {
         facet.setExtendViewport(true);

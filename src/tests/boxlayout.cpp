@@ -11,6 +11,7 @@
 #include "Tui/ZTest.h"
 
 #include "Testhelper.h"
+#include "vcheck_zlayout.h"
 
 namespace {
 
@@ -105,6 +106,11 @@ TEST_CASE("boxlayout-default", "") {
         // empty layouts are invisible
         CHECK(layout.isVisible() == false);
         CHECK(layout.isSpacer() == false);
+
+        SECTION("abi-vcheck") {
+            ZLayoutBaseWrapper base;
+            checkZLayoutOverrides(&base, &layout);
+        }
     };
 
     SECTION("vbox") {
