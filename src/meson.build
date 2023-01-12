@@ -18,7 +18,6 @@ tuiwidgets_moc_headers = [
   'Tui/ZLayout.h',
   'Tui/ZListView.h',
   'Tui/ZMenu.h',
-  'Tui/ZMenuItem.h',
   'Tui/ZMenu_p.h',
   'Tui/ZMenubar.h',
   'Tui/ZRadioButton.h',
