@@ -38,6 +38,7 @@ public:
 
 public:
     // public virtuals from base class override everything for later ABI compatibility
+    ZWidget *widget() override;
     bool event(QEvent *event) override;
     bool eventFilter(QObject *watched, QEvent *event) override;
     bool isSpacer() const override;

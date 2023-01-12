@@ -99,6 +99,10 @@ bool ZLayout::isVisible() const {
     return true;
 }
 
+ZWidget *ZLayout::widget(){
+    return ZLayoutItem::widget();
+}
+
 bool ZLayout::event(QEvent *event) {
     return QObject::event(event);
 }

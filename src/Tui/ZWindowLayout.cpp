@@ -237,6 +237,14 @@ void ZWindowLayout::setBottomBorderRightAdjust(int bottomBorderRightAdjust) {
     relayout();
 }
 
+ZWidget *ZWindowLayout::widget() {
+    return ZLayout::widget();
+}
+
+ZLayout *ZWindowLayout::layout() {
+    return ZLayout::layout();
+}
+
 void ZWindowLayout::childEvent(QChildEvent *event) {
     auto *const p = tuiwidgets_impl();
 

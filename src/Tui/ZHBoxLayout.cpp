@@ -173,6 +173,14 @@ bool ZHBoxLayout::isVisible() const {
     return false;
 }
 
+ZWidget *ZHBoxLayout::widget() {
+    return ZLayout::widget();
+}
+
+ZLayout *ZHBoxLayout::layout() {
+    return ZLayout::layout();
+}
+
 void ZHBoxLayout::childEvent(QChildEvent *event) {
     auto *const p = tuiwidgets_impl();
 
