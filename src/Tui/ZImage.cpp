@@ -51,7 +51,7 @@ ZImage::ZImage(ZImage &&other) : tuiwidgets_pimpl_ptr(std::move(other.tuiwidgets
     // undefined anyway.
 }
 
-ZImage &ZImage::operator=(const ZImage & other) {
+ZImage &ZImage::operator=(const ZImage &other) {
     tuiwidgets_pimpl_ptr = other.tuiwidgets_pimpl_ptr;
     if (tuiwidgets_pimpl_ptr.constData()->hasPainters()) {
         tuiwidgets_pimpl_ptr.detach();
@@ -59,7 +59,7 @@ ZImage &ZImage::operator=(const ZImage & other) {
     return *this;
 }
 
-ZImage &ZImage::operator=(ZImage && other) {
+ZImage &ZImage::operator=(ZImage &&other) {
     // ignore hasPainters() because using outstanding painter from the moved from object is
     // undefined anyway.
     tuiwidgets_pimpl_ptr = other.tuiwidgets_pimpl_ptr;

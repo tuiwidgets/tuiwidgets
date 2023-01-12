@@ -72,7 +72,7 @@ class TUIWIDGETS_EXPORT ZShortcut : public QObject {
 public:
     //explicit ZShortcut(ZWidget *parent = 0);
     explicit ZShortcut(const ZKeySequence &key, ZWidget *parent, ShortcutContext context = WindowShortcut);
-    virtual ~ZShortcut() override;
+    ~ZShortcut() override;
 
 public:
     bool isEnabled() const;
