@@ -113,6 +113,7 @@ class DestructorReference : public T {
 
 class SpecialDestructorUsageLayout : public Tui::ZLayout {
     void setGeometry(QRect) override {}
+    void removeWidgetRecursively(Tui::ZWidget*) override {}
 };
 
 class SpecialDestructorUsageLayoutItem : public Tui::ZLayoutItem {
