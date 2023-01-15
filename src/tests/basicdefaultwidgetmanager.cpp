@@ -176,4 +176,14 @@ TEST_CASE("dialogdefaultwidgetmananger", "") {
         }
     }
 
+    SECTION("delete default widget") {
+        Tui::ZWidget *dflt = new Tui::ZWidget(w);
+        manager.setDefaultWidget(dflt);
+        w->setFocus();
+        CHECK(manager.isDefaultWidgetActive() == true);
+
+        delete dflt;
+
+        CHECK(manager.isDefaultWidgetActive() == false);
+    }
 }

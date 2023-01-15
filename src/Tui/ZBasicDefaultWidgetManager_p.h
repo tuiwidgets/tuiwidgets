@@ -5,6 +5,8 @@
 
 #include <Tui/ZBasicDefaultWidgetManager.h>
 
+#include <QPointer>
+
 #include <Tui/tuiwidgets_internal.h>
 
 TUIWIDGETS_NS_START
@@ -15,7 +17,7 @@ public:
     virtual ~ZBasicDefaultWidgetManagerPrivate();
 
 public:
-    ZWidget *_defaultWidget = nullptr;
+    QPointer<ZWidget> _defaultWidget;
     ZWidget *_dialog = nullptr;
 };
 
