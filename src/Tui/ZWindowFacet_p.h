@@ -5,6 +5,8 @@
 
 #include <Tui/ZWindowFacet.h>
 
+#include <QPointer>
+
 #include <Tui/tuiwidgets_internal.h>
 
 TUIWIDGETS_NS_START
@@ -15,7 +17,7 @@ public:
 
 public:
     bool manuallyPlaced = true;
-    ZWindowContainer *container = nullptr;
+    QPointer<ZWindowContainer> container;
 };
 
 TUIWIDGETS_NS_END
