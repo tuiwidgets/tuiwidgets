@@ -168,6 +168,20 @@ TEST_CASE("image", "") {
         CHECK(image.peekAttributes(1, 1) == Tui::ZTextAttributes(Tui::ZTextAttribute::Bold));
     }
 
+    SECTION("comparison") {
+        Tui::ZImage image2(t.terminal.get(), 14, 4);
+        image2.painter().writeWithAttributes(1, 1, "stuff", {0xFF, 0xFF, 0xFF}, {0x80, 0x80, 0x80}, Tui::ZTextAttribute::Bold);
+        image2.painter().setSoftwrapMarker(0, 1);
+
+        CHECK(image == image2);
+        CHECK(!(image != image2));
+
+        image2.painter().writeWithAttributes(1, 1, "STUFF", {0xFF, 0xFF, 0xFF}, {0x80, 0x80, 0x80}, Tui::ZTextAttribute::Bold);
+
+        CHECK(image != image2);
+        CHECK(!(image == image2));
+    }
+
     SECTION("swap") {
         CHECK(image.size() == QSize{14, 4});
         Tui::ZImage image2(t.terminal.get(), 80, 11);
@@ -190,6 +204,24 @@ TEST_CASE("image", "") {
 
         CHECK(image.peekForground(1, 1) == Tui::ZColor{0xFF, 0xFF, 0xFF});
         CHECK(image2.peekForground(1, 1) == Tui::ZColor{0xFF, 0xAE, 0xFF});
+    }
+
+    SECTION("move") {
+        CHECK(image.peekForground(1, 1) == Tui::ZColor{0xFF, 0xFF, 0xFF});
+
+        Tui::ZImage backup = image;
+        Tui::ZImage image2 = std::move(image);
+
+        CHECK(backup.peekForground(1, 1) == Tui::ZColor{0xFF, 0xFF, 0xFF});
+        CHECK(image2.peekForground(1, 1) == Tui::ZColor{0xFF, 0xFF, 0xFF});
+
+        image2.painter().setForeground(1, 1, Tui::ZColor{0xFF, 0xAE, 0xFF});
+
+        CHECK(backup.peekForground(1, 1) == Tui::ZColor{0xFF, 0xFF, 0xFF});
+        CHECK(image2.peekForground(1, 1) == Tui::ZColor{0xFF, 0xAE, 0xFF});
+
+        image = backup;
+        CHECK(image.peekForground(1, 1) == Tui::ZColor{0xFF, 0xFF, 0xFF});
     }
 
     SECTION("copy-ctor-with-painter") {
