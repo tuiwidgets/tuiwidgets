@@ -97,6 +97,7 @@ tuiwidgets_misc_public_headers = [
 tuiwidgets_sources = [
   'Tui/Misc/AbstractTableModelTrackBy.h',
   'Tui/Misc/SurrogateEscape.cpp',
+  'Tui/Utils.cpp',
   'Tui/ZBasicDefaultWidgetManager.cpp',
   'Tui/ZBasicWindowFacet.cpp',
   'Tui/ListNode.cpp',

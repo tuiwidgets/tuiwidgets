@@ -3,6 +3,39 @@
 #ifndef TUIWIDGETS_UTILS_P_INCLUDED
 #define TUIWIDGETS_UTILS_P_INCLUDED
 
+#include <QList>
+#include <QPointer>
+
+#include <Tui/tuiwidgets_internal.h>
+
+TUIWIDGETS_NS_START
+
+inline namespace IPrivate {
+
+    template <typename T>
+    QList<QPointer<T>> toQPointerList(QList<T*> input) {
+        QList<QPointer<T>> result;
+        result.reserve(input.size());
+        for (T* ptr: input) {
+            result.append(ptr);
+        }
+        return result;
+    }
+
+    template <typename T>
+    QList<QPointer<T>> toQPointerListWithCast(QList<QObject*> input) {
+        QList<QPointer<T>> result;
+        result.reserve(input.size());
+        for (QObject* ptr: input) {
+            result.append(qobject_cast<T*>(ptr));
+        }
+        return result;
+    }
+
+}
+
+TUIWIDGETS_NS_END
+
 namespace {
     template <class... Ts> struct overloads;
 
