@@ -227,9 +227,13 @@ namespace {
 
 void ZTerminal::doLayout() {
     auto *const p = tuiwidgets_impl();
-    auto copy = p->layoutPendingWidgets;
+    QList<QPointer<ZWidget>> copy = p->layoutPendingWidgets;
     p->layoutPendingWidgets.clear();
     LayoutGenerationUpdaterScope generationUpdater(p->layoutGeneration);
+
+    auto last = std::remove(copy.begin(), copy.end(), nullptr);
+    copy.erase(last, copy.end());
+
     for (auto &w: copy) {
         int depth = 0;
         ZWidget *wTmp = w;
