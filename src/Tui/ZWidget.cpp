@@ -15,6 +15,8 @@
 #include <Tui/ZPalette.h>
 #include <Tui/ZTerminal_p.h>
 
+#include <Tui/Utils_p.h>
+
 TUIWIDGETS_NS_START
 
 
@@ -69,7 +71,8 @@ ZWidget::~ZWidget() {
 
     // Delete children here manually, instead of leaving it to QObject,
     // to avoid children observing already destructed parent.
-    for (QObject *child : children()) {
+    for (QObject *child : toQPointerList(children())) {
+        if (!child) continue;
         if (p->layout == child) {
             p->layout = nullptr;
         }
@@ -260,8 +263,7 @@ void ZWidgetPrivate::updateEffectivelyEnabledRecursively() {
         return;
     }
     effectivelyEnabled = newEffectiveValue;
-    for (QObject *childQObj : pub()->children()) {
-        ZWidget *child = qobject_cast<ZWidget*>(childQObj);
+    for (ZWidget *child : toQPointerListWithCast<ZWidget>(pub()->children())) {
         if (!child) {
             continue;
         }
@@ -337,8 +339,7 @@ void ZWidgetPrivate::updateEffectivelyVisibleRecursively() {
         QEvent hideEvent(ZEventType::hide());
         QCoreApplication::instance()->sendEvent(pub(), &hideEvent);
     }
-    for (QObject *childQObj : pub()->children()) {
-        ZWidget *child = qobject_cast<ZWidget*>(childQObj);
+    for (ZWidget *child : toQPointerListWithCast<ZWidget>(pub()->children())) {
         if (!child) {
             continue;
         }
@@ -1305,13 +1306,11 @@ bool ZWidget::eventFilter(QObject *watched, QEvent *event) {
 void ZWidgetPrivate::updateRequestEvent(ZPaintEvent *event)
 {
     auto *painter = event->painter();
-    // TODO think about mitigations about childs beeing deleted while in paint event
     {
         ZPaintEvent nestedEvent(painter);
         QCoreApplication::instance()->sendEvent(pub(), &nestedEvent);
     }
-    for (QObject *childQObj : pub()->children()) {
-        ZWidget *child = qobject_cast<ZWidget*>(childQObj);
+    for (ZWidget *child : toQPointerListWithCast<ZWidget>(pub()->children())) {
         if (!child) {
             continue;
         }
