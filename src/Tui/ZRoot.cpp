@@ -11,6 +11,8 @@
 #include <Tui/ZTerminal.h>
 #include <Tui/ZWindowFacet.h>
 
+#include <Tui/Utils_p.h>
+
 TUIWIDGETS_NS_START
 
 ZRoot::ZRoot() : ZWidget(nullptr, std::make_unique<ZRootPrivate>(this)) {
@@ -112,15 +114,13 @@ bool ZRoot::event(QEvent *event) {
 void ZRoot::resizeEvent(ZResizeEvent *event) {
     const int height = geometry().height();
     const int width = geometry().width();
-    for (QObject *o: children()) {
-        auto childWidget = qobject_cast<ZWidget*>(o);
-        if (childWidget) {
-            ZWindowFacet *windowFacet = static_cast<ZWindowFacet*>(childWidget->facet(ZWindowFacet::staticMetaObject));
-            if (windowFacet) {
-                if (!windowFacet->isManuallyPlaced() && !windowFacet->container()) {
-                    windowFacet->autoPlace({width, height}, childWidget);
-                    continue;
-                }
+    for (ZWidget *childWidget: toQPointerListWithCast<ZWidget>(children())) {
+        if (!childWidget) continue;
+        ZWindowFacet *windowFacet = static_cast<ZWindowFacet*>(childWidget->facet(ZWindowFacet::staticMetaObject));
+        if (windowFacet) {
+            if (!windowFacet->isManuallyPlaced() && !windowFacet->container()) {
+                windowFacet->autoPlace({width, height}, childWidget);
+                continue;
             }
         }
     }
