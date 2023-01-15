@@ -6,6 +6,8 @@
 #include <Tui/ZShortcut.h>
 #include <Tui/ZTerminal.h>
 
+#include <Tui/Utils_p.h>
+
 TUIWIDGETS_NS_START
 
 ZRadioButton::ZRadioButton(ZWidget *parent) : ZWidget(parent, std::make_unique<ZRadioButtonPrivate>(this)) {
@@ -99,7 +101,8 @@ void ZRadioButton::toggle() {
     auto *const p = tuiwidgets_impl();
     if (!p->checked) {
         if (parent()) {
-            for (ZRadioButton *rb : parent()->findChildren<ZRadioButton*>(QString(), Qt::FindDirectChildrenOnly)) {
+            for (ZRadioButton *rb : toQPointerList(parent()->findChildren<ZRadioButton*>(QString(), Qt::FindDirectChildrenOnly))) {
+                if (!rb) continue;
                 if (rb != this) {
                     rb->tuiwidgets_impl()->checked = false;
                     rb->toggled(false);

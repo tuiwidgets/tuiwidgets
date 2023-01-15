@@ -408,6 +408,23 @@ TEST_CASE("radiobutton-emit", "") {
         rb1->setMarkup("OK");
         FAIL_CHECK_VEC(t.checkCharEventBubbles("o", Tui::AltModifier));
     }
+
+    SECTION("remove-from-signal") {
+        Tui::ZRadioButton *rb2 = new Tui::ZRadioButton(Tui::withMarkup, "<m>r</m>b2", w);
+        Tui::ZRadioButton *rb3 = new Tui::ZRadioButton(Tui::withMarkup, "<m>r</m>b3", w);
+        rb2->setGeometry({1, 2, 13, 1});
+        rb3->setGeometry({1, 3, 13, 1});
+        rb1->setChecked(true);
+        triggerState = ToggleExpectedFalse;
+        bool x = false;
+        QObject::connect(rb1, &Tui::ZRadioButton::toggled, [&] {
+            delete rb3;
+            x = true;
+        });
+        rb2->toggle();
+        CHECK(x);
+        CHECK(triggerState == ToggleDone);
+    }
 }
 
 TEST_CASE("radiobutton-color", "") {
