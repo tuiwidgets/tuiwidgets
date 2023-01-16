@@ -46,6 +46,7 @@ TEST_CASE("listview-base", "") {
         FAIL_CHECK_VEC(checkWidgetsDefaultsExcept(lv.get(), DefaultException::SizePolicyV
                                                           | DefaultException::SizePolicyH
                                                           | DefaultException::FocusPolicy));
+        CHECK(lv->sizeHint() == QSize{10, 3});
     }
 
     std::unique_ptr<Tui::ZListView> lv = std::make_unique<Tui::ZListView>(w.get());

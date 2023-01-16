@@ -100,6 +100,7 @@ List views by default accept focus and have a expanding vertical and horizontal 
 The size request of a list view is currently empty(i.e. to use in layouts use of
 :cpp:func:`~void Tui::ZWidget::setMinimumSize(int w, int h)` is required).
 
+List views have a size hint of :cpp:expr:`(10, 3)` as placeholder.
 
 Palette
 -------

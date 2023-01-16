@@ -36,6 +36,8 @@ public:
     QModelIndex currentIndex() const;
     QItemSelectionModel *selectionModel() const;
 
+    QSize sizeHint() const override;
+
     void scrollTo(const QModelIndex& index, ScrollHint hint=EnsureVisible);
 
 Q_SIGNALS:
@@ -50,7 +52,6 @@ public:
     // public virtuals from base class override everything for later ABI compatibility
     bool event(QEvent *event) override;
     bool eventFilter(QObject *watched, QEvent *event) override;
-    QSize sizeHint() const override;
     QSize minimumSizeHint() const override;
     QRect layoutArea() const override;
     QObject *facet(const QMetaObject &metaObject) const override;

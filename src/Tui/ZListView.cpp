@@ -88,6 +88,10 @@ QItemSelectionModel *ZListView::selectionModel() const {
     return p->selectionModel;
 }
 
+QSize ZListView::sizeHint() const {
+    return {10, 3};
+}
+
 void ZListView::scrollTo(const QModelIndex &index, ZListView::ScrollHint hint) {
     auto *const p = tuiwidgets_impl();
     if (!geometry().height()) return;
@@ -390,10 +394,6 @@ bool ZListView::event(QEvent *event) {
 
 bool ZListView::eventFilter(QObject *watched, QEvent *event) {
     return ZWidget::eventFilter(watched, event);
-}
-
-QSize ZListView::sizeHint() const {
-    return ZWidget::sizeHint();
 }
 
 QSize ZListView::minimumSizeHint() const {
