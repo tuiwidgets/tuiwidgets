@@ -95,14 +95,14 @@ tuiwidgets_misc_public_headers = [
 
 #ide:editable-filelist
 tuiwidgets_sources = [
+  'Tui/Layout_p.cpp',
+  'Tui/ListNode.cpp',
+  'Tui/MarkupParser.cpp',
   'Tui/Misc/AbstractTableModelTrackBy.h',
   'Tui/Misc/SurrogateEscape.cpp',
   'Tui/Utils.cpp',
   'Tui/ZBasicDefaultWidgetManager.cpp',
   'Tui/ZBasicWindowFacet.cpp',
-  'Tui/ListNode.cpp',
-  'Tui/MarkupParser.cpp',
-  'Tui/Layout_p.cpp',
   'Tui/ZButton.cpp',
   'Tui/ZCheckBox.cpp',
   'Tui/ZColor.cpp',
@@ -249,8 +249,8 @@ test_files = [
   'tests/painting/painter_terminal.cpp',
   'tests/radiobutton/radiobutton.cpp',
   'tests/root/root.cpp',
-  'tests/styledtextline/styledtextline.cpp',
   'tests/shortcut.cpp',
+  'tests/styledtextline/styledtextline.cpp',
   'tests/surrogateescape.cpp',
   'tests/symbol/symbol.cpp',
   'tests/terminal.cpp',
