@@ -2,7 +2,7 @@
 
 project('tuiwidgets', ['cpp'], default_options : ['buildtype=debugoptimized', 'cpp_std=c++17'])
 
-posixsignalmanager_dep = subproject('posixsignalmanager').get_variable('posixsignalmanager_dep')
+posixsignalmanager_dep = dependency('PosixSignalManager', fallback:['posixsignalmanager', 'posixsignalmanager_dep'])
 
 if meson.get_compiler('cpp').get_id() == 'gcc'
   add_project_arguments('-fvisibility=hidden', '-fvisibility-inlines-hidden', language: 'cpp')
