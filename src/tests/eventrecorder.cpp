@@ -168,11 +168,8 @@ RecorderEvent EventRecorder::watchShowToParentEvent(QObject *o, std::string name
 
 RecorderEvent EventRecorder::watchTerminalChangeEvent(QObject *o, std::string name) {
     return watchEvent(o, name, [this](std::shared_ptr<EventRecorder::RecorderEvent> eventRef, const QEvent *ev) {
-        if (ev->type() == Tui::ZEventType::otherChange()) {
-            auto &event = dynamic_cast<const Tui::ZOtherChangeEvent&>(*ev);
-            if (!event.unchanged().contains(TUISYM_LITERAL("terminal"))) {
-                recordEvent(eventRef);
-            }
+        if (ev->type() == Tui::ZEventType::terminalChange()) {
+            recordEvent(eventRef);
         }
     });
 }

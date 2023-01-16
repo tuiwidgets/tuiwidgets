@@ -48,7 +48,7 @@ public:
 
     ZShortcutManager *ensureShortcutManager();
 
-    void sendOtherChangeEvent(QSet<ZSymbol> unchanged);
+    void sendTerminalChangeEvent();
 
     void adjustViewportOffset();
     bool viewportKeyEvent(ZKeyEvent *translated);

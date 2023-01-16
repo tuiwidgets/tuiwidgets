@@ -649,7 +649,7 @@ void ZTerminal::setMainWidget(ZWidget *w) {
 
 void ZTerminalPrivate::attachMainWidgetStage2() {
     ZWidgetPrivate::get(mainWidget)->setManagingTerminal(pub());
-    sendOtherChangeEvent(ZOtherChangeEvent::all().subtract({TUISYM_LITERAL("terminal")}));
+    sendTerminalChangeEvent();
 
     // TODO respect minimal widget size and add system managed scrolling if terminal is too small
     mainWidget->setGeometry({0, 0, termpaint_surface_width(surface), termpaint_surface_height(surface)});
@@ -679,11 +679,11 @@ void ZTerminalPrivate::attachMainWidgetStage2() {
     pub()->update();
 }
 
-void ZTerminalPrivate::sendOtherChangeEvent(QSet<ZSymbol> unchanged) {
+void ZTerminalPrivate::sendTerminalChangeEvent() {
 
     if (!mainWidgetFullyAttached()) return;
 
-    ZOtherChangeEvent change(unchanged);
+    QEvent change(ZEventType::terminalChange());
 
     auto f = [&](QObject *w) {
         QCoreApplication::sendEvent(w, &change);

@@ -45,6 +45,7 @@ namespace ZEventType {
     QEvent::Type show();
     QEvent::Type hide();
     QEvent::Type close();
+    QEvent::Type terminalChange();
 
     QEvent::Type updateRequest();
     QEvent::Type terminalNativeEvent();

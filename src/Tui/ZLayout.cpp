@@ -32,7 +32,7 @@ ZLayout::~ZLayout() {
 
 void ZLayout::widgetEvent(QEvent *event) {
     if (event->type() == ZEventType::resize()
-          || ZOtherChangeEvent::match(event, TUISYM_LITERAL("terminal"))) {
+          || event->type() == ZEventType::terminalChange()) {
         ZWidget *w = parentWidget();
         if (w) {
             ZTerminal *term = w->terminal();

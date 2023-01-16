@@ -190,11 +190,9 @@ void ZCommandNotifier::probeParents() {
 
 bool ZCommandNotifier::event(QEvent *event) {
     auto *const p = tuiwidgets_impl();
-    if (event->type() == ZEventType::otherChange()) {
-        if (!static_cast<ZOtherChangeEvent*>(event)->unchanged().contains(TUISYM_LITERAL("terminal"))) {
-            probeParents();
-            p->connectToTerminal(this);
-        }
+    if (event->type() == ZEventType::terminalChange()) {
+        probeParents();
+        p->connectToTerminal(this);
     }
     return QObject::event(event);
 }

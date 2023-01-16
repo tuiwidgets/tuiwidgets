@@ -47,10 +47,8 @@ bool ZMenubar::event(QEvent *event) {
             break;
     }
 
-    if (event->type() == ZEventType::otherChange()) {
-        if (!static_cast<ZOtherChangeEvent*>(event)->unchanged().contains(TUISYM_LITERAL("terminal"))) {
-            updateCacheAndRegrabKeys();
-        }
+    if (event->type() == ZEventType::terminalChange()) {
+        updateCacheAndRegrabKeys();
     }
 
     return ZWidget::event(event);

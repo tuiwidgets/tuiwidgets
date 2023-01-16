@@ -63,6 +63,10 @@ TUIWIDGETS_EXPORT QEvent::Type ZEventType::close() {
     CALL_ONCE_REGISTEREVENTTYPE;
 }
 
+TUIWIDGETS_EXPORT QEvent::Type ZEventType::terminalChange() {
+    CALL_ONCE_REGISTEREVENTTYPE;
+}
+
 TUIWIDGETS_EXPORT QEvent::Type ZEventType::updateRequest() {
     CALL_ONCE_REGISTEREVENTTYPE;
 }
@@ -311,7 +315,7 @@ ZOtherChangeEvent::~ZOtherChangeEvent() {
 }
 
 QSet<ZSymbol> ZOtherChangeEvent::all() {
-    static QSet<ZSymbol> a = { TUISYM_LITERAL("terminal") };
+    static QSet<ZSymbol> a = { };
     return a;
 }
 

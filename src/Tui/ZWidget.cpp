@@ -134,7 +134,7 @@ void ZWidget::setParent(ZWidget *newParent) {
     QCoreApplication::sendEvent(this, &e2);
     auto *const newTerminal = terminal();
     if (prevTerminal != newTerminal) {
-        ZOtherChangeEvent change(ZOtherChangeEvent::all().subtract({TUISYM_LITERAL("terminal")}));
+        QEvent change(ZEventType::terminalChange());
 
         QPointer<ZWidget> newFocus;
         uint64_t highestFocus = 0;

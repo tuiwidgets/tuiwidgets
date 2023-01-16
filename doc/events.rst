@@ -140,6 +140,13 @@ Tui Widgets defines getter for the type values for its events. The Tui Widgets e
 
    See also :ref:`QEvent::HideToParent <qevent_hidetoparent>`.
 
+.. cpp:function:: Tui::ZEventType::terminalChange()
+
+   Informs the widget that its terminal attachment has changed (:cpp:class:`QEvent`).
+
+   The new terminal can be queried using :cpp:func:`Tui::ZWidget::terminal()`, which on terminal detach will return
+   :cpp:expr:`nullptr` and otherwise the newly attached terminal.
+
 .. cpp:function:: Tui::ZEventType::close()
 
    Used as query to decide if a window should be closed (:cpp:class:`Tui::ZCloseEvent`).

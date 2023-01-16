@@ -449,30 +449,9 @@ TEST_CASE("root-terminalChanged") {
     Testhelper t("unsued", "unused", 15, 5);
     CHECK(t.root->terminalChangedTrigger == true);
 
-    SECTION("manual-event-empty") {
+    SECTION("manual-event") {
         t.root->terminalChangedTrigger = false;
-        auto e = Tui::ZOtherChangeEvent(QSet<Tui::ZSymbol>());
-        t.app->sendEvent(t.root, &e);
-        CHECK(t.root->terminalChangedTrigger == false);
-    }
-
-    SECTION("manual-event-terminal") {
-        t.root->terminalChangedTrigger = false;
-        auto e = Tui::ZOtherChangeEvent({TUISYM_LITERAL("terminal")});
-        t.app->sendEvent(t.root, &e);
-        CHECK(t.root->terminalChangedTrigger == false);
-    }
-
-    SECTION("manual-event-window") {
-        t.root->terminalChangedTrigger = false;
-        auto e = Tui::ZOtherChangeEvent({TUISYM_LITERAL("window")});
-        t.app->sendEvent(t.root, &e);
-        CHECK(t.root->terminalChangedTrigger == false);
-    }
-
-    SECTION("manual-event-all") {
-        t.root->terminalChangedTrigger = false;
-        auto e = Tui::ZOtherChangeEvent(Tui::ZOtherChangeEvent::all());
+        auto e = QEvent(Tui::ZEventType::terminalChange());
         t.app->sendEvent(t.root, &e);
         CHECK(t.root->terminalChangedTrigger == false);
     }

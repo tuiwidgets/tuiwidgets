@@ -260,13 +260,11 @@ bool ZInputBox::event(QEvent *event) {
         return ZWidget::event(event);
     }
 
-    if (event->type() == ZEventType::otherChange()) {
-        if (!static_cast<ZOtherChangeEvent*>(event)->unchanged().contains(TUISYM_LITERAL("terminal"))) {
-            // make sure cursor position is on cluster boundary
-            setCursorPosition(cursorPosition());
+    if (event->type() == ZEventType::terminalChange()) {
+        // make sure cursor position is on cluster boundary
+        setCursorPosition(cursorPosition());
 
-            p->adjustScrollPosition();
-        }
+        p->adjustScrollPosition();
     }
 
     return ZWidget::event(event);
