@@ -180,6 +180,8 @@ tuiwidgets = library('tuiwidgets', tuiwidgets_sources, tuiwidgets_generated,
   cpp_args: tui_cpp_args,
   link_args : main_ld_vscript,
   link_depends : main_vscript,
+  soversion: '0a',
+  darwin_versions: ['1', '1'],
   install: true
 )
 
