@@ -737,6 +737,8 @@ Members
    The position of the widget's geometry is ignored and the widget is always placed in the top-left corner of the
    terminal.
 
+   The new main widget must not have a parent widget, otherwise the call will do nothing.
+
 .. cpp:function:: ZPainter painter()
 
    Returns a painter that allows modifying the the ``ZTerminal`` side terminal buffer directly.
