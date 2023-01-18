@@ -1,0 +1,1659 @@
+TUIWIDGETS_0.2 {
+    global: extern "C++" {
+        ########### Misc::SurrogateEscape
+
+        "Tui::v0::Misc::SurrogateEscape::decode(QByteArray const&)";
+        "Tui::v0::Misc::SurrogateEscape::decode(char const*, int)";
+        "Tui::v0::Misc::SurrogateEscape::encode(QChar const*, int)";
+        "Tui::v0::Misc::SurrogateEscape::encode(QString const&)";
+
+
+        ########### ZBasicDefaultWidgetManager
+
+        "typeinfo for Tui::v0::ZBasicDefaultWidgetManager";
+        "typeinfo name for Tui::v0::ZBasicDefaultWidgetManager";
+        "vtable for Tui::v0::ZBasicDefaultWidgetManager";
+        "Tui::v0::ZBasicDefaultWidgetManager::staticMetaObject";
+        "Tui::v0::ZBasicDefaultWidgetManager::ZBasicDefaultWidgetManager(Tui::v0::ZWidget*)";
+        "Tui::v0::ZBasicDefaultWidgetManager::childEvent(QChildEvent*)";
+        "Tui::v0::ZBasicDefaultWidgetManager::connectNotify(QMetaMethod const&)";
+        "Tui::v0::ZBasicDefaultWidgetManager::customEvent(QEvent*)";
+        "Tui::v0::ZBasicDefaultWidgetManager::defaultWidget() const";
+        "Tui::v0::ZBasicDefaultWidgetManager::disconnectNotify(QMetaMethod const&)";
+        "Tui::v0::ZBasicDefaultWidgetManager::event(QEvent*)";
+        "Tui::v0::ZBasicDefaultWidgetManager::eventFilter(QObject*, QEvent*)";
+        "Tui::v0::ZBasicDefaultWidgetManager::isDefaultWidgetActive() const";
+        "Tui::v0::ZBasicDefaultWidgetManager::metaObject() const";
+        "Tui::v0::ZBasicDefaultWidgetManager::qt_metacall(QMetaObject::Call, int, void**)";
+        "Tui::v0::ZBasicDefaultWidgetManager::qt_metacast(char const*)";
+        "Tui::v0::ZBasicDefaultWidgetManager::setDefaultWidget(Tui::v0::ZWidget*)";
+        "Tui::v0::ZBasicDefaultWidgetManager::timerEvent(QTimerEvent*)";
+        "Tui::v0::ZBasicDefaultWidgetManager::~ZBasicDefaultWidgetManager()";
+
+
+        ########### ZBasicWindowFacet
+
+        "typeinfo for Tui::v0::ZBasicWindowFacet";
+        "typeinfo name for Tui::v0::ZBasicWindowFacet";
+        "vtable for Tui::v0::ZBasicWindowFacet";
+        "Tui::v0::ZBasicWindowFacet::staticMetaObject";
+        "Tui::v0::ZBasicWindowFacet::ZBasicWindowFacet()";
+        "Tui::v0::ZBasicWindowFacet::autoPlace(QSize const&, Tui::v0::ZWidget*)";
+        "Tui::v0::ZBasicWindowFacet::childEvent(QChildEvent*)";
+        "Tui::v0::ZBasicWindowFacet::connectNotify(QMetaMethod const&)";
+        "Tui::v0::ZBasicWindowFacet::container() const";
+        "Tui::v0::ZBasicWindowFacet::customEvent(QEvent*)";
+        "Tui::v0::ZBasicWindowFacet::disconnectNotify(QMetaMethod const&)";
+        "Tui::v0::ZBasicWindowFacet::event(QEvent*)";
+        "Tui::v0::ZBasicWindowFacet::eventFilter(QObject*, QEvent*)";
+        "Tui::v0::ZBasicWindowFacet::isExtendViewport() const";
+        "Tui::v0::ZBasicWindowFacet::isManuallyPlaced() const";
+        "Tui::v0::ZBasicWindowFacet::metaObject() const";
+        "Tui::v0::ZBasicWindowFacet::qt_metacall(QMetaObject::Call, int, void**)";
+        "Tui::v0::ZBasicWindowFacet::qt_metacast(char const*)";
+        "Tui::v0::ZBasicWindowFacet::setContainer(Tui::v0::ZWindowContainer*)";
+        "Tui::v0::ZBasicWindowFacet::setDefaultPlacement(QFlags<Qt::AlignmentFlag>, QPoint)";
+        "Tui::v0::ZBasicWindowFacet::setExtendViewport(bool)";
+        "Tui::v0::ZBasicWindowFacet::setManuallyPlaced(bool)";
+        "Tui::v0::ZBasicWindowFacet::timerEvent(QTimerEvent*)";
+        "Tui::v0::ZBasicWindowFacet::~ZBasicWindowFacet()";
+
+
+        ########### ZButton
+
+        "typeinfo for Tui::v0::ZButton";
+        "typeinfo name for Tui::v0::ZButton";
+        "vtable for Tui::v0::ZButton";
+        "Tui::v0::ZButton::staticMetaObject";
+        "Tui::v0::ZButton::ZButton(QString const&, Tui::v0::ZWidget*)";
+        "Tui::v0::ZButton::ZButton(Tui::v0::WithMarkupTag, QString const&, Tui::v0::ZWidget*)";
+        "Tui::v0::ZButton::ZButton(Tui::v0::ZWidget*)";
+        "Tui::v0::ZButton::childEvent(QChildEvent*)";
+        "Tui::v0::ZButton::click()";
+        "Tui::v0::ZButton::clicked()";
+        "Tui::v0::ZButton::connectNotify(QMetaMethod const&)";
+        "Tui::v0::ZButton::customEvent(QEvent*)";
+        "Tui::v0::ZButton::disconnectNotify(QMetaMethod const&)";
+        "Tui::v0::ZButton::event(QEvent*)";
+        "Tui::v0::ZButton::eventFilter(QObject*, QEvent*)";
+        "Tui::v0::ZButton::facet(QMetaObject const&) const";
+        "Tui::v0::ZButton::focusInEvent(Tui::v0::ZFocusEvent*)";
+        "Tui::v0::ZButton::focusOutEvent(Tui::v0::ZFocusEvent*)";
+        "Tui::v0::ZButton::isDefault() const";
+        "Tui::v0::ZButton::keyEvent(Tui::v0::ZKeyEvent*)";
+        "Tui::v0::ZButton::layoutArea() const";
+        "Tui::v0::ZButton::markup() const";
+        "Tui::v0::ZButton::metaObject() const";
+        "Tui::v0::ZButton::minimumSizeHint() const";
+        "Tui::v0::ZButton::moveEvent(Tui::v0::ZMoveEvent*)";
+        "Tui::v0::ZButton::paintEvent(Tui::v0::ZPaintEvent*)";
+        "Tui::v0::ZButton::pasteEvent(Tui::v0::ZPasteEvent*)";
+        "Tui::v0::ZButton::qt_metacall(QMetaObject::Call, int, void**)";
+        "Tui::v0::ZButton::qt_metacast(char const*)";
+        "Tui::v0::ZButton::resizeEvent(Tui::v0::ZResizeEvent*)";
+        "Tui::v0::ZButton::resolveSizeHintChain()";
+        "Tui::v0::ZButton::setDefault(bool)";
+        "Tui::v0::ZButton::setMarkup(QString const&)";
+        "Tui::v0::ZButton::setShortcut(Tui::v0::ZKeySequence const&)";
+        "Tui::v0::ZButton::setText(QString const&)";
+        "Tui::v0::ZButton::sizeHint() const";
+        "Tui::v0::ZButton::text() const";
+        "Tui::v0::ZButton::timerEvent(QTimerEvent*)";
+        "Tui::v0::ZButton::~ZButton()";
+
+
+        ########### ZCheckBox
+
+        "typeinfo for Tui::v0::ZCheckBox";
+        "typeinfo name for Tui::v0::ZCheckBox";
+        "vtable for Tui::v0::ZCheckBox";
+        "Tui::v0::ZCheckBox::staticMetaObject";
+        "Tui::v0::ZCheckBox::ZCheckBox(QString const&, Tui::v0::ZWidget*)";
+        "Tui::v0::ZCheckBox::ZCheckBox(Tui::v0::WithMarkupTag, QString const&, Tui::v0::ZWidget*)";
+        "Tui::v0::ZCheckBox::ZCheckBox(Tui::v0::ZWidget*)";
+        "Tui::v0::ZCheckBox::checkState() const";
+        "Tui::v0::ZCheckBox::childEvent(QChildEvent*)";
+        "Tui::v0::ZCheckBox::click()";
+        "Tui::v0::ZCheckBox::connectNotify(QMetaMethod const&)";
+        "Tui::v0::ZCheckBox::customEvent(QEvent*)";
+        "Tui::v0::ZCheckBox::disconnectNotify(QMetaMethod const&)";
+        "Tui::v0::ZCheckBox::event(QEvent*)";
+        "Tui::v0::ZCheckBox::eventFilter(QObject*, QEvent*)";
+        "Tui::v0::ZCheckBox::facet(QMetaObject const&) const";
+        "Tui::v0::ZCheckBox::focusInEvent(Tui::v0::ZFocusEvent*)";
+        "Tui::v0::ZCheckBox::focusOutEvent(Tui::v0::ZFocusEvent*)";
+        "Tui::v0::ZCheckBox::isTristate() const";
+        "Tui::v0::ZCheckBox::keyEvent(Tui::v0::ZKeyEvent*)";
+        "Tui::v0::ZCheckBox::layoutArea() const";
+        "Tui::v0::ZCheckBox::markup() const";
+        "Tui::v0::ZCheckBox::metaObject() const";
+        "Tui::v0::ZCheckBox::minimumSizeHint() const";
+        "Tui::v0::ZCheckBox::moveEvent(Tui::v0::ZMoveEvent*)";
+        "Tui::v0::ZCheckBox::paintEvent(Tui::v0::ZPaintEvent*)";
+        "Tui::v0::ZCheckBox::pasteEvent(Tui::v0::ZPasteEvent*)";
+        "Tui::v0::ZCheckBox::qt_metacall(QMetaObject::Call, int, void**)";
+        "Tui::v0::ZCheckBox::qt_metacast(char const*)";
+        "Tui::v0::ZCheckBox::resizeEvent(Tui::v0::ZResizeEvent*)";
+        "Tui::v0::ZCheckBox::resolveSizeHintChain()";
+        "Tui::v0::ZCheckBox::setCheckState(Qt::CheckState)";
+        "Tui::v0::ZCheckBox::setMarkup(QString const&)";
+        "Tui::v0::ZCheckBox::setShortcut(Tui::v0::ZKeySequence const&)";
+        "Tui::v0::ZCheckBox::setText(QString const&)";
+        "Tui::v0::ZCheckBox::setTristate(bool)";
+        "Tui::v0::ZCheckBox::sizeHint() const";
+        "Tui::v0::ZCheckBox::stateChanged(Qt::CheckState)";
+        "Tui::v0::ZCheckBox::text() const";
+        "Tui::v0::ZCheckBox::timerEvent(QTimerEvent*)";
+        "Tui::v0::ZCheckBox::toggle()";
+        "Tui::v0::ZCheckBox::~ZCheckBox()";
+
+
+        ########### ZCloseEvent
+
+        "typeinfo for Tui::v0::ZCloseEvent";
+        "typeinfo name for Tui::v0::ZCloseEvent";
+        "vtable for Tui::v0::ZCloseEvent";
+        "Tui::v0::ZCloseEvent::ZCloseEvent(QStringList)";
+        "Tui::v0::ZCloseEvent::skipChecks() const";
+        "Tui::v0::ZCloseEvent::~ZCloseEvent()";
+
+
+        ########### ZColor
+
+        "Tui::v0::ZColor::ZColor()";
+        "Tui::v0::ZColor::ZColor(Tui::v0::Private::GlobalColorRGB)";
+        "Tui::v0::ZColor::ZColor(Tui::v0::TerminalColor)";
+        "Tui::v0::ZColor::ZColor(Tui::v0::ZColor const&)";
+        "Tui::v0::ZColor::ZColor(int, int, int)";
+        "Tui::v0::ZColor::blue() const";
+        "Tui::v0::ZColor::blueOrGuess() const";
+        "Tui::v0::ZColor::colorType() const";
+        "Tui::v0::ZColor::defaultColor()";
+        "Tui::v0::ZColor::fromHsv(Tui::v0::ZColorHSV const&)";
+        "Tui::v0::ZColor::fromHsv(double, double, double)";
+        "Tui::v0::ZColor::fromHsvStrict(Tui::v0::ZColorHSV const&)";
+        "Tui::v0::ZColor::fromHsvStrict(double, double, double)";
+        "Tui::v0::ZColor::fromRgb(int, int, int)";
+        "Tui::v0::ZColor::fromTerminalColor(Tui::v0::TerminalColor)";
+        "Tui::v0::ZColor::fromTerminalColor(int)";
+        "Tui::v0::ZColor::fromTerminalColorIndexed(int)";
+        "Tui::v0::ZColor::green() const";
+        "Tui::v0::ZColor::greenOrGuess() const";
+        "Tui::v0::ZColor::nativeValue() const";
+        "Tui::v0::ZColor::operator!=(Tui::v0::ZColor const&) const";
+        "Tui::v0::ZColor::operator=(Tui::v0::ZColor const&)";
+        "Tui::v0::ZColor::operator==(Tui::v0::ZColor const&) const";
+        "Tui::v0::ZColor::red() const";
+        "Tui::v0::ZColor::redOrGuess() const";
+        "Tui::v0::ZColor::setBlue(int)";
+        "Tui::v0::ZColor::setGreen(int)";
+        "Tui::v0::ZColor::setRed(int)";
+        "Tui::v0::ZColor::terminalColor() const";
+        "Tui::v0::ZColor::terminalColorIndexed() const";
+        "Tui::v0::ZColor::toHsv() const";
+        "Tui::v0::ZColor::~ZColor()";
+
+
+        ########### ZColorHSV
+
+        "Tui::v0::ZColorHSV::ZColorHSV()";
+        "Tui::v0::ZColorHSV::ZColorHSV(Tui::v0::ZColorHSV const&)";
+        "Tui::v0::ZColorHSV::ZColorHSV(double, double, double)";
+        "Tui::v0::ZColorHSV::hue() const";
+        "Tui::v0::ZColorHSV::operator!=(Tui::v0::ZColorHSV const&) const";
+        "Tui::v0::ZColorHSV::operator=(Tui::v0::ZColorHSV const&)";
+        "Tui::v0::ZColorHSV::operator==(Tui::v0::ZColorHSV const&) const";
+        "Tui::v0::ZColorHSV::saturation() const";
+        "Tui::v0::ZColorHSV::setHue(double)";
+        "Tui::v0::ZColorHSV::setSaturation(double)";
+        "Tui::v0::ZColorHSV::setValue(double)";
+        "Tui::v0::ZColorHSV::value() const";
+        "Tui::v0::ZColorHSV::~ZColorHSV()";
+
+
+        ########### ZCommandManager
+
+        "typeinfo for Tui::v0::ZCommandManager";
+        "typeinfo name for Tui::v0::ZCommandManager";
+        "vtable for Tui::v0::ZCommandManager";
+        "Tui::v0::ZCommandManager::staticMetaObject";
+        "Tui::v0::ZCommandManager::ZCommandManager(QObject*)";
+        "Tui::v0::ZCommandManager::activateCommand(Tui::v0::ZSymbol)";
+        "Tui::v0::ZCommandManager::childEvent(QChildEvent*)";
+        "Tui::v0::ZCommandManager::commandStateChanged(Tui::v0::ZSymbol)";
+        "Tui::v0::ZCommandManager::connectNotify(QMetaMethod const&)";
+        "Tui::v0::ZCommandManager::customEvent(QEvent*)";
+        "Tui::v0::ZCommandManager::deregisterCommandNotifier(Tui::v0::ZCommandNotifier*)";
+        "Tui::v0::ZCommandManager::disconnectNotify(QMetaMethod const&)";
+        "Tui::v0::ZCommandManager::event(QEvent*)";
+        "Tui::v0::ZCommandManager::eventFilter(QObject*, QEvent*)";
+        "Tui::v0::ZCommandManager::isCommandEnabled(Tui::v0::ZSymbol) const";
+        "Tui::v0::ZCommandManager::metaObject() const";
+        "Tui::v0::ZCommandManager::qt_metacall(QMetaObject::Call, int, void**)";
+        "Tui::v0::ZCommandManager::qt_metacast(char const*)";
+        "Tui::v0::ZCommandManager::registerCommandNotifier(Tui::v0::ZCommandNotifier*)";
+        "Tui::v0::ZCommandManager::timerEvent(QTimerEvent*)";
+        "Tui::v0::ZCommandManager::~ZCommandManager()";
+
+
+        ########### ZCommandNotifier
+
+        "typeinfo for Tui::v0::ZCommandNotifier";
+        "typeinfo name for Tui::v0::ZCommandNotifier";
+        "vtable for Tui::v0::ZCommandNotifier";
+        "Tui::v0::ZCommandNotifier::staticMetaObject";
+        "Tui::v0::ZCommandNotifier::ZCommandNotifier(Tui::v0::ZImplicitSymbol, QObject*)";
+        "Tui::v0::ZCommandNotifier::ZCommandNotifier(Tui::v0::ZImplicitSymbol, QObject*, Qt::ShortcutContext)";
+        "Tui::v0::ZCommandNotifier::activated()";
+        "Tui::v0::ZCommandNotifier::childEvent(QChildEvent*)";
+        "Tui::v0::ZCommandNotifier::command() const";
+        "Tui::v0::ZCommandNotifier::connectNotify(QMetaMethod const&)";
+        "Tui::v0::ZCommandNotifier::context() const";
+        "Tui::v0::ZCommandNotifier::customEvent(QEvent*)";
+        "Tui::v0::ZCommandNotifier::disconnectNotify(QMetaMethod const&)";
+        "Tui::v0::ZCommandNotifier::enabledChanged(bool)";
+        "Tui::v0::ZCommandNotifier::event(QEvent*)";
+        "Tui::v0::ZCommandNotifier::eventFilter(QObject*, QEvent*)";
+        "Tui::v0::ZCommandNotifier::isContextSatisfied() const";
+        "Tui::v0::ZCommandNotifier::isEnabled() const";
+        "Tui::v0::ZCommandNotifier::metaObject() const";
+        "Tui::v0::ZCommandNotifier::qt_metacall(QMetaObject::Call, int, void**)";
+        "Tui::v0::ZCommandNotifier::qt_metacast(char const*)";
+        "Tui::v0::ZCommandNotifier::setEnabled(bool)";
+        "Tui::v0::ZCommandNotifier::timerEvent(QTimerEvent*)";
+        "Tui::v0::ZCommandNotifier::~ZCommandNotifier()";
+
+
+        ########### ZDefaultWidgetManager
+
+        "typeinfo for Tui::v0::ZDefaultWidgetManager";
+        "typeinfo name for Tui::v0::ZDefaultWidgetManager";
+        "vtable for Tui::v0::ZDefaultWidgetManager";
+        "Tui::v0::ZDefaultWidgetManager::staticMetaObject";
+        "Tui::v0::ZDefaultWidgetManager::ZDefaultWidgetManager()";
+        "Tui::v0::ZDefaultWidgetManager::childEvent(QChildEvent*)";
+        "Tui::v0::ZDefaultWidgetManager::connectNotify(QMetaMethod const&)";
+        "Tui::v0::ZDefaultWidgetManager::customEvent(QEvent*)";
+        "Tui::v0::ZDefaultWidgetManager::disconnectNotify(QMetaMethod const&)";
+        "Tui::v0::ZDefaultWidgetManager::event(QEvent*)";
+        "Tui::v0::ZDefaultWidgetManager::eventFilter(QObject*, QEvent*)";
+        "Tui::v0::ZDefaultWidgetManager::metaObject() const";
+        "Tui::v0::ZDefaultWidgetManager::qt_metacall(QMetaObject::Call, int, void**)";
+        "Tui::v0::ZDefaultWidgetManager::qt_metacast(char const*)";
+        "Tui::v0::ZDefaultWidgetManager::timerEvent(QTimerEvent*)";
+        "Tui::v0::ZDefaultWidgetManager::~ZDefaultWidgetManager()";
+
+
+        ########### ZDialog
+
+        "typeinfo for Tui::v0::ZDialog";
+        "typeinfo name for Tui::v0::ZDialog";
+        "vtable for Tui::v0::ZDialog";
+        "Tui::v0::ZDialog::staticMetaObject";
+        "Tui::v0::ZDialog::ZDialog(Tui::v0::ZWidget*)";
+        "Tui::v0::ZDialog::childEvent(QChildEvent*)";
+        "Tui::v0::ZDialog::closeEvent(Tui::v0::ZCloseEvent*)";
+        "Tui::v0::ZDialog::connectNotify(QMetaMethod const&)";
+        "Tui::v0::ZDialog::customEvent(QEvent*)";
+        "Tui::v0::ZDialog::disconnectNotify(QMetaMethod const&)";
+        "Tui::v0::ZDialog::event(QEvent*)";
+        "Tui::v0::ZDialog::eventFilter(QObject*, QEvent*)";
+        "Tui::v0::ZDialog::facet(QMetaObject const&) const";
+        "Tui::v0::ZDialog::focusInEvent(Tui::v0::ZFocusEvent*)";
+        "Tui::v0::ZDialog::focusOutEvent(Tui::v0::ZFocusEvent*)";
+        "Tui::v0::ZDialog::keyEvent(Tui::v0::ZKeyEvent*)";
+        "Tui::v0::ZDialog::layoutArea() const";
+        "Tui::v0::ZDialog::metaObject() const";
+        "Tui::v0::ZDialog::minimumSizeHint() const";
+        "Tui::v0::ZDialog::moveEvent(Tui::v0::ZMoveEvent*)";
+        "Tui::v0::ZDialog::paintEvent(Tui::v0::ZPaintEvent*)";
+        "Tui::v0::ZDialog::pasteEvent(Tui::v0::ZPasteEvent*)";
+        "Tui::v0::ZDialog::qt_metacall(QMetaObject::Call, int, void**)";
+        "Tui::v0::ZDialog::qt_metacast(char const*)";
+        "Tui::v0::ZDialog::reject()";
+        "Tui::v0::ZDialog::rejected()";
+        "Tui::v0::ZDialog::resizeEvent(Tui::v0::ZResizeEvent*)";
+        "Tui::v0::ZDialog::resolveSizeHintChain()";
+        "Tui::v0::ZDialog::showHandler()";
+        "Tui::v0::ZDialog::sizeHint() const";
+        "Tui::v0::ZDialog::systemMenu()";
+        "Tui::v0::ZDialog::timerEvent(QTimerEvent*)";
+        "Tui::v0::ZDialog::~ZDialog()";
+
+
+        ########### ZEvent
+
+        "typeinfo for Tui::v0::ZEvent";
+        "typeinfo name for Tui::v0::ZEvent";
+        "vtable for Tui::v0::ZEvent";
+        "Tui::v0::ZEvent::~ZEvent()";
+
+
+        ########### ZEventType
+
+        "Tui::v0::ZEventType::close()";
+        "Tui::v0::ZEventType::focusIn()";
+        "Tui::v0::ZEventType::focusOut()";
+        "Tui::v0::ZEventType::hide()";
+        "Tui::v0::ZEventType::key()";
+        "Tui::v0::ZEventType::move()";
+        "Tui::v0::ZEventType::otherChange()";
+        "Tui::v0::ZEventType::paint()";
+        "Tui::v0::ZEventType::paste()";
+        "Tui::v0::ZEventType::pendingRawSequence()";
+        "Tui::v0::ZEventType::queryAcceptsEnter()";
+        "Tui::v0::ZEventType::rawSequence()";
+        "Tui::v0::ZEventType::resize()";
+        "Tui::v0::ZEventType::show()";
+        "Tui::v0::ZEventType::terminalChange()";
+        "Tui::v0::ZEventType::terminalNativeEvent()";
+        "Tui::v0::ZEventType::updateRequest()";
+
+
+        ########### ZFocusEvent
+
+        "typeinfo for Tui::v0::ZFocusEvent";
+        "typeinfo name for Tui::v0::ZFocusEvent";
+        "vtable for Tui::v0::ZFocusEvent";
+        "Tui::v0::ZFocusEvent::ZFocusEvent(Tui::v0::ZFocusEvent::FocusIn, Qt::FocusReason)";
+        "Tui::v0::ZFocusEvent::ZFocusEvent(Tui::v0::ZFocusEvent::FocusOut, Qt::FocusReason)";
+        "Tui::v0::ZFocusEvent::reason() const";
+        "Tui::v0::ZFocusEvent::~ZFocusEvent()";
+
+
+        ########### ZFormatRange
+
+        "Tui::v0::ZFormatRange::ZFormatRange()";
+        "Tui::v0::ZFormatRange::ZFormatRange(Tui::v0::ZFormatRange const&)";
+        "Tui::v0::ZFormatRange::ZFormatRange(Tui::v0::ZFormatRange&&)";
+        "Tui::v0::ZFormatRange::ZFormatRange(int, int, Tui::v0::ZTextStyle, Tui::v0::ZTextStyle, int)";
+        "Tui::v0::ZFormatRange::format() const";
+        "Tui::v0::ZFormatRange::formattingChar() const";
+        "Tui::v0::ZFormatRange::length() const";
+        "Tui::v0::ZFormatRange::operator=(Tui::v0::ZFormatRange const&)";
+        "Tui::v0::ZFormatRange::operator=(Tui::v0::ZFormatRange&&)";
+        "Tui::v0::ZFormatRange::setFormat(Tui::v0::ZTextStyle const&)";
+        "Tui::v0::ZFormatRange::setFormattingChar(Tui::v0::ZTextStyle const&)";
+        "Tui::v0::ZFormatRange::setLength(int)";
+        "Tui::v0::ZFormatRange::setStart(int)";
+        "Tui::v0::ZFormatRange::setUserData(int)";
+        "Tui::v0::ZFormatRange::start() const";
+        "Tui::v0::ZFormatRange::userData() const";
+        "Tui::v0::ZFormatRange::~ZFormatRange()";
+
+
+        ########### ZHBoxLayout
+
+        "typeinfo for Tui::v0::ZHBoxLayout";
+        "typeinfo name for Tui::v0::ZHBoxLayout";
+        "vtable for Tui::v0::ZHBoxLayout";
+        "Tui::v0::ZHBoxLayout::staticMetaObject";
+        "Tui::v0::ZHBoxLayout::ZHBoxLayout()";
+        "Tui::v0::ZHBoxLayout::add(Tui::v0::ZLayout*)";
+        "Tui::v0::ZHBoxLayout::addSpacing(int)";
+        "Tui::v0::ZHBoxLayout::addStretch()";
+        "Tui::v0::ZHBoxLayout::addWidget(Tui::v0::ZWidget*)";
+        "Tui::v0::ZHBoxLayout::childEvent(QChildEvent*)";
+        "Tui::v0::ZHBoxLayout::connectNotify(QMetaMethod const&)";
+        "Tui::v0::ZHBoxLayout::customEvent(QEvent*)";
+        "Tui::v0::ZHBoxLayout::disconnectNotify(QMetaMethod const&)";
+        "Tui::v0::ZHBoxLayout::event(QEvent*)";
+        "Tui::v0::ZHBoxLayout::eventFilter(QObject*, QEvent*)";
+        "Tui::v0::ZHBoxLayout::isSpacer() const";
+        "Tui::v0::ZHBoxLayout::isVisible() const";
+        "Tui::v0::ZHBoxLayout::layout()";
+        "Tui::v0::ZHBoxLayout::metaObject() const";
+        "Tui::v0::ZHBoxLayout::qt_metacall(QMetaObject::Call, int, void**)";
+        "Tui::v0::ZHBoxLayout::qt_metacast(char const*)";
+        "Tui::v0::ZHBoxLayout::removeWidgetRecursively(Tui::v0::ZWidget*)";
+        "Tui::v0::ZHBoxLayout::setGeometry(QRect)";
+        "Tui::v0::ZHBoxLayout::setSpacing(int)";
+        "Tui::v0::ZHBoxLayout::sizeHint() const";
+        "Tui::v0::ZHBoxLayout::sizePolicyH() const";
+        "Tui::v0::ZHBoxLayout::sizePolicyV() const";
+        "Tui::v0::ZHBoxLayout::spacing() const";
+        "Tui::v0::ZHBoxLayout::timerEvent(QTimerEvent*)";
+        "Tui::v0::ZHBoxLayout::widget()";
+        "Tui::v0::ZHBoxLayout::widgetEvent(QEvent*)";
+        "Tui::v0::ZHBoxLayout::~ZHBoxLayout()";
+        "non-virtual thunk to Tui::v0::ZHBoxLayout::isSpacer() const";
+        "non-virtual thunk to Tui::v0::ZHBoxLayout::isVisible() const";
+        "non-virtual thunk to Tui::v0::ZHBoxLayout::layout()";
+        "non-virtual thunk to Tui::v0::ZHBoxLayout::setGeometry(QRect)";
+        "non-virtual thunk to Tui::v0::ZHBoxLayout::sizeHint() const";
+        "non-virtual thunk to Tui::v0::ZHBoxLayout::sizePolicyH() const";
+        "non-virtual thunk to Tui::v0::ZHBoxLayout::sizePolicyV() const";
+        "non-virtual thunk to Tui::v0::ZHBoxLayout::widget()";
+        "non-virtual thunk to Tui::v0::ZHBoxLayout::~ZHBoxLayout()";
+
+
+        ########### ZImage
+
+        "typeinfo for Tui::v0::ZImage";
+        "typeinfo name for Tui::v0::ZImage";
+        "vtable for Tui::v0::ZImage";
+        "Tui::v0::ZImage::ZImage(QSharedDataPointer<Tui::v0::ZImageData>)";
+        "Tui::v0::ZImage::ZImage(Tui::v0::ZImage const&)";
+        "Tui::v0::ZImage::ZImage(Tui::v0::ZImage&&)";
+        "Tui::v0::ZImage::ZImage(Tui::v0::ZTerminal const*, int, int)";
+        "Tui::v0::ZImage::fromByteArray(Tui::v0::ZTerminal const*, QByteArray)";
+        "Tui::v0::ZImage::fromFile(Tui::v0::ZTerminal const*, QString const&)";
+        "Tui::v0::ZImage::height() const";
+        "Tui::v0::ZImage::operator!=(Tui::v0::ZImage const&) const";
+        "Tui::v0::ZImage::operator=(Tui::v0::ZImage const&)";
+        "Tui::v0::ZImage::operator=(Tui::v0::ZImage&&)";
+        "Tui::v0::ZImage::operator==(Tui::v0::ZImage const&) const";
+        "Tui::v0::ZImage::painter()";
+        "Tui::v0::ZImage::peekAttributes(int, int) const";
+        "Tui::v0::ZImage::peekBackground(int, int) const";
+        "Tui::v0::ZImage::peekDecoration(int, int) const";
+        "Tui::v0::ZImage::peekForground(int, int) const";
+        "Tui::v0::ZImage::peekSoftwrapMarker(int, int) const";
+        "Tui::v0::ZImage::peekText(int, int, int*, int*) const";
+        "Tui::v0::ZImage::save(QString const&) const";
+        "Tui::v0::ZImage::saveToByteArray() const";
+        "Tui::v0::ZImage::size() const";
+        "Tui::v0::ZImage::swap(Tui::v0::ZImage&)";
+        "Tui::v0::ZImage::width() const";
+        "Tui::v0::ZImage::~ZImage()";
+
+
+        ########### ZInputBox
+
+        "typeinfo for Tui::v0::ZInputBox";
+        "typeinfo name for Tui::v0::ZInputBox";
+        "vtable for Tui::v0::ZInputBox";
+        "Tui::v0::ZInputBox::staticMetaObject";
+        "Tui::v0::ZInputBox::ZInputBox(QString const&, Tui::v0::ZWidget*)";
+        "Tui::v0::ZInputBox::ZInputBox(Tui::v0::ZWidget*)";
+        "Tui::v0::ZInputBox::childEvent(QChildEvent*)";
+        "Tui::v0::ZInputBox::connectNotify(QMetaMethod const&)";
+        "Tui::v0::ZInputBox::cursorPosition() const";
+        "Tui::v0::ZInputBox::customEvent(QEvent*)";
+        "Tui::v0::ZInputBox::disconnectNotify(QMetaMethod const&)";
+        "Tui::v0::ZInputBox::echoMode() const";
+        "Tui::v0::ZInputBox::event(QEvent*)";
+        "Tui::v0::ZInputBox::eventFilter(QObject*, QEvent*)";
+        "Tui::v0::ZInputBox::facet(QMetaObject const&) const";
+        "Tui::v0::ZInputBox::focusInEvent(Tui::v0::ZFocusEvent*)";
+        "Tui::v0::ZInputBox::focusOutEvent(Tui::v0::ZFocusEvent*)";
+        "Tui::v0::ZInputBox::insertAtCursorPosition(QString const&)";
+        "Tui::v0::ZInputBox::keyEvent(Tui::v0::ZKeyEvent*)";
+        "Tui::v0::ZInputBox::layoutArea() const";
+        "Tui::v0::ZInputBox::metaObject() const";
+        "Tui::v0::ZInputBox::minimumSizeHint() const";
+        "Tui::v0::ZInputBox::moveEvent(Tui::v0::ZMoveEvent*)";
+        "Tui::v0::ZInputBox::overwriteMode() const";
+        "Tui::v0::ZInputBox::paintEvent(Tui::v0::ZPaintEvent*)";
+        "Tui::v0::ZInputBox::pasteEvent(Tui::v0::ZPasteEvent*)";
+        "Tui::v0::ZInputBox::qt_metacall(QMetaObject::Call, int, void**)";
+        "Tui::v0::ZInputBox::qt_metacast(char const*)";
+        "Tui::v0::ZInputBox::resizeEvent(Tui::v0::ZResizeEvent*)";
+        "Tui::v0::ZInputBox::resolveSizeHintChain()";
+        "Tui::v0::ZInputBox::setCursorPosition(int)";
+        "Tui::v0::ZInputBox::setEchoMode(Tui::v0::ZInputBox::EchoMode)";
+        "Tui::v0::ZInputBox::setOverwriteMode(bool)";
+        "Tui::v0::ZInputBox::setText(QString const&)";
+        "Tui::v0::ZInputBox::sizeHint() const";
+        "Tui::v0::ZInputBox::text() const";
+        "Tui::v0::ZInputBox::textChanged(QString const&)";
+        "Tui::v0::ZInputBox::timerEvent(QTimerEvent*)";
+        "Tui::v0::ZInputBox::~ZInputBox()";
+
+
+        ########### ZKeyEvent
+
+        "typeinfo for Tui::v0::ZKeyEvent";
+        "typeinfo name for Tui::v0::ZKeyEvent";
+        "vtable for Tui::v0::ZKeyEvent";
+        "Tui::v0::ZKeyEvent::ZKeyEvent(int, QFlags<Qt::KeyboardModifier>, QString const&)";
+        "Tui::v0::ZKeyEvent::key() const";
+        "Tui::v0::ZKeyEvent::modifiers() const";
+        "Tui::v0::ZKeyEvent::text() const";
+        "Tui::v0::ZKeyEvent::~ZKeyEvent()";
+
+
+        ########### ZKeySequence
+
+        "Tui::v0::ZKeySequence::ZKeySequence()";
+        "Tui::v0::ZKeySequence::ZKeySequence(Tui::v0::ZKeySequence const&)";
+        "Tui::v0::ZKeySequence::forKey(int, QFlags<Qt::KeyboardModifier>)";
+        "Tui::v0::ZKeySequence::forMnemonic(QString const&)";
+        "Tui::v0::ZKeySequence::forShortcut(QString const&, QFlags<Qt::KeyboardModifier>)";
+        "Tui::v0::ZKeySequence::forShortcutSequence(QString const&, QFlags<Qt::KeyboardModifier>, QString const&, QFlags<Qt::KeyboardModifier>)";
+        "Tui::v0::ZKeySequence::forShortcutSequence(QString const&, QFlags<Qt::KeyboardModifier>, int, QFlags<Qt::KeyboardModifier>)";
+        "Tui::v0::ZKeySequence::operator=(Tui::v0::ZKeySequence const&)";
+        "Tui::v0::ZKeySequence::~ZKeySequence()";
+
+
+        ########### ZLabel
+
+        "typeinfo for Tui::v0::ZLabel";
+        "typeinfo name for Tui::v0::ZLabel";
+        "vtable for Tui::v0::ZLabel";
+        "Tui::v0::ZLabel::staticMetaObject";
+        "Tui::v0::ZLabel::ZLabel(QString const&, Tui::v0::ZWidget*)";
+        "Tui::v0::ZLabel::ZLabel(Tui::v0::WithMarkupTag, QString const&, Tui::v0::ZWidget*)";
+        "Tui::v0::ZLabel::ZLabel(Tui::v0::ZWidget*)";
+        "Tui::v0::ZLabel::buddy() const";
+        "Tui::v0::ZLabel::childEvent(QChildEvent*)";
+        "Tui::v0::ZLabel::connectNotify(QMetaMethod const&)";
+        "Tui::v0::ZLabel::customEvent(QEvent*)";
+        "Tui::v0::ZLabel::disconnectNotify(QMetaMethod const&)";
+        "Tui::v0::ZLabel::event(QEvent*)";
+        "Tui::v0::ZLabel::eventFilter(QObject*, QEvent*)";
+        "Tui::v0::ZLabel::facet(QMetaObject const&) const";
+        "Tui::v0::ZLabel::focusInEvent(Tui::v0::ZFocusEvent*)";
+        "Tui::v0::ZLabel::focusOutEvent(Tui::v0::ZFocusEvent*)";
+        "Tui::v0::ZLabel::keyEvent(Tui::v0::ZKeyEvent*)";
+        "Tui::v0::ZLabel::layoutArea() const";
+        "Tui::v0::ZLabel::markup() const";
+        "Tui::v0::ZLabel::metaObject() const";
+        "Tui::v0::ZLabel::minimumSizeHint() const";
+        "Tui::v0::ZLabel::moveEvent(Tui::v0::ZMoveEvent*)";
+        "Tui::v0::ZLabel::paintEvent(Tui::v0::ZPaintEvent*)";
+        "Tui::v0::ZLabel::pasteEvent(Tui::v0::ZPasteEvent*)";
+        "Tui::v0::ZLabel::qt_metacall(QMetaObject::Call, int, void**)";
+        "Tui::v0::ZLabel::qt_metacast(char const*)";
+        "Tui::v0::ZLabel::resizeEvent(Tui::v0::ZResizeEvent*)";
+        "Tui::v0::ZLabel::resolveSizeHintChain()";
+        "Tui::v0::ZLabel::setBuddy(Tui::v0::ZWidget*)";
+        "Tui::v0::ZLabel::setMarkup(QString const&)";
+        "Tui::v0::ZLabel::setText(QString const&)";
+        "Tui::v0::ZLabel::sizeHint() const";
+        "Tui::v0::ZLabel::text() const";
+        "Tui::v0::ZLabel::timerEvent(QTimerEvent*)";
+        "Tui::v0::ZLabel::~ZLabel()";
+
+
+        ########### ZLayout
+
+        "typeinfo for Tui::v0::ZLayout";
+        "typeinfo name for Tui::v0::ZLayout";
+        "vtable for Tui::v0::ZLayout";
+        "Tui::v0::ZLayout::staticMetaObject";
+        "Tui::v0::ZLayout::ZLayout(QObject*)";
+        "Tui::v0::ZLayout::childEvent(QChildEvent*)";
+        "Tui::v0::ZLayout::connectNotify(QMetaMethod const&)";
+        "Tui::v0::ZLayout::customEvent(QEvent*)";
+        "Tui::v0::ZLayout::disconnectNotify(QMetaMethod const&)";
+        "Tui::v0::ZLayout::event(QEvent*)";
+        "Tui::v0::ZLayout::eventFilter(QObject*, QEvent*)";
+        "Tui::v0::ZLayout::isSpacer() const";
+        "Tui::v0::ZLayout::isVisible() const";
+        "Tui::v0::ZLayout::layout()";
+        "Tui::v0::ZLayout::metaObject() const";
+        "Tui::v0::ZLayout::parentWidget() const";
+        "Tui::v0::ZLayout::qt_metacall(QMetaObject::Call, int, void**)";
+        "Tui::v0::ZLayout::qt_metacast(char const*)";
+        "Tui::v0::ZLayout::relayout()";
+        "Tui::v0::ZLayout::removeWidgetRecursivelyHelper(Tui::v0::ZLayoutItem*, Tui::v0::ZWidget*)";
+        "Tui::v0::ZLayout::sizeHint() const";
+        "Tui::v0::ZLayout::sizePolicyH() const";
+        "Tui::v0::ZLayout::sizePolicyV() const";
+        "Tui::v0::ZLayout::timerEvent(QTimerEvent*)";
+        "Tui::v0::ZLayout::widget()";
+        "Tui::v0::ZLayout::widgetEvent(QEvent*)";
+        "Tui::v0::ZLayout::~ZLayout()";
+        "non-virtual thunk to Tui::v0::ZLayout::isSpacer() const";
+        "non-virtual thunk to Tui::v0::ZLayout::isVisible() const";
+        "non-virtual thunk to Tui::v0::ZLayout::layout()";
+        "non-virtual thunk to Tui::v0::ZLayout::sizeHint() const";
+        "non-virtual thunk to Tui::v0::ZLayout::sizePolicyH() const";
+        "non-virtual thunk to Tui::v0::ZLayout::sizePolicyV() const";
+        "non-virtual thunk to Tui::v0::ZLayout::widget()";
+        "non-virtual thunk to Tui::v0::ZLayout::~ZLayout()";
+
+
+        ########### ZLayoutItem
+
+        "typeinfo for Tui::v0::ZLayoutItem";
+        "typeinfo name for Tui::v0::ZLayoutItem";
+        "vtable for Tui::v0::ZLayoutItem";
+        "Tui::v0::ZLayoutItem::ZLayoutItem()";
+        "Tui::v0::ZLayoutItem::isSpacer() const";
+        "Tui::v0::ZLayoutItem::layout()";
+        "Tui::v0::ZLayoutItem::widget()";
+        "Tui::v0::ZLayoutItem::wrapWidget(Tui::v0::ZWidget*)";
+        "Tui::v0::ZLayoutItem::~ZLayoutItem()";
+
+
+        ########### ZListView
+
+        "typeinfo for Tui::v0::ZListView";
+        "typeinfo name for Tui::v0::ZListView";
+        "vtable for Tui::v0::ZListView";
+        "Tui::v0::ZListView::staticMetaObject";
+        "Tui::v0::ZListView::ZListView(Tui::v0::ZWidget*)";
+        "Tui::v0::ZListView::childEvent(QChildEvent*)";
+        "Tui::v0::ZListView::connectNotify(QMetaMethod const&)";
+        "Tui::v0::ZListView::currentIndex() const";
+        "Tui::v0::ZListView::currentItem() const";
+        "Tui::v0::ZListView::customEvent(QEvent*)";
+        "Tui::v0::ZListView::disconnectNotify(QMetaMethod const&)";
+        "Tui::v0::ZListView::enterPressed(int)";
+        "Tui::v0::ZListView::event(QEvent*)";
+        "Tui::v0::ZListView::eventFilter(QObject*, QEvent*)";
+        "Tui::v0::ZListView::facet(QMetaObject const&) const";
+        "Tui::v0::ZListView::focusInEvent(Tui::v0::ZFocusEvent*)";
+        "Tui::v0::ZListView::focusOutEvent(Tui::v0::ZFocusEvent*)";
+        "Tui::v0::ZListView::items() const";
+        "Tui::v0::ZListView::keyEvent(Tui::v0::ZKeyEvent*)";
+        "Tui::v0::ZListView::layoutArea() const";
+        "Tui::v0::ZListView::metaObject() const";
+        "Tui::v0::ZListView::minimumSizeHint() const";
+        "Tui::v0::ZListView::model() const";
+        "Tui::v0::ZListView::moveEvent(Tui::v0::ZMoveEvent*)";
+        "Tui::v0::ZListView::paintEvent(Tui::v0::ZPaintEvent*)";
+        "Tui::v0::ZListView::pasteEvent(Tui::v0::ZPasteEvent*)";
+        "Tui::v0::ZListView::qt_metacall(QMetaObject::Call, int, void**)";
+        "Tui::v0::ZListView::qt_metacast(char const*)";
+        "Tui::v0::ZListView::resizeEvent(Tui::v0::ZResizeEvent*)";
+        "Tui::v0::ZListView::resolveSizeHintChain()";
+        "Tui::v0::ZListView::scrollTo(QModelIndex const&, Tui::v0::ZListView::ScrollHint)";
+        "Tui::v0::ZListView::selectionModel() const";
+        "Tui::v0::ZListView::setCurrentIndex(QModelIndex)";
+        "Tui::v0::ZListView::setItems(QStringList const&)";
+        "Tui::v0::ZListView::setModel(QAbstractItemModel*)";
+        "Tui::v0::ZListView::sizeHint() const";
+        "Tui::v0::ZListView::timerEvent(QTimerEvent*)";
+        "Tui::v0::ZListView::~ZListView()";
+
+
+        ########### ZMenu
+
+        "typeinfo for Tui::v0::ZMenu";
+        "typeinfo name for Tui::v0::ZMenu";
+        "vtable for Tui::v0::ZMenu";
+        "Tui::v0::ZMenu::staticMetaObject";
+        "Tui::v0::ZMenu::ZMenu(Tui::v0::ZWidget*)";
+        "Tui::v0::ZMenu::aboutToHide()";
+        "Tui::v0::ZMenu::aboutToShow()";
+        "Tui::v0::ZMenu::childEvent(QChildEvent*)";
+        "Tui::v0::ZMenu::connectNotify(QMetaMethod const&)";
+        "Tui::v0::ZMenu::customEvent(QEvent*)";
+        "Tui::v0::ZMenu::disconnectNotify(QMetaMethod const&)";
+        "Tui::v0::ZMenu::event(QEvent*)";
+        "Tui::v0::ZMenu::eventFilter(QObject*, QEvent*)";
+        "Tui::v0::ZMenu::facet(QMetaObject const&) const";
+        "Tui::v0::ZMenu::focusInEvent(Tui::v0::ZFocusEvent*)";
+        "Tui::v0::ZMenu::focusOutEvent(Tui::v0::ZFocusEvent*)";
+        "Tui::v0::ZMenu::items() const";
+        "Tui::v0::ZMenu::keyEvent(Tui::v0::ZKeyEvent*)";
+        "Tui::v0::ZMenu::layoutArea() const";
+        "Tui::v0::ZMenu::metaObject() const";
+        "Tui::v0::ZMenu::minimumSizeHint() const";
+        "Tui::v0::ZMenu::moveEvent(Tui::v0::ZMoveEvent*)";
+        "Tui::v0::ZMenu::paintEvent(Tui::v0::ZPaintEvent*)";
+        "Tui::v0::ZMenu::pasteEvent(Tui::v0::ZPasteEvent*)";
+        "Tui::v0::ZMenu::popup(QPoint const&)";
+        "Tui::v0::ZMenu::qt_metacall(QMetaObject::Call, int, void**)";
+        "Tui::v0::ZMenu::qt_metacast(char const*)";
+        "Tui::v0::ZMenu::resizeEvent(Tui::v0::ZResizeEvent*)";
+        "Tui::v0::ZMenu::resolveSizeHintChain()";
+        "Tui::v0::ZMenu::setItems(QVector<Tui::v0::ZMenuItem>)";
+        "Tui::v0::ZMenu::setParentMenu(Tui::v0::ZMenubar*)";
+        "Tui::v0::ZMenu::sizeHint() const";
+        "Tui::v0::ZMenu::timerEvent(QTimerEvent*)";
+        "Tui::v0::ZMenu::~ZMenu()";
+
+
+        ########### ZMenuItem
+
+        "Tui::v0::ZMenuItem::ZMenuItem()";
+        "Tui::v0::ZMenuItem::ZMenuItem(QString const&, QObject*, std::function<QVector<Tui::v0::ZMenuItem> ()>)";
+        "Tui::v0::ZMenuItem::ZMenuItem(QString const&, QString const&, Tui::v0::ZImplicitSymbol, QVector<Tui::v0::ZMenuItem>)";
+        "Tui::v0::ZMenuItem::ZMenuItem(Tui::v0::ZMenuItem const&)";
+        "Tui::v0::ZMenuItem::ZMenuItem(Tui::v0::ZMenuItem&&)";
+        "Tui::v0::ZMenuItem::command() const";
+        "Tui::v0::ZMenuItem::fakeShortcut() const";
+        "Tui::v0::ZMenuItem::hasSubitems() const";
+        "Tui::v0::ZMenuItem::markup() const";
+        "Tui::v0::ZMenuItem::operator=(Tui::v0::ZMenuItem const&)";
+        "Tui::v0::ZMenuItem::operator=(Tui::v0::ZMenuItem&&)";
+        "Tui::v0::ZMenuItem::setCommand(Tui::v0::ZImplicitSymbol const&)";
+        "Tui::v0::ZMenuItem::setFakeShortcut(QString const&)";
+        "Tui::v0::ZMenuItem::setMarkup(QString const&)";
+        "Tui::v0::ZMenuItem::setSubitems(QVector<Tui::v0::ZMenuItem> const&)";
+        "Tui::v0::ZMenuItem::setSubitemsGenerator(QObject*, std::function<QVector<Tui::v0::ZMenuItem> ()>)";
+        "Tui::v0::ZMenuItem::subitems() const";
+        "Tui::v0::ZMenuItem::~ZMenuItem()";
+
+
+        ########### ZMenubar
+
+        "typeinfo for Tui::v0::ZMenubar";
+        "typeinfo name for Tui::v0::ZMenubar";
+        "vtable for Tui::v0::ZMenubar";
+        "Tui::v0::ZMenubar::staticMetaObject";
+        "Tui::v0::ZMenubar::ZMenubar(Tui::v0::ZWidget*)";
+        "Tui::v0::ZMenubar::childEvent(QChildEvent*)";
+        "Tui::v0::ZMenubar::close()";
+        "Tui::v0::ZMenubar::connectNotify(QMetaMethod const&)";
+        "Tui::v0::ZMenubar::customEvent(QEvent*)";
+        "Tui::v0::ZMenubar::disconnectNotify(QMetaMethod const&)";
+        "Tui::v0::ZMenubar::event(QEvent*)";
+        "Tui::v0::ZMenubar::eventFilter(QObject*, QEvent*)";
+        "Tui::v0::ZMenubar::facet(QMetaObject const&) const";
+        "Tui::v0::ZMenubar::focusInEvent(Tui::v0::ZFocusEvent*)";
+        "Tui::v0::ZMenubar::focusOutEvent(Tui::v0::ZFocusEvent*)";
+        "Tui::v0::ZMenubar::items() const";
+        "Tui::v0::ZMenubar::keyActivate(Tui::v0::ZKeyEvent*)";
+        "Tui::v0::ZMenubar::keyEvent(Tui::v0::ZKeyEvent*)";
+        "Tui::v0::ZMenubar::layoutArea() const";
+        "Tui::v0::ZMenubar::left()";
+        "Tui::v0::ZMenubar::metaObject() const";
+        "Tui::v0::ZMenubar::minimumSizeHint() const";
+        "Tui::v0::ZMenubar::moveEvent(Tui::v0::ZMoveEvent*)";
+        "Tui::v0::ZMenubar::paintEvent(Tui::v0::ZPaintEvent*)";
+        "Tui::v0::ZMenubar::pasteEvent(Tui::v0::ZPasteEvent*)";
+        "Tui::v0::ZMenubar::qt_metacall(QMetaObject::Call, int, void**)";
+        "Tui::v0::ZMenubar::qt_metacast(char const*)";
+        "Tui::v0::ZMenubar::resizeEvent(Tui::v0::ZResizeEvent*)";
+        "Tui::v0::ZMenubar::resolveSizeHintChain()";
+        "Tui::v0::ZMenubar::respawnMenu()";
+        "Tui::v0::ZMenubar::right()";
+        "Tui::v0::ZMenubar::setItems(QVector<Tui::v0::ZMenuItem>)";
+        "Tui::v0::ZMenubar::sizeHint() const";
+        "Tui::v0::ZMenubar::timerEvent(QTimerEvent*)";
+        "Tui::v0::ZMenubar::~ZMenubar()";
+
+
+        ########### ZMoveEvent
+
+        "typeinfo for Tui::v0::ZMoveEvent";
+        "typeinfo name for Tui::v0::ZMoveEvent";
+        "vtable for Tui::v0::ZMoveEvent";
+        "Tui::v0::ZMoveEvent::ZMoveEvent(QPoint, QPoint)";
+        "Tui::v0::ZMoveEvent::oldPos() const";
+        "Tui::v0::ZMoveEvent::pos() const";
+        "Tui::v0::ZMoveEvent::~ZMoveEvent()";
+
+
+        ########### ZOtherChangeEvent
+
+        "typeinfo for Tui::v0::ZOtherChangeEvent";
+        "typeinfo name for Tui::v0::ZOtherChangeEvent";
+        "vtable for Tui::v0::ZOtherChangeEvent";
+        "Tui::v0::ZOtherChangeEvent::ZOtherChangeEvent(QSet<Tui::v0::ZSymbol>)";
+        "Tui::v0::ZOtherChangeEvent::all()";
+        "Tui::v0::ZOtherChangeEvent::match(QEvent const*, Tui::v0::ZSymbol)";
+        "Tui::v0::ZOtherChangeEvent::unchanged() const";
+        "Tui::v0::ZOtherChangeEvent::~ZOtherChangeEvent()";
+
+
+        ########### ZPaintEvent
+
+        "typeinfo for Tui::v0::ZPaintEvent";
+        "typeinfo name for Tui::v0::ZPaintEvent";
+        "vtable for Tui::v0::ZPaintEvent";
+        "Tui::v0::ZPaintEvent::ZPaintEvent(Tui::v0::ZPaintEvent::Update, Tui::v0::ZPainter*)";
+        "Tui::v0::ZPaintEvent::ZPaintEvent(Tui::v0::ZPainter*)";
+        "Tui::v0::ZPaintEvent::painter() const";
+        "Tui::v0::ZPaintEvent::~ZPaintEvent()";
+
+
+        ########### ZPainter
+
+        "typeinfo for Tui::v0::ZPainter";
+        "typeinfo name for Tui::v0::ZPainter";
+        "vtable for Tui::v0::ZPainter";
+        "Tui::v0::ZPainter::ZPainter(Tui::v0::ZPainter const&)";
+        "Tui::v0::ZPainter::clear(Tui::v0::ZColor, Tui::v0::ZColor, QFlags<Tui::v0::ZTextAttribute>)";
+        "Tui::v0::ZPainter::clearRect(int, int, int, int, Tui::v0::ZColor, Tui::v0::ZColor, QFlags<Tui::v0::ZTextAttribute>)";
+        "Tui::v0::ZPainter::clearRectWithChar(int, int, int, int, Tui::v0::ZColor, Tui::v0::ZColor, int, QFlags<Tui::v0::ZTextAttribute>)";
+        "Tui::v0::ZPainter::clearSoftwrapMarker(int, int)";
+        "Tui::v0::ZPainter::clearWithChar(Tui::v0::ZColor, Tui::v0::ZColor, int, QFlags<Tui::v0::ZTextAttribute>)";
+        "Tui::v0::ZPainter::drawImage(int, int, Tui::v0::ZImage const&, int, int, int, int)";
+        "Tui::v0::ZPainter::setBackground(int, int, Tui::v0::ZColor)";
+        "Tui::v0::ZPainter::setCursor(int, int)";
+        "Tui::v0::ZPainter::setForeground(int, int, Tui::v0::ZColor)";
+        "Tui::v0::ZPainter::setSoftwrapMarker(int, int)";
+        "Tui::v0::ZPainter::setWidget(Tui::v0::ZWidget*)";
+        "Tui::v0::ZPainter::textMetrics() const";
+        "Tui::v0::ZPainter::translateAndClip(QRect)";
+        "Tui::v0::ZPainter::translateAndClip(int, int, int, int)";
+        "Tui::v0::ZPainter::writeWithAttributes(int, int, QChar const*, int, Tui::v0::ZColor, Tui::v0::ZColor, QFlags<Tui::v0::ZTextAttribute>)";
+        "Tui::v0::ZPainter::writeWithAttributes(int, int, QString const&, Tui::v0::ZColor, Tui::v0::ZColor, QFlags<Tui::v0::ZTextAttribute>)";
+        "Tui::v0::ZPainter::writeWithAttributes(int, int, char const*, int, Tui::v0::ZColor, Tui::v0::ZColor, QFlags<Tui::v0::ZTextAttribute>)";
+        "Tui::v0::ZPainter::writeWithAttributes(int, int, char16_t const*, int, Tui::v0::ZColor, Tui::v0::ZColor, QFlags<Tui::v0::ZTextAttribute>)";
+        "Tui::v0::ZPainter::writeWithColors(int, int, QChar const*, int, Tui::v0::ZColor, Tui::v0::ZColor)";
+        "Tui::v0::ZPainter::writeWithColors(int, int, QString const&, Tui::v0::ZColor, Tui::v0::ZColor)";
+        "Tui::v0::ZPainter::writeWithColors(int, int, char const*, int, Tui::v0::ZColor, Tui::v0::ZColor)";
+        "Tui::v0::ZPainter::writeWithColors(int, int, char16_t const*, int, Tui::v0::ZColor, Tui::v0::ZColor)";
+        "Tui::v0::ZPainter::~ZPainter()";
+
+
+        ########### ZPalette
+
+        "typeinfo for Tui::v0::ZPalette";
+        "typeinfo name for Tui::v0::ZPalette";
+        "vtable for Tui::v0::ZPalette";
+        "Tui::v0::ZPalette::ZPalette()";
+        "Tui::v0::ZPalette::ZPalette(Tui::v0::ZPalette const&)";
+        "Tui::v0::ZPalette::addRules(QList<Tui::v0::ZPalette::RuleDef>)";
+        "Tui::v0::ZPalette::black()";
+        "Tui::v0::ZPalette::classic()";
+        "Tui::v0::ZPalette::getColor(Tui::v0::ZWidget*, Tui::v0::ZImplicitSymbol)";
+        "Tui::v0::ZPalette::isNull() const";
+        "Tui::v0::ZPalette::operator=(Tui::v0::ZPalette const&)";
+        "Tui::v0::ZPalette::setColors(QList<Tui::v0::ZPalette::ColorDef>)";
+        "Tui::v0::ZPalette::setDefaultRules(Tui::v0::ZPalette&)";
+        "Tui::v0::ZPalette::~ZPalette()";
+
+
+        ########### ZPasteEvent
+
+        "typeinfo for Tui::v0::ZPasteEvent";
+        "typeinfo name for Tui::v0::ZPasteEvent";
+        "vtable for Tui::v0::ZPasteEvent";
+        "Tui::v0::ZPasteEvent::ZPasteEvent(QString const&)";
+        "Tui::v0::ZPasteEvent::text() const";
+        "Tui::v0::ZPasteEvent::~ZPasteEvent()";
+
+
+        ########### ZPendingKeySequenceCallbacks
+
+        "Tui::v0::ZPendingKeySequenceCallbacks::ZPendingKeySequenceCallbacks()";
+        "Tui::v0::ZPendingKeySequenceCallbacks::ZPendingKeySequenceCallbacks(Tui::v0::ZPendingKeySequenceCallbacks const&)";
+        "Tui::v0::ZPendingKeySequenceCallbacks::operator=(Tui::v0::ZPendingKeySequenceCallbacks const&)";
+        "Tui::v0::ZPendingKeySequenceCallbacks::setPendingSequenceFinished(std::function<void (bool)>)";
+        "Tui::v0::ZPendingKeySequenceCallbacks::setPendingSequenceStarted(std::function<void ()>)";
+        "Tui::v0::ZPendingKeySequenceCallbacks::~ZPendingKeySequenceCallbacks()";
+
+
+        ########### ZRadioButton
+
+        "typeinfo for Tui::v0::ZRadioButton";
+        "typeinfo name for Tui::v0::ZRadioButton";
+        "vtable for Tui::v0::ZRadioButton";
+        "Tui::v0::ZRadioButton::staticMetaObject";
+        "Tui::v0::ZRadioButton::ZRadioButton(QString const&, Tui::v0::ZWidget*)";
+        "Tui::v0::ZRadioButton::ZRadioButton(Tui::v0::WithMarkupTag, QString const&, Tui::v0::ZWidget*)";
+        "Tui::v0::ZRadioButton::ZRadioButton(Tui::v0::ZWidget*)";
+        "Tui::v0::ZRadioButton::checked() const";
+        "Tui::v0::ZRadioButton::childEvent(QChildEvent*)";
+        "Tui::v0::ZRadioButton::click()";
+        "Tui::v0::ZRadioButton::connectNotify(QMetaMethod const&)";
+        "Tui::v0::ZRadioButton::customEvent(QEvent*)";
+        "Tui::v0::ZRadioButton::disconnectNotify(QMetaMethod const&)";
+        "Tui::v0::ZRadioButton::event(QEvent*)";
+        "Tui::v0::ZRadioButton::eventFilter(QObject*, QEvent*)";
+        "Tui::v0::ZRadioButton::facet(QMetaObject const&) const";
+        "Tui::v0::ZRadioButton::focusInEvent(Tui::v0::ZFocusEvent*)";
+        "Tui::v0::ZRadioButton::focusOutEvent(Tui::v0::ZFocusEvent*)";
+        "Tui::v0::ZRadioButton::keyEvent(Tui::v0::ZKeyEvent*)";
+        "Tui::v0::ZRadioButton::layoutArea() const";
+        "Tui::v0::ZRadioButton::markup() const";
+        "Tui::v0::ZRadioButton::metaObject() const";
+        "Tui::v0::ZRadioButton::minimumSizeHint() const";
+        "Tui::v0::ZRadioButton::moveEvent(Tui::v0::ZMoveEvent*)";
+        "Tui::v0::ZRadioButton::paintEvent(Tui::v0::ZPaintEvent*)";
+        "Tui::v0::ZRadioButton::pasteEvent(Tui::v0::ZPasteEvent*)";
+        "Tui::v0::ZRadioButton::qt_metacall(QMetaObject::Call, int, void**)";
+        "Tui::v0::ZRadioButton::qt_metacast(char const*)";
+        "Tui::v0::ZRadioButton::resizeEvent(Tui::v0::ZResizeEvent*)";
+        "Tui::v0::ZRadioButton::resolveSizeHintChain()";
+        "Tui::v0::ZRadioButton::setChecked(bool)";
+        "Tui::v0::ZRadioButton::setMarkup(QString const&)";
+        "Tui::v0::ZRadioButton::setShortcut(Tui::v0::ZKeySequence const&)";
+        "Tui::v0::ZRadioButton::setText(QString const&)";
+        "Tui::v0::ZRadioButton::sizeHint() const";
+        "Tui::v0::ZRadioButton::text() const";
+        "Tui::v0::ZRadioButton::timerEvent(QTimerEvent*)";
+        "Tui::v0::ZRadioButton::toggle()";
+        "Tui::v0::ZRadioButton::toggled(bool)";
+        "Tui::v0::ZRadioButton::~ZRadioButton()";
+
+
+        ########### ZRawSequenceEvent
+
+        "typeinfo for Tui::v0::ZRawSequenceEvent";
+        "typeinfo name for Tui::v0::ZRawSequenceEvent";
+        "vtable for Tui::v0::ZRawSequenceEvent";
+        "Tui::v0::ZRawSequenceEvent::ZRawSequenceEvent(QByteArray)";
+        "Tui::v0::ZRawSequenceEvent::ZRawSequenceEvent(Tui::v0::ZRawSequenceEvent::Pending, QByteArray)";
+        "Tui::v0::ZRawSequenceEvent::sequence() const";
+        "Tui::v0::ZRawSequenceEvent::~ZRawSequenceEvent()";
+
+
+        ########### ZResizeEvent
+
+        "typeinfo for Tui::v0::ZResizeEvent";
+        "typeinfo name for Tui::v0::ZResizeEvent";
+        "vtable for Tui::v0::ZResizeEvent";
+        "Tui::v0::ZResizeEvent::ZResizeEvent(QSize, QSize)";
+        "Tui::v0::ZResizeEvent::oldSize() const";
+        "Tui::v0::ZResizeEvent::size() const";
+        "Tui::v0::ZResizeEvent::~ZResizeEvent()";
+
+
+        ########### ZRoot
+
+        "typeinfo for Tui::v0::ZRoot";
+        "typeinfo name for Tui::v0::ZRoot";
+        "vtable for Tui::v0::ZRoot";
+        "Tui::v0::ZRoot::staticMetaObject";
+        "Tui::v0::ZRoot::ZRoot()";
+        "Tui::v0::ZRoot::activateNextWindow()";
+        "Tui::v0::ZRoot::activatePreviousWindow()";
+        "Tui::v0::ZRoot::childEvent(QChildEvent*)";
+        "Tui::v0::ZRoot::connectNotify(QMetaMethod const&)";
+        "Tui::v0::ZRoot::customEvent(QEvent*)";
+        "Tui::v0::ZRoot::disconnectNotify(QMetaMethod const&)";
+        "Tui::v0::ZRoot::event(QEvent*)";
+        "Tui::v0::ZRoot::eventFilter(QObject*, QEvent*)";
+        "Tui::v0::ZRoot::facet(QMetaObject const&) const";
+        "Tui::v0::ZRoot::fillChar() const";
+        "Tui::v0::ZRoot::focusInEvent(Tui::v0::ZFocusEvent*)";
+        "Tui::v0::ZRoot::focusOutEvent(Tui::v0::ZFocusEvent*)";
+        "Tui::v0::ZRoot::keyEvent(Tui::v0::ZKeyEvent*)";
+        "Tui::v0::ZRoot::layoutArea() const";
+        "Tui::v0::ZRoot::metaObject() const";
+        "Tui::v0::ZRoot::minimumSizeHint() const";
+        "Tui::v0::ZRoot::moveEvent(Tui::v0::ZMoveEvent*)";
+        "Tui::v0::ZRoot::paintEvent(Tui::v0::ZPaintEvent*)";
+        "Tui::v0::ZRoot::pasteEvent(Tui::v0::ZPasteEvent*)";
+        "Tui::v0::ZRoot::qt_metacall(QMetaObject::Call, int, void**)";
+        "Tui::v0::ZRoot::qt_metacast(char const*)";
+        "Tui::v0::ZRoot::raiseOnActivate(Tui::v0::ZWidget*)";
+        "Tui::v0::ZRoot::resizeEvent(Tui::v0::ZResizeEvent*)";
+        "Tui::v0::ZRoot::resolveSizeHintChain()";
+        "Tui::v0::ZRoot::setFillChar(int)";
+        "Tui::v0::ZRoot::sizeHint() const";
+        "Tui::v0::ZRoot::terminalChanged()";
+        "Tui::v0::ZRoot::timerEvent(QTimerEvent*)";
+        "Tui::v0::ZRoot::~ZRoot()";
+
+
+        ########### ZShortcut
+
+        "typeinfo for Tui::v0::ZShortcut";
+        "typeinfo name for Tui::v0::ZShortcut";
+        "vtable for Tui::v0::ZShortcut";
+        "Tui::v0::ZShortcut::staticMetaObject";
+        "Tui::v0::ZShortcut::ZShortcut(Tui::v0::ZKeySequence const&, Tui::v0::ZWidget*, Qt::ShortcutContext)";
+        "Tui::v0::ZShortcut::activated()";
+        "Tui::v0::ZShortcut::childEvent(QChildEvent*)";
+        "Tui::v0::ZShortcut::connectNotify(QMetaMethod const&)";
+        "Tui::v0::ZShortcut::customEvent(QEvent*)";
+        "Tui::v0::ZShortcut::disconnectNotify(QMetaMethod const&)";
+        "Tui::v0::ZShortcut::event(QEvent*)";
+        "Tui::v0::ZShortcut::eventFilter(QObject*, QEvent*)";
+        "Tui::v0::ZShortcut::isEnabled() const";
+        "Tui::v0::ZShortcut::matches(Tui::v0::ZWidget*, Tui::v0::ZKeyEvent const*) const";
+        "Tui::v0::ZShortcut::metaObject() const";
+        "Tui::v0::ZShortcut::qt_metacall(QMetaObject::Call, int, void**)";
+        "Tui::v0::ZShortcut::qt_metacast(char const*)";
+        "Tui::v0::ZShortcut::setEnabled(bool)";
+        "Tui::v0::ZShortcut::setEnabledDelegate(Tui::v0::Private::ZMoFunc<bool ()>&&)";
+        "Tui::v0::ZShortcut::timerEvent(QTimerEvent*)";
+        "Tui::v0::ZShortcut::~ZShortcut()";
+
+
+        ########### ZSimpleFileLogger
+
+        "Tui::v0::ZSimpleFileLogger::install(QString const&)";
+
+
+        ########### ZSimpleStringLogger
+
+        "Tui::v0::ZSimpleStringLogger::clearMessages()";
+        "Tui::v0::ZSimpleStringLogger::getMessages()";
+        "Tui::v0::ZSimpleStringLogger::install()";
+
+
+        ########### ZStyledTextLine
+
+        "Tui::v0::ZStyledTextLine::ZStyledTextLine()";
+        "Tui::v0::ZStyledTextLine::ZStyledTextLine(Tui::v0::ZStyledTextLine const&)";
+        "Tui::v0::ZStyledTextLine::ZStyledTextLine(Tui::v0::ZStyledTextLine&&)";
+        "Tui::v0::ZStyledTextLine::hasParsingError() const";
+        "Tui::v0::ZStyledTextLine::markup() const";
+        "Tui::v0::ZStyledTextLine::mnemonic() const";
+        "Tui::v0::ZStyledTextLine::operator=(Tui::v0::ZStyledTextLine const&)";
+        "Tui::v0::ZStyledTextLine::operator=(Tui::v0::ZStyledTextLine&&)";
+        "Tui::v0::ZStyledTextLine::setBaseStyle(Tui::v0::ZTextStyle)";
+        "Tui::v0::ZStyledTextLine::setMarkup(QString const&)";
+        "Tui::v0::ZStyledTextLine::setMnemonicStyle(Tui::v0::ZTextStyle, Tui::v0::ZTextStyle)";
+        "Tui::v0::ZStyledTextLine::setText(QString const&)";
+        "Tui::v0::ZStyledTextLine::text() const";
+        "Tui::v0::ZStyledTextLine::width(Tui::v0::ZTextMetrics const&) const";
+        "Tui::v0::ZStyledTextLine::write(Tui::v0::ZPainter*, int, int, int) const";
+        "Tui::v0::ZStyledTextLine::~ZStyledTextLine()";
+
+
+        ########### ZSymbol
+
+        "Tui::v0::ZSymbol::lookup(QString, bool)";
+        "Tui::v0::ZSymbol::toString() const";
+
+
+        ########### ZTerminal::OffScreen
+
+        "Tui::v0::ZTerminal::OffScreen::OffScreen(Tui::v0::ZTerminal::OffScreen const&)";
+        "Tui::v0::ZTerminal::OffScreen::OffScreen(int, int)";
+        "Tui::v0::ZTerminal::OffScreen::operator=(Tui::v0::ZTerminal::OffScreen const&)";
+        "Tui::v0::ZTerminal::OffScreen::withCapability(Tui::v0::ZSymbol) const";
+        "Tui::v0::ZTerminal::OffScreen::withoutCapability(Tui::v0::ZSymbol) const";
+        "Tui::v0::ZTerminal::OffScreen::~OffScreen()";
+
+
+        ########### ZTerminal::TerminalConnection
+
+        "Tui::v0::ZTerminal::TerminalConnection::TerminalConnection()";
+        "Tui::v0::ZTerminal::TerminalConnection::setBackspaceIsX08(bool)";
+        "Tui::v0::ZTerminal::TerminalConnection::setDelegate(Tui::v0::ZTerminal::TerminalConnectionDelegate*)";
+        "Tui::v0::ZTerminal::TerminalConnection::setSize(int, int)";
+        "Tui::v0::ZTerminal::TerminalConnection::terminalInput(char const*, int)";
+        "Tui::v0::ZTerminal::TerminalConnection::~TerminalConnection()";
+
+
+        ########### ZTerminal
+
+        "typeinfo for Tui::v0::ZTerminal";
+        "typeinfo name for Tui::v0::ZTerminal";
+        "vtable for Tui::v0::ZTerminal";
+        "Tui::v0::ZTerminal::staticMetaObject";
+        "Tui::v0::ZTerminal::ZTerminal(QFlags<Tui::v0::ZTerminal::Option>, QObject*)";
+        "Tui::v0::ZTerminal::ZTerminal(QObject*)";
+        "Tui::v0::ZTerminal::ZTerminal(Tui::v0::ZTerminal::FileDescriptor, QFlags<Tui::v0::ZTerminal::Option>, QObject*)";
+        "Tui::v0::ZTerminal::ZTerminal(Tui::v0::ZTerminal::OffScreen const&, QObject*)";
+        "Tui::v0::ZTerminal::ZTerminal(Tui::v0::ZTerminal::TerminalConnection*, QFlags<Tui::v0::ZTerminal::Option>, QObject*)";
+        "Tui::v0::ZTerminal::afterRendering()";
+        "Tui::v0::ZTerminal::autoDetectTimeoutMessage() const";
+        "Tui::v0::ZTerminal::beforeRendering()";
+        "Tui::v0::ZTerminal::childEvent(QChildEvent*)";
+        "Tui::v0::ZTerminal::connectNotify(QMetaMethod const&)";
+        "Tui::v0::ZTerminal::currentLayoutGeneration()";
+        "Tui::v0::ZTerminal::customEvent(QEvent*)";
+        "Tui::v0::ZTerminal::disconnectNotify(QMetaMethod const&)";
+        "Tui::v0::ZTerminal::dispatchKeyboardEvent(Tui::v0::ZKeyEvent&)";
+        "Tui::v0::ZTerminal::dispatchPasteEvent(Tui::v0::ZPasteEvent&)";
+        "Tui::v0::ZTerminal::doLayout()";
+        "Tui::v0::ZTerminal::event(QEvent*)";
+        "Tui::v0::ZTerminal::eventFilter(QObject*, QEvent*)";
+        "Tui::v0::ZTerminal::focusChanged()";
+        "Tui::v0::ZTerminal::focusWidget() const";
+        "Tui::v0::ZTerminal::forceRepaint()";
+        "Tui::v0::ZTerminal::grabCurrentImage() const";
+        "Tui::v0::ZTerminal::grabCursorColor() const";
+        "Tui::v0::ZTerminal::grabCursorPosition() const";
+        "Tui::v0::ZTerminal::grabCursorStyle() const";
+        "Tui::v0::ZTerminal::grabCursorVisibility() const";
+        "Tui::v0::ZTerminal::hasCapability(Tui::v0::ZSymbol) const";
+        "Tui::v0::ZTerminal::height() const";
+        "Tui::v0::ZTerminal::iconTitle() const";
+        "Tui::v0::ZTerminal::incompatibleTerminalDetected()";
+        "Tui::v0::ZTerminal::isDefaultTerminalAvailable()";
+        "Tui::v0::ZTerminal::isLayoutPending() const";
+        "Tui::v0::ZTerminal::isPaused() const";
+        "Tui::v0::ZTerminal::keyboardGrabber() const";
+        "Tui::v0::ZTerminal::mainWidget() const";
+        "Tui::v0::ZTerminal::maybeRequestLayout(Tui::v0::ZWidget*)";
+        "Tui::v0::ZTerminal::metaObject() const";
+        "Tui::v0::ZTerminal::painter()";
+        "Tui::v0::ZTerminal::pauseOperation()";
+        "Tui::v0::ZTerminal::qt_metacall(QMetaObject::Call, int, void**)";
+        "Tui::v0::ZTerminal::qt_metacast(char const*)";
+        "Tui::v0::ZTerminal::registerPendingKeySequenceCallbacks(Tui::v0::ZPendingKeySequenceCallbacks const&)";
+        "Tui::v0::ZTerminal::requestLayout(Tui::v0::ZWidget*)";
+        "Tui::v0::ZTerminal::resize(int, int)";
+        "Tui::v0::ZTerminal::setAutoDetectTimeoutMessage(QString const&)";
+        "Tui::v0::ZTerminal::setCursorColor(int, int, int)";
+        "Tui::v0::ZTerminal::setCursorPosition(QPoint)";
+        "Tui::v0::ZTerminal::setCursorStyle(Tui::v0::CursorStyle)";
+        "Tui::v0::ZTerminal::setIconTitle(QString const&)";
+        "Tui::v0::ZTerminal::setMainWidget(Tui::v0::ZWidget*)";
+        "Tui::v0::ZTerminal::setTitle(QString const&)";
+        "Tui::v0::ZTerminal::terminalConnectionLost()";
+        "Tui::v0::ZTerminal::textMetrics() const";
+        "Tui::v0::ZTerminal::timerEvent(QTimerEvent*)";
+        "Tui::v0::ZTerminal::title() const";
+        "Tui::v0::ZTerminal::translateKeyEvent(Tui::v0::ZTerminalNativeEvent const&)";
+        "Tui::v0::ZTerminal::unpauseOperation()";
+        "Tui::v0::ZTerminal::update()";
+        "Tui::v0::ZTerminal::updateOutput()";
+        "Tui::v0::ZTerminal::updateOutputForceFullRepaint()";
+        "Tui::v0::ZTerminal::width() const";
+        "Tui::v0::ZTerminal::~ZTerminal()";
+
+
+        ########### ZTerminal::TerminalConnectionDelegate
+
+        "typeinfo for Tui::v0::ZTerminal::TerminalConnectionDelegate";
+        "typeinfo name for Tui::v0::ZTerminal::TerminalConnectionDelegate";
+        "vtable for Tui::v0::ZTerminal::TerminalConnectionDelegate";
+        "Tui::v0::ZTerminal::TerminalConnectionDelegate::TerminalConnectionDelegate()";
+        "Tui::v0::ZTerminal::TerminalConnectionDelegate::pause()";
+        "Tui::v0::ZTerminal::TerminalConnectionDelegate::unpause()";
+        "Tui::v0::ZTerminal::TerminalConnectionDelegate::~TerminalConnectionDelegate()";
+
+
+        ########### ZTerminalNativeEvent
+
+        "typeinfo for Tui::v0::ZTerminalNativeEvent";
+        "typeinfo name for Tui::v0::ZTerminalNativeEvent";
+        "vtable for Tui::v0::ZTerminalNativeEvent";
+        "Tui::v0::ZTerminalNativeEvent::ZTerminalNativeEvent(void*)";
+        "Tui::v0::ZTerminalNativeEvent::nativeEventPointer() const";
+        "Tui::v0::ZTerminalNativeEvent::~ZTerminalNativeEvent()";
+
+
+        ########### ZTest
+
+        "Tui::v0::ZTest::sendKey(Tui::v0::ZTerminal*, Qt::Key, QFlags<Qt::KeyboardModifier>)";
+        "Tui::v0::ZTest::sendKeyToWidget(Tui::v0::ZWidget*, Qt::Key, QFlags<Qt::KeyboardModifier>)";
+        "Tui::v0::ZTest::sendPaste(Tui::v0::ZTerminal*, QString const&)";
+        "Tui::v0::ZTest::sendText(Tui::v0::ZTerminal*, QString const&, QFlags<Qt::KeyboardModifier>)";
+        "Tui::v0::ZTest::waitForNextRenderAndGetContents(Tui::v0::ZTerminal*)";
+        "Tui::v0::ZTest::withLayoutRequestTracking(Tui::v0::ZTerminal*, std::function<void (QSet<Tui::v0::ZWidget*>*)>)";
+
+
+        ########### ZTextLayout
+
+        "Tui::v0::ZTextLayout::ZTextLayout(Tui::v0::ZTextLayout const&)";
+        "Tui::v0::ZTextLayout::ZTextLayout(Tui::v0::ZTextMetrics)";
+        "Tui::v0::ZTextLayout::ZTextLayout(Tui::v0::ZTextMetrics, QString const&)";
+        "Tui::v0::ZTextLayout::beginLayout()";
+        "Tui::v0::ZTextLayout::boundingRect() const";
+        "Tui::v0::ZTextLayout::createLine()";
+        "Tui::v0::ZTextLayout::doLayout(int)";
+        "Tui::v0::ZTextLayout::draw(Tui::v0::ZPainter, QPoint const&, Tui::v0::ZTextStyle, Tui::v0::ZTextStyle const*, QVector<Tui::v0::ZFormatRange> const&) const";
+        "Tui::v0::ZTextLayout::endLayout()";
+        "Tui::v0::ZTextLayout::isValidCursorPosition(int) const";
+        "Tui::v0::ZTextLayout::lineAt(int) const";
+        "Tui::v0::ZTextLayout::lineCount() const";
+        "Tui::v0::ZTextLayout::lineForTextPosition(int) const";
+        "Tui::v0::ZTextLayout::maximumWidth() const";
+        "Tui::v0::ZTextLayout::nextCursorPosition(int, Tui::v0::ZTextLayout::CursorMode) const";
+        "Tui::v0::ZTextLayout::operator=(Tui::v0::ZTextLayout const&)";
+        "Tui::v0::ZTextLayout::previousCursorPosition(int, Tui::v0::ZTextLayout::CursorMode) const";
+        "Tui::v0::ZTextLayout::setText(QString const&)";
+        "Tui::v0::ZTextLayout::setTextOption(Tui::v0::ZTextOption const&)";
+        "Tui::v0::ZTextLayout::showCursor(Tui::v0::ZPainter, QPoint const&, int) const";
+        "Tui::v0::ZTextLayout::text() const";
+        "Tui::v0::ZTextLayout::textOption() const";
+        "Tui::v0::ZTextLayout::~ZTextLayout()";
+
+
+        ########### ZTextLine
+
+        "typeinfo for Tui::v0::ZTextLine";
+        "typeinfo name for Tui::v0::ZTextLine";
+        "vtable for Tui::v0::ZTextLine";
+        "Tui::v0::ZTextLine::staticMetaObject";
+        "Tui::v0::ZTextLine::ZTextLine(QString const&, Tui::v0::ZWidget*)";
+        "Tui::v0::ZTextLine::ZTextLine(Tui::v0::WithMarkupTag, QString const&, Tui::v0::ZWidget*)";
+        "Tui::v0::ZTextLine::ZTextLine(Tui::v0::ZWidget*)";
+        "Tui::v0::ZTextLine::childEvent(QChildEvent*)";
+        "Tui::v0::ZTextLine::connectNotify(QMetaMethod const&)";
+        "Tui::v0::ZTextLine::customEvent(QEvent*)";
+        "Tui::v0::ZTextLine::disconnectNotify(QMetaMethod const&)";
+        "Tui::v0::ZTextLine::event(QEvent*)";
+        "Tui::v0::ZTextLine::eventFilter(QObject*, QEvent*)";
+        "Tui::v0::ZTextLine::facet(QMetaObject const&) const";
+        "Tui::v0::ZTextLine::focusInEvent(Tui::v0::ZFocusEvent*)";
+        "Tui::v0::ZTextLine::focusOutEvent(Tui::v0::ZFocusEvent*)";
+        "Tui::v0::ZTextLine::keyEvent(Tui::v0::ZKeyEvent*)";
+        "Tui::v0::ZTextLine::layoutArea() const";
+        "Tui::v0::ZTextLine::markup() const";
+        "Tui::v0::ZTextLine::metaObject() const";
+        "Tui::v0::ZTextLine::minimumSizeHint() const";
+        "Tui::v0::ZTextLine::moveEvent(Tui::v0::ZMoveEvent*)";
+        "Tui::v0::ZTextLine::paintEvent(Tui::v0::ZPaintEvent*)";
+        "Tui::v0::ZTextLine::pasteEvent(Tui::v0::ZPasteEvent*)";
+        "Tui::v0::ZTextLine::qt_metacall(QMetaObject::Call, int, void**)";
+        "Tui::v0::ZTextLine::qt_metacast(char const*)";
+        "Tui::v0::ZTextLine::resizeEvent(Tui::v0::ZResizeEvent*)";
+        "Tui::v0::ZTextLine::resolveSizeHintChain()";
+        "Tui::v0::ZTextLine::setMarkup(QString const&)";
+        "Tui::v0::ZTextLine::setText(QString const&)";
+        "Tui::v0::ZTextLine::sizeHint() const";
+        "Tui::v0::ZTextLine::text() const";
+        "Tui::v0::ZTextLine::timerEvent(QTimerEvent*)";
+        "Tui::v0::ZTextLine::~ZTextLine()";
+
+
+        ########### ZTextLineRef
+
+        "Tui::v0::ZTextLineRef::ZTextLineRef()";
+        "Tui::v0::ZTextLineRef::ZTextLineRef(Tui::v0::ZTextLayout*, int)";
+        "Tui::v0::ZTextLineRef::ZTextLineRef(Tui::v0::ZTextLineRef const&)";
+        "Tui::v0::ZTextLineRef::cursorToX(int*, Tui::v0::ZTextLayout::Edge) const";
+        "Tui::v0::ZTextLineRef::cursorToX(int, Tui::v0::ZTextLayout::Edge) const";
+        "Tui::v0::ZTextLineRef::draw(Tui::v0::ZPainter, QPoint const&, Tui::v0::ZTextStyle, Tui::v0::ZTextStyle, QVector<Tui::v0::ZFormatRange> const&) const";
+        "Tui::v0::ZTextLineRef::height() const";
+        "Tui::v0::ZTextLineRef::isValid() const";
+        "Tui::v0::ZTextLineRef::lineNumber() const";
+        "Tui::v0::ZTextLineRef::operator=(Tui::v0::ZTextLineRef const&)";
+        "Tui::v0::ZTextLineRef::position() const";
+        "Tui::v0::ZTextLineRef::rect() const";
+        "Tui::v0::ZTextLineRef::setLineWidth(int)";
+        "Tui::v0::ZTextLineRef::setPosition(QPoint const&)";
+        "Tui::v0::ZTextLineRef::textLength() const";
+        "Tui::v0::ZTextLineRef::textStart() const";
+        "Tui::v0::ZTextLineRef::width() const";
+        "Tui::v0::ZTextLineRef::x() const";
+        "Tui::v0::ZTextLineRef::xToCursor(int) const";
+        "Tui::v0::ZTextLineRef::y() const";
+        "Tui::v0::ZTextLineRef::~ZTextLineRef()";
+
+
+        ########### ZTextMetrics
+
+        "typeinfo for Tui::v0::ZTextMetrics";
+        "typeinfo name for Tui::v0::ZTextMetrics";
+        "vtable for Tui::v0::ZTextMetrics";
+        "Tui::v0::ZTextMetrics::ZTextMetrics(Tui::v0::ZTextMetrics const&)";
+        "Tui::v0::ZTextMetrics::nextCluster(QChar const*, int) const";
+        "Tui::v0::ZTextMetrics::nextCluster(QString const&, int) const";
+        "Tui::v0::ZTextMetrics::nextCluster(char const*, int) const";
+        "Tui::v0::ZTextMetrics::nextCluster(char16_t const*, int) const";
+        "Tui::v0::ZTextMetrics::nextCluster(char32_t const*, int) const";
+        "Tui::v0::ZTextMetrics::operator=(Tui::v0::ZTextMetrics const&)";
+        "Tui::v0::ZTextMetrics::sizeInClusters(QChar const*, int) const";
+        "Tui::v0::ZTextMetrics::sizeInClusters(QString const&) const";
+        "Tui::v0::ZTextMetrics::sizeInClusters(char const*, int) const";
+        "Tui::v0::ZTextMetrics::sizeInClusters(char16_t const*, int) const";
+        "Tui::v0::ZTextMetrics::sizeInClusters(char32_t const*, int) const";
+        "Tui::v0::ZTextMetrics::sizeInColumns(QChar const*, int) const";
+        "Tui::v0::ZTextMetrics::sizeInColumns(QString const&) const";
+        "Tui::v0::ZTextMetrics::sizeInColumns(char const*, int) const";
+        "Tui::v0::ZTextMetrics::sizeInColumns(char16_t const*, int) const";
+        "Tui::v0::ZTextMetrics::sizeInColumns(char32_t const*, int) const";
+        "Tui::v0::ZTextMetrics::splitByColumns(QChar const*, int, int) const";
+        "Tui::v0::ZTextMetrics::splitByColumns(QString const&, int) const";
+        "Tui::v0::ZTextMetrics::splitByColumns(char const*, int, int) const";
+        "Tui::v0::ZTextMetrics::splitByColumns(char16_t const*, int, int) const";
+        "Tui::v0::ZTextMetrics::splitByColumns(char32_t const*, int, int) const";
+        "Tui::v0::ZTextMetrics::~ZTextMetrics()";
+
+
+        ########### ZTextOption::Tab
+
+        "Tui::v0::ZTextOption::Tab::operator!=(Tui::v0::ZTextOption::Tab const&) const";
+        "Tui::v0::ZTextOption::Tab::operator==(Tui::v0::ZTextOption::Tab const&) const";
+
+
+        ########### ZTextOption
+
+        "Tui::v0::ZTextOption::ZTextOption()";
+        "Tui::v0::ZTextOption::ZTextOption(Tui::v0::ZTextOption const&)";
+        "Tui::v0::ZTextOption::ZTextOption(Tui::v0::ZTextOption&&)";
+        "Tui::v0::ZTextOption::flags() const";
+        "Tui::v0::ZTextOption::mapTabColor(int, int, int, Tui::v0::ZTextStyle const&, Tui::v0::ZTextStyle const&, Tui::v0::ZFormatRange const*) const";
+        "Tui::v0::ZTextOption::mapTrailingWhitespaceColor(Tui::v0::ZTextStyle const&, Tui::v0::ZTextStyle const&, Tui::v0::ZFormatRange const*) const";
+        "Tui::v0::ZTextOption::operator=(Tui::v0::ZTextOption const&)";
+        "Tui::v0::ZTextOption::operator=(Tui::v0::ZTextOption&&)";
+        "Tui::v0::ZTextOption::setFlags(QFlags<Tui::v0::ZTextOption::Flag>)";
+        "Tui::v0::ZTextOption::setTabArray(QList<int> const&)";
+        "Tui::v0::ZTextOption::setTabColor(std::function<Tui::v0::ZTextStyle (int, int, int, Tui::v0::ZTextStyle const&, Tui::v0::ZTextStyle const&, Tui::v0::ZFormatRange const*)>)";
+        "Tui::v0::ZTextOption::setTabStopDistance(int)";
+        "Tui::v0::ZTextOption::setTabs(QList<Tui::v0::ZTextOption::Tab> const&)";
+        "Tui::v0::ZTextOption::setTrailingWhitespaceColor(std::function<Tui::v0::ZTextStyle (Tui::v0::ZTextStyle const&, Tui::v0::ZTextStyle const&, Tui::v0::ZFormatRange const*)>)";
+        "Tui::v0::ZTextOption::setWrapMode(Tui::v0::ZTextOption::WrapMode)";
+        "Tui::v0::ZTextOption::tabArray() const";
+        "Tui::v0::ZTextOption::tabStopDistance() const";
+        "Tui::v0::ZTextOption::tabs() const";
+        "Tui::v0::ZTextOption::wrapMode() const";
+        "Tui::v0::ZTextOption::~ZTextOption()";
+
+
+        ########### ZTextStyle
+
+        "Tui::v0::ZTextStyle::ZTextStyle()";
+        "Tui::v0::ZTextStyle::ZTextStyle(Tui::v0::ZColor, Tui::v0::ZColor)";
+        "Tui::v0::ZTextStyle::ZTextStyle(Tui::v0::ZColor, Tui::v0::ZColor, QFlags<Tui::v0::ZTextAttribute>)";
+        "Tui::v0::ZTextStyle::ZTextStyle(Tui::v0::ZTextStyle const&)";
+        "Tui::v0::ZTextStyle::ZTextStyle(Tui::v0::ZTextStyle&&)";
+        "Tui::v0::ZTextStyle::attributes() const";
+        "Tui::v0::ZTextStyle::backgroundColor() const";
+        "Tui::v0::ZTextStyle::foregroundColor() const";
+        "Tui::v0::ZTextStyle::operator=(Tui::v0::ZTextStyle const&)";
+        "Tui::v0::ZTextStyle::operator=(Tui::v0::ZTextStyle&&)";
+        "Tui::v0::ZTextStyle::operator==(Tui::v0::ZTextStyle const&) const";
+        "Tui::v0::ZTextStyle::setAttributes(QFlags<Tui::v0::ZTextAttribute>)";
+        "Tui::v0::ZTextStyle::setBackgroundColor(Tui::v0::ZColor const&)";
+        "Tui::v0::ZTextStyle::setForegroundColor(Tui::v0::ZColor const&)";
+        "Tui::v0::ZTextStyle::~ZTextStyle()";
+
+
+        ########### ZVBoxLayout
+
+        "typeinfo for Tui::v0::ZVBoxLayout";
+        "typeinfo name for Tui::v0::ZVBoxLayout";
+        "vtable for Tui::v0::ZVBoxLayout";
+        "Tui::v0::ZVBoxLayout::staticMetaObject";
+        "Tui::v0::ZVBoxLayout::ZVBoxLayout()";
+        "Tui::v0::ZVBoxLayout::add(Tui::v0::ZLayout*)";
+        "Tui::v0::ZVBoxLayout::addSpacing(int)";
+        "Tui::v0::ZVBoxLayout::addStretch()";
+        "Tui::v0::ZVBoxLayout::addWidget(Tui::v0::ZWidget*)";
+        "Tui::v0::ZVBoxLayout::childEvent(QChildEvent*)";
+        "Tui::v0::ZVBoxLayout::connectNotify(QMetaMethod const&)";
+        "Tui::v0::ZVBoxLayout::customEvent(QEvent*)";
+        "Tui::v0::ZVBoxLayout::disconnectNotify(QMetaMethod const&)";
+        "Tui::v0::ZVBoxLayout::event(QEvent*)";
+        "Tui::v0::ZVBoxLayout::eventFilter(QObject*, QEvent*)";
+        "Tui::v0::ZVBoxLayout::isSpacer() const";
+        "Tui::v0::ZVBoxLayout::isVisible() const";
+        "Tui::v0::ZVBoxLayout::layout()";
+        "Tui::v0::ZVBoxLayout::metaObject() const";
+        "Tui::v0::ZVBoxLayout::qt_metacall(QMetaObject::Call, int, void**)";
+        "Tui::v0::ZVBoxLayout::qt_metacast(char const*)";
+        "Tui::v0::ZVBoxLayout::removeWidgetRecursively(Tui::v0::ZWidget*)";
+        "Tui::v0::ZVBoxLayout::setGeometry(QRect)";
+        "Tui::v0::ZVBoxLayout::setSpacing(int)";
+        "Tui::v0::ZVBoxLayout::sizeHint() const";
+        "Tui::v0::ZVBoxLayout::sizePolicyH() const";
+        "Tui::v0::ZVBoxLayout::sizePolicyV() const";
+        "Tui::v0::ZVBoxLayout::spacing() const";
+        "Tui::v0::ZVBoxLayout::timerEvent(QTimerEvent*)";
+        "Tui::v0::ZVBoxLayout::widget()";
+        "Tui::v0::ZVBoxLayout::widgetEvent(QEvent*)";
+        "Tui::v0::ZVBoxLayout::~ZVBoxLayout()";
+        "non-virtual thunk to Tui::v0::ZVBoxLayout::isSpacer() const";
+        "non-virtual thunk to Tui::v0::ZVBoxLayout::isVisible() const";
+        "non-virtual thunk to Tui::v0::ZVBoxLayout::layout()";
+        "non-virtual thunk to Tui::v0::ZVBoxLayout::setGeometry(QRect)";
+        "non-virtual thunk to Tui::v0::ZVBoxLayout::sizeHint() const";
+        "non-virtual thunk to Tui::v0::ZVBoxLayout::sizePolicyH() const";
+        "non-virtual thunk to Tui::v0::ZVBoxLayout::sizePolicyV() const";
+        "non-virtual thunk to Tui::v0::ZVBoxLayout::widget()";
+        "non-virtual thunk to Tui::v0::ZVBoxLayout::~ZVBoxLayout()";
+
+
+        ########### ZWidget
+
+        "typeinfo for Tui::v0::ZWidget";
+        "typeinfo name for Tui::v0::ZWidget";
+        "vtable for Tui::v0::ZWidget";
+        "Tui::v0::ZWidget::staticMetaObject";
+        "Tui::v0::ZWidget::ZWidget(Tui::v0::ZWidget*)";
+        "Tui::v0::ZWidget::addPaletteClass(QString const&)";
+        "Tui::v0::ZWidget::childEvent(QChildEvent*)";
+        "Tui::v0::ZWidget::commandManager() const";
+        "Tui::v0::ZWidget::connectNotify(QMetaMethod const&)";
+        "Tui::v0::ZWidget::contentsMargins() const";
+        "Tui::v0::ZWidget::contentsRect() const";
+        "Tui::v0::ZWidget::cursorStyle() const";
+        "Tui::v0::ZWidget::customEvent(QEvent*)";
+        "Tui::v0::ZWidget::disconnectNotify(QMetaMethod const&)";
+        "Tui::v0::ZWidget::effectiveMinimumSize() const";
+        "Tui::v0::ZWidget::effectiveSizeHint() const";
+        "Tui::v0::ZWidget::ensureCommandManager()";
+        "Tui::v0::ZWidget::event(QEvent*)";
+        "Tui::v0::ZWidget::eventFilter(QObject*, QEvent*)";
+        "Tui::v0::ZWidget::facet(QMetaObject const&) const";
+        "Tui::v0::ZWidget::focus() const";
+        "Tui::v0::ZWidget::focusInEvent(Tui::v0::ZFocusEvent*)";
+        "Tui::v0::ZWidget::focusMode() const";
+        "Tui::v0::ZWidget::focusOrder() const";
+        "Tui::v0::ZWidget::focusOutEvent(Tui::v0::ZFocusEvent*)";
+        "Tui::v0::ZWidget::focusPolicy() const";
+        "Tui::v0::ZWidget::geometry() const";
+        "Tui::v0::ZWidget::getColor(Tui::v0::ZImplicitSymbol const&)";
+        "Tui::v0::ZWidget::grabKeyboard()";
+        "Tui::v0::ZWidget::grabKeyboard(Tui::v0::Private::ZMoFunc<void (QEvent*)>)";
+        "Tui::v0::ZWidget::isAncestorOf(Tui::v0::ZWidget const*) const";
+        "Tui::v0::ZWidget::isEnabled() const";
+        "Tui::v0::ZWidget::isEnabledTo(Tui::v0::ZWidget const*) const";
+        "Tui::v0::ZWidget::isInFocusPath() const";
+        "Tui::v0::ZWidget::isLocallyEnabled() const";
+        "Tui::v0::ZWidget::isLocallyVisible() const";
+        "Tui::v0::ZWidget::isVisible() const";
+        "Tui::v0::ZWidget::isVisibleTo(Tui::v0::ZWidget const*) const";
+        "Tui::v0::ZWidget::keyEvent(Tui::v0::ZKeyEvent*)";
+        "Tui::v0::ZWidget::layout() const";
+        "Tui::v0::ZWidget::layoutArea() const";
+        "Tui::v0::ZWidget::lower()";
+        "Tui::v0::ZWidget::mapFromTerminal(QPoint const&)";
+        "Tui::v0::ZWidget::mapToTerminal(QPoint const&)";
+        "Tui::v0::ZWidget::maximumSize() const";
+        "Tui::v0::ZWidget::metaObject() const";
+        "Tui::v0::ZWidget::minimumSize() const";
+        "Tui::v0::ZWidget::minimumSizeHint() const";
+        "Tui::v0::ZWidget::moveEvent(Tui::v0::ZMoveEvent*)";
+        "Tui::v0::ZWidget::nextFocusable() const";
+        "Tui::v0::ZWidget::nextFocusable()";
+        "Tui::v0::ZWidget::paintEvent(Tui::v0::ZPaintEvent*)";
+        "Tui::v0::ZWidget::palette() const";
+        "Tui::v0::ZWidget::paletteClass() const";
+        "Tui::v0::ZWidget::pasteEvent(Tui::v0::ZPasteEvent*)";
+        "Tui::v0::ZWidget::placeFocus(bool) const";
+        "Tui::v0::ZWidget::placeFocus(bool)";
+        "Tui::v0::ZWidget::prevFocusable() const";
+        "Tui::v0::ZWidget::prevFocusable()";
+        "Tui::v0::ZWidget::qt_metacall(QMetaObject::Call, int, void**)";
+        "Tui::v0::ZWidget::qt_metacast(char const*)";
+        "Tui::v0::ZWidget::raise()";
+        "Tui::v0::ZWidget::rect() const";
+        "Tui::v0::ZWidget::releaseKeyboard()";
+        "Tui::v0::ZWidget::removePaletteClass(QString const&)";
+        "Tui::v0::ZWidget::resetCursorColor()";
+        "Tui::v0::ZWidget::resizeEvent(Tui::v0::ZResizeEvent*)";
+        "Tui::v0::ZWidget::resolveSizeHintChain()";
+        "Tui::v0::ZWidget::setCommandManager(Tui::v0::ZCommandManager*)";
+        "Tui::v0::ZWidget::setContentsMargins(QMargins)";
+        "Tui::v0::ZWidget::setCursorColor(int, int, int)";
+        "Tui::v0::ZWidget::setCursorStyle(Tui::v0::CursorStyle)";
+        "Tui::v0::ZWidget::setEnabled(bool)";
+        "Tui::v0::ZWidget::setFixedSize(QSize)";
+        "Tui::v0::ZWidget::setFixedSize(int, int)";
+        "Tui::v0::ZWidget::setFocus(Qt::FocusReason)";
+        "Tui::v0::ZWidget::setFocusMode(Tui::v0::FocusContainerMode)";
+        "Tui::v0::ZWidget::setFocusOrder(int)";
+        "Tui::v0::ZWidget::setFocusPolicy(Qt::FocusPolicy)";
+        "Tui::v0::ZWidget::setGeometry(QRect const&)";
+        "Tui::v0::ZWidget::setLayout(Tui::v0::ZLayout*)";
+        "Tui::v0::ZWidget::setMaximumSize(QSize)";
+        "Tui::v0::ZWidget::setMaximumSize(int, int)";
+        "Tui::v0::ZWidget::setMinimumSize(QSize)";
+        "Tui::v0::ZWidget::setMinimumSize(int, int)";
+        "Tui::v0::ZWidget::setPalette(Tui::v0::ZPalette const&)";
+        "Tui::v0::ZWidget::setPaletteClass(QStringList)";
+        "Tui::v0::ZWidget::setParent(Tui::v0::ZWidget*)";
+        "Tui::v0::ZWidget::setSizePolicyH(Tui::v0::SizePolicy)";
+        "Tui::v0::ZWidget::setSizePolicyV(Tui::v0::SizePolicy)";
+        "Tui::v0::ZWidget::setStackingLayer(int)";
+        "Tui::v0::ZWidget::setVisible(bool)";
+        "Tui::v0::ZWidget::showCursor(QPoint)";
+        "Tui::v0::ZWidget::sizeHint() const";
+        "Tui::v0::ZWidget::sizePolicyH() const";
+        "Tui::v0::ZWidget::sizePolicyV() const";
+        "Tui::v0::ZWidget::stackUnder(Tui::v0::ZWidget*)";
+        "Tui::v0::ZWidget::stackingLayer() const";
+        "Tui::v0::ZWidget::terminal() const";
+        "Tui::v0::ZWidget::timerEvent(QTimerEvent*)";
+        "Tui::v0::ZWidget::update()";
+        "Tui::v0::ZWidget::updateGeometry()";
+        "Tui::v0::ZWidget::~ZWidget()";
+
+
+        ########### ZWindow
+
+        "typeinfo for Tui::v0::ZWindow";
+        "typeinfo name for Tui::v0::ZWindow";
+        "vtable for Tui::v0::ZWindow";
+        "Tui::v0::ZWindow::staticMetaObject";
+        "Tui::v0::ZWindow::ZWindow(QString const&, Tui::v0::ZWidget*)";
+        "Tui::v0::ZWindow::ZWindow(Tui::v0::ZWidget*)";
+        "Tui::v0::ZWindow::borderEdges() const";
+        "Tui::v0::ZWindow::childEvent(QChildEvent*)";
+        "Tui::v0::ZWindow::close()";
+        "Tui::v0::ZWindow::closeEvent(Tui::v0::ZCloseEvent*)";
+        "Tui::v0::ZWindow::closeSkipCheck(QStringList)";
+        "Tui::v0::ZWindow::connectNotify(QMetaMethod const&)";
+        "Tui::v0::ZWindow::customEvent(QEvent*)";
+        "Tui::v0::ZWindow::disconnectNotify(QMetaMethod const&)";
+        "Tui::v0::ZWindow::event(QEvent*)";
+        "Tui::v0::ZWindow::eventFilter(QObject*, QEvent*)";
+        "Tui::v0::ZWindow::facet(QMetaObject const&) const";
+        "Tui::v0::ZWindow::focusInEvent(Tui::v0::ZFocusEvent*)";
+        "Tui::v0::ZWindow::focusOutEvent(Tui::v0::ZFocusEvent*)";
+        "Tui::v0::ZWindow::keyEvent(Tui::v0::ZKeyEvent*)";
+        "Tui::v0::ZWindow::layoutArea() const";
+        "Tui::v0::ZWindow::metaObject() const";
+        "Tui::v0::ZWindow::minimumSizeHint() const";
+        "Tui::v0::ZWindow::moveEvent(Tui::v0::ZMoveEvent*)";
+        "Tui::v0::ZWindow::options() const";
+        "Tui::v0::ZWindow::paintEvent(Tui::v0::ZPaintEvent*)";
+        "Tui::v0::ZWindow::pasteEvent(Tui::v0::ZPasteEvent*)";
+        "Tui::v0::ZWindow::qt_metacall(QMetaObject::Call, int, void**)";
+        "Tui::v0::ZWindow::qt_metacast(char const*)";
+        "Tui::v0::ZWindow::resizeEvent(Tui::v0::ZResizeEvent*)";
+        "Tui::v0::ZWindow::resolveSizeHintChain()";
+        "Tui::v0::ZWindow::setAutomaticPlacement()";
+        "Tui::v0::ZWindow::setBorderEdges(QFlags<Qt::Edge>)";
+        "Tui::v0::ZWindow::setDefaultPlacement(QFlags<Qt::AlignmentFlag>, QPoint)";
+        "Tui::v0::ZWindow::setOptions(QFlags<Tui::v0::ZWindow::Option>)";
+        "Tui::v0::ZWindow::setWindowTitle(QString const&)";
+        "Tui::v0::ZWindow::showSystemMenu()";
+        "Tui::v0::ZWindow::sizeHint() const";
+        "Tui::v0::ZWindow::startInteractiveMove()";
+        "Tui::v0::ZWindow::startInteractiveResize()";
+        "Tui::v0::ZWindow::systemMenu()";
+        "Tui::v0::ZWindow::timerEvent(QTimerEvent*)";
+        "Tui::v0::ZWindow::windowTitle() const";
+        "Tui::v0::ZWindow::windowTitleChanged(QString const&)";
+        "Tui::v0::ZWindow::~ZWindow()";
+
+
+        ########### ZWindowContainer
+
+        "typeinfo for Tui::v0::ZWindowContainer";
+        "typeinfo name for Tui::v0::ZWindowContainer";
+        "vtable for Tui::v0::ZWindowContainer";
+        "Tui::v0::ZWindowContainer::staticMetaObject";
+        "Tui::v0::ZWindowContainer::ZWindowContainer()";
+        "Tui::v0::ZWindowContainer::childEvent(QChildEvent*)";
+        "Tui::v0::ZWindowContainer::connectNotify(QMetaMethod const&)";
+        "Tui::v0::ZWindowContainer::containerMenuItems() const";
+        "Tui::v0::ZWindowContainer::customEvent(QEvent*)";
+        "Tui::v0::ZWindowContainer::disconnectNotify(QMetaMethod const&)";
+        "Tui::v0::ZWindowContainer::event(QEvent*)";
+        "Tui::v0::ZWindowContainer::eventFilter(QObject*, QEvent*)";
+        "Tui::v0::ZWindowContainer::metaObject() const";
+        "Tui::v0::ZWindowContainer::qt_metacall(QMetaObject::Call, int, void**)";
+        "Tui::v0::ZWindowContainer::qt_metacast(char const*)";
+        "Tui::v0::ZWindowContainer::timerEvent(QTimerEvent*)";
+        "Tui::v0::ZWindowContainer::~ZWindowContainer()";
+
+
+        ########### ZWindowFacet
+
+        "typeinfo for Tui::v0::ZWindowFacet";
+        "typeinfo name for Tui::v0::ZWindowFacet";
+        "vtable for Tui::v0::ZWindowFacet";
+        "Tui::v0::ZWindowFacet::staticMetaObject";
+        "Tui::v0::ZWindowFacet::ZWindowFacet()";
+        "Tui::v0::ZWindowFacet::autoPlace(QSize const&, Tui::v0::ZWidget*)";
+        "Tui::v0::ZWindowFacet::childEvent(QChildEvent*)";
+        "Tui::v0::ZWindowFacet::connectNotify(QMetaMethod const&)";
+        "Tui::v0::ZWindowFacet::container() const";
+        "Tui::v0::ZWindowFacet::customEvent(QEvent*)";
+        "Tui::v0::ZWindowFacet::disconnectNotify(QMetaMethod const&)";
+        "Tui::v0::ZWindowFacet::event(QEvent*)";
+        "Tui::v0::ZWindowFacet::eventFilter(QObject*, QEvent*)";
+        "Tui::v0::ZWindowFacet::isExtendViewport() const";
+        "Tui::v0::ZWindowFacet::isManuallyPlaced() const";
+        "Tui::v0::ZWindowFacet::metaObject() const";
+        "Tui::v0::ZWindowFacet::qt_metacall(QMetaObject::Call, int, void**)";
+        "Tui::v0::ZWindowFacet::qt_metacast(char const*)";
+        "Tui::v0::ZWindowFacet::setContainer(Tui::v0::ZWindowContainer*)";
+        "Tui::v0::ZWindowFacet::setManuallyPlaced(bool)";
+        "Tui::v0::ZWindowFacet::timerEvent(QTimerEvent*)";
+        "Tui::v0::ZWindowFacet::~ZWindowFacet()";
+
+
+        ########### ZWindowLayout
+
+        "typeinfo for Tui::v0::ZWindowLayout";
+        "typeinfo name for Tui::v0::ZWindowLayout";
+        "vtable for Tui::v0::ZWindowLayout";
+        "Tui::v0::ZWindowLayout::staticMetaObject";
+        "Tui::v0::ZWindowLayout::ZWindowLayout()";
+        "Tui::v0::ZWindowLayout::bottomBorderLeftAdjust() const";
+        "Tui::v0::ZWindowLayout::bottomBorderRightAdjust() const";
+        "Tui::v0::ZWindowLayout::childEvent(QChildEvent*)";
+        "Tui::v0::ZWindowLayout::connectNotify(QMetaMethod const&)";
+        "Tui::v0::ZWindowLayout::customEvent(QEvent*)";
+        "Tui::v0::ZWindowLayout::disconnectNotify(QMetaMethod const&)";
+        "Tui::v0::ZWindowLayout::event(QEvent*)";
+        "Tui::v0::ZWindowLayout::eventFilter(QObject*, QEvent*)";
+        "Tui::v0::ZWindowLayout::isSpacer() const";
+        "Tui::v0::ZWindowLayout::isVisible() const";
+        "Tui::v0::ZWindowLayout::layout()";
+        "Tui::v0::ZWindowLayout::metaObject() const";
+        "Tui::v0::ZWindowLayout::qt_metacall(QMetaObject::Call, int, void**)";
+        "Tui::v0::ZWindowLayout::qt_metacast(char const*)";
+        "Tui::v0::ZWindowLayout::removeWidgetRecursively(Tui::v0::ZWidget*)";
+        "Tui::v0::ZWindowLayout::rightBorderBottomAdjust() const";
+        "Tui::v0::ZWindowLayout::rightBorderTopAdjust() const";
+        "Tui::v0::ZWindowLayout::setBottomBorderLeftAdjust(int)";
+        "Tui::v0::ZWindowLayout::setBottomBorderRightAdjust(int)";
+        "Tui::v0::ZWindowLayout::setBottomBorderWidget(Tui::v0::ZWidget*, QFlags<Qt::AlignmentFlag>)";
+        "Tui::v0::ZWindowLayout::setCentral(Tui::v0::ZLayoutItem*)";
+        "Tui::v0::ZWindowLayout::setCentralWidget(Tui::v0::ZWidget*)";
+        "Tui::v0::ZWindowLayout::setGeometry(QRect)";
+        "Tui::v0::ZWindowLayout::setRightBorderBottomAdjust(int)";
+        "Tui::v0::ZWindowLayout::setRightBorderTopAdjust(int)";
+        "Tui::v0::ZWindowLayout::setRightBorderWidget(Tui::v0::ZWidget*, QFlags<Qt::AlignmentFlag>)";
+        "Tui::v0::ZWindowLayout::setTopBorderLeftAdjust(int)";
+        "Tui::v0::ZWindowLayout::setTopBorderRightAdjust(int)";
+        "Tui::v0::ZWindowLayout::setTopBorderWidget(Tui::v0::ZWidget*, QFlags<Qt::AlignmentFlag>)";
+        "Tui::v0::ZWindowLayout::sizeHint() const";
+        "Tui::v0::ZWindowLayout::sizePolicyH() const";
+        "Tui::v0::ZWindowLayout::sizePolicyV() const";
+        "Tui::v0::ZWindowLayout::timerEvent(QTimerEvent*)";
+        "Tui::v0::ZWindowLayout::topBorderLeftAdjust() const";
+        "Tui::v0::ZWindowLayout::topBorderRightAdjust() const";
+        "Tui::v0::ZWindowLayout::widget()";
+        "Tui::v0::ZWindowLayout::widgetEvent(QEvent*)";
+        "Tui::v0::ZWindowLayout::~ZWindowLayout()";
+        "non-virtual thunk to Tui::v0::ZWindowLayout::isSpacer() const";
+        "non-virtual thunk to Tui::v0::ZWindowLayout::isVisible() const";
+        "non-virtual thunk to Tui::v0::ZWindowLayout::layout()";
+        "non-virtual thunk to Tui::v0::ZWindowLayout::setGeometry(QRect)";
+        "non-virtual thunk to Tui::v0::ZWindowLayout::sizeHint() const";
+        "non-virtual thunk to Tui::v0::ZWindowLayout::sizePolicyH() const";
+        "non-virtual thunk to Tui::v0::ZWindowLayout::sizePolicyV() const";
+        "non-virtual thunk to Tui::v0::ZWindowLayout::widget()";
+        "non-virtual thunk to Tui::v0::ZWindowLayout::~ZWindowLayout()";
+    };
+
+    local: extern "C++" {
+        # Private functions
+        "Tui::v0::ZButton::removeShortcut()";
+        "Tui::v0::ZCheckBox::removeShortcut()";
+        "Tui::v0::ZCommandManager::_tui_enabledChanged(bool)";
+        "Tui::v0::ZCommandManager::compact(Tui::v0::ZSymbol)";
+        "Tui::v0::ZCommandNotifier::probeParents()";
+        "Tui::v0::ZLabel::removeShortcut()";
+        "Tui::v0::ZListView::attachModel()";
+        "Tui::v0::ZListView::detachModel()";
+        "Tui::v0::ZMenubar::commandStateChanged(Tui::v0::ZSymbol)";
+        "Tui::v0::ZMenubar::updateCacheAndRegrabKeys()";
+        "Tui::v0::ZRadioButton::removeShortcut()";
+        "Tui::v0::ZRoot::focusWindowHelper(bool)";
+        "Tui::v0::ZTerminal::dispatcherIsAboutToBlock()";
+        "Tui::v0::ZTextLayout::layoutLine(int, int)";
+        "Tui::v0::ZTextLayout::lineNumberForTextPosition(int) const";
+
+        # internal constructors for pimpl chaining
+        "Tui::v0::ZEvent::ZEvent(QEvent::Type, std::unique_ptr<Tui::v0::ZEventPrivate, std::default_delete<Tui::v0::ZEventPrivate> >)";
+        "Tui::v0::ZLayout::ZLayout(QObject*, std::unique_ptr<Tui::v0::ZLayoutPrivate, std::default_delete<Tui::v0::ZLayoutPrivate> >)";
+        "Tui::v0::ZPainter::ZPainter(std::unique_ptr<Tui::v0::ZPainterPrivate, std::default_delete<Tui::v0::ZPainterPrivate> >)";
+        "Tui::v0::ZTextMetrics::ZTextMetrics(std::shared_ptr<Tui::v0::ZTextMetricsPrivate>)";
+        "Tui::v0::ZWidget::ZWidget(Tui::v0::ZWidget*, std::unique_ptr<Tui::v0::ZWidgetPrivate, std::default_delete<Tui::v0::ZWidgetPrivate> >)";
+        "Tui::v0::ZWindow::ZWindow(Tui::v0::ZWidget*, std::unique_ptr<Tui::v0::ZWidgetPrivate, std::default_delete<Tui::v0::ZWidgetPrivate> >)";
+        "Tui::v0::ZWindowContainer::ZWindowContainer(std::unique_ptr<Tui::v0::ZWindowContainerPrivate, std::default_delete<Tui::v0::ZWindowContainerPrivate> >)";
+        "Tui::v0::ZWindowFacet::ZWindowFacet(std::unique_ptr<Tui::v0::ZWindowFacetPrivate, std::default_delete<Tui::v0::ZWindowFacetPrivate> >)";
+
+        ########### ZTerminal::OffScreenData
+
+        "Tui::v0::ZTerminal::OffScreenData::OffScreenData(int, int)";
+        "Tui::v0::ZTerminal::OffScreenData::OffScreenData(int, int)";
+    };
+};

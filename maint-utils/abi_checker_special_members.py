@@ -29,7 +29,7 @@ nm_exit = subprocess.run(['nm', '--dynamic', '--extern-only', '--undefined-only'
 
 undef_symbols = set()
 
-undef_symbol_re = re.compile('^([_A-Za-z0-9]+) U')
+undef_symbol_re = re.compile('^([_A-Za-z0-9]+)@[A-Z_.0-9]+ U')
 
 for line in nm_exit.stdout.split('\n'):
     match = undef_symbol_re.match(line)

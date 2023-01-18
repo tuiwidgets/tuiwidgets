@@ -139,6 +139,11 @@ class SpecialDestructorUsageTerminalConnectionDelegate : public Tui::ZTerminal::
 };
 
 class Tui::v0::ZEventPrivate {};
+Tui::v0::ZEvent::ZEvent(Type type, std::unique_ptr<ZEventPrivate> pimpl)
+    : QEvent(type), tuiwidgets_pimpl_ptr(move(pimpl))
+{
+}
+
 class SpecialDestructorUsageEvent : public Tui::ZEvent {
     SpecialDestructorUsageEvent() : Tui::ZEvent(QEvent::Type::None, nullptr) {}
 };
@@ -273,7 +278,7 @@ void testInner(Kind kind, bool run, T *a, T *b) {
                 }
             } else if constexpr (std::is_same_v<T, Tui::ZPainter>) {
                 // can only be created using existing ZPainter
-            } else if constexpr (std::is_constructible_v<T, nullptr_t>) {
+            } else if constexpr (std::is_constructible_v<T, nullptr_t> && !std::is_same_v<T, Tui::ZTextMetrics>) {
                 if (run) {
                     DestructorReference<T> x(nullptr);
                 }
