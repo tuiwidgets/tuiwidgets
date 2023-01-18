@@ -999,7 +999,7 @@ void MarkupParser::nextEvent() {
                     t.errorUnimplemented("TODO dd/dt");
                     // FIXME
                 } else if (currentTokenIsTagBegin() && (t.tagName == U"plaintext")) {
-                    t.errorUnimplemented("depricated plaintext tag");
+                    t.errorUnimplemented("deprecate plaintext tag");
                 } else if (currentTokenIsTagBegin() && (t.tagName == U"button")) {
                     if (hasInScope(U"button")) {
                         t._isError = true;

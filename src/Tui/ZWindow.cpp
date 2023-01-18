@@ -169,7 +169,7 @@ void ZWindow::setDefaultPlacement(Alignment align, QPoint displace) {
         p->windowFacet->setDefaultPlacement(align, displace);
         p->ensureAutoPlacement();
     } else {
-        qWarning("ZWindow::setDefaultPlacement calls with overriden WindowFacet do nothing.");
+        qWarning("ZWindow::setDefaultPlacement calls with overridden WindowFacet do nothing.");
     }
 }
 

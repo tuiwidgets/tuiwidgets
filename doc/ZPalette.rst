@@ -89,7 +89,7 @@ palettes.
    .. cpp:function:: void setColors(QList<Tui::ZPalette::ColorDef> newColors)
 
       Define colors for symbols as specified in ``newColors``.
-      The defined colors take effect for the widget given this palette and its descendants unless overriden later.
+      The defined colors take effect for the widget given this palette and its descendants unless overridden later.
 
    .. cpp:function:: addRules(QList<Tui::ZPalette::RuleDef> newRules)
 

@@ -1728,12 +1728,12 @@ namespace {
     };
 }
 
-TEST_CASE("window-auto-placement-overriden-facet", "") {
+TEST_CASE("window-auto-placement-overridden-facet", "") {
     Testhelper t("window", "unused", 100, 30);
     WindowWithOwnFacet *w = new WindowWithOwnFacet(t.root);
 
     DiagnosticMessageChecker msg;
-    msg.expectMessage("ZWindow::setDefaultPlacement calls with overriden WindowFacet do nothing.");
+    msg.expectMessage("ZWindow::setDefaultPlacement calls with overridden WindowFacet do nothing.");
     w->setDefaultPlacement(Tui::AlignCenter);
     msg.tillHere();
 

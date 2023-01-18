@@ -19,7 +19,7 @@ ZRoot is designed as the root widget in the widget tree.
 It sets a default palette, clears the widget and handles switching between windows using :kbd:`F6` and :kbd:`Shift+F6`.
 
 Commonly an application has a class derived from ZRoot to setup the user interface widget tree.
-It is recommended to create the widgets in an overriden :cpp:func:`~void Tui::ZRoot::terminalChanged()` function, so
+It is recommended to create the widgets in an overridden :cpp:func:`~void Tui::ZRoot::terminalChanged()` function, so
 that all terminal auto detection is already finished when the widget tree is build.
 
 Example
