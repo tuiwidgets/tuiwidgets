@@ -235,6 +235,7 @@ test_files = [
   'tests/checkbox/checkbox.cpp',
   'tests/color/color.cpp',
   'tests/command.cpp',
+  'tests/defaultwidgetmanager.cpp',
   'tests/eventrecorder.cpp',
   'tests/events.cpp',
   'tests/image/image.cpp',
