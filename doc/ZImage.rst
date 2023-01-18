@@ -7,6 +7,11 @@ ZImage
 
    ZImage allows keeping terminal output in a memory buffer for later usage or to store and load.
 
+   ZSymbol is copyable, movable, assignable and supports equality comparisons.
+
+   It is undefined behaviour when a image with outstanding painter is moved from or access anything else than
+   the assignment operators and destructor on the moved from state.
+
    **Constructors**
 
    | :cpp:func:`ZImage(const Tui::ZTerminal *terminal, int width, int height)> <void Tui::ZImage::ZImage(const Tui::ZTerminal *terminal, int width, int height)>`
