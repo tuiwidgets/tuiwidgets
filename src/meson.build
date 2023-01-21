@@ -193,7 +193,9 @@ import('pkgconfig').generate(
   description: 'Terminal User Interface Widget Library',
   filebase: 'TuiWidgets',
   name: 'TuiWidgets',
+  url: 'https://tuiwidgets.namepad.de/',
   libraries: [tuiwidgets],
+  requires: [qt5_dep],
   subdirs: ['.']
 )
 
