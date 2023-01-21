@@ -36,7 +36,7 @@ public:                                                                         
 #else
 // disable everywhere else
 #define VIRTUAL_INDEX_PROBE(N, T, M)
-#define CHECK_VIRTUAL(N, M) (void)base, derived
+#define CHECK_VIRTUAL(N, M) (void)base; (void)derived
 
 #endif
 
