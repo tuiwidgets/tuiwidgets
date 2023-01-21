@@ -189,7 +189,6 @@ install_headers(tuiwidgets_public_headers, subdir:'Tui')
 install_headers(tuiwidgets_misc_public_headers, subdir:'Tui/Misc')
 
 import('pkgconfig').generate(
-  version: '0.0',
   description: 'Terminal User Interface Widget Library',
   filebase: 'TuiWidgets',
   name: 'TuiWidgets',
