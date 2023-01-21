@@ -18,7 +18,13 @@ mydir = os.path.dirname(__file__) + '/'
 
 result_exe = mydir + '/../_build/abi_checker_exe'
 
-subprocess.run(['c++', '-fno-access-control', '-Wa,-amhlsd=' + result_exe + '.asmlist', '-I../src', '-I/usr/include/x86_64-linux-gnu/qt5/QtCore', '-I/usr/include/x86_64-linux-gnu/qt5', '-D_FILE_OFFSET_BITS=64', '-Wall', '-Winvalid-pch', '-Wnon-virtual-dtor', '-std=c++17', '-O0', '-g', '-fvisibility=hidden', '-fvisibility-inlines-hidden', '-Wall', '-Wextra', '-Werror=return-type', '-DQT_CORE_LIB', '-fPIC', '-o', result_exe, 'abi_checker_special_members.cpp', '-lQt5Core', '../_build/src/libtuiwidgets.so', '-Wl,-rpath,' + mydir + '/../_build/src'], cwd=mydir, check=True)
+subprocess.run(['c++', '-fno-access-control', '-Wa,-amhlsd=' + result_exe + '.asmlist', '-I../src',
+                '-I/usr/include/x86_64-linux-gnu/qt5/QtCore', '-I/usr/include/x86_64-linux-gnu/qt5',
+                '-D_FILE_OFFSET_BITS=64', '-Wall', '-Winvalid-pch', '-Wnon-virtual-dtor', '-std=c++17',
+                '-O0', '-g', '-fvisibility=hidden', '-fvisibility-inlines-hidden', '-Wall', '-Wextra',
+                '-Werror=return-type', '-DQT_CORE_LIB', '-fPIC', '-o', result_exe, 'abi_checker_special_members.cpp',
+                '-lQt5Core', '../_build/src/libtuiwidgets.so', '-Wl,-rpath,' + mydir + '/../_build/src'],
+                cwd=mydir, check=True)
 
 result_exit = subprocess.run([result_exe], capture_output=True, encoding='utf8', errors='surrogateescape')
 
