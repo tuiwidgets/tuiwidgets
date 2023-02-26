@@ -1657,3 +1657,10 @@ TUIWIDGETS_0.2 {
         "Tui::v0::ZTerminal::OffScreenData::OffScreenData(int, int)";
     };
 };
+
+TUIWIDGETS_0.2.1 {
+    global: extern "C++" {
+        ########### ZPainter
+        "Tui::v0::ZPainter::drawImageWithTiling(int, int, Tui::v0::ZImage const&, int, int, int, int, Tui::v0::ZTilingMode, Tui::v0::ZTilingMode)";
+    };
+};

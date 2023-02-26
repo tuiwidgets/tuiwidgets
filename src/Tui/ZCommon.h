@@ -135,6 +135,12 @@ enum class ZTextAttribute : int {
 };
 Q_DECLARE_FLAGS(ZTextAttributes, ZTextAttribute)
 
+enum class ZTilingMode : int {
+    NoTiling = 0,
+    Preserve = -1,
+    Put = 1
+};
+
 static constexpr int Erased = 127;
 
 constexpr class WithMarkupTag {} withMarkup {};

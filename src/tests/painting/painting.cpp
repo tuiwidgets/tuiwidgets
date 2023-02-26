@@ -775,16 +775,24 @@ TEST_CASE("ZPainter: translateAndClip") {
 
 
     SECTION("drawImage") {
+        bool withTilingOptions = GENERATE(false, true);
+        CAPTURE(withTilingOptions);
         Tui::ZImage image = Tui::ZImageData::createForTesting(f.terminal, 10, 10);
         image.painter().clear(Tui::TerminalColor::cyan, Tui::TerminalColor::green);
         image.painter().setBackground(2, 2, Tui::TerminalColor::blue);
-        painter1x1.drawImage(-2, -2, image);
+        if (withTilingOptions) {
+            painter1x1.drawImageWithTiling(-2, -2, image, 0, 0, -1, -1, Tui::ZTilingMode::NoTiling, Tui::ZTilingMode::NoTiling);
+        } else {
+            painter1x1.drawImage(-2, -2, image);
+        }
         checkEmptyPlusSome(f.surface, {
                                {{2, 3}, singleWideChar(TERMPAINT_ERASED).withBg(TERMPAINT_COLOR_BLUE).withFg(TERMPAINT_COLOR_CYAN)}
                            });
     }
 
     SECTION("drawImage-inside") {
+        bool withTilingOptions = GENERATE(false, true);
+        CAPTURE(withTilingOptions);
         Tui::ZPainter painter = useQRect ? painterUnclipped.translateAndClip({1, 2, 20, 3})
                                          : painterUnclipped.translateAndClip(1, 2, 20, 3);
         Tui::ZImage image = Tui::ZImageData::createForTesting(f.terminal, 5, 1);
@@ -792,7 +800,11 @@ TEST_CASE("ZPainter: translateAndClip") {
         image.painter().setBackground(2, 0, Tui::TerminalColor::blue);
         image.painter().setBackground(3, 0, Tui::TerminalColor::blue);
         image.painter().setBackground(4, 0, Tui::TerminalColor::blue);
-        painter.drawImage(2, 1, image);
+        if (withTilingOptions) {
+            painter.drawImageWithTiling(2, 1, image, 0, 0, -1, -1, Tui::ZTilingMode::NoTiling, Tui::ZTilingMode::NoTiling);
+        } else {
+            painter.drawImage(2, 1, image);
+        }
         checkEmptyPlusSome(f.surface, {
                                {{3, 3}, singleWideChar(TERMPAINT_ERASED).withBg(TERMPAINT_COLOR_GREEN).withFg(TERMPAINT_COLOR_CYAN)},
                                {{4, 3}, singleWideChar(TERMPAINT_ERASED).withBg(TERMPAINT_COLOR_GREEN).withFg(TERMPAINT_COLOR_CYAN)},
@@ -803,16 +815,24 @@ TEST_CASE("ZPainter: translateAndClip") {
     }
 
     SECTION("drawImage-outside") {
+        bool withTilingOptions = GENERATE(false, true);
+        CAPTURE(withTilingOptions);
         Tui::ZPainter painter = useQRect ? painterUnclipped.translateAndClip({1, 2, 10, 3})
                                          : painterUnclipped.translateAndClip(1, 2, 10, 3);
         Tui::ZImage image = Tui::ZImageData::createForTesting(f.terminal, 10, 10);
         image.painter().clear(Tui::TerminalColor::cyan, Tui::TerminalColor::green);
         image.painter().setBackground(2, 2, Tui::TerminalColor::blue);
-        painter.drawImage(12, 2, image);
+        if (withTilingOptions) {
+            painter.drawImageWithTiling(12, 2, image, 0, 0, -1, -1, Tui::ZTilingMode::NoTiling, Tui::ZTilingMode::NoTiling);
+        } else {
+            painter.drawImage(12, 2, image);
+        }
         checkEmptyPlusSome(f.surface, {});
     }
 
     SECTION("drawImage with offset") {
+        bool withTilingOptions = GENERATE(false, true);
+        CAPTURE(withTilingOptions);
         Tui::ZImage image = Tui::ZImageData::createForTesting(f.terminal, 10, 4);
         image.painter().clear(Tui::TerminalColor::cyan, Tui::TerminalColor::green);
         image.painter().writeWithColors(0, 0, "abcdefghij", Tui::TerminalColor::blue, Tui::TerminalColor::brightMagenta);
@@ -820,7 +840,11 @@ TEST_CASE("ZPainter: translateAndClip") {
         image.painter().writeWithColors(0, 2, "0123456789", Tui::TerminalColor::blue, Tui::TerminalColor::brightMagenta);
         image.painter().writeWithColors(0, 3, "xxxxxxxxxx", Tui::TerminalColor::blue, Tui::TerminalColor::brightMagenta);
 
-        painterOffset.drawImage(0, 0, image);
+        if (withTilingOptions) {
+            painterOffset.drawImageWithTiling(0, 0, image, 0, 0, -1, -1, Tui::ZTilingMode::NoTiling, Tui::ZTilingMode::NoTiling);
+        } else {
+            painterOffset.drawImage(0, 0, image);
+        }
 
         checkEmptyPlusSome(f.surface, {
                                {{20, 1}, singleWideChar("C").withFg(TERMPAINT_COLOR_BLUE).withBg(TERMPAINT_COLOR_BRIGHT_MAGENTA)},
@@ -831,6 +855,8 @@ TEST_CASE("ZPainter: translateAndClip") {
     }
 
     SECTION("drawImage with offset-2-1") {
+        bool withTilingOptions = GENERATE(false, true);
+        CAPTURE(withTilingOptions);
         Tui::ZImage image = Tui::ZImageData::createForTesting(f.terminal, 10, 4);
         image.painter().clear(Tui::TerminalColor::cyan, Tui::TerminalColor::green);
         image.painter().writeWithColors(0, 0, "abcdefghij", Tui::TerminalColor::blue, Tui::TerminalColor::brightMagenta);
@@ -838,7 +864,11 @@ TEST_CASE("ZPainter: translateAndClip") {
         image.painter().writeWithColors(0, 2, "0123456789", Tui::TerminalColor::blue, Tui::TerminalColor::brightMagenta);
         image.painter().writeWithColors(0, 3, "xxxxxxxxxx", Tui::TerminalColor::blue, Tui::TerminalColor::brightMagenta);
 
-        painterOffset.drawImage(2, 1, image);
+        if (withTilingOptions) {
+            painterOffset.drawImageWithTiling(2, 1, image, 0, 0, -1, -1, Tui::ZTilingMode::NoTiling, Tui::ZTilingMode::NoTiling);
+        } else {
+            painterOffset.drawImage(2, 1, image);
+        }
 
         checkEmptyPlusSome(f.surface, {
                                {{20, 1}, singleWideChar("a").withFg(TERMPAINT_COLOR_BLUE).withBg(TERMPAINT_COLOR_BRIGHT_MAGENTA)},
@@ -1043,6 +1073,9 @@ TEST_CASE("ZPainter: clearSoftwrapMarker") {
 }
 
 TEST_CASE("ZPainter: drawImage") {
+    bool withTilingOptions = GENERATE(false, true);
+    CAPTURE(withTilingOptions);
+
     bool useImage = GENERATE(false, true);
     CAPTURE(useImage);
     TermpaintFixtureImg f{80, 6, useImage};
@@ -1051,7 +1084,11 @@ TEST_CASE("ZPainter: drawImage") {
     Tui::ZPainter painter = f.testPainter();
     Tui::ZImage image = Tui::ZImageData::createForTesting(f.terminal, 1, 1);
     image.painter().setBackground(0, 0, Tui::TerminalColor::blue);
-    painter.drawImage(0, 0, image);
+    if (withTilingOptions) {
+        painter.drawImageWithTiling(0, 0, image, 0, 0, -1, -1, Tui::ZTilingMode::NoTiling, Tui::ZTilingMode::NoTiling);
+    } else {
+        painter.drawImage(0, 0, image);
+    }
     checkEmptyPlusSome(f.surface, {
                            {{0, 0}, singleWideChar(TERMPAINT_ERASED).withBg(TERMPAINT_COLOR_BLUE)}
                        });
@@ -1059,7 +1096,11 @@ TEST_CASE("ZPainter: drawImage") {
     image = Tui::ZImageData::createForTesting(f.terminal, 3, 2);
     image.painter().writeWithColors(0, 0, "ASD", Tui::TerminalColor::red, Tui::TerminalColor::cyan);
     image.painter().writeWithColors(0, 1, "123", Tui::TerminalColor::red, Tui::TerminalColor::cyan);
-    painter.drawImage(0, 0, image, 0, 0, -1, -1);
+    if (withTilingOptions) {
+        painter.drawImageWithTiling(0, 0, image, 0, 0, -1, -1, Tui::ZTilingMode::NoTiling, Tui::ZTilingMode::NoTiling);
+    } else {
+        painter.drawImage(0, 0, image, 0, 0, -1, -1);
+    }
     checkEmptyPlusSome(f.surface, {
                            {{0, 0}, singleWideChar("A").withFg(TERMPAINT_COLOR_RED).withBg(TERMPAINT_COLOR_CYAN)},
                            {{1, 0}, singleWideChar("S").withFg(TERMPAINT_COLOR_RED).withBg(TERMPAINT_COLOR_CYAN)},
@@ -1070,7 +1111,11 @@ TEST_CASE("ZPainter: drawImage") {
                        });
 
     painter.clear(Tui::ZColor::defaultColor(), Tui::ZColor::defaultColor());
-    painter.drawImage(2, 3, image);
+    if (withTilingOptions) {
+        painter.drawImageWithTiling(2, 3, image, 0, 0, -1, -1, Tui::ZTilingMode::NoTiling, Tui::ZTilingMode::NoTiling);
+    } else {
+        painter.drawImage(2, 3, image);
+    }
     checkEmptyPlusSome(f.surface, {
                            {{2, 3}, singleWideChar("A").withFg(TERMPAINT_COLOR_RED).withBg(TERMPAINT_COLOR_CYAN)},
                            {{3, 3}, singleWideChar("S").withFg(TERMPAINT_COLOR_RED).withBg(TERMPAINT_COLOR_CYAN)},
@@ -1081,17 +1126,86 @@ TEST_CASE("ZPainter: drawImage") {
                        });
 
     painter.clear(Tui::ZColor::defaultColor(), Tui::ZColor::defaultColor());
-    painter.drawImage(0, 0, image, 2, 1);
+    if (withTilingOptions) {
+        painter.drawImageWithTiling(0, 0, image, 2, 1, -1, -1, Tui::ZTilingMode::NoTiling, Tui::ZTilingMode::NoTiling);
+    } else {
+        painter.drawImage(0, 0, image, 2, 1);
+    }
     checkEmptyPlusSome(f.surface, {
                            {{0, 0}, singleWideChar("3").withFg(TERMPAINT_COLOR_RED).withBg(TERMPAINT_COLOR_CYAN)}
                        });
 
     painter.clear(Tui::ZColor::defaultColor(), Tui::ZColor::defaultColor());
-    painter.drawImage(0, 0, image, 0, 0, 2, 1);
+    if (withTilingOptions) {
+        painter.drawImageWithTiling(0, 0, image, 0, 0, 2, 1, Tui::ZTilingMode::NoTiling, Tui::ZTilingMode::NoTiling);
+    } else {
+        painter.drawImage(0, 0, image, 0, 0, 2, 1);
+    }
     checkEmptyPlusSome(f.surface, {
                            {{0, 0}, singleWideChar("A").withFg(TERMPAINT_COLOR_RED).withBg(TERMPAINT_COLOR_CYAN)},
                            {{1, 0}, singleWideChar("S").withFg(TERMPAINT_COLOR_RED).withBg(TERMPAINT_COLOR_CYAN)},
                        });
+}
+
+TEST_CASE("ZPainter: drawImageWithTiling") {
+    bool useImage = GENERATE(false, true);
+    CAPTURE(useImage);
+    TermpaintFixtureImg f{80, 6, useImage};
+    termpaint_surface_clear(f.surface, TERMPAINT_DEFAULT_COLOR, TERMPAINT_DEFAULT_COLOR);
+
+    Tui::ZPainter painter = f.testPainter();
+    Tui::ZImage image = Tui::ZImageData::createForTesting(f.terminal, 6, 2);
+
+    image.painter().writeWithColors(1, 0, "あう", Tui::TerminalColor::red, Tui::TerminalColor::cyan);
+    image.painter().writeWithColors(1, 1, "1234", Tui::TerminalColor::red, Tui::TerminalColor::cyan);
+
+    SECTION("NoTiling, NoTiling") {
+        painter.drawImageWithTiling(1, 0, image, 2, 0, 2, 1, Tui::ZTilingMode::NoTiling, Tui::ZTilingMode::NoTiling);
+
+        checkEmptyPlusSome(f.surface, {
+                               {{1, 0}, singleWideChar(" ").withFg(TERMPAINT_COLOR_RED).withBg(TERMPAINT_COLOR_CYAN)},
+                               {{2, 0}, singleWideChar(" ").withFg(TERMPAINT_COLOR_RED).withBg(TERMPAINT_COLOR_CYAN)},
+                           });
+    }
+
+    SECTION("NoTiling, Put") {
+        painter.drawImageWithTiling(1, 0, image, 2, 0, 2, 1, Tui::ZTilingMode::NoTiling, Tui::ZTilingMode::Put);
+
+        checkEmptyPlusSome(f.surface, {
+                               {{1, 0}, singleWideChar(" ").withFg(TERMPAINT_COLOR_RED).withBg(TERMPAINT_COLOR_CYAN)},
+                               {{2, 0}, doubleWideChar("う").withFg(TERMPAINT_COLOR_RED).withBg(TERMPAINT_COLOR_CYAN)},
+                           });
+    }
+
+    SECTION("Put, NoTiling") {
+        painter.drawImageWithTiling(1, 0, image, 2, 0, 2, 1, Tui::ZTilingMode::Put, Tui::ZTilingMode::NoTiling);
+
+        checkEmptyPlusSome(f.surface, {
+                               {{0, 0}, doubleWideChar("あ").withFg(TERMPAINT_COLOR_RED).withBg(TERMPAINT_COLOR_CYAN)},
+                               {{2, 0}, singleWideChar(" ").withFg(TERMPAINT_COLOR_RED).withBg(TERMPAINT_COLOR_CYAN)},
+                           });
+    }
+
+    SECTION("Put, Put") {
+        painter.drawImageWithTiling(1, 0, image, 2, 0, 2, 1, Tui::ZTilingMode::Put, Tui::ZTilingMode::Put);
+
+        checkEmptyPlusSome(f.surface, {
+                               {{0, 0}, doubleWideChar("あ").withFg(TERMPAINT_COLOR_RED).withBg(TERMPAINT_COLOR_CYAN)},
+                               {{2, 0}, doubleWideChar("う").withFg(TERMPAINT_COLOR_RED).withBg(TERMPAINT_COLOR_CYAN)},
+                           });
+    }
+
+    SECTION("Preserve, Preserve") {
+        painter.writeWithColors(0, 0, "えxい", Tui::TerminalColor::yellow, Tui::TerminalColor::magenta);
+        image.painter().writeWithColors(1, 0, "あuう", Tui::TerminalColor::red, Tui::TerminalColor::cyan);
+
+        painter.drawImageWithTiling(1, 0, image, 2, 0, 3, 1, Tui::ZTilingMode::Preserve, Tui::ZTilingMode::Preserve);
+        checkEmptyPlusSome(f.surface, {
+                               {{0, 0}, doubleWideChar("え").withFg(TERMPAINT_COLOR_YELLOW).withBg(TERMPAINT_COLOR_MAGENTA)},
+                               {{2, 0}, singleWideChar("u").withFg(TERMPAINT_COLOR_RED).withBg(TERMPAINT_COLOR_CYAN)},
+                               {{3, 0}, doubleWideChar("い").withFg(TERMPAINT_COLOR_YELLOW).withBg(TERMPAINT_COLOR_MAGENTA)},
+                           });
+    }
 
 }
 

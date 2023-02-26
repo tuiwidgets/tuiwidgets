@@ -87,6 +87,30 @@ The ``ZCommon.h`` header contains types, enums and constants shared by various c
    On supported terminals trailing erased cells in a line will not add whitespace when copying text from the terminal.
 
 .. rst-class:: tw-midspacebefore
+.. cpp:enum-class:: Tui::ZTilingMode
+
+   When drawing an image on a painter with double wide characters on the edges of the source rectangle, selects how to
+   handle these characters.
+
+   .. cpp:enumerator:: NoTiling
+
+      Partial clusters in the source are copied to the destination as spaces for the part of the cluster that
+      is inside the rectangle.
+      If clusters in the destination cross the boundary they are erased before the copy is made.
+      (The part of the cluster outside the rectangle preserves it’s attributes but the text is replaced by spaces)
+
+   .. cpp:enumerator:: Preserve
+
+      If clusters in the destination line up with clusters in source, the cluster in the destination is preserved.
+      This allows seamlessly extending a copy made with TERMPAINT_COPY_TILE_PUT without overwriting previously
+      copied cells.
+
+   .. cpp:enumerator:: Put
+
+      Clusters in the source will be copied into the destination even if that means modifying cells outside
+      of the destination rectangle. This allows copying a larger region in multiple steps.
+
+.. rst-class:: tw-midspacebefore
 .. cpp:class:: Tui::WithMarkupTag
 .. cpp:var:: constexpr Tui::WithMarkupTag Tui::withMarkup {}
 

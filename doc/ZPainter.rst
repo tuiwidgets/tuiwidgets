@@ -28,6 +28,7 @@ when not using widgets from a :cpp:class:`Tui::ZTerminal`.
    | :cpp:func:`void clearSoftwrapMarker(int x, int y)`
    | :cpp:func:`void clearWithChar(Tui::ZColor fg, Tui::ZColor bg, int fillChar, Tui::ZTextAttributes attr = {})`
    | :cpp:func:`void drawImage(int x, int y, const Tui::ZImage &sourceImage, int sourceX = 0, int sourceY = 0, int width = -1, int height = -1)`
+   | :cpp:func:`void drawImageWithTiling(int x, int y, const Tui::ZImage &sourceImage, int sourceX, int sourceY, int width, int height, Tui::ZTilingMode tileLeft, Tui::ZTilingMode tileRight)`
    | :cpp:func:`void setBackground(int x, int y, Tui::ZColor bg)`
    | :cpp:func:`void setCursor(int x, int y)`
    | :cpp:func:`void setForeground(int x, int y, Tui::ZColor fg)`
@@ -148,6 +149,7 @@ Members
    |clipandtransform|
 
 .. cpp:function:: void drawImage(int x, int y, const Tui::ZImage &sourceImage, int sourceX = 0, int sourceY = 0, int width = -1, int height = -1)
+.. cpp:function:: void drawImageWithTiling(int x, int y, const Tui::ZImage &sourceImage, int sourceX, int sourceY, int width, int height, Tui::ZTilingMode tileLeft, Tui::ZTilingMode tileRight)
 
    Draws the rectangle starting at ``sourceX``, ``sourceY`` with width ``width`` and height ``height`` of the image
    given as ``sourceImage``.
@@ -156,6 +158,9 @@ Members
    The image is drawn starting at the point ``x``, ``y``.
 
    |clipandtransform|
+
+   Handling of wide characters on the left or right edge of the source rectangle is selected using ``tileLeft`` and
+   ``tileRight``. :cpp:enumerator:`Tui::ZTilingMode::NoTiling` is used in the variant without these parameters.
 
 .. cpp:function:: void setForeground(int x, int y, Tui::ZColor fg)
 

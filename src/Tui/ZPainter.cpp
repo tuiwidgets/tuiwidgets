@@ -15,6 +15,10 @@
 
 TUIWIDGETS_NS_START
 
+static_assert ((int)ZTilingMode::NoTiling == TERMPAINT_COPY_NO_TILE);
+static_assert ((int)ZTilingMode::Put == TERMPAINT_COPY_TILE_PUT);
+static_assert ((int)ZTilingMode::Preserve == TERMPAINT_COPY_TILE_PRESERVE);
+
 namespace {
     int toTermPaintColor(ZColor color) {
         return color.nativeValue();
@@ -208,7 +212,9 @@ void ZPainter::clearSoftwrapMarker(int x, int y) {
     termpaint_surface_set_softwrap_marker(pimpl->surface, pimpl->x + x, pimpl->y + y, false);
 }
 
-void ZPainter::drawImage(int x, int y, const ZImage &sourceImage, int sourceX, int sourceY, int width, int height) {
+void ZPainter::drawImageWithTiling(int x, int y,
+                                   const ZImage &sourceImage, int sourceX, int sourceY, int width, int height,
+                                   ZTilingMode tileLeft, ZTilingMode tileRight) {
     auto *const pimpl = tuiwidgets_impl();
 
     x += pimpl->offsetX;
@@ -241,7 +247,12 @@ void ZPainter::drawImage(int x, int y, const ZImage &sourceImage, int sourceX, i
 
     termpaint_surface_copy_rect(ZImageData::get(&sourceImage)->surface, sourceX, sourceY, width, height,
                                 pimpl->surface, pimpl->x + x, pimpl->y + y,
-                                TERMPAINT_COPY_NO_TILE, TERMPAINT_COPY_NO_TILE);
+                                static_cast<int>(tileLeft), static_cast<int>(tileRight));
+}
+
+void ZPainter::drawImage(int x, int y, const ZImage &sourceImage, int sourceX, int sourceY, int width, int height) {
+    drawImageWithTiling(x, y, sourceImage, sourceX, sourceY, width, height,
+                             ZTilingMode::NoTiling, ZTilingMode::NoTiling);
 }
 
 void ZPainter::setForeground(int x, int y, ZColor fg) {
