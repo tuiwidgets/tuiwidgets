@@ -854,6 +854,26 @@ bool ZTerminal::hasCapability(ZSymbol cap) const {
     return false;
 }
 
+QString ZTerminal::terminalDetectionResultText() const {
+    auto *const p = tuiwidgets_impl();
+    if (p->initState != ZTerminalPrivate::InitState::Ready && p->initState != ZTerminalPrivate::InitState::Paused) {
+        return {};
+    }
+
+    char buff[2048];
+    termpaint_terminal_auto_detect_result_text(p->terminal, buff, sizeof(buff));
+    return QString::fromUtf8(buff);
+}
+
+QString ZTerminal::terminalSelfReportedNameAndVersion() const {
+    auto *const p = tuiwidgets_impl();
+    if (p->initState != ZTerminalPrivate::InitState::Ready && p->initState != ZTerminalPrivate::InitState::Paused) {
+        return {};
+    }
+
+    return QString::fromUtf8(termpaint_terminal_self_reported_name_and_version(p->terminal));
+}
+
 void ZTerminal::pauseOperation() {
     auto *const p = tuiwidgets_impl();
     if (p->initState != ZTerminalPrivate::InitState::Ready) return;

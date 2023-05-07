@@ -150,6 +150,8 @@ public:
     QString autoDetectTimeoutMessage() const;
 
     bool hasCapability(ZSymbol cap) const;
+    QString terminalDetectionResultText() const;
+    QString terminalSelfReportedNameAndVersion() const;
 
     void pauseOperation();
     void unpauseOperation();

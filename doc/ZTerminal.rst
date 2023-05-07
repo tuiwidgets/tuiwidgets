@@ -441,6 +441,8 @@ ZTerminal
    | :cpp:func:`void registerPendingKeySequenceCallbacks(const Tui::ZPendingKeySequenceCallbacks &callbacks)`
    | :cpp:func:`void requestLayout(ZWidget *w)`
    | :cpp:func:`void resize(int width, int height)`
+   | :cpp:func:`QString terminalDetectionResultText() const`
+   | :cpp:func:`QString terminalSelfReportedNameAndVersion() const`
    | :cpp:func:`void setAutoDetectTimeoutMessage(const QString &message)`
    | :cpp:func:`void setCursorColor(int cursorColorR, int cursorColorG, int cursorColorB)`
    | :cpp:func:`void setCursorPosition(QPoint cursorPosition)`
@@ -571,6 +573,16 @@ Members
    Queries if the capability ``cap`` is set.
 
    See :ref:`term_capabilites` for details and possible values for ``cap``.
+
+.. cpp:function:: QString terminalDetectionResultText() const
+
+   Returns a string describing the result of terminal auto detection.
+
+   Don't parse the result of this function, it is only intended to be displayed as diagnostic information.
+
+.. cpp:function:: QString terminalSelfReportedNameAndVersion() const
+
+   Returns the the name and version the terminal reports about itself.
 
 .. cpp:function:: int currentLayoutGeneration()
 
