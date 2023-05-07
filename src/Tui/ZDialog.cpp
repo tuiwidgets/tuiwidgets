@@ -16,7 +16,11 @@ ZDialogPrivate::ZDialogPrivate(ZWidget *pub) : ZWindowPrivate(pub) {
 ZDialogPrivate::~ZDialogPrivate() {
 }
 
-ZDialog::ZDialog(ZWidget *parent) : ZWindow(parent, std::make_unique<ZDialogPrivate>(this)) {
+ZDialog::ZDialog(ZWidget *parent) : ZDialog(parent, std::make_unique<ZDialogPrivate>(this)) {
+}
+
+
+ZDialog::ZDialog(ZWidget *parent, std::unique_ptr<ZDialogPrivate> pimpl) : ZWindow(parent, move(pimpl)) {
     setPaletteClass({QStringLiteral("window"), QStringLiteral("dialog")});
     setStackingLayer(1000);
     QTimer::singleShot(0, this, &ZDialog::showHandler);

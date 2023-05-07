@@ -1663,4 +1663,9 @@ TUIWIDGETS_0.2.1 {
         ########### ZPainter
         "Tui::v0::ZPainter::drawImageWithTiling(int, int, Tui::v0::ZImage const&, int, int, int, int, Tui::v0::ZTilingMode, Tui::v0::ZTilingMode)";
     };
+
+    local: extern "C++" {
+        # internal constructors for pimpl chaining
+        "Tui::v0::ZDialog::ZDialog(Tui::v0::ZWidget*, std::unique_ptr<Tui::v0::ZDialogPrivate, std::default_delete<Tui::v0::ZDialogPrivate> >)";
+    };
 };

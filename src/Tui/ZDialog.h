@@ -60,6 +60,9 @@ protected:
 private:
     void showHandler();
 
+protected:
+    explicit ZDialog(ZWidget *parent, std::unique_ptr<ZDialogPrivate> pimpl);
+
 private:
     TUIWIDGETS_DECLARE_PRIVATE(ZDialog)    
 };
