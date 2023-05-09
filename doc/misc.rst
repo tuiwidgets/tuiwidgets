@@ -11,6 +11,7 @@ Misc
    ZFormatRange
    ZMenuItem
    ZStyledTextLine
+   ZTerminalDiagnosticsDialog
    ZTextOption
    ZTextStyle
    ZValuePtr

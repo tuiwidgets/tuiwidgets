@@ -1666,6 +1666,40 @@ TUIWIDGETS_0.2.1 {
         ########### ZTerminal
         "Tui::v0::ZTerminal::terminalDetectionResultText() const";
         "Tui::v0::ZTerminal::terminalSelfReportedNameAndVersion() const";
+
+        ########### ZTerminalDiagnosticsDialog
+
+        "typeinfo for Tui::v0::ZTerminalDiagnosticsDialog";
+        "typeinfo name for Tui::v0::ZTerminalDiagnosticsDialog";
+        "vtable for Tui::v0::ZTerminalDiagnosticsDialog";
+
+        "Tui::v0::ZTerminalDiagnosticsDialog::ZTerminalDiagnosticsDialog(Tui::v0::ZWidget*)";
+        "Tui::v0::ZTerminalDiagnosticsDialog::childEvent(QChildEvent*)";
+        "Tui::v0::ZTerminalDiagnosticsDialog::closeEvent(Tui::v0::ZCloseEvent*)";
+        "Tui::v0::ZTerminalDiagnosticsDialog::connectNotify(QMetaMethod const&)";
+        "Tui::v0::ZTerminalDiagnosticsDialog::customEvent(QEvent*)";
+        "Tui::v0::ZTerminalDiagnosticsDialog::disconnectNotify(QMetaMethod const&)";
+        "Tui::v0::ZTerminalDiagnosticsDialog::event(QEvent*)";
+        "Tui::v0::ZTerminalDiagnosticsDialog::eventFilter(QObject*, QEvent*)";
+        "Tui::v0::ZTerminalDiagnosticsDialog::facet(QMetaObject const&) const";
+        "Tui::v0::ZTerminalDiagnosticsDialog::focusInEvent(Tui::v0::ZFocusEvent*)";
+        "Tui::v0::ZTerminalDiagnosticsDialog::focusOutEvent(Tui::v0::ZFocusEvent*)";
+        "Tui::v0::ZTerminalDiagnosticsDialog::keyEvent(Tui::v0::ZKeyEvent*)";
+        "Tui::v0::ZTerminalDiagnosticsDialog::layoutArea() const";
+        "Tui::v0::ZTerminalDiagnosticsDialog::metaObject() const";
+        "Tui::v0::ZTerminalDiagnosticsDialog::minimumSizeHint() const";
+        "Tui::v0::ZTerminalDiagnosticsDialog::moveEvent(Tui::v0::ZMoveEvent*)";
+        "Tui::v0::ZTerminalDiagnosticsDialog::paintEvent(Tui::v0::ZPaintEvent*)";
+        "Tui::v0::ZTerminalDiagnosticsDialog::pasteEvent(Tui::v0::ZPasteEvent*)";
+        "Tui::v0::ZTerminalDiagnosticsDialog::qt_metacall(QMetaObject::Call, int, void**)";
+        "Tui::v0::ZTerminalDiagnosticsDialog::qt_metacast(char const*)";
+        "Tui::v0::ZTerminalDiagnosticsDialog::resizeEvent(Tui::v0::ZResizeEvent*)";
+        "Tui::v0::ZTerminalDiagnosticsDialog::resolveSizeHintChain()";
+        "Tui::v0::ZTerminalDiagnosticsDialog::sizeHint() const";
+        "Tui::v0::ZTerminalDiagnosticsDialog::staticMetaObject";
+        "Tui::v0::ZTerminalDiagnosticsDialog::systemMenu()";
+        "Tui::v0::ZTerminalDiagnosticsDialog::timerEvent(QTimerEvent*)";
+        "Tui::v0::ZTerminalDiagnosticsDialog::~ZTerminalDiagnosticsDialog()";
     };
 
     local: extern "C++" {

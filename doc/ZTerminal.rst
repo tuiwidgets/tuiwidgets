@@ -579,6 +579,7 @@ Members
    Returns a string describing the result of terminal auto detection.
 
    Don't parse the result of this function, it is only intended to be displayed as diagnostic information.
+   An easy way to display this information is by using :ref:`ZTerminalDiagnosticsDialog`.
 
 .. cpp:function:: QString terminalSelfReportedNameAndVersion() const
 
