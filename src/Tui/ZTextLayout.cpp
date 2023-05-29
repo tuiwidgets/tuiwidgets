@@ -619,6 +619,13 @@ bool ZTextLineRef::isValid() const {
     return _index != -1;
 }
 
+namespace {
+    struct HighlightSortHelper {
+        int run;
+        const ZFormatRange *ptr;
+    };
+}
+
 void ZTextLineRef::draw(ZPainter painter, const QPoint &pos, ZTextStyle color, ZTextStyle formattingChars,
                         const QVector<ZFormatRange> &ranges) const {
     if (_layout) {
@@ -629,17 +636,63 @@ void ZTextLineRef::draw(ZPainter painter, const QPoint &pos, ZTextStyle color, Z
         ZPainter painterClipped = painter.translateAndClip({0, 0, pos.x() + ld.pos.x() + ld.maxWidth,
                                                             pos.y() + ld.pos.y() + 1});
 
+        // Prepare to use binary search to find first text run that a format range intersects
+        std::vector<int> textRunStarts;
+        textRunStarts.reserve(ld.textRuns.size());
+        for (int i = 0; i < ld.textRuns.size(); i++) {
+            textRunStarts.push_back(ld.textRuns[i].offset);
+        }
+
+        // match each format range to all text runs that intersect it.
+        // This can add multiple entries per original format range.
+        std::vector<HighlightSortHelper> partitionedRanges;
+        partitionedRanges.reserve(ranges.size()); // enough if no format range intersects multiple text runs
+
+        for (int i = 0; i < ranges.size(); i++) {
+            const ZFormatRange &formatRange = ranges[i];
+            const auto formatRangeLength = formatRange.length();
+            if (formatRangeLength <= 0) {
+                continue;
+            }
+            auto formatRangeStart = formatRange.start();
+            int formatRangeEnd = formatRangeStart + formatRangeLength;
+
+            if (formatRangeEnd < 0 || formatRangeStart >= ld.endIndex) {
+                continue;
+            }
+
+            if (formatRangeStart < ld.offset) {
+                formatRangeStart = ld.offset;
+            }
+
+            auto lb = std::upper_bound(textRunStarts.begin(), textRunStarts.end(), formatRangeStart);
+            lb--; // safe as formatRangeStart >= ld.offset and *textRunStarts.begin() == ld.offset
+            int textRunIndex = lb - textRunStarts.begin();
+            for (; textRunIndex < ld.textRuns.size(); textRunIndex++) {
+                partitionedRanges.push_back(HighlightSortHelper{textRunIndex, &formatRange});
+                if (ld.textRuns[textRunIndex].endIndex >= formatRangeEnd) {
+                    break;
+                }
+            }
+        }
+
+        // Sort by run index, so that the rendering code can iterate over the format ranges in O(1)
+        std::stable_sort(partitionedRanges.begin(), partitionedRanges.end(),
+                         [] (const HighlightSortHelper &lhs, const HighlightSortHelper &rhs) {
+            return lhs.run < rhs.run;
+        });
+
+
+        auto nextFormatRange = partitionedRanges.begin();
         for (int i = 0; i < ld.textRuns.size(); i++) {
             const ZTextLayoutPrivate::TextRun &run = ld.textRuns[i];
             if (run.type == ZTextLayoutPrivate::TextRun::COPY) {
                 painterClipped.writeWithAttributes(pos.x() + ld.pos.x() + run.x, pos.y() + ld.pos.y(),
                                                    p->text.mid(run.offset, run.endIndex - run.offset),
                                                    color.foregroundColor(), color.backgroundColor(), color.attributes());
-                for (const ZFormatRange &formatRange: ranges) {
+                for (; nextFormatRange != partitionedRanges.end() && nextFormatRange->run == i; nextFormatRange++) {
+                    const ZFormatRange &formatRange = *nextFormatRange->ptr;
                     const auto formatRangeLength = formatRange.length();
-                    if (formatRangeLength <= 0) {
-                        continue;
-                    }
                     const auto formatRangeStart = formatRange.start();
                     int formatRangeEnd = formatRangeStart + formatRangeLength;
                     if (formatRangeStart <= run.offset && formatRangeEnd > run.offset) {
@@ -677,11 +730,9 @@ void ZTextLineRef::draw(ZPainter painter, const QPoint &pos, ZTextStyle color, Z
                 }
             } else if (run.type == ZTextLayoutPrivate::TextRun::TAB) {
                 const ZFormatRange *range = nullptr;
-                for (const ZFormatRange &formatRange: ranges) {
+                for (; nextFormatRange != partitionedRanges.end() && nextFormatRange->run == i; nextFormatRange++) {
+                    const ZFormatRange &formatRange = *nextFormatRange->ptr;
                     const auto formatRangeLength = formatRange.length();
-                    if (formatRangeLength <= 0) {
-                        continue;
-                    }
                     const auto formatRangeStart = formatRange.start();
                     int formatRangeEnd = formatRangeStart + formatRangeLength;
                     if (run.offset >= formatRangeStart && run.offset < formatRangeEnd) {
@@ -727,11 +778,9 @@ void ZTextLineRef::draw(ZPainter painter, const QPoint &pos, ZTextStyle color, Z
                 painterClipped.writeWithAttributes(pos.x() + ld.pos.x() + run.x, pos.y() + ld.pos.y(),
                                                    QString(run.width, ch),
                                                    style.foregroundColor(), style.backgroundColor(), style.attributes());
-                for (const ZFormatRange& formatRange: ranges) {
+                for (; nextFormatRange != partitionedRanges.end() && nextFormatRange->run == i; nextFormatRange++) {
+                    const ZFormatRange &formatRange = *nextFormatRange->ptr;
                     const auto formatRangeLength = formatRange.length();
-                    if (formatRangeLength <= 0) {
-                        continue;
-                    }
                     const auto formatRangeStart = formatRange.start();
                     int formatRangeEnd = formatRangeStart + formatRangeLength;
                     if (formatRangeStart <= run.offset && formatRangeEnd > run.offset) {
@@ -778,11 +827,9 @@ void ZTextLineRef::draw(ZPainter painter, const QPoint &pos, ZTextStyle color, Z
                 ZColor fg = color.backgroundColor();
                 ZColor bg = color.foregroundColor();
                 ZTextAttributes attr = color.attributes();
-                for (const ZFormatRange& formatRange: ranges) {
+                for (; nextFormatRange != partitionedRanges.end() && nextFormatRange->run == i; nextFormatRange++) {
+                    const ZFormatRange &formatRange = *nextFormatRange->ptr;
                     const auto formatRangeLength = formatRange.length();
-                    if (formatRangeLength <= 0) {
-                        continue;
-                    }
                     const auto formatRangeStart = formatRange.start();
                     int formatRangeEnd = formatRangeStart + formatRangeLength;
                     if ((formatRangeStart <= run.offset && formatRangeEnd > run.offset)
