@@ -144,6 +144,8 @@ void ZListView::resizeEvent(ZResizeEvent *event) {
         } else {
             p->scrollPosition = std::min(p->scrollPosition, maxPossibleScrollPosition);
         }
+    } else if (event->oldSize().height() == 0 && event->size().height() && p->model && currentIndex().isValid()) {
+        scrollTo(currentIndex(), PositionAtCenter);
     }
 
     ZWidget::resizeEvent(event);
