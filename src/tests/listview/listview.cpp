@@ -1480,3 +1480,75 @@ TEST_CASE("listview-without-terminal", "") {
     CHECK(lv1->currentIndex().isValid() == true);
     CHECK(lv1->currentIndex().row() == 0);
 }
+
+TEST_CASE("listview-scroll-by-index", "") {
+
+    Testhelper t("listview", "listview", 15, 5);
+    Tui::ZWindow *w = new Tui::ZWindow(t.root);
+    w->setGeometry({0, 0, 15, 5});
+
+    Tui::ZListView *lv1 = new Tui::ZListView(w);
+
+    lv1->setFocus();
+
+    QStringList qsl;
+    for (int i = 1; i <= 30; i++) {
+        qsl.append(QString::number(i));
+    }
+    lv1->setItems(qsl);
+
+    bool geomety = GENERATE(true, false);
+    if (!geomety) lv1->setGeometry({1, 1, 13, 3});
+
+    SECTION("set index 0") {
+        lv1->setCurrentIndex(lv1->model()->index(0,0));
+        if (geomety) lv1->setGeometry({1, 1, 13, 3});
+        CHECK(lv1->currentIndex().row() == 0);
+        CHECK(lv1->currentItem() == "1");
+        t.compare();
+    }
+    SECTION("set index 1") {
+        lv1->setCurrentIndex(lv1->model()->index(1,0));
+        if (geomety) lv1->setGeometry({1, 1, 13, 3});
+        CHECK(lv1->currentIndex().row() == 1);
+        CHECK(lv1->currentItem() == "2");
+        t.compare();
+    }
+    SECTION("set index 2") {
+        lv1->setCurrentIndex(lv1->model()->index(2,0));
+        if (geomety) lv1->setGeometry({1, 1, 13, 3});
+        CHECK(lv1->currentIndex().row() == 2);
+        CHECK(lv1->currentItem() == "3");
+        t.compare();
+    }
+    SECTION("set index 3") {
+        lv1->setCurrentIndex(lv1->model()->index(3,0));
+        if (geomety) lv1->setGeometry({1, 1, 13, 3});
+        CHECK(lv1->currentIndex().row() == 3);
+        CHECK(lv1->currentItem() == "4");
+        t.compare();
+    }
+    SECTION("set index 29") {
+        lv1->setCurrentIndex(lv1->model()->index(29,0));
+        if (geomety) lv1->setGeometry({1, 1, 13, 3});
+        CHECK(lv1->currentIndex().row() == 29);
+        CHECK(lv1->currentItem() == "30");
+        t.compare();
+    }
+    SECTION("invalid model index") {
+        lv1->setCurrentIndex(QModelIndex());
+        if (geomety) lv1->setGeometry({1, 1, 13, 3});
+        CHECK(lv1->currentIndex().row() == 0);
+        CHECK(lv1->currentItem() == "1");
+        t.compare("set index 0");
+    }
+
+    SECTION("set index 10 set index 2") {
+        lv1->setCurrentIndex(lv1->model()->index(10,0));
+        if (geomety) lv1->setGeometry({1, 1, 13, 3});
+        lv1->setCurrentIndex(lv1->model()->index(2,0));
+        CHECK(lv1->currentIndex().row() == 2);
+        CHECK(lv1->currentItem() == "3");
+        t.compare("set index 2");
+    }
+}
