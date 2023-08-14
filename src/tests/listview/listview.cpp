@@ -1293,7 +1293,7 @@ TEST_CASE("listview-resize", "") {
 }
 
 TEST_CASE("listview-changes", "") {
-    Testhelper t("listview", "unused", 15, 5);
+    Testhelper t("listview", "listview", 15, 5);
     Tui::ZWindow *w = new Tui::ZWindow(t.root);
     w->setGeometry({0, 0, 15, 5});
 
@@ -1364,6 +1364,28 @@ TEST_CASE("listview-changes", "") {
         CHECK(lv1->currentIndex().row() == 2);
         lv1->setCurrentIndex(model.index(1, 0));
         CHECK(lv1->currentIndex().row() == 1);
+    }
+
+    SECTION("removed-and-scroll") {
+        QStringListModel model({"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"});
+        lv1->setModel(&model);
+        lv1->setCurrentIndex(model.index(9, 0));
+        model.removeRows(0, 1);
+        model.removeRows(0, 1);
+        model.removeRows(0, 1);
+        CHECK(lv1->currentIndex().row() == 6);
+        t.compare();
+    }
+    SECTION("add-and-scroll") {
+        QStringListModel model({"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"});
+        lv1->setModel(&model);
+        lv1->setCurrentIndex(model.index(9, 0));
+        model.insertRows(0, 3);
+        model.setData(model.index(0,0), "0");
+        model.setData(model.index(1,0), "0");
+        model.setData(model.index(2,0), "0");
+        CHECK(lv1->currentIndex().row() == 12);
+        t.compare("removed-and-scroll");
     }
 
 }

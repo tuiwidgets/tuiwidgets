@@ -193,6 +193,7 @@ void ZListView::attachModel() {
             // keep this code in case there are edge cases where it doesn't.
             setCurrentIndex(p->model->index(std::min(p->lastSelectedRow, p->model->rowCount() - 1), 0));
         }
+        scrollTo(currentIndex(), EnsureVisible);
         update();
     };
 
