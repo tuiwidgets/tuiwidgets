@@ -18,6 +18,8 @@ template <typename T, typename Tag>
 class ListHead {
 public:
     ListHead(){}
+    ListHead(const ListHead&) = delete;
+    ListHead &operator=(const ListHead&) = delete;
 
     ~ListHead() {
         clear();
@@ -76,6 +78,10 @@ public:
 template <typename T>
 class ListNode {
 public:
+    ListNode() = default;
+    ListNode(const ListNode&) = delete;
+    ListNode &operator=(const ListNode&) = delete;
+
     T *prev = nullptr;
     T *next = nullptr;
 };
