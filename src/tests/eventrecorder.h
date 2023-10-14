@@ -33,6 +33,9 @@ public:
             std::vector<std::any> args;
             (args.emplace_back(arguments), ...);
             records.push_back(Record{event, std::move(args)});
+            if (event == _waitingEvent) {
+                _waitingEvent = nullptr;
+            }
         });
         return event;
     }
@@ -64,6 +67,9 @@ public:
         std::vector<std::any> args;
         (args.emplace_back(arguments), ...);
         records.push_back(Record{ event, std::move(args)});
+        if (event == _waitingEvent) {
+            _waitingEvent = nullptr;
+        }
     }
 
     template<typename... ARGS>
@@ -87,6 +93,7 @@ public:
     [[nodiscard]]
     bool noMoreEvents();
 
+    void waitForEvent(std::shared_ptr<RecorderEvent> event);
 
     bool eventFilter(QObject *watched, QEvent *event) override;
 
@@ -126,6 +133,8 @@ protected:
     std::vector<Record> records;
     std::map<const QObject*, std::vector<std::tuple<std::function<void(std::shared_ptr<EventRecorder::RecorderEvent>, const QEvent*)>,
                                          std::shared_ptr<EventRecorder::RecorderEvent>>>> registeredQObjects;
+
+    std::shared_ptr<RecorderEvent> _waitingEvent;
 };
 
 using RecorderEvent = std::shared_ptr<EventRecorder::RecorderEvent>;
