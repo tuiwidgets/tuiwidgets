@@ -1660,12 +1660,213 @@ TUIWIDGETS_0.2 {
 
 TUIWIDGETS_0.2.1 {
     global: extern "C++" {
+
+        ########### ZDocument
+
+        "typeinfo for Tui::v0::ZDocument";
+        "typeinfo name for Tui::v0::ZDocument";
+        "vtable for Tui::v0::ZDocument";
+
+        "Tui::v0::ZDocument::ZDocument(QObject*)";
+        "Tui::v0::ZDocument::childEvent(QChildEvent*)";
+        "Tui::v0::ZDocument::clearCollapseUndoStep()";
+        "Tui::v0::ZDocument::connectNotify(QMetaMethod const&)";
+        "Tui::v0::ZDocument::contentsChanged()";
+        "Tui::v0::ZDocument::crLfMode() const";
+        "Tui::v0::ZDocument::crLfModeChanged(bool)";
+        "Tui::v0::ZDocument::cursorChanged(Tui::v0::ZDocumentCursor const*)";
+        "Tui::v0::ZDocument::customEvent(QEvent*)";
+        "Tui::v0::ZDocument::debugConsistencyCheck(Tui::v0::ZDocumentCursor const*) const";
+        "Tui::v0::ZDocument::disconnectNotify(QMetaMethod const&)";
+        "Tui::v0::ZDocument::event(QEvent*)";
+        "Tui::v0::ZDocument::eventFilter(QObject*, QEvent*)";
+        "Tui::v0::ZDocument::filename() const";
+        "Tui::v0::ZDocument::findAsync(QRegularExpression const&, Tui::v0::ZDocumentCursor const&, QFlags<Tui::v0::ZDocument::FindFlag>) const";
+        "Tui::v0::ZDocument::findAsync(QString const&, Tui::v0::ZDocumentCursor const&, QFlags<Tui::v0::ZDocument::FindFlag>) const";
+        "Tui::v0::ZDocument::findAsyncWithPool(QThreadPool*, int, QRegularExpression const&, Tui::v0::ZDocumentCursor const&, QFlags<Tui::v0::ZDocument::FindFlag>) const";
+        "Tui::v0::ZDocument::findAsyncWithPool(QThreadPool*, int, QString const&, Tui::v0::ZDocumentCursor const&, QFlags<Tui::v0::ZDocument::FindFlag>) const";
+        "Tui::v0::ZDocument::findSync(QRegularExpression const&, Tui::v0::ZDocumentCursor const&, QFlags<Tui::v0::ZDocument::FindFlag>) const";
+        "Tui::v0::ZDocument::findSync(QString const&, Tui::v0::ZDocumentCursor const&, QFlags<Tui::v0::ZDocument::FindFlag>) const";
+        "Tui::v0::ZDocument::findSyncWithDetails(QRegularExpression const&, Tui::v0::ZDocumentCursor const&, QFlags<Tui::v0::ZDocument::FindFlag>) const";
+        "Tui::v0::ZDocument::isModified() const";
+        "Tui::v0::ZDocument::isRedoAvailable() const";
+        "Tui::v0::ZDocument::isUndoAvailable() const";
+        "Tui::v0::ZDocument::line(int) const";
+        "Tui::v0::ZDocument::lineCodeUnits(int) const";
+        "Tui::v0::ZDocument::lineCount() const";
+        "Tui::v0::ZDocument::lineMarkerChanged(Tui::v0::ZDocumentLineMarker const*)";
+        "Tui::v0::ZDocument::lineRevision(int) const";
+        "Tui::v0::ZDocument::lineUserData(int) const";
+        "Tui::v0::ZDocument::markUndoStateAsSaved()";
+        "Tui::v0::ZDocument::metaObject() const";
+        "Tui::v0::ZDocument::modificationChanged(bool)";
+        "Tui::v0::ZDocument::moveLine(int, int, Tui::v0::ZDocumentCursor*)";
+        "Tui::v0::ZDocument::newlineAfterLastLineMissing() const";
+        "Tui::v0::ZDocument::qt_metacall(QMetaObject::Call, int, void**)";
+        "Tui::v0::ZDocument::qt_metacast(char const*)";
+        "Tui::v0::ZDocument::readFrom(QIODevice*)";
+        "Tui::v0::ZDocument::readFrom(QIODevice*, Tui::v0::ZDocumentCursor::Position, Tui::v0::ZDocumentCursor*)";
+        "Tui::v0::ZDocument::redo(Tui::v0::ZDocumentCursor*)";
+        "Tui::v0::ZDocument::redoAvailable(bool)";
+        "Tui::v0::ZDocument::reset()";
+        "Tui::v0::ZDocument::revision() const";
+        "Tui::v0::ZDocument::setCrLfMode(bool)";
+        "Tui::v0::ZDocument::setFilename(QString const&)";
+        "Tui::v0::ZDocument::setLineUserData(int, std::shared_ptr<Tui::v0::ZDocumentLineUserData>)";
+        "Tui::v0::ZDocument::setNewlineAfterLastLineMissing(bool)";
+        "Tui::v0::ZDocument::snapshot() const";
+        "Tui::v0::ZDocument::sortLines(int, int, Tui::v0::ZDocumentCursor*)";
+        "Tui::v0::ZDocument::startUndoGroup(Tui::v0::ZDocumentCursor*)";
+        "Tui::v0::ZDocument::staticMetaObject";
+        "Tui::v0::ZDocument::timerEvent(QTimerEvent*)";
+        "Tui::v0::ZDocument::undo(Tui::v0::ZDocumentCursor*)";
+        "Tui::v0::ZDocument::undoAvailable(bool)";
+        "Tui::v0::ZDocument::writeTo(QIODevice*, bool) const";
+        "Tui::v0::ZDocument::~ZDocument()";
+
+
+        ########### ZDocument::UndoGroup
+
+        "Tui::v0::ZDocument::UndoGroup::UndoGroup(Tui::v0::ZDocument::UndoGroup&&)";
+        "Tui::v0::ZDocument::UndoGroup::operator=(Tui::v0::ZDocument::UndoGroup const&)";
+        "Tui::v0::ZDocument::UndoGroup::~UndoGroup()";
+        "Tui::v0::ZDocument::UndoGroup::closeGroup()";
+
+
+        ########### ZDocumentCursor
+
+        "Tui::v0::ZDocumentCursor::ZDocumentCursor(Tui::v0::ZDocument*, std::function<Tui::v0::ZTextLayout (int, bool)>)";
+        "Tui::v0::ZDocumentCursor::ZDocumentCursor(Tui::v0::ZDocumentCursor const&)";
+        "Tui::v0::ZDocumentCursor::~ZDocumentCursor()";
+        "Tui::v0::ZDocumentCursor::operator=(Tui::v0::ZDocumentCursor const&)";
+        "Tui::v0::ZDocumentCursor::insertText(QString const&)";
+        "Tui::v0::ZDocumentCursor::removeSelectedText()";
+        "Tui::v0::ZDocumentCursor::clearSelection()";
+        "Tui::v0::ZDocumentCursor::selectedText() const";
+        "Tui::v0::ZDocumentCursor::deleteCharacter()";
+        "Tui::v0::ZDocumentCursor::deletePreviousCharacter()";
+        "Tui::v0::ZDocumentCursor::deleteWord()";
+        "Tui::v0::ZDocumentCursor::deletePreviousWord()";
+        "Tui::v0::ZDocumentCursor::deleteLine()";
+        "Tui::v0::ZDocumentCursor::moveCharacterLeft(bool)";
+        "Tui::v0::ZDocumentCursor::moveCharacterRight(bool)";
+        "Tui::v0::ZDocumentCursor::moveWordLeft(bool)";
+        "Tui::v0::ZDocumentCursor::moveWordRight(bool)";
+        "Tui::v0::ZDocumentCursor::moveUp(bool)";
+        "Tui::v0::ZDocumentCursor::moveDown(bool)";
+        "Tui::v0::ZDocumentCursor::moveToStartOfLine(bool)";
+        "Tui::v0::ZDocumentCursor::moveToStartIndentedText(bool)";
+        "Tui::v0::ZDocumentCursor::moveToEndOfLine(bool)";
+        "Tui::v0::ZDocumentCursor::moveToStartOfDocument(bool)";
+        "Tui::v0::ZDocumentCursor::moveToEndOfDocument(bool)";
+        "Tui::v0::ZDocumentCursor::position() const";
+        "Tui::v0::ZDocumentCursor::setPosition(Tui::v0::ZDocumentCursor::Position, bool)";
+        "Tui::v0::ZDocumentCursor::setPositionPreservingVerticalMovementColumn(Tui::v0::ZDocumentCursor::Position, bool)";
+        "Tui::v0::ZDocumentCursor::anchor() const";
+        "Tui::v0::ZDocumentCursor::setAnchorPosition(Tui::v0::ZDocumentCursor::Position)";
+        "Tui::v0::ZDocumentCursor::verticalMovementColumn() const";
+        "Tui::v0::ZDocumentCursor::setVerticalMovementColumn(int)";
+        "Tui::v0::ZDocumentCursor::selectionStartPos() const";
+        "Tui::v0::ZDocumentCursor::selectionEndPos() const";
+        "Tui::v0::ZDocumentCursor::selectAll()";
+        "Tui::v0::ZDocumentCursor::hasSelection() const";
+        "Tui::v0::ZDocumentCursor::atStart() const";
+        "Tui::v0::ZDocumentCursor::atEnd() const";
+        "Tui::v0::ZDocumentCursor::atLineStart() const";
+        "Tui::v0::ZDocumentCursor::atLineEnd() const";
+        "Tui::v0::ZDocumentCursor::debugConsistencyCheck() const";
+
+
+        ########### ZDocumentCursor::Position
+
+        "Tui::v0::ZDocumentCursor::Position::Position()";
+        "Tui::v0::ZDocumentCursor::Position::Position(Tui::v0::ZDocumentCursor::Position const&)";
+        "Tui::v0::ZDocumentCursor::Position::Position(Tui::v0::ZDocumentCursor::Position&&)";
+        "Tui::v0::ZDocumentCursor::Position::Position(int, int)";
+        "Tui::v0::ZDocumentCursor::Position::~Position()";
+        "Tui::v0::operator<(Tui::v0::ZDocumentCursor::Position const&, Tui::v0::ZDocumentCursor::Position const&)";
+        "Tui::v0::operator<=(Tui::v0::ZDocumentCursor::Position const&, Tui::v0::ZDocumentCursor::Position const&)";
+        "Tui::v0::operator>(Tui::v0::ZDocumentCursor::Position const&, Tui::v0::ZDocumentCursor::Position const&)";
+        "Tui::v0::operator>=(Tui::v0::ZDocumentCursor::Position const&, Tui::v0::ZDocumentCursor::Position const&)";
+        "Tui::v0::operator==(Tui::v0::ZDocumentCursor::Position const&, Tui::v0::ZDocumentCursor::Position const&)";
+        "Tui::v0::operator!=(Tui::v0::ZDocumentCursor::Position const&, Tui::v0::ZDocumentCursor::Position const&)";
+
+
+        ########### ZDocumentFindAsyncResult
+
+        "Tui::v0::ZDocumentFindAsyncResult::ZDocumentFindAsyncResult()";
+        "Tui::v0::ZDocumentFindAsyncResult::ZDocumentFindAsyncResult(Tui::v0::ZDocumentFindAsyncResult const&)";
+        "Tui::v0::ZDocumentFindAsyncResult::~ZDocumentFindAsyncResult()";
+        "Tui::v0::ZDocumentFindAsyncResult::operator=(Tui::v0::ZDocumentFindAsyncResult const&)";
+        "Tui::v0::ZDocumentFindAsyncResult::anchor() const";
+        "Tui::v0::ZDocumentFindAsyncResult::cursor() const";
+        "Tui::v0::ZDocumentFindAsyncResult::revision() const";
+        "Tui::v0::ZDocumentFindAsyncResult::regexLastCapturedIndex() const";
+        "Tui::v0::ZDocumentFindAsyncResult::regexCapture(int) const";
+        "Tui::v0::ZDocumentFindAsyncResult::regexCapture(QString const&) const";
+
+
+        ########### ZDocumentFindResult
+
+        "Tui::v0::ZDocumentFindResult::ZDocumentFindResult(Tui::v0::ZDocumentFindResult const&)";
+        "Tui::v0::ZDocumentFindResult::~ZDocumentFindResult()";
+        "Tui::v0::ZDocumentFindResult::operator=(Tui::v0::ZDocumentFindResult const&)";
+        "Tui::v0::ZDocumentFindResult::cursor() const";
+        "Tui::v0::ZDocumentFindResult::regexLastCapturedIndex() const";
+        "Tui::v0::ZDocumentFindResult::regexCapture(int) const";
+        "Tui::v0::ZDocumentFindResult::regexCapture(QString const&) const";
+
+
+        ########### ZDocumentLineMarker
+
+        "Tui::v0::ZDocumentLineMarker::ZDocumentLineMarker(Tui::v0::ZDocument*)";
+        "Tui::v0::ZDocumentLineMarker::ZDocumentLineMarker(Tui::v0::ZDocumentLineMarker const&)";
+        "Tui::v0::ZDocumentLineMarker::ZDocumentLineMarker(Tui::v0::ZDocument*, int)";
+        "Tui::v0::ZDocumentLineMarker::~ZDocumentLineMarker()";
+        "Tui::v0::ZDocumentLineMarker::operator=(Tui::v0::ZDocumentLineMarker const&)";
+        "Tui::v0::ZDocumentLineMarker::line() const";
+        "Tui::v0::ZDocumentLineMarker::setLine(int)";
+
+
+        ########### ZDocumentLineUserData
+
+        "typeinfo for Tui::v0::ZDocumentLineUserData";
+        "typeinfo name for Tui::v0::ZDocumentLineUserData";
+        "vtable for Tui::v0::ZDocumentLineUserData";
+
+        "Tui::v0::ZDocumentLineUserData::ZDocumentLineUserData()";
+        "Tui::v0::ZDocumentLineUserData::ZDocumentLineUserData(Tui::v0::ZDocumentLineUserData const&)";
+        "Tui::v0::ZDocumentLineUserData::ZDocumentLineUserData(Tui::v0::ZDocumentLineUserData&&)";
+        "Tui::v0::ZDocumentLineUserData::operator=(Tui::v0::ZDocumentLineUserData const&)";
+        "Tui::v0::ZDocumentLineUserData::operator=(Tui::v0::ZDocumentLineUserData&&)";
+        "Tui::v0::ZDocumentLineUserData::~ZDocumentLineUserData()";
+
+
+        ########### ZDocumentSnapshot
+
+        "Tui::v0::ZDocumentSnapshot::ZDocumentSnapshot()";
+        "Tui::v0::ZDocumentSnapshot::ZDocumentSnapshot(Tui::v0::ZDocumentSnapshot const&)";
+        "Tui::v0::ZDocumentSnapshot::~ZDocumentSnapshot()";
+        "Tui::v0::ZDocumentSnapshot::operator=(Tui::v0::ZDocumentSnapshot const&)";
+        "Tui::v0::ZDocumentSnapshot::lineCount() const";
+        "Tui::v0::ZDocumentSnapshot::line(int) const";
+        "Tui::v0::ZDocumentSnapshot::lineCodeUnits(int) const";
+        "Tui::v0::ZDocumentSnapshot::lineRevision(int) const";
+        "Tui::v0::ZDocumentSnapshot::lineUserData(int) const";
+        "Tui::v0::ZDocumentSnapshot::revision() const";
+        "Tui::v0::ZDocumentSnapshot::isUpToDate() const";
+
+
         ########### ZPainter
+
         "Tui::v0::ZPainter::drawImageWithTiling(int, int, Tui::v0::ZImage const&, int, int, int, int, Tui::v0::ZTilingMode, Tui::v0::ZTilingMode)";
 
+
         ########### ZTerminal
+
         "Tui::v0::ZTerminal::terminalDetectionResultText() const";
         "Tui::v0::ZTerminal::terminalSelfReportedNameAndVersion() const";
+
 
         ########### ZTerminalDiagnosticsDialog
 
@@ -1700,10 +1901,16 @@ TUIWIDGETS_0.2.1 {
         "Tui::v0::ZTerminalDiagnosticsDialog::systemMenu()";
         "Tui::v0::ZTerminalDiagnosticsDialog::timerEvent(QTimerEvent*)";
         "Tui::v0::ZTerminalDiagnosticsDialog::~ZTerminalDiagnosticsDialog()";
+
     };
 
     local: extern "C++" {
         # internal constructors for pimpl chaining
         "Tui::v0::ZDialog::ZDialog(Tui::v0::ZWidget*, std::unique_ptr<Tui::v0::ZDialogPrivate, std::default_delete<Tui::v0::ZDialogPrivate> >)";
+        "Tui::v0::ZDocument::UndoGroup::UndoGroup(std::unique_ptr<Tui::v0::ZDocumentUndoGroupPrivate, std::default_delete<Tui::v0::ZDocumentUndoGroupPrivate> >)";
+        "Tui::v0::ZDocumentFindAsyncResult::ZDocumentFindAsyncResult(std::unique_ptr<Tui::v0::ZDocumentFindAsyncResultPrivate, std::default_delete<Tui::v0::ZDocumentFindAsyncResultPrivate> >)";
+
+        # internal constructors
+        "Tui::v0::ZDocumentFindResult::ZDocumentFindResult(Tui::v0::ZDocumentCursor, QRegularExpressionMatch)";
     };
 };

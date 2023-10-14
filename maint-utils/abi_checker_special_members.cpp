@@ -24,6 +24,10 @@
 #include <Tui/ZCommandNotifier.h>
 #include <Tui/ZDefaultWidgetManager.h>
 #include <Tui/ZDialog.h>
+#include <Tui/ZDocument.h>
+#include <Tui/ZDocumentCursor.h>
+#include <Tui/ZDocumentLineMarker.h>
+#include <Tui/ZDocumentSnapshot.h>
 #include <Tui/ZEvent.h>
 #include <Tui/ZFormatRange.h>
 #include <Tui/ZHBoxLayout.h>
@@ -168,7 +172,9 @@ void testInner(Kind kind, bool run, T *a, T *b) {
     
     std::string selfref = "1";
     
-    if (className == "Tui::v0::ZTerminal::OffScreen") {
+    if (className == "Tui::v0::ZTerminal::OffScreen"
+            || className == "Tui::v0::ZDocument::UndoGroup"
+            || className == "Tui::v0::ZDocumentCursor::Position") {
         selfref = "2";
     }
     
@@ -384,6 +390,15 @@ int main(int argc, char* argv[]) {
     test<Tui::ZCommandNotifier>(Kind::QObject_Intree, run);
     test<Tui::ZDefaultWidgetManager>(Kind::Facet, run);
     test<Tui::ZDialog>(Kind::Widget, run);
+    test<Tui::ZDocument::UndoGroup>(Kind::Misc, run);
+    test<Tui::ZDocument>(Kind::QObject_Other, run);
+    test<Tui::ZDocumentCursor::Position>(Kind::Inline, run);
+    test<Tui::ZDocumentCursor>(Kind::Value, run);
+    test<Tui::ZDocumentFindAsyncResult>(Kind::Value, run);
+    test<Tui::ZDocumentFindResult>(Kind::Value, run);
+    test<Tui::ZDocumentLineMarker>(Kind::Value, run);
+    test<Tui::ZDocumentLineUserData>(Kind::Misc, run);
+    test<Tui::ZDocumentSnapshot>(Kind::Value, run);
     test<Tui::ZEvent>(Kind::Event, run);
     test<Tui::ZFocusEvent>(Kind::Event, run);
     test<Tui::ZFormatRange>(Kind::Value, run);
@@ -417,9 +432,9 @@ int main(int argc, char* argv[]) {
     test<Tui::ZShortcut>(Kind::QObject_Intree, run);
     test<Tui::ZStyledTextLine>(Kind::Value, run);
     test<Tui::ZSymbol>(Kind::Inline, run);
-    test<Tui::ZImplicitSymbol>(Kind::Inline, run);    
+    test<Tui::ZImplicitSymbol>(Kind::Inline, run);
     test<Tui::ZTerminal>(Kind::QObject_Other, run);
-    test<Tui::ZTerminal::FileDescriptor>(Kind::Inline, run); 
+    test<Tui::ZTerminal::FileDescriptor>(Kind::Inline, run);
     test<Tui::ZTerminal::OffScreen>(Kind::Value, run);
     test<Tui::ZTerminal::TerminalConnectionDelegate>(Kind::Misc, run);
     test<Tui::ZTerminal::TerminalConnection>(Kind::Misc, run);

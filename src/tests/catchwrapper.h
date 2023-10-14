@@ -8,6 +8,7 @@
 #include <QString>
 
 #include <Tui/ZColor.h>
+#include <Tui/ZDocumentCursor.h>
 #include <Tui/ZWidget.h>
 
 #ifdef CATCH3
@@ -119,6 +120,16 @@ namespace Catch {
                     .toStdString();
         }
     };
+
+    template<>
+    struct StringMaker<Tui::ZDocumentCursor::Position, void> {
+        static std::string convert(Tui::ZDocumentCursor::Position const& value) {
+            return QStringLiteral("(codeUnit: %0, line: %1)").arg(
+                        QString::number(value.codeUnit),
+                        QString::number(value.line)).toStdString();
+        }
+    };
+
 }
 
 #endif

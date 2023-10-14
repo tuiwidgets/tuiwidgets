@@ -123,6 +123,11 @@ QVariant cpp:class 1 qvariant.html QVariant
 QAbstractTableModel cpp:class 1 qabstracttablemodel.html QAbstractTableModel
 QVector cpp:class 1 qvector.html QVector
 Qt::DisplayRole cpp:enumerator 1 qt.html#ItemDataRole-enum DisplayRole
+QRegularExpression cpp:class 1 qregularexpression.html QRegularExpression
+QThreadPool cpp:class 1 qthreadpool.html QThreadPool
+QIODevice cpp:class 1 qiodevice.html QIODevice
+QRegularExpression::PatternOption::CaseInsensitiveOption cpp:enum 1 qregularexpression.html#PatternOption-enum CaseInsensitiveOption
+Qt::CaseInSensitive cpp:enum 1 qt.html#CaseSensitivity-enum CaseInSensitive
 """[1:]
 
 # Templates don't seem to work with intershinx without complaining about missing references or adding entries for
@@ -132,6 +137,7 @@ QFlags<Tui::ZTerminal::Option> cpp:class 1 qflags.html QFlags
 QFlags<Tui::ZTextAttribute> cpp:class 1 qflags.html QFlags
 QFlags<Tui::ZTextOption::Flag> cpp:class 1 qflags.html QFlags
 QFlags<Tui::ZWindow::Option> cpp:class 1 qflags.html QFlags
+QFlags<Tui::ZDocument::FindFlag> cpp:class 1 qflags.html QFlags
 QSet<Tui::ZWidget*> cpp:class 1 qset.html QSet
 QSet<Tui::ZSymbol> cpp:class 1 qset.html QSet
 QSet<QString> cpp:class 1 qset.html QSet
@@ -147,6 +153,7 @@ QVector<QMap<int, QVariant>> cpp:class 1 qvector.html QVector
 QVector<Tui::Misc::AbstractTableModelTrackBy::Row> cpp:class 1 qvector.html QVector
 QVector<ZMenuItem> cpp:class 1 qvector.html QVector
 QMap<int, QVariant> cpp:class 1 qmap.html QMap
+QFuture<Tui::ZDocumentFindAsyncResult> cpp:class 1 qfuture.html QFuture
 """[1:]
 
 data += template_hacks

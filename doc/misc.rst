@@ -8,6 +8,7 @@ Misc
    ZBasicDefaultWidgetManager
    ZBasicWindowFacet
    ZDefaultWidgetManager
+   ZDocument
    ZFormatRange
    ZMenuItem
    ZStyledTextLine

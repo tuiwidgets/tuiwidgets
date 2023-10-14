@@ -24,6 +24,7 @@ widget_files = [
   'widgets/button.cpp',
   'widgets/checkbox.cpp',
   'widgets/dialog.cpp',
+  'widgets/document.cpp',
   'widgets/inputbox.cpp',
   'widgets/label.cpp',
   'widgets/listview.cpp',
