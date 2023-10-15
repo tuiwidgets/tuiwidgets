@@ -330,7 +330,7 @@ TEST_CASE("layout generation mixed") {
     REQUIRE(gen == 6);
 }
 
-TEST_CASE("layout generation wraparound brute force with doLayout", "[!hide][layoutgenwrap]") {
+TEST_CASE("layout generation wraparound brute force with doLayout", "[.layoutgenwrap]") {
     // Runs about 15 minutes with 32bit int
     Testhelper t("unused", "unused", 80, 50);
 
@@ -373,7 +373,7 @@ TEST_CASE("layout generation wraparound brute force with doLayout", "[!hide][lay
     CHECK(nextGen > 0);
 }
 
-TEST_CASE("layout generation wraparound brute force no layout", "[!hide][layoutgenwrap]") {
+TEST_CASE("layout generation wraparound brute force no layout", "[.layoutgenwrap]") {
     // Runs fairly fast < 1min
     Testhelper t("unused", "unused", 80, 50);
 

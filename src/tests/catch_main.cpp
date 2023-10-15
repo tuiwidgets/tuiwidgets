@@ -1,12 +1,18 @@
 // SPDX-License-Identifier: BSL-1.0
 
-#define CATCH_CONFIG_MAIN
+#define CATCH_CONFIG_RUNNER
 #include "catchwrapper.h"
+
+#ifdef CATCH3
+using ListenerBase = Catch::EventListenerBase;
+#else
+using ListenerBase = Catch::TestEventListenerBase;
+#endif
 
 #include <QString>
 
-struct TestStackListener : Catch::TestEventListenerBase {
-    using TestEventListenerBase::TestEventListenerBase;
+struct TestStackListener : ListenerBase {
+    using ListenerBase::ListenerBase;
 
     void sectionStarting(Catch::SectionInfo const &sectionInfo) override {
         names.push_back(sectionInfo.name);
@@ -29,9 +35,8 @@ std::vector<std::string> getCurrentTestNames() {
 }
 
 
-struct QtDiagnosticsFallbackListener : Catch::TestEventListenerBase {
-    using TestEventListenerBase::TestEventListenerBase;
-
+struct QtDiagnosticsFallbackListener : ListenerBase {
+    using ListenerBase::ListenerBase;
 
     static void qtMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg) {
         (void)type; (void)context;
@@ -64,3 +69,7 @@ struct QtDiagnosticsFallbackListener : Catch::TestEventListenerBase {
 QtMessageHandler QtDiagnosticsFallbackListener::oldMessageHandler;
 
 CATCH_REGISTER_LISTENER(QtDiagnosticsFallbackListener)
+
+int main (int argc, char * argv[]) {
+    return Catch::Session().run( argc, argv );
+}

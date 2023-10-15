@@ -439,7 +439,7 @@ TEST_CASE("zcolor - hsv") {
     }
 }
 
-TEST_CASE("zcolor - hsv brute force", "[!hide]") {
+TEST_CASE("zcolor - hsv brute force", "[.]") {
     for (int r = 0; r < 256; r++) {
         for (int g = 0; g < 256; g++) {
             for (int b = 0; b < 256; b++) {
@@ -464,7 +464,7 @@ TEST_CASE("zcolor - hsv brute force", "[!hide]") {
 }
 
 /*
-TEST_CASE("zcolor - hsv brute bench", "[!hide]") {
+TEST_CASE("zcolor - hsv brute bench", "[.]") {
 
     BENCHMARK("fromHSV") {
         double sink = 0;
