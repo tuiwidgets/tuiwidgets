@@ -177,6 +177,15 @@ void ZRoot::terminalChanged() {
     // for derived classes to override
 }
 
+QObject *ZRoot::facet(const QMetaObject &metaObject) const {
+    auto *const p = tuiwidgets_impl();
+    if (metaObject.className() == ZClipboard::staticMetaObject.className()) {
+        return const_cast<ZClipboard*>(&p->clipboard);
+    } else {
+        return ZWidget::facet(metaObject);
+    }
+}
+
 void ZRoot::customEvent(QEvent *event) {
     ZWidget::customEvent(event);
 }
@@ -189,10 +198,6 @@ void ZRoot::connectNotify(const QMetaMethod &signal) {
 void ZRoot::disconnectNotify(const QMetaMethod &signal) {
     // XXX needs to be thread-safe
     ZWidget::disconnectNotify(signal);
-}
-
-QObject *ZRoot::facet(const QMetaObject &metaObject) const {
-    return ZWidget::facet(metaObject);
 }
 
 QSize ZRoot::sizeHint() const {

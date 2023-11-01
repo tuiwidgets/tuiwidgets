@@ -4,6 +4,7 @@
 
 #include <QSet>
 
+#include <Tui/ZClipboard.h>
 #include <Tui/ZEvent.h>
 #include <Tui/ZSymbol.h>
 #include <Tui/ZWidget.h>
@@ -42,6 +43,9 @@ TEST_CASE("root-base") {
     CHECK(root.layoutArea() == QRect{0, 0, 0, 0});
 
     FAIL_CHECK_VEC(checkWidgetsDefaultsExcept(&root, DefaultException::Palette | DefaultException::MinimumSize));
+
+    Tui::ZClipboard *clipboard = qobject_cast<Tui::ZClipboard*>(root.facet(Tui::ZClipboard::staticMetaObject));
+    CHECK(clipboard != nullptr);
 }
 
 namespace {

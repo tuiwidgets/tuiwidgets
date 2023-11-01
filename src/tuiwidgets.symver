@@ -1661,6 +1661,30 @@ TUIWIDGETS_0.2 {
 TUIWIDGETS_0.2.1 {
     global: extern "C++" {
 
+        ########### ZClipboard
+
+        "typeinfo for Tui::v0::ZClipboard";
+        "typeinfo name for Tui::v0::ZClipboard";
+        "vtable for Tui::v0::ZClipboard";
+        "Tui::v0::ZClipboard::ZClipboard()";
+        "Tui::v0::ZClipboard::childEvent(QChildEvent*)";
+        "Tui::v0::ZClipboard::clear()";
+        "Tui::v0::ZClipboard::connectNotify(QMetaMethod const&)";
+        "Tui::v0::ZClipboard::contents() const";
+        "Tui::v0::ZClipboard::contentsChanged()";
+        "Tui::v0::ZClipboard::customEvent(QEvent*)";
+        "Tui::v0::ZClipboard::disconnectNotify(QMetaMethod const&)";
+        "Tui::v0::ZClipboard::event(QEvent*)";
+        "Tui::v0::ZClipboard::eventFilter(QObject*, QEvent*)";
+        "Tui::v0::ZClipboard::metaObject() const";
+        "Tui::v0::ZClipboard::qt_metacall(QMetaObject::Call, int, void**)";
+        "Tui::v0::ZClipboard::qt_metacast(char const*)";
+        "Tui::v0::ZClipboard::setContents(QString const&)";
+        "Tui::v0::ZClipboard::staticMetaObject";
+        "Tui::v0::ZClipboard::timerEvent(QTimerEvent*)";
+        "Tui::v0::ZClipboard::~ZClipboard()";
+
+
         ########### ZDocument
 
         "typeinfo for Tui::v0::ZDocument";
@@ -1909,6 +1933,7 @@ TUIWIDGETS_0.2.1 {
         "Tui::v0::ZDialog::ZDialog(Tui::v0::ZWidget*, std::unique_ptr<Tui::v0::ZDialogPrivate, std::default_delete<Tui::v0::ZDialogPrivate> >)";
         "Tui::v0::ZDocument::UndoGroup::UndoGroup(std::unique_ptr<Tui::v0::ZDocumentUndoGroupPrivate, std::default_delete<Tui::v0::ZDocumentUndoGroupPrivate> >)";
         "Tui::v0::ZDocumentFindAsyncResult::ZDocumentFindAsyncResult(std::unique_ptr<Tui::v0::ZDocumentFindAsyncResultPrivate, std::default_delete<Tui::v0::ZDocumentFindAsyncResultPrivate> >)";
+        "Tui::v0::ZClipboard::ZClipboard(std::unique_ptr<Tui::v0::ZClipboardPrivate, std::default_delete<Tui::v0::ZClipboardPrivate> >)";
 
         # internal constructors
         "Tui::v0::ZDocumentFindResult::ZDocumentFindResult(Tui::v0::ZDocumentCursor, QRegularExpressionMatch)";

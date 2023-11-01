@@ -3,6 +3,7 @@
 #ifndef TUIWIDGETS_ZROOT_P_INCLUDED
 #define TUIWIDGETS_ZROOT_P_INCLUDED
 
+#include <Tui/ZClipboard.h>
 #include <Tui/ZRoot.h>
 #include <Tui/ZPainter.h>
 #include <Tui/ZWidget.h>
@@ -22,6 +23,8 @@ public:
     int fillChar = Erased;
     QList<QObject*> windows;
     QPointer<ZTerminal> connectedTerminal;
+
+    ZClipboard clipboard;
 };
 
 TUIWIDGETS_NS_END

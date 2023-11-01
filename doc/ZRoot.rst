@@ -88,6 +88,9 @@ The layout area of ZRoot is usually its geometry with the contents margins remov
 If the root widgets size is currently expanded due to a window using ``isExtendViewport`` the layout area will not
 reflect the temporarily larger geometry due to this window.
 
+ZRoot exposes :cpp:class:`Tui::ZClipboard` as a facet.
+This facet is used as clipboard for copy and paste operations by other widgets in the application.
+
 Palette
 -------
 

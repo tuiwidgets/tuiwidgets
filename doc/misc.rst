@@ -7,6 +7,7 @@ Misc
    SurrogateEscape
    ZBasicDefaultWidgetManager
    ZBasicWindowFacet
+   ZClipboard
    ZDefaultWidgetManager
    ZDocument
    ZFormatRange

@@ -30,6 +30,8 @@ public:
     QRect layoutArea() const override;
     QSize minimumSizeHint() const override;
 
+    QObject *facet(const QMetaObject &metaObject) const override;
+
 protected:
 
     void paintEvent(ZPaintEvent *event) override;
@@ -45,7 +47,6 @@ public:
     // public virtuals from base class override everything for later ABI compatibility
     bool event(QEvent *event) override;
     bool eventFilter(QObject *watched, QEvent *event) override;
-    QObject *facet(const QMetaObject &metaObject) const override;
     QSize sizeHint() const override;
     ZWidget *resolveSizeHintChain() override;
 

@@ -20,6 +20,7 @@
 #include <Tui/ZButton.h>
 #include <Tui/ZCheckBox.h>
 #include <Tui/ZColor.h>
+#include <Tui/ZClipboard.h>
 #include <Tui/ZCommandManager.h>
 #include <Tui/ZCommandNotifier.h>
 #include <Tui/ZDefaultWidgetManager.h>
@@ -277,7 +278,8 @@ void testInner(Kind kind, bool run, T *a, T *b) {
             
             // This again is a huge hack to try to generate a reference to the destructor symbol.
             // For virtual destructors this happens when generating the constructor which implies generating the vtable...
-            if constexpr (std::is_same_v<T, Tui::ZWindowFacet> || std::is_same_v<T, Tui::ZWindowContainer>) {
+            if constexpr (std::is_same_v<T, Tui::ZWindowFacet> || std::is_same_v<T, Tui::ZWindowContainer>
+                          || std::is_same_v<T, Tui::ZClipboard>) {
                 // nullptr overload exists but is troublesome
                 if (run) {
                     DestructorReference<T> x;
@@ -386,6 +388,7 @@ int main(int argc, char* argv[]) {
     test<Tui::ZColor>(Kind::Value, run);
     test<Tui::ZColorHSV>(Kind::Value, run);
     test<Tui::Private::GlobalColorRGB>(Kind::Inline, run); // needs to be usable for constexpr globals
+    test<Tui::ZClipboard>(Kind::Facet, run);
     test<Tui::ZCommandManager>(Kind::Facet, run);
     test<Tui::ZCommandNotifier>(Kind::QObject_Intree, run);
     test<Tui::ZDefaultWidgetManager>(Kind::Facet, run);
