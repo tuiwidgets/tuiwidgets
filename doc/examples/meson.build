@@ -32,6 +32,7 @@ widget_files = [
   'widgets/menubar.cpp',
   'widgets/radiobuttons.cpp',
   'widgets/root.cpp',
+  'widgets/textedit.cpp',
   'widgets/textline.cpp',
   'widgets/window.cpp',
 ]

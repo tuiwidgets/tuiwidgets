@@ -16,6 +16,7 @@ void listView();
 void menu();
 void radiobutton();
 void root();
+void textedit();
 void textline();
 void window();
 

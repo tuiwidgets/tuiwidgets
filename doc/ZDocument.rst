@@ -84,6 +84,8 @@ threads than the document's thread.
 
 Currently the user-data is restored when using undo and redo, but this might change in the future.
 
+.. _zdocument_undoredo:
+
 Undo and redo
 -------------
 
@@ -110,6 +112,9 @@ until the returned group object is destroyed.
 An application can keep itself informed, if currently an undo or redo operation is available, by
 connecting to the :cpp:func:`~void Tui::ZDocument::undoAvailable(bool available)`
 and :cpp:func:`~void Tui::ZDocument::redoAvailable(bool available)` signals.
+
+
+.. _zdocument_finding:
 
 Finding
 -------

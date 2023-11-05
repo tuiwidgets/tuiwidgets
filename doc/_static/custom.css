@@ -35,6 +35,10 @@ table.noborder {
     -webkit-box-shadow: none;
 }
 
+table.firstcolnobreakkbd > tbody > tr > td:nth-child(1) kbd {
+    white-space: nowrap;
+}
+
 table.noborder > tbody > tr > td {
     border: none;
 }

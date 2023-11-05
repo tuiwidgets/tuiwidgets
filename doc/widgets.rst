@@ -15,5 +15,6 @@ Widgets
    ZMenubar
    ZRadioButton
    ZRoot
+   ZTextEdit
    ZTextLine
    ZWindow

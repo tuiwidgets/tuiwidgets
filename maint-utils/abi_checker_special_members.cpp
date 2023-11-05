@@ -49,6 +49,7 @@
 #include <Tui/ZStyledTextLine.h>
 #include <Tui/ZSymbol.h>
 #include <Tui/ZTerminal.h>
+#include <Tui/ZTextEdit.h>
 #include <Tui/ZTextLayout.h>
 #include <Tui/ZTextLine.h>
 #include <Tui/ZTextMetrics.h>
@@ -442,6 +443,7 @@ int main(int argc, char* argv[]) {
     test<Tui::ZTerminal::TerminalConnectionDelegate>(Kind::Misc, run);
     test<Tui::ZTerminal::TerminalConnection>(Kind::Misc, run);
     test<Tui::ZTerminalNativeEvent>(Kind::Event, run);
+    test<Tui::ZTextEdit>(Kind::Widget, run);
     test<Tui::ZTextLayout>(Kind::Misc, run);
     test<Tui::ZTextLine>(Kind::Widget, run);
     test<Tui::ZTextLineRef>(Kind::Value, run);

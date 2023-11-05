@@ -27,6 +27,7 @@ int main(int argc, char **argv) {
     menu();
     radiobutton();
     root();
+    textedit();
     textline();
     window();
 
