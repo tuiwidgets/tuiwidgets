@@ -54,7 +54,7 @@ Keyboard Usage
       - Close the menu
 
    *  - :kbd:`F10`
-      - Close the menu
+      - Open and close the menu
 
    *  - :kbd:`Enter`
       - Active the current menu item
