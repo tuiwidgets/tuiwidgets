@@ -11,6 +11,7 @@
 #include <Tui/ZDialog.h>
 #include <Tui/ZListView.h>
 #include <Tui/ZRoot.h>
+#include <Tui/ZTextEdit.h>
 #include <Tui/ZTextLine.h>
 
 class Demo : public Tui::ZRoot {
@@ -81,6 +82,13 @@ private:
     QDir _dir;
     std::unique_ptr<FileModel> _model;
 };
+
+class TextEditDialog : public Tui::ZDialog {
+    Q_OBJECT
+public:
+    TextEditDialog(Tui::ZWidget *parent);
+};
+
 
 class LabelDialog : public Tui::ZDialog {
     Q_OBJECT

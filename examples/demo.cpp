@@ -45,6 +45,7 @@ void Demo::terminalChanged() {
                        { "<m>R</m>adioButton", "", "RadioButtonDialog", {}},
                        { "<m>L</m>istView", "", "ListViewDialog", {}},
                        { "L<m>a</m>bel", "", "LabelDialog", {}},
+                       { "<m>T</m>extEdit", "", "TextEditDialog", {}},
                        {},
                        { "Search and Replace", "", "SearchAndReplaceDialog", {}},
                        {},
@@ -91,6 +92,11 @@ void Demo::terminalChanged() {
                      [this] {
         new LabelDialog(this);
     });
+
+    QObject::connect(new Tui::ZCommandNotifier("TextEditDialog", this), &Tui::ZCommandNotifier::activated,
+                     [this] {
+                         new TextEditDialog(this);
+                     });
 
     QObject::connect(new Tui::ZCommandNotifier("SearchAndReplaceDialog", this), &Tui::ZCommandNotifier::activated,
                      [this] {
@@ -470,6 +476,25 @@ LabelDialog::LabelDialog(Tui::ZWidget *parent) : Tui::ZDialog(parent) {
     vbox->addWidget(label4);
 }
 
+TextEditDialog::TextEditDialog(ZWidget *parent) : Tui::ZDialog(parent) {
+    setOptions(Tui::ZWindow::CloseOption | Tui::ZWindow::DeleteOnClose
+               | Tui::ZWindow::MoveOption | Tui::ZWindow::AutomaticOption | Tui::ZWindow::ResizeOption);
+    setDefaultPlacement(Tui::AlignCenter);
+
+    setWindowTitle("TextEdit");
+    setContentsMargins({1, 1, 1, 1});
+
+    Tui::ZVBoxLayout *vbox = new Tui::ZVBoxLayout();
+    vbox->setSpacing(1);
+    setLayout(vbox);
+
+    Tui::ZTextEdit *_textEdit = new Tui::ZTextEdit(parent->terminal()->textMetrics(),this);
+    _textEdit->setMinimumSize(30, 8);
+    _textEdit->insertText("Hello World");
+    _textEdit->setFocus();
+    _textEdit->setTabChangesFocus(false);
+    vbox->addWidget(_textEdit);
+}
 
 SearchAndReplaceDialog::SearchAndReplaceDialog(Tui::ZWidget *parent) : Tui::ZDialog(parent) {
     setOptions(Tui::ZWindow::CloseOption | Tui::ZWindow::MoveOption |
