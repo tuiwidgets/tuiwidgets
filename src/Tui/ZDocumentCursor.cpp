@@ -110,6 +110,32 @@ void ZDocumentCursor::insertText(const QString &text) {
     p->doc->debugConsistencyCheck(nullptr);
 }
 
+void ZDocumentCursor::overwriteText(const QString &text, int clusterCount) {
+    auto *const p = tuiwidgets_impl();
+    auto undoGroup = p->doc->startUndoGroup(this);
+
+    if (!text.size()) {
+        return;
+    } else if (!hasSelection()) {
+        clusterCount -= text.count(QLatin1Char('\n'));
+        if (clusterCount < 0) {
+            clusterCount = 0;
+        }
+        const auto [currentCodeUnit, currentLine] = position();
+        if (currentCodeUnit < p->doc->lines[currentLine].chars.size()) {
+            ZTextLayout lay = p->createTextLayout(p->cursorLine, false);
+            const Position start = {currentCodeUnit, currentLine};
+            Position end = {currentCodeUnit, currentLine};
+            for (int i = 0; i < clusterCount; i++) {
+                end = {lay.nextCursorPosition(end.codeUnit, ZTextLayout::SkipCharacters), end.line};
+            }
+            p->doc->removeFromLine(this, start.line, start.codeUnit, end.codeUnit - start.codeUnit);
+        }
+    }
+
+    insertText(text);
+}
+
 void ZDocumentCursor::removeSelectedText() {
     auto *const p = tuiwidgets_impl();
 

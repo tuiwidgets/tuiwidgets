@@ -1786,6 +1786,161 @@ TEST_CASE("ZDocument") {
         CHECK(snap3.lineUserData(0) == userdata2);
         CHECK(snap3.lineUserData(1) == nullptr);
     }
+
+    SECTION("overwriteText") {
+        cursor.insertText("test test\ntest test");
+        cursor.setPosition({0, 0});
+        const QString s = "TEST";
+        bool inOneStep = GENERATE(true, false);
+        CAPTURE(inOneStep);
+        if (inOneStep) {
+            cursor.overwriteText(s, textMetrics.sizeInClusters(s));
+        } else {
+            for (QString c: s) {
+                cursor.overwriteText(c);
+            }
+        }
+        CHECK(docToVec(doc) == QVector<QString>{"TEST test", "test test"});
+    }
+
+    SECTION("overwriteText-long-line") {
+        cursor.insertText("test test\ntest test");
+        cursor.setPosition({0, 0});
+        const QString s = "TEST TEST TEST";
+        bool inOneStep = GENERATE(true, false);
+        CAPTURE(inOneStep);
+        if (inOneStep) {
+            cursor.overwriteText(s, textMetrics.sizeInClusters(s));
+        } else {
+            for (QString c: s) {
+                cursor.overwriteText(c);
+            }
+        }
+        CHECK(docToVec(doc) == QVector<QString>{"TEST TEST TEST", "test test"});
+    }
+
+    SECTION("overwriteText-empty-with-replace-count") {
+        cursor.insertText("test test\ntest test");
+        cursor.setPosition({0, 0});
+        const QString s = "";
+        cursor.overwriteText(s, textMetrics.sizeInClusters(s));
+        CHECK(docToVec(doc) == QVector<QString>{"test test", "test test"});
+    }
+
+    SECTION("overwriteText-empty") {
+        cursor.insertText("test test\ntest test");
+        cursor.setPosition({0, 0});
+        const QString s = "";
+        cursor.overwriteText(s);
+        CHECK(docToVec(doc) == QVector<QString>{"test test", "test test"});
+    }
+
+    SECTION("overwriteText-new-line") {
+        cursor.insertText("test test\ntest test");
+        cursor.setPosition({0, 0});
+        const QString s = "TEST\nTEST";
+        bool inOneStep = GENERATE(true, false);
+        CAPTURE(inOneStep);
+        if (inOneStep) {
+            cursor.overwriteText(s, textMetrics.sizeInClusters(s));
+        } else {
+            for (QString c: s) {
+                cursor.overwriteText(c);
+            }
+        }
+        CHECK(docToVec(doc) == QVector<QString>{"TEST", "TESTt", "test test"});
+    }
+
+    SECTION("overwriteText-U+1F603") {
+        cursor.insertText("test test\ntest test");
+        cursor.setPosition({0, 0});
+        bool inOneStep = GENERATE(true, false);
+        CAPTURE(inOneStep);
+        if (inOneStep) {
+            const QString s = "😃😃";
+            cursor.overwriteText(s, textMetrics.sizeInClusters(s));
+        } else {
+            // manually split here, because both parts are 2 UTF-16 code units and the for loop doesn't get that right.
+            cursor.overwriteText("😃");
+            cursor.overwriteText("😃");
+        }
+        CHECK(docToVec(doc) == QVector<QString>{"😃😃st test", "test test"});
+    }
+
+    SECTION("overwriteText-U+1F603-at-end-of-line") {
+        cursor.insertText("test test\ntest test");
+        cursor.setPosition({8, 0});
+        const QString s = "😃";
+        cursor.overwriteText(s);
+        CHECK(docToVec(doc) == QVector<QString>{"test tes😃", "test test"});
+    }
+
+    SECTION("overwriteText-overwrite-U+1F603") {
+        cursor.insertText("😃😃😃 test\ntest test");
+        cursor.setPosition({0, 0});
+        const QString s = "TS";
+        bool inOneStep = GENERATE(true, false);
+        CAPTURE(inOneStep);
+        if (inOneStep) {
+            cursor.overwriteText(s, textMetrics.sizeInClusters(s));
+        } else {
+            for (QString c: s) {
+                cursor.overwriteText(c);
+            }
+        }
+        CHECK(docToVec(doc) == QVector<QString>{"TS😃 test", "test test"});
+    }
+
+    SECTION("overwriteText-almost-at-and") {
+        cursor.insertText("test test\ntest test");
+        cursor.setPosition({8, 1});
+        const QString s = "TEST";
+        bool inOneStep = GENERATE(true, false);
+        CAPTURE(inOneStep);
+        if (inOneStep) {
+            cursor.overwriteText(s, textMetrics.sizeInClusters(s));
+        } else {
+            for (QString c: s) {
+                cursor.overwriteText(c);
+            }
+        }
+        CHECK(docToVec(doc) == QVector<QString>{"test test", "test tesTEST"});
+    }
+
+    SECTION("overwriteText-at-and") {
+        cursor.insertText("test test\ntest test");
+        const QString s = "TEST\nTEST";
+        bool inOneStep = GENERATE(true, false);
+        CAPTURE(inOneStep);
+        if (inOneStep) {
+            cursor.overwriteText(s, textMetrics.sizeInClusters(s));
+        } else {
+            for (QString c: s) {
+                cursor.overwriteText(c);
+            }
+        }
+        CHECK(docToVec(doc) == QVector<QString>{"test test", "test testTEST", "TEST"});
+    }
+
+    SECTION("overwriteText-seletion") {
+        cursor.insertText("test test\ntest test");
+        cursor.setPosition({1, 0});
+        cursor.setAnchorPosition({3, 0});
+        CHECK(cursor.selectedText() == "es");
+        const QString s = "EST";
+        bool inOneStep = GENERATE(true, false);
+        if (inOneStep) {
+            int ignoredCodeUnitsValue = GENERATE(0, 3, 12);
+            cursor.overwriteText(s, ignoredCodeUnitsValue);
+            CHECK(docToVec(doc) == QVector<QString>{"tESTt test", "test test"});
+        } else {
+            foreach (QString c, s) {
+                cursor.overwriteText(c);
+            }
+            CHECK(docToVec(doc) == QVector<QString>{"tESTtest", "test test"});
+        }
+    }
+
 }
 
 

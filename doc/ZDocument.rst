@@ -665,6 +665,25 @@ ZDocument
 
       Both cursor points will be set to the end of the inserted text.
 
+   .. cpp:function:: void overwriteText(const QString &text, int clusterCount = 1)
+
+      Insert the text ``text`` at the current cursor location, overwriting up to ``clusterCount`` characters/clusters.
+
+      If ``text`` is empty this function does nothing.
+
+      If the cursor has a selection, it will be replaced by the text ``text`` and ``clusterCount`` is ignored.
+
+      Otherwise removes up to ``clusterCount`` characters/clusters following the current position on the current line.
+      First ``clusterCount`` is reduced by the amount of ``\n`` characters found in ``text``, then it is reduced to at
+      most the count of remaining characters/clusters in the current line.
+      Then the ``text`` is inserted.
+
+      It should be called with ``textMetrics.sizeInClusters(text)`` as ``clusterCount``.
+      When done so and without a selection, calling it with each character/cluster one at a time and calling it with the
+      same characters all at once will yield the same result.
+
+      Both cursor points will be set to the end of the inserted text.
+
    .. cpp:function:: void removeSelectedText()
 
       If the cursor has a selection, it will be removed.

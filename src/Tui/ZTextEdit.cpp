@@ -730,13 +730,13 @@ void ZTextEdit::keyEvent(ZKeyEvent *event) {
     } else if (editable && text.size() && event->modifiers() == 0) {
         p->detachedScrolling = false;
         setSelectMode(false);
-        if (overwriteMode() && !p->cursor.hasSelection() && !p->cursor.atLineEnd()) {
-            p->cursor.deleteCharacter();
-        }
-
         // Inserting might adjust the scroll position, so save it here and restore it later.
         const int line = p->scrollPositionLine.line();
-        p->cursor.insertText(text);
+        if (overwriteMode()) {
+            p->cursor.overwriteText(text);
+        } else {
+            p->cursor.insertText(text);
+        }
         p->scrollPositionLine.setLine(line);
         adjustScrollPosition();
         updateCommands();

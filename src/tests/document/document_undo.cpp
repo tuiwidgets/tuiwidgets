@@ -4,6 +4,8 @@
 #include <Tui/ZDocumentCursor.h>
 #include <Tui/ZDocumentLineMarker.h>
 
+#include <QBuffer>
+
 #include <optional>
 
 #include <Tui/ZTerminal.h>
@@ -22,6 +24,13 @@ static QVector<QString> docToVec(const Tui::ZDocument &doc) {
     }
 
     return ret;
+}
+
+static void loadText(Tui::ZDocument *doc, const QString &text) {
+    QByteArray x = text.toUtf8();
+    QBuffer data(&x);
+    data.open(QIODevice::ReadOnly);
+    doc->readFrom(&data);
 }
 
 TEST_CASE("Document Undo Redo") {
@@ -288,6 +297,72 @@ TEST_CASE("Document Undo Redo") {
                   });
     }
 
+
+    SECTION("overwriteText-undo") {
+        cursor1.insertText("test test\ntest test");
+        cursor1.setPosition({0, 0});
+        const QString s = "TEST TEST TEST";
+        foreach (QString c, s) {
+            cursor1.overwriteText(c);
+        }
+        CHECK(docToVec(doc) == QVector<QString>{"TEST TEST TEST", "test test"});
+        CHECK(cursor1.position().codeUnit == 14);
+        doc.undo(&cursor1);
+        CHECK(docToVec(doc) == QVector<QString>{"TEST TEST", "test test"});
+        CHECK(cursor1.position().codeUnit == 9);
+        doc.undo(&cursor1);
+        CHECK(docToVec(doc) == QVector<QString>{"TEST test", "test test"});
+        CHECK(cursor1.position().codeUnit == 4);
+        doc.undo(&cursor1);
+        CHECK(docToVec(doc) == QVector<QString>{"test test", "test test"});
+        CHECK(cursor1.position().codeUnit == 0);
+
+        cursor1.overwriteText(s, textMetrics.sizeInClusters(s));
+        CHECK(docToVec(doc) == QVector<QString>{"TEST TEST TEST", "test test"});
+        CHECK(cursor1.position().codeUnit == 14);
+        doc.undo(&cursor1);
+        CHECK(docToVec(doc) == QVector<QString>{"test test", "test test"});
+        CHECK(cursor1.position().codeUnit == 0);
+    }
+
+    SECTION("overwriteText-inserts2") {
+        loadText(&doc, "for peace around the world");
+        runChecks({
+            { Collapsed, [&] { cursor1.overwriteText("a"); } },
+            { Collapsed, [&] { cursor1.overwriteText("b"); } },
+            { NormalStp, [&] { cursor1.overwriteText("c"); } },
+            { Collapsed, [&] { cursor1.overwriteText(" "); } },
+            { Collapsed, [&] { cursor1.overwriteText("d"); } },
+            { Collapsed, [&] { cursor1.overwriteText("e"); } },
+            { NormalStp, [&] { cursor1.overwriteText("f"); } }
+        });
+    }
+
+    SECTION("overwriteText-insert and move") {
+        loadText(&doc, "for peace around the world");
+        runChecks({
+            { Collapsed, [&] { cursor1.overwriteText("a"); } },
+            { Collapsed, [&] { cursor1.overwriteText("b"); } },
+            { NormalStp, [&] { cursor1.overwriteText("c"); } },
+            { Invisible, [&] { cursor1.moveCharacterLeft(); } },
+            { Collapsed, [&] { cursor1.overwriteText("d"); } },
+            { Collapsed, [&] { cursor1.overwriteText("e"); } },
+            { NormalStp, [&] { cursor1.overwriteText("f"); } }
+        });
+    }
+
+    SECTION("overwriteText-insert and cancle collapsing") {
+        loadText(&doc, "for peace around the world");
+        runChecks({
+            { Collapsed, [&] { cursor1.overwriteText("a"); } },
+            { Collapsed, [&] { cursor1.overwriteText("b"); } },
+            { NormalStp, [&] { cursor1.overwriteText("c"); } },
+            { Invisible, [&] { doc.clearCollapseUndoStep(); } },
+            { Collapsed, [&] { cursor1.overwriteText("d"); } },
+            { Collapsed, [&] { cursor1.overwriteText("e"); } },
+            { NormalStp, [&] { cursor1.overwriteText("f"); } }
+        });
+    }
 }
 
 TEST_CASE("Document additional cursor adjustments") {

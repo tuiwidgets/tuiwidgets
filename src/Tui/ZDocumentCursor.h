@@ -44,6 +44,7 @@ public:
 
 public:
     void insertText(const QString &text);
+    void overwriteText(const QString &text, int clusterCount = 1);
     void removeSelectedText();
     void clearSelection();
     QString selectedText() const;
