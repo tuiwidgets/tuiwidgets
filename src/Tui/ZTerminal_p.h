@@ -145,8 +145,9 @@ public:
     } initState = InitState::InInitWithoutPendingPaintRequest;
 
     // stuff from internal integration
-    int fd = -1;
-    bool auto_close = false;
+    int fd_read = -1;
+    int fd_write = -1;
+    bool auto_close = false; // if true fd_read == fd_write is assumed
     QByteArray output_buffer;
     termios originalTerminalAttributes;
     termios prepauseTerminalAttributes;

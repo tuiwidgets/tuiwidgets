@@ -43,6 +43,10 @@ TUIWIDGETS_NS_START
 #endif
 
 // signal based terminal restore...
+// NOTE: This is only used when the terminal is the controlling terminal, as the needed kernel interfaces
+//       are only usable with the controlling terminal.
+// NOTE: The whole controlling terminal code assumes fd_read == fd_write, as we can always get one fd for
+//       both when a controlling terminal exists via /dev/tty.
 static bool systemRestoreInited = false; // global once only signal handler registration
 STATIC_ASSERT_ALWAYS_LOCKFREE(std::atomic<int>);
 static std::atomic<int> systemRestoreFd { -1 }; // only written by non signal handling code
@@ -277,31 +281,32 @@ bool ZTerminalPrivate::terminalAvailableForInternalConnection() {
 }
 
 bool ZTerminalPrivate::setupInternalConnection(ZTerminal::Options options, ZTerminal::FileDescriptor *explicitFd) {
-    if (fd != -1) {
+    if (fd_read != -1 || fd_write != -1) {
         return false;
     }
 
-    fd = -1;
+    fd_read = -1;
+    fd_write = -1;
     auto_close = false;
 
     if (explicitFd) {
         if (isatty(explicitFd->fd()) && isFileRw(explicitFd->fd())) {
-            fd = explicitFd->fd();
+            fd_read = fd_write = explicitFd->fd();
             return commonInitForInternalConnection(options);
         }
         return false;
     }
 
     if (isatty(0) && isFileRw(0)) {
-        fd = 0;
+        fd_read = fd_write = 0;
     } else if (isatty(1) && isFileRw(1)) {
-        fd = 1;
+        fd_read = fd_write = 1;
     } else if (isatty(2) && isFileRw(2)) {
-        fd = 2;
+        fd_read = fd_write = 2;
     } else {
-        fd = open("/dev/tty", O_RDWR | O_NOCTTY | FD_CLOEXEC);
+        fd_read = fd_write = open("/dev/tty", O_RDWR | O_NOCTTY | FD_CLOEXEC);
         auto_close = true;
-        if (fd == -1) {
+        if (fd_read == -1) {
             return false;
         }
     }
@@ -311,14 +316,14 @@ bool ZTerminalPrivate::setupInternalConnection(ZTerminal::Options options, ZTerm
 
 void ZTerminalPrivate::deinitTerminalForInternalConnection() {
     inputNotifier = nullptr; // ensure no more notifications from this point
-    if (fd != -1 && fd == systemRestoreFd.load()) {
+    if (fd_read != -1 && fd_read == systemRestoreFd.load()) {
         const char *old = systemRestoreEscape.load();
         systemRestoreEscape.store(nullptr);
         systemRestoreFd.store(-1);
         systemTerminal = nullptr;
         int pausedFd = systemPausedFd.load();
         if (pausedFd != -1) {
-            dup2(pausedFd, fd);
+            dup2(pausedFd, fd_read);
             close(pausedFd);
             systemPausedFd.store(-1);
         }
@@ -335,31 +340,30 @@ void ZTerminalPrivate::deinitTerminalForInternalConnection() {
         while (!timer.hasExpired(100)) {
             int ret;
             struct pollfd info;
-            info.fd = fd;
+            info.fd = fd_read;
             info.events = POLLIN;
             ret = poll(&info, 1, std::max((qint64)1, 100 - timer.elapsed()));
             if (ret == 1) {
                 char buff[1000];
-                int amount = (int)read(fd, buff, 999);
+                int amount = (int)read(fd_read, buff, 999);
                 if (amount < 0) {
                     break;
                 }
             }
         }
     }
-    if (fd != -1) {
-        tcsetattr (fd, TCSAFLUSH, &originalTerminalAttributes);
+    if (fd_read != -1) {
+        tcsetattr(fd_read, TCSAFLUSH, &originalTerminalAttributes);
     }
 }
 
 bool ZTerminalPrivate::setupFromControllingTerminal(ZTerminal::Options options) {
-    if (fd != -1) {
+    if (fd_read != -1 || fd_write != -1) {
         return false;
     }
 
-    fd = -1;
-    fd = open("/dev/tty", O_RDWR | O_NOCTTY | FD_CLOEXEC);
-    if (fd == -1) {
+    fd_read = fd_write = open("/dev/tty", O_RDWR | O_NOCTTY | FD_CLOEXEC);
+    if (fd_read == -1) {
         return false;
     }
     auto_close = true;
@@ -382,20 +386,22 @@ bool ZTerminalPrivate::commonInitForInternalConnection(ZTerminal::Options option
     surface = termpaint_terminal_get_surface(terminal);
 
     struct winsize s;
-    if (isatty(fd) && ioctl(fd, TIOCGWINSZ, &s) >= 0) {
+    if (isatty(fd_read) && ioctl(fd_read, TIOCGWINSZ, &s) >= 0) {
         termpaint_surface_resize(surface, s.ws_col, s.ws_row);
     } else {
         termpaint_surface_resize(surface, 80, 24);
     }
 
-    tcgetattr(fd, &originalTerminalAttributes);
+    tcgetattr(fd_read, &originalTerminalAttributes);
     backspaceIsX08 = (originalTerminalAttributes.c_cc[VERASE] == 0x08);
     // The following call sends a TTOU signal if this process is in a background job.
     // This cleanly stops terminal init, until after the process's job is moved to the foreground.
-    tcsetattr(fd, TCSANOW, &originalTerminalAttributes);
+    tcsetattr(fd_read, TCSANOW, &originalTerminalAttributes);
 
     // determine if fd refers to the controlling tty
-    const bool controllingTty = (tcgetpgrp(fd) != -1);
+    // and that fd_read == fd_write as the whole code here is not prepared to deal with different read and write fd·s
+    // and the internal connection init code will always use a common fd for both when a controlling terminal exists.
+    const bool controllingTty = fd_read == fd_write && (tcgetpgrp(fd_read) != -1);
     if (controllingTty) {
         if (systemRestoreFd.load() != -1) {
             qWarning("Two ZTerminal instances connected to the controlling terminal at once is not supported");
@@ -414,7 +420,7 @@ bool ZTerminalPrivate::commonInitForInternalConnection(ZTerminal::Options option
             // After this the signal handler pay attention to the just setup state
             // Also this forms a release-aquire pair with reads in the signal handler
             // to allow for race free access of systemOriginalTerminalAttributes.
-            systemRestoreFd.store(fd);
+            systemRestoreFd.store(fd_write);
             systemTerminal = pub();
 
             if (!systemRestoreInited) {
@@ -469,7 +475,7 @@ bool ZTerminalPrivate::commonInitForInternalConnection(ZTerminal::Options option
                             return;
                         }
                         struct winsize s;
-                        if (isatty(p->fd) && ioctl(p->fd, TIOCGWINSZ, &s) >= 0) {
+                        if (isatty(p->fd_read) && ioctl(p->fd_read, TIOCGWINSZ, &s) >= 0) {
                             systemTerminal->resize(s.ws_col, s.ws_row);
                         }
                     }
@@ -479,7 +485,7 @@ bool ZTerminalPrivate::commonInitForInternalConnection(ZTerminal::Options option
     }
 
     struct termios tattr;
-    tcgetattr (fd, &tattr);
+    tcgetattr(fd_read, &tattr);
     tattr.c_iflag |= IGNBRK | IGNPAR;
     tattr.c_iflag &= ~(BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL | IXON | IXOFF);
     tattr.c_oflag &= ~(OPOST | ONLCR | OCRNL | ONOCR | ONLRET);
@@ -504,15 +510,15 @@ bool ZTerminalPrivate::commonInitForInternalConnection(ZTerminal::Options option
         }
     }
 
-    tcsetattr(fd, TCSAFLUSH, &tattr);
+    tcsetattr(fd_read, TCSAFLUSH, &tattr);
 
-    if (systemRestoreFd.load() == fd) {
+    if (systemRestoreFd.load() == fd_read) {
         tcgetattr(systemRestoreFd.load(), &systemPresuspendTerminalAttributes);
     }
 
     initCommon();
 
-    inputNotifier.reset(new QSocketNotifier(fd, QSocketNotifier::Read));
+    inputNotifier.reset(new QSocketNotifier(fd_read, QSocketNotifier::Read));
     QObject::connect(inputNotifier.get(), &QSocketNotifier::activated,
                      pub(), [this] (int socket) -> void { internalConnectionTerminalFdHasData(socket); });
 
@@ -520,21 +526,21 @@ bool ZTerminalPrivate::commonInitForInternalConnection(ZTerminal::Options option
 }
 
 void ZTerminalPrivate::pauseTerminalForInternalConnection() {
-    tcgetattr(fd, &prepauseTerminalAttributes);
+    tcgetattr(fd_read, &prepauseTerminalAttributes);
 
     inputNotifier->setEnabled(false);
     termpaint_terminal_pause(terminal);
-    tcsetattr(fd, TCSAFLUSH, &originalTerminalAttributes);
-    if (fd == systemRestoreFd.load()) {
+    tcsetattr(fd_read, TCSAFLUSH, &originalTerminalAttributes);
+    if (fd_read == systemRestoreFd.load()) {
         systemTerminalPaused.store(true);
     }
 }
 
 void ZTerminalPrivate::unpauseTerminalForInternalConnection() {
-    if (fd == systemRestoreFd.load()) {
+    if (fd_read == systemRestoreFd.load()) {
         systemTerminalPaused.store(false);
     }
-    tcsetattr(fd, TCSAFLUSH, &prepauseTerminalAttributes);
+    tcsetattr(fd_read, TCSAFLUSH, &prepauseTerminalAttributes);
     inputNotifier->setEnabled(true);
     termpaint_terminal_unpause(terminal);
 }
@@ -565,8 +571,9 @@ void ZTerminalPrivate::internalConnectionTerminalFdHasData(int socket) {
 
 void ZTerminalPrivate::internalConnection_integration_free() {
     // this does not really free, because ZTerminalPrivate which contains the integration struct is externally owned
-    if (auto_close && fd != -1) {
-        close(fd);
+    if (auto_close && fd_read != -1) {
+        // assumnes that auto_close will only be true if fd_read == fd_write
+        close(fd_read);
     }
 }
 
@@ -575,24 +582,24 @@ void ZTerminalPrivate::internalConnection_integration_write_unbuffered(char *dat
     int ret;
     errno = 0;
     while (written != length) {
-        ret = write(fd, data+written, length-written);
+        ret = write(fd_write, data + written, length - written);
         if (ret > 0) {
             written += ret;
         } else {
             // error handling?
             if (errno == EAGAIN || errno == EWOULDBLOCK) {
                 // fatal, non blocking is not supported by this integration
-                fd = -1;
+                fd_read = fd_write = -1;
                 return;
             }
             if (errno == EIO || errno == ENOSPC) {
                 // fatal?
-                fd = -1;
+                fd_read = fd_write = -1;
                 return;
             }
             if (errno == EBADF || errno == EINVAL || errno == EPIPE) {
                 // fatal, or fd is gone bad
-                fd = -1;
+                fd_read = fd_write = -1;
                 return;
             }
             if (errno == EINTR) {
@@ -615,11 +622,11 @@ void ZTerminalPrivate::internalConnection_integration_flush() {
 }
 
 bool ZTerminalPrivate::internalConnection_integration_is_bad() {
-    return fd == -1;
+    return fd_read == -1;
 }
 
 void ZTerminalPrivate::internalConnection_integration_restore_sequence_updated(const char *data, int len, bool force) {
-    if (fd == systemRestoreFd.load() || force) {
+    if (fd_read == systemRestoreFd.load() || force) {
         unsigned length = static_cast<unsigned>(len);
         const char *old = systemRestoreEscape.load();
         char *update = new char[length + 1];
