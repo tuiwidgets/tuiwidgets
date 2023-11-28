@@ -261,6 +261,34 @@ namespace  {
         int ret = fcntl(fd, F_GETFL);
         return ret != -1 && (ret & O_ACCMODE) == O_RDWR;
     }
+
+    bool isFdReadable(int fd) {
+        int ret = fcntl(fd, F_GETFL);
+        return ret != -1 && ((ret & O_ACCMODE) == O_RDWR || (ret & O_ACCMODE) == O_RDONLY);
+    }
+
+    bool isFdWritable(int fd) {
+        int ret = fcntl(fd, F_GETFL);
+        return ret != -1 && ((ret & O_ACCMODE) == O_RDWR || (ret & O_ACCMODE) == O_WRONLY);
+    }
+
+    bool isTerminalFdPair(int fd_read, int fd_write) {
+        if (isatty(fd_read) && isatty(fd_write)
+                && isFdReadable(fd_read) && isFdWritable(fd_write)) {
+            struct stat statbuf_r;
+            struct stat statbuf_w;
+
+            if (fstat(fd_read, &statbuf_r) == 0 && fstat(fd_write, &statbuf_w) == 0) {
+                if (statbuf_r.st_rdev == statbuf_w.st_rdev
+                        && statbuf_r.st_dev == statbuf_w.st_dev
+                        && statbuf_r.st_ino == statbuf_w.st_ino) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 }
 
 bool ZTerminalPrivate::terminalAvailableForInternalConnection() {
@@ -275,6 +303,12 @@ bool ZTerminalPrivate::terminalAvailableForInternalConnection() {
     int fd = open("/dev/tty", O_RDONLY | O_NOCTTY | FD_CLOEXEC);
     if (fd != -1) {
         close(fd);
+        return true;
+    }
+    // as last resort check if (0, 1) or (0, 2) are matching read/write pairs pointing to the same terminal
+    if (isTerminalFdPair(0, 1)) {
+        return true;
+    } else  if (isTerminalFdPair(0, 2)) {
         return true;
     }
     return false;
@@ -305,9 +339,19 @@ bool ZTerminalPrivate::setupInternalConnection(ZTerminal::Options options, ZTerm
         fd_read = fd_write = 2;
     } else {
         fd_read = fd_write = open("/dev/tty", O_RDWR | O_NOCTTY | FD_CLOEXEC);
-        auto_close = true;
-        if (fd_read == -1) {
-            return false;
+        if (fd_read != -1) {
+            auto_close = true;
+        } else {
+            // as last resort check if (0, 1) or (0, 2) are matching read/write pairs pointing to the same terminal
+            if (isTerminalFdPair(0, 1)) {
+                fd_read = 0;
+                fd_write = 1;
+            } else  if (isTerminalFdPair(0, 2)) {
+                fd_read = 0;
+                fd_write = 2;
+            } else {
+                return false;
+            }
         }
     }
 
