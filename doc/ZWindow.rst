@@ -240,8 +240,8 @@ Palette
         | Also this color is used for the frame in interactive move and resize modes.
 
 
-Comands
--------
+Commands
+--------
 
 The window registers the following window local commands:
 
