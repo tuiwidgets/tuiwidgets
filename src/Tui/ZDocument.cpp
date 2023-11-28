@@ -38,6 +38,24 @@ ZDocument::~ZDocument() {
     auto *const p = tuiwidgets_impl();
     // Invalidate all snapshots out there, if snapshots are used in threads that should signal them to stop their work
     p->revision->store(p->revision->load(std::memory_order_relaxed) + 1, std::memory_order_relaxed);
+
+    bool hasMarker = false;
+    bool hasCursor = false;
+
+    for (ZDocumentLineMarkerPrivate *marker = p->lineMarkerList.first; marker; marker = marker->markersList.next) {
+        hasMarker = true;
+    }
+    for (ZDocumentCursorPrivate *cursor = p->cursorList.first; cursor; cursor = cursor->markersList.next) {
+        hasCursor = true;
+    }
+
+    if (hasMarker && hasCursor) {
+        qFatal("~ZDocument: Has still line markers and cursors active on destruction, this is not supported");
+    } else if (hasMarker) {
+        qFatal("~ZDocument: Has still line markers active on destruction, this is not supported");
+    } else if (hasCursor) {
+        qFatal("~ZDocument: Has still cursors active on destruction, this is not supported");
+    }
 }
 
 void ZDocument::reset() {
