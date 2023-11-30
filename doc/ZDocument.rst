@@ -79,10 +79,10 @@ To facilitate this, the document allows saving an additional object with each li
 :cpp:func:`setLineUserData <void Tui::ZDocument::setLineUserData(int line, std::shared_ptr<Tui::ZDocumentLineUserData> userData)>`.
 
 Setting it or changes to it do not trigger change signals or increment the document or line revisions.
-The user is responsible for threading save usage of this object, when using snapshots with other
+The user is responsible for thread safe usage of this object, when using snapshots with other
 threads than the document's thread.
 
-Currently the user-data is restored when using undo and redo, but this might change in the future.
+Currently the user-data is also affected by undo and redo, but this might change in the future.
 
 .. _zdocument_undoredo:
 
