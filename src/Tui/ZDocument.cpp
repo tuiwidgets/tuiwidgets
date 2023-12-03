@@ -94,6 +94,24 @@ void ZDocument::writeTo(QIODevice *file, bool crLfMode) const {
     }
 }
 
+QString ZDocument::text(bool crLfMode) const {
+    QString result;
+    auto *const p = tuiwidgets_impl();
+    for (int i = 0; i < lineCount(); i++) {
+        result += p->lines[i].chars;
+        if (i + 1 == lineCount() && p->newlineAfterLastLineMissing) {
+            // omit newline
+        } else {
+            if (crLfMode) {
+                result += QStringLiteral("\r\n");
+            } else {
+                result += QStringLiteral("\n");
+            }
+        }
+    }
+    return result;
+}
+
 
 void ZDocument::readFrom(QIODevice *file) {
     readFrom(file, {0, 0}, nullptr);
@@ -141,6 +159,73 @@ void ZDocument::readFrom(QIODevice *file, ZDocumentCursor::Position initialPosit
     if (p->lines.isEmpty()) {
         p->lines.append({QStringLiteral(""), 0, nullptr});
         p->newlineAfterLastLineMissing = true;
+    }
+
+    bool allLinesCrLf = false;
+
+    for (int i = 0; i < lineCount() - (p->newlineAfterLastLineMissing ? 1 : 0); i++) {
+        if (p->lines[i].chars.size() >= 1 && p->lines[i].chars.at(p->lines[i].chars.size() - 1) == QLatin1Char('\r')) {
+            allLinesCrLf = true;
+        } else {
+            allLinesCrLf = false;
+            break;
+        }
+    }
+    if (allLinesCrLf) {
+        for (int i = 0; i < lineCount() - (p->newlineAfterLastLineMissing ? 1 : 0); i++) {
+            p->lines[i].chars.remove(p->lines[i].chars.size() - 1, 1);
+        }
+    }
+
+    if (initialPosition.line >= p->lines.size()) {
+        initialPosition.line = p->lines.size() - 1;
+    }
+    if (initialPosition.codeUnit > p->lines[initialPosition.line].chars.size()) {
+        initialPosition.codeUnit = p->lines[initialPosition.line].chars.size();
+    }
+
+    if (initialPositionCursor) {
+        initialPositionCursor->setPosition(initialPosition);
+        initialPosition = initialPositionCursor->position();
+    }
+    p->initalUndoStep(initialPosition.codeUnit, initialPosition.line);
+
+    debugConsistencyCheck(nullptr);
+
+    p->noteContentsChange();
+
+    setCrLfMode(allLinesCrLf);
+}
+
+void ZDocument::setText(const QString &text) {
+    setText(text, {0, 0}, nullptr);
+}
+
+void ZDocument::setText(const QString &text, ZDocumentCursor::Position initialPosition, ZDocumentCursor *initialPositionCursor) {
+    auto *const p = tuiwidgets_impl();
+    // Clear line markers and cursors while _lines still has contents.
+    for (ZDocumentLineMarkerPrivate *marker = p->lineMarkerList.first; marker; marker = marker->markersList.next) {
+        marker->pub()->setLine(0);
+    }
+    for (ZDocumentCursorPrivate *cursor = p->cursorList.first; cursor; cursor = cursor->markersList.next) {
+        cursor->pub()->setPosition({0, 0});
+    }
+
+    p->lines.clear();
+
+    if (text.isEmpty()) {
+        p->lines.append({QStringLiteral(""), 0, nullptr});
+        p->newlineAfterLastLineMissing = true;
+    } else {
+        for (QString line: text.split(QLatin1Char('\n'))) {
+            p->lines.append({line, 0, nullptr});
+        }
+
+        p->newlineAfterLastLineMissing = true;
+        if (p->lines.back().chars.isEmpty()) {
+            p->lines.removeLast();
+            p->newlineAfterLastLineMissing = false;
+        }
     }
 
     bool allLinesCrLf = false;

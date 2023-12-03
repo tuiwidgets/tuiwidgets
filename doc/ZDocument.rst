@@ -250,8 +250,37 @@ ZDocument
 
       Sets the :cpp:func:`crLfMode property <bool Tui::ZDocument::crLfMode() const>` to  :cpp:expr:`true`,
       if the file consistently uses the CRLF (\\r\\n) line ending convention.
-      Pass the this value as ``crLfMode`` into ``writeTo`` to keep the same line ending
+      Pass this value as ``crLfMode`` into ``writeTo`` to keep the same line ending
       convention as the loaded file when saving.
+
+      The variant taking a ``initialPosition`` sets the initial cursor position to ``initialPosition``
+      in the initial undo step.
+
+      The variant taking a ``initialPositionCursor`` sets the initial cursor position also in the
+      cursor passed as ``initialPositionCursor``.
+      The passed pointer may be :cpp:expr:`nullptr`.
+
+   .. cpp:function:: void text(bool crLfMode = false) const
+
+      Return the document's contents as a string.
+
+      If ``crLfMode`` is :cpp:expr:`true`, line breaks will use the CRLF (\\r\\n) line ending
+      convention.
+      To keep the same line ending convention as the originally input string or file, pass the return value
+      from :cpp:func:`bool Tui::ZDocument::crLfMode() const` here.
+
+      If :cpp:func:`~bool newlineAfterLastLineMissing() const` is not set, an trailing line break
+      will be added to the returned string.
+
+   .. cpp:function:: void setText(const QString &text)
+   .. cpp:function:: void setText(const QString &text, Tui::ZDocumentCursor::Position initialPosition, Tui::ZDocumentCursor *initialPositionCursor)
+
+      Reset the document and read new data from the QString ``text``.
+
+      Sets the :cpp:func:`crLfMode property <bool Tui::ZDocument::crLfMode() const>` to  :cpp:expr:`true`,
+      if the input string consistently uses the CRLF (\\r\\n) line ending convention.
+      Pass this value as ``crLfMode`` into ``text`` or ``writeTo`` to keep the same line ending
+      convention as the input string when retrieving the contents.
 
       The variant taking a ``initialPosition`` sets the initial cursor position to ``initialPosition``
       in the initial undo step.

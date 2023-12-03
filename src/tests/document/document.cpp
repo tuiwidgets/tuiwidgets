@@ -811,6 +811,259 @@ TEST_CASE("ZDocument") {
         }
     }
 
+    SECTION("text - setText") {
+        SECTION("empty") {
+            doc.setText(QString());
+            CHECK(docToVec(doc) == QVector<QString>{ "" });
+            CHECK(doc.crLfMode() == false);
+            CHECK(doc.newlineAfterLastLineMissing() == true);
+
+            CHECK(doc.text().size() == 0);
+        }
+
+        SECTION("simple") {
+            QString inData = "line1\nline2\n";
+            doc.setText(inData);
+            CHECK(docToVec(doc) == QVector<QString>{ "line1", "line2" });
+            CHECK(doc.crLfMode() == false);
+            CHECK(doc.newlineAfterLastLineMissing() == false);
+            CHECK(doc.isModified() == false);
+            CHECK(doc.isUndoAvailable() == false);
+            CHECK(doc.isRedoAvailable() == false);
+
+            CHECK(doc.text(doc.crLfMode()) == inData);
+        }
+
+        SECTION("initial cursor position") {
+            QString inData ="line1\nline2\n";
+            doc.setText(inData, Tui::ZDocumentCursor::Position{1, 1}, &cursor);
+            CHECK(docToVec(doc) == QVector<QString>{ "line1", "line2" });
+            CHECK(doc.crLfMode() == false);
+            CHECK(doc.newlineAfterLastLineMissing() == false);
+            CHECK(doc.isModified() == false);
+            CHECK(doc.isUndoAvailable() == false);
+            CHECK(doc.isRedoAvailable() == false);
+            CHECK(cursor.position() == Tui::ZDocumentCursor::Position{1, 1});
+            CHECK(cursor.hasSelection() == false);
+
+            CHECK(doc.text(doc.crLfMode()) == inData);
+        }
+
+        SECTION("initial cursor position with out of range code unit") {
+            QString inData = "line1\nline2\n";
+            doc.setText(inData, Tui::ZDocumentCursor::Position{10, 1}, &cursor);
+            CHECK(docToVec(doc) == QVector<QString>{ "line1", "line2" });
+            CHECK(doc.crLfMode() == false);
+            CHECK(doc.newlineAfterLastLineMissing() == false);
+            CHECK(doc.isModified() == false);
+            CHECK(doc.isUndoAvailable() == false);
+            CHECK(doc.isRedoAvailable() == false);
+            CHECK(cursor.position() == Tui::ZDocumentCursor::Position{5, 1});
+            CHECK(cursor.hasSelection() == false);
+
+            CHECK(doc.text(doc.crLfMode()) == inData);
+        }
+
+        SECTION("initial cursor position with out of range line") {
+            QString inData = "line1\nline2\n";
+            doc.setText(inData, Tui::ZDocumentCursor::Position{2, 10}, &cursor);
+            CHECK(docToVec(doc) == QVector<QString>{ "line1", "line2" });
+            CHECK(doc.crLfMode() == false);
+            CHECK(doc.newlineAfterLastLineMissing() == false);
+            CHECK(doc.isModified() == false);
+            CHECK(doc.isUndoAvailable() == false);
+            CHECK(doc.isRedoAvailable() == false);
+            CHECK(cursor.position() == Tui::ZDocumentCursor::Position{2, 1});
+            CHECK(cursor.hasSelection() == false);
+
+            CHECK(doc.text(doc.crLfMode()) == inData);
+        }
+
+        SECTION("resets cursors and line markers") {
+            cursor.insertText("\ntest test");
+            REQUIRE(doc.lineCount() == 2);
+            CHECK(cursor.position() == Tui::ZDocumentCursor::Position{9, 1});
+            Tui::ZDocumentLineMarker marker{&doc, 1};
+
+            QString inData = "line1\nline2\n";
+            doc.setText(inData);
+
+            CHECK(cursor.position() == Tui::ZDocumentCursor::Position{0, 0});
+            CHECK(marker.line() == 0);
+        }
+
+        SECTION("simple - missing last linebreak") {
+            QString inData = "line1\nline2";
+            doc.setText(inData);
+            CHECK(docToVec(doc) == QVector<QString>{ "line1", "line2" });
+            CHECK(doc.crLfMode() == false);
+            CHECK(doc.newlineAfterLastLineMissing() == true);
+            CHECK(doc.isModified() == false);
+            CHECK(doc.isUndoAvailable() == false);
+            CHECK(doc.isRedoAvailable() == false);
+
+            CHECK(doc.text(doc.crLfMode()) == inData);
+        }
+
+        SECTION("mixed line endings") {
+            QString inData = "line1\r\nline2\nline3\n";
+            doc.setText(inData);
+            CHECK(docToVec(doc) == QVector<QString>{ "line1\r", "line2", "line3" });
+            CHECK(doc.crLfMode() == false);
+            CHECK(doc.newlineAfterLastLineMissing() == false);
+            CHECK(doc.isModified() == false);
+            CHECK(doc.isUndoAvailable() == false);
+            CHECK(doc.isRedoAvailable() == false);
+
+            CHECK(doc.text(doc.crLfMode()) == inData);
+        }
+
+        SECTION("mixed line endings - last line missing CR") {
+            QString inData = "line1\r\nline2\r\nline3\n";
+            doc.setText(inData);
+            CHECK(docToVec(doc) == QVector<QString>{ "line1\r", "line2\r", "line3" });
+            CHECK(doc.crLfMode() == false);
+            CHECK(doc.newlineAfterLastLineMissing() == false);
+            CHECK(doc.isModified() == false);
+            CHECK(doc.isUndoAvailable() == false);
+            CHECK(doc.isRedoAvailable() == false);
+
+            CHECK(doc.text(doc.crLfMode()) == inData);
+        }
+
+        SECTION("mixed line endings - missing last linebreak") {
+            QString inData = "line1\r\nline2\nline3";
+            doc.setText(inData);
+            CHECK(docToVec(doc) == QVector<QString>{ "line1\r", "line2", "line3" });
+            CHECK(doc.crLfMode() == false);
+            CHECK(doc.newlineAfterLastLineMissing() == true);
+            CHECK(doc.isModified() == false);
+            CHECK(doc.isUndoAvailable() == false);
+            CHECK(doc.isRedoAvailable() == false);
+
+            CHECK(doc.text(doc.crLfMode()) == inData);
+        }
+
+        SECTION("crlf line endings") {
+            QString inData = "line1\r\nline2\r\n";
+
+            EventRecorder recorder;
+            auto changedSignal = recorder.watchSignal(&doc, RECORDER_SIGNAL(&Tui::ZDocument::crLfModeChanged));
+
+            doc.setText(inData);
+
+            recorder.waitForEvent(changedSignal);
+            CHECK(recorder.consumeFirst(changedSignal, true));
+            CHECK(recorder.noMoreEvents());
+
+            CHECK(docToVec(doc) == QVector<QString>{ "line1", "line2" });
+            CHECK(doc.crLfMode() == true);
+            CHECK(doc.newlineAfterLastLineMissing() == false);
+            CHECK(doc.isModified() == false);
+            CHECK(doc.isUndoAvailable() == false);
+            CHECK(doc.isRedoAvailable() == false);
+
+            CHECK(doc.text(doc.crLfMode()) == inData);
+        }
+
+        SECTION("crlf line endings - missing last linebreak") {
+            QString inData = "line1\r\nline2";
+            doc.setText(inData);
+            CHECK(docToVec(doc) == QVector<QString>{ "line1", "line2" });
+            CHECK(doc.crLfMode() == true);
+            CHECK(doc.newlineAfterLastLineMissing() == true);
+            CHECK(doc.isModified() == false);
+            CHECK(doc.isUndoAvailable() == false);
+            CHECK(doc.isRedoAvailable() == false);
+
+            CHECK(doc.text(doc.crLfMode()) == inData);
+        }
+
+        SECTION("with NUL bytes") {
+            QString inData = QLatin1String("li\0e1\nline2\n", 12);
+            doc.setText(inData);
+            std::array<char16_t, 5> expectedLine1 = {'l', 'i', 0x00, 'e', '1'};
+            CHECK(docToVec(doc) == QVector<QString>{ QString::fromUtf16(expectedLine1.data(), expectedLine1.size()), "line2" });
+            CHECK(doc.crLfMode() == false);
+            CHECK(doc.newlineAfterLastLineMissing() == false);
+            CHECK(doc.isModified() == false);
+            CHECK(doc.isUndoAvailable() == false);
+            CHECK(doc.isRedoAvailable() == false);
+
+            CHECK(doc.text(doc.crLfMode()) == inData);
+        }
+
+        SECTION("signals") {
+            QString inData = "line1\nline2\n";
+
+            EventRecorder recorderModificationChanged;
+            auto modificationChangedSignal = recorderModificationChanged.watchSignal(&doc, RECORDER_SIGNAL(&Tui::ZDocument::modificationChanged));
+
+            EventRecorder recorderRedoAvailable;
+            auto redoAvailableSignal = recorderRedoAvailable.watchSignal(&doc, RECORDER_SIGNAL(&Tui::ZDocument::redoAvailable));
+
+            EventRecorder recorderUndoAvailable;
+            auto undoAvailableSignal = recorderUndoAvailable.watchSignal(&doc, RECORDER_SIGNAL(&Tui::ZDocument::undoAvailable));
+
+            EventRecorder recorderContentsChanged;
+            auto contentsChangedSignal = recorderContentsChanged.watchSignal(&doc, RECORDER_SIGNAL(&Tui::ZDocument::contentsChanged));
+
+            doc.setText(inData);
+
+            recorderModificationChanged.waitForEvent(modificationChangedSignal);
+            CHECK(recorderModificationChanged.consumeFirst(modificationChangedSignal, false));
+            CHECK(recorderModificationChanged.noMoreEvents());
+
+            recorderRedoAvailable.waitForEvent(redoAvailableSignal);
+            CHECK(recorderRedoAvailable.consumeFirst(redoAvailableSignal, false));
+            CHECK(recorderRedoAvailable.noMoreEvents());
+
+            recorderUndoAvailable.waitForEvent(undoAvailableSignal);
+            CHECK(recorderUndoAvailable.consumeFirst(undoAvailableSignal, false));
+            CHECK(recorderUndoAvailable.noMoreEvents());
+
+            recorderContentsChanged.waitForEvent(contentsChangedSignal);
+            CHECK(recorderContentsChanged.consumeFirst(contentsChangedSignal));
+            CHECK(recorderContentsChanged.noMoreEvents());
+        }
+
+        SECTION("cursors and line marker change signals") {
+            cursor.insertText("\ntest test");
+            REQUIRE(doc.lineCount() == 2);
+            CHECK(cursor.position() == Tui::ZDocumentCursor::Position{9, 1});
+            Tui::ZDocumentLineMarker marker{&doc, 1};
+
+            QString inData = "line1\nline2\n";
+
+            EventRecorder recorderLineMarkerChanged;
+            auto lineMarkerChangedSignal = recorderLineMarkerChanged.watchSignal(&doc, RECORDER_SIGNAL(&Tui::ZDocument::lineMarkerChanged));
+
+            EventRecorder recorderCursorChanged;
+            auto cursorChangedSignal = recorderCursorChanged.watchSignal(&doc, RECORDER_SIGNAL(&Tui::ZDocument::cursorChanged));
+
+            recorderCursorChanged.waitForEvent(cursorChangedSignal);
+            CHECK(recorderCursorChanged.consumeFirst(cursorChangedSignal, (const Tui::ZDocumentCursor*)&cursor));
+            CHECK(recorderCursorChanged.consumeFirst(cursorChangedSignal, (const Tui::ZDocumentCursor*)&wrappedCursor));
+            CHECK(recorderCursorChanged.noMoreEvents());
+
+            doc.setText(inData);
+
+            recorderCursorChanged.waitForEvent(cursorChangedSignal);
+            CHECK(recorderCursorChanged.consumeFirst(cursorChangedSignal, (const Tui::ZDocumentCursor*)&cursor));
+            CHECK(recorderCursorChanged.consumeFirst(cursorChangedSignal, (const Tui::ZDocumentCursor*)&wrappedCursor));
+            CHECK(recorderCursorChanged.noMoreEvents());
+
+            CHECK(cursor.position() == Tui::ZDocumentCursor::Position{0, 0});
+
+            recorderLineMarkerChanged.waitForEvent(lineMarkerChangedSignal);
+            CHECK(recorderLineMarkerChanged.consumeFirst(lineMarkerChangedSignal, (const Tui::ZDocumentLineMarker*)&marker));
+            CHECK(recorderLineMarkerChanged.noMoreEvents());
+
+            CHECK(marker.line() == 0);
+        }
+
+    }
+
 
     SECTION("markUndoStateAsSaved") {
         CHECK(doc.isModified() == false);
