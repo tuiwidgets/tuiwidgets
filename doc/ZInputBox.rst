@@ -69,6 +69,9 @@ Keyboard Usage
    *  - :kbd:`Insert`
       - Toggle overwrite mode.
 
+   *  - | :kbd:`Ctrl+V`
+        | :kbd:`Shift+Insert`
+      - Inserts the current clipboard content at the cursor position.
 
 Behavior
 --------

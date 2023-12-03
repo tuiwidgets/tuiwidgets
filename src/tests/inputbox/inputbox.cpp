@@ -8,6 +8,8 @@
 #include "../signalrecorder.h"
 #include "../vcheck_zwidget.h"
 
+#include <Tui/ZClipboard.h>
+
 TEST_CASE("inputbox-base", "") {
     bool parent = GENERATE(false, true);
     CAPTURE(parent);
@@ -260,6 +262,108 @@ TEST_CASE("inputbox-behavior", "") {
         CHECK(inputbox->cursorPosition() == 6);
         CHECK(inputbox->text() == "ABCDEF");
         t.compare("char-ABCDEF-5x1+2+2");
+    }
+
+    SECTION("paste-zclipboard-ABCDEF-5x1+2+2") {
+        t.root->findFacet<Tui::ZClipboard>()->setContents("ABCDEF");
+        const bool key = GENERATE(false, true);
+        CAPTURE(key);
+        if (key) {
+            t.sendChar("v", Tui::ControlModifier);
+        } else {
+            t.sendKey(Tui::Key_Insert, Tui::ShiftModifier);
+        }
+        CHECK(inputbox->cursorPosition() == 6);
+        CHECK(inputbox->text() == "ABCDEF");
+        t.compare("char-ABCDEF-5x1+2+2");
+    }
+
+    SECTION("paste-zclipboard-XXXABCDEF-5x1+2+2") {
+        t.root->findFacet<Tui::ZClipboard>()->setContents("XXXABCDEF");
+        const bool key = GENERATE(false, true);
+        CAPTURE(key);
+        if (key) {
+            t.sendChar("v", Tui::ControlModifier);
+        } else {
+            t.sendKey(Tui::Key_Insert, Tui::ShiftModifier);
+        }
+        CHECK(inputbox->cursorPosition() == 9);
+        CHECK(inputbox->text() == "XXXABCDEF");
+        t.compare("char-ABCDEF-5x1+2+2");
+    }
+
+    SECTION("paste-zclipboard-append-ABCDEF-5x1+2+2") {
+        inputbox->setText("XXX");
+        t.root->findFacet<Tui::ZClipboard>()->setContents("ABCDEF");
+        const bool key = GENERATE(false, true);
+        CAPTURE(key);
+        if (key) {
+            t.sendChar("v", Tui::ControlModifier);
+        } else {
+            t.sendKey(Tui::Key_Insert, Tui::ShiftModifier);
+        }
+        CHECK(inputbox->cursorPosition() == 9);
+        CHECK(inputbox->text() == "XXXABCDEF");
+        t.compare("char-ABCDEF-5x1+2+2");
+    }
+
+    SECTION("paste-zclipboard-insert-ABCDEF-5x1+2+2") {
+        inputbox->setText("XXX");
+        inputbox->setCursorPosition(1);
+        t.root->findFacet<Tui::ZClipboard>()->setContents("ABCDEF");
+        const bool key = GENERATE(false, true);
+        CAPTURE(key);
+        if (key) {
+            t.sendChar("v", Tui::ControlModifier);
+        } else {
+            t.sendKey(Tui::Key_Insert, Tui::ShiftModifier);
+        }
+        CHECK(inputbox->cursorPosition() == 7);
+        CHECK(inputbox->text() == "XABCDEFXX");
+        t.compare("char-ABCDEFX-5x1+2+2");
+    }
+
+    SECTION("paste-zclipboard-newline-7x1+1+2") {
+        inputbox->setGeometry({1, 2, 7, 1});
+        t.root->findFacet<Tui::ZClipboard>()->setContents("A\nB");
+        const bool key = GENERATE(false, true);
+        CAPTURE(key);
+        if (key) {
+            t.sendChar("v", Tui::ControlModifier);
+        } else {
+            t.sendKey(Tui::Key_Insert, Tui::ShiftModifier);
+        }
+        CHECK(inputbox->cursorPosition() == 3);
+        CHECK(inputbox->text() == "A\nB");
+        t.compare("char-newline-7x1+1+2");
+    }
+
+    SECTION("paste-zclipboard-empty") {
+        t.root->findFacet<Tui::ZClipboard>()->setContents("");
+        const bool key = GENERATE(false, true);
+        CAPTURE(key);
+        if (key) {
+            t.sendChar("v", Tui::ControlModifier);
+        } else {
+            t.sendKey(Tui::Key_Insert, Tui::ShiftModifier);
+        }
+        CHECK(inputbox->cursorPosition() == 0);
+        CHECK(inputbox->text() == "");
+    }
+
+    SECTION("paste-zclipboard-no-clipboard") {
+        inputbox->setParent(nullptr);
+        t.terminal->setMainWidget(inputbox);
+        const bool key = GENERATE(false, true);
+        CAPTURE(key);
+        if (key) {
+            t.sendChar("v", Tui::ControlModifier);
+        } else {
+            t.sendKey(Tui::Key_Insert, Tui::ShiftModifier);
+        }
+        CHECK(inputbox->cursorPosition() == 0);
+        CHECK(inputbox->text() == "");
+        delete inputbox;
     }
 
     SECTION("char-left2-ABCDEF-5x1+2+2") {

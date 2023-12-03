@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: BSL-1.0
 
+#include "ZClipboard.h"
 #include "ZInputBox.h"
 #include "ZInputBox_p.h"
 
@@ -229,6 +230,12 @@ void ZInputBox::keyEvent(ZKeyEvent *event) {
         update();
     } else if (event->key() == Key_Insert && event->modifiers() == 0) {
        setOverwriteMode(!p->overwriteMode);
+    } else if ((event->text() == QStringLiteral("v") && event->modifiers() == Qt::ControlModifier) ||
+               (event->key() == Qt::Key_Insert && event->modifiers() == Qt::ShiftModifier)) {
+        ZClipboard *clipboard = findFacet<ZClipboard>();
+        if (clipboard && clipboard->contents().size()) {
+            insertAtCursorPosition(clipboard->contents());
+        }
     } else {
         ZWidget::keyEvent(event);
     }
