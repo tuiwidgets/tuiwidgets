@@ -421,7 +421,7 @@ ZTextEdit
    .. cpp:function:: Tui::ZDocument::UndoGroup startUndoGroup()
 
       Starts an undo group.
-      
+
       See :ref:`zdocument_undoredo` for details.
 
    .. cpp:function:: void removeSelectedText()
@@ -602,6 +602,24 @@ ZTextEdit
    .. cpp:function:: void writeTo(QIODevice *file) const
 
       Saves the contents of the document used by this widget in to the :cpp:class:`QIODevice` ``file``.
+
+      Also marks the current undo state as saved.
+
+   .. cpp:function:: void setText(const QString &text)
+
+      Replaces the contents of the document used by this widget with the contents of the string ``text``.
+
+   .. cpp:function:: void setText(const QString &text, Tui::ZDocumentCursor::Position initialPosition)
+
+      Replaces the contents of the document used by this widget with the contents of the string ``text``.
+      It sets the initial cursor position to ``initialPosition``.
+
+   .. cpp:function:: void text() const
+
+      Returns the contents of the document used by this widget as a string.
+
+      In constrast to :cpp:func:`~void writeTo(QIODevice *file) const` this function does not mark the current undo
+      state as saved.
 
    .. cpp:function:: void registerCommandNotifiers(Qt::ShortcutContext context)
 

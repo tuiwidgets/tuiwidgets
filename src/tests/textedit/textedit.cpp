@@ -320,6 +320,54 @@ TEST_CASE("textedit-read-write", "") {
 
 }
 
+TEST_CASE("textedit-text-setText", "") {
+
+    Testhelper t("textedit", "unused", 20, 10);
+
+    Tui::ZTextEdit *te = new Tui::ZTextEdit(t.terminal->textMetrics(), t.root);
+
+    SECTION("empty") {
+        te->setText(QString());
+        CHECK(docToVec(te->document()) == QVector<QString>{ "" });
+        CHECK(te->document()->crLfMode() == false);
+        CHECK(te->document()->newlineAfterLastLineMissing() == true);
+        CHECK(te->isModified() == false);
+
+        CHECK(te->text().size() == 0);
+    }
+
+    SECTION("simple") {
+        QString inData = "line1\nline2\n";
+        te->setText(inData);
+        CHECK(docToVec(te->document()) == QVector<QString>{ "line1", "line2" });
+        CHECK(te->document()->crLfMode() == false);
+        CHECK(te->document()->newlineAfterLastLineMissing() == false);
+        CHECK(te->isModified() == false);
+        CHECK(te->document()->isModified() == false);
+        CHECK(te->document()->isUndoAvailable() == false);
+        CHECK(te->document()->isRedoAvailable() == false);
+
+        CHECK(te->text() == inData);
+    }
+
+    SECTION("initial cursor position") {
+        QString inData = "line1\nline2\n";
+        te->setText(inData, Tui::ZDocumentCursor::Position{1, 1});
+        CHECK(docToVec(te->document()) == QVector<QString>{ "line1", "line2" });
+        CHECK(te->document()->crLfMode() == false);
+        CHECK(te->document()->newlineAfterLastLineMissing() == false);
+        CHECK(te->isModified() == false);
+        CHECK(te->document()->isModified() == false);
+        CHECK(te->document()->isUndoAvailable() == false);
+        CHECK(te->document()->isRedoAvailable() == false);
+        CHECK(te->textCursor().position() == Tui::ZDocumentCursor::Position{1, 1});
+        CHECK(te->textCursor().hasSelection() == false);
+
+        CHECK(te->text() == inData);
+    }
+
+}
+
 TEST_CASE("textedit-behavior", "") {
 
     Testhelper t("textedit", "unused", 20, 10);

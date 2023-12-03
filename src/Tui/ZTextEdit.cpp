@@ -1242,6 +1242,25 @@ void ZTextEdit::writeTo(QIODevice *file) const {
     p->doc->markUndoStateAsSaved();
 }
 
+void ZTextEdit::setText(const QString &text) {
+    setText(text, {0, 0});
+}
+
+void ZTextEdit::setText(const QString &text, ZTextEdit::Position initialPosition) {
+    auto *const p = tuiwidgets_impl();
+
+    p->doc->setText(text, initialPosition, &p->cursor);
+    adjustScrollPosition();
+    updateCommands();
+    update();
+}
+
+QString ZTextEdit::text() const {
+    auto *const p = tuiwidgets_impl();
+
+    return p->doc->text(p->doc->crLfMode());
+}
+
 
 ZTextOption ZTextEdit::textOption() const {
     auto *const p = tuiwidgets_impl();

@@ -123,6 +123,10 @@ public:
     void readFrom(QIODevice *file, Position initialPosition);
     void writeTo(QIODevice *file) const;
 
+    void setText(const QString &text);
+    void setText(const QString &text, Position initialPosition);
+    QString text() const;
+
     void registerCommandNotifiers(Qt::ShortcutContext context);
 
     ZDocumentCursor makeCursor();
