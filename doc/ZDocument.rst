@@ -3,7 +3,8 @@
 ZDocument
 =========
 
-ZDocument is a model class to store multi-line text for usage with multi-line text edit widgets.
+ZDocument is a model class to store multi-line text for usage with multi-line text edit widgets, like
+:cpp:ref:`ZTextEdit`.
 
 The document class itself mostly serves read access.
 Most modifications are done using the :cpp:class:`Tui::ZDocumentCursor` class.
