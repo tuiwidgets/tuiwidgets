@@ -1222,24 +1222,29 @@ void ZTextEdit::clear() {
     update();
 }
 
-void ZTextEdit::readFrom(QIODevice *file) {
-    readFrom(file, {0, 0});
+bool ZTextEdit::readFrom(QIODevice *file) {
+    return readFrom(file, {0, 0});
 }
 
-void ZTextEdit::readFrom(QIODevice *file, Position initialPosition) {
+bool ZTextEdit::readFrom(QIODevice *file, Position initialPosition) {
     auto *const p = tuiwidgets_impl();
 
-    p->doc->readFrom(file, initialPosition, &p->cursor);
+    bool ok = p->doc->readFrom(file, initialPosition, &p->cursor);
     adjustScrollPosition();
     updateCommands();
     update();
+    return ok;
 }
 
-void ZTextEdit::writeTo(QIODevice *file) const {
+bool ZTextEdit::writeTo(QIODevice *file) const {
     auto *const p = tuiwidgets_impl();
 
-    p->doc->writeTo(file, p->doc->crLfMode());
-    p->doc->markUndoStateAsSaved();
+    if (p->doc->writeTo(file, p->doc->crLfMode())) {
+        p->doc->markUndoStateAsSaved();
+        return true;
+    } else {
+        return false;
+    }
 }
 
 void ZTextEdit::setText(const QString &text) {

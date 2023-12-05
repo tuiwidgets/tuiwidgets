@@ -119,9 +119,9 @@ public:
 
     void clear();
 
-    void readFrom(QIODevice *file);
-    void readFrom(QIODevice *file, Position initialPosition);
-    void writeTo(QIODevice *file) const;
+    bool readFrom(QIODevice *file);
+    bool readFrom(QIODevice *file, Position initialPosition);
+    bool writeTo(QIODevice *file) const;
 
     void setText(const QString &text);
     void setText(const QString &text, Position initialPosition);

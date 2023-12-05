@@ -594,14 +594,20 @@ ZTextEdit
 
       Replaces the contents of the document used by this widget with the contents of :cpp:class:`QIODevice` ``file``.
 
+      Returns :cpp:expr:`true` on success, otherwise returns :cpp:expr:`false`.
+
    .. cpp:function:: void readFrom(QIODevice *file, Tui::ZDocumentCursor::Position initialPosition)
 
       Replaces the contents of the document used by this widget with the contents of :cpp:class:`QIODevice` ``file``.
       It sets the initial cursor position to ``initialPosition``.
 
+      Returns :cpp:expr:`true` on success, otherwise returns :cpp:expr:`false`.
+
    .. cpp:function:: void writeTo(QIODevice *file) const
 
       Saves the contents of the document used by this widget in to the :cpp:class:`QIODevice` ``file``.
+
+      Returns :cpp:expr:`true` on success, otherwise returns :cpp:expr:`false`.
 
       Also marks the current undo state as saved.
 
