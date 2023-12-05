@@ -53,7 +53,7 @@ struct QtDiagnosticsFallbackListener : ListenerBase {
         qInstallMessageHandler(oldMessageHandler);
     }
 
-#if defined(__FreeBSD__) || defined(__OpenBSD__)
+#if defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__NetBSD__)
     // if the first log message is output with a temporary QCoreApplication later it crashes somewhere in
     // QCoreApplication::applicationFilePath. Outputting a log message without a QCoreApplication primes the logging
     // system without stumbling in that crash. This should not be here, but i don't have a good way to debug this right
