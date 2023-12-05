@@ -138,7 +138,7 @@ void ZListView::resizeEvent(ZResizeEvent *event) {
         const bool wasVisible = p->scrollPosition <= currentRow && currentRow < p->scrollPosition + oldVisibleItems;
         const bool willBeVisible = p->scrollPosition <= currentRow && currentRow < p->scrollPosition + visibleItems;
 
-        const int maxPossibleScrollPosition = p->model->rowCount() - visibleItems;
+        const int maxPossibleScrollPosition = std::max(0, p->model->rowCount() - visibleItems);
         if (wasVisible && !willBeVisible) {
             p->scrollPosition = std::max(0, std::min(currentRow - visibleItems + 2, maxPossibleScrollPosition));
         } else {

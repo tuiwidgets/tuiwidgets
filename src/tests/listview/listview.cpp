@@ -1290,6 +1290,19 @@ TEST_CASE("listview-resize", "") {
         lv1->setGeometry({1, 1, 13, 8});
         t.compare("grow-top-8");
     }
+
+    SECTION("grow-from-exact-fit") {
+        QStringList qsl;
+        for (int i = 1; i <= 3; i++) {
+            qsl.append(QString::number(i));
+        }
+        lv1->setItems(qsl);
+
+        lv1->setGeometry({1, 1, 13, 3});
+        lv1->setGeometry({1, 1, 13, 8});
+        t.compare();
+
+    }
 }
 
 TEST_CASE("listview-changes", "") {
