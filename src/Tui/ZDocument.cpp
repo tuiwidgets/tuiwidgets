@@ -78,20 +78,28 @@ void ZDocument::reset() {
     p->noteContentsChange();
 }
 
-void ZDocument::writeTo(QIODevice *file, bool crLfMode) const {
+bool ZDocument::writeTo(QIODevice *file, bool crLfMode) const {
     auto *const p = tuiwidgets_impl();
     for (int i = 0; i < lineCount(); i++) {
-        file->write(Misc::SurrogateEscape::encode(p->lines[i].chars));
+        const QByteArray converted = Misc::SurrogateEscape::encode(p->lines[i].chars);
+        if (file->write(converted) != converted.size()) {
+            return false;
+        };
         if (i + 1 == lineCount() && p->newlineAfterLastLineMissing) {
             // omit newline
         } else {
             if (crLfMode) {
-                file->write("\r\n", 2);
+                if (file->write("\r\n", 2) != 2) {
+                    return false;
+                }
             } else {
-                file->write("\n", 1);
+                if (file->write("\n", 1) != 1) {
+                    return false;
+                }
             }
         }
     }
+    return true;
 }
 
 QString ZDocument::text(bool crLfMode) const {
@@ -113,11 +121,11 @@ QString ZDocument::text(bool crLfMode) const {
 }
 
 
-void ZDocument::readFrom(QIODevice *file) {
-    readFrom(file, {0, 0}, nullptr);
+bool ZDocument::readFrom(QIODevice *file) {
+    return readFrom(file, {0, 0}, nullptr);
 }
 
-void ZDocument::readFrom(QIODevice *file, ZDocumentCursor::Position initialPosition, ZDocumentCursor *initialPositionCursor) {
+bool ZDocument::readFrom(QIODevice *file, ZDocumentCursor::Position initialPosition, ZDocumentCursor *initialPositionCursor) {
     auto *const p = tuiwidgets_impl();
     // Clear line markers and cursors while _lines still has contents.
     for (ZDocumentLineMarkerPrivate *marker = p->lineMarkerList.first; marker; marker = marker->markersList.next) {
@@ -137,7 +145,7 @@ void ZDocument::readFrom(QIODevice *file, ZDocumentCursor::Position initialPosit
             int res = file->readLine(lineBuf.data() + lineBytes, lineBuf.size() - 1 - lineBytes);
             if (res < 0) {
                 // Some kind of error
-                return;
+                return false;
             } else if (res > 0) {
                 lineBytes += res;
                 if (lineBuf[lineBytes - 1] == '\n') {
@@ -195,6 +203,7 @@ void ZDocument::readFrom(QIODevice *file, ZDocumentCursor::Position initialPosit
     p->noteContentsChange();
 
     setCrLfMode(allLinesCrLf);
+    return true;
 }
 
 void ZDocument::setText(const QString &text) {

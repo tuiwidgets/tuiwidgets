@@ -232,7 +232,7 @@ ZDocument
 
       This function triggers change signals.
 
-   .. cpp:function:: void writeTo(QIODevice *file, bool crLfMode = false) const
+   .. cpp:function:: bool writeTo(QIODevice *file, bool crLfMode = false) const
 
       Write the document's contents to the QIODevice ``file``.
 
@@ -244,8 +244,10 @@ ZDocument
       If :cpp:func:`~bool newlineAfterLastLineMissing() const` is not set, an trailing line break
       will be added to the file.
 
-   .. cpp:function:: void readFrom(QIODevice *file)
-   .. cpp:function:: void readFrom(QIODevice *file, Tui::ZDocumentCursor::Position initialPosition, Tui::ZDocumentCursor *initialPositionCursor)
+      Returns :cpp:expr:`true` on success, otherwise returns :cpp:expr:`false`.
+
+   .. cpp:function:: bool readFrom(QIODevice *file)
+   .. cpp:function:: bool readFrom(QIODevice *file, Tui::ZDocumentCursor::Position initialPosition, Tui::ZDocumentCursor *initialPositionCursor)
 
       Reset the document and read new data from the QIODevice ``file``.
 
@@ -260,6 +262,8 @@ ZDocument
       The variant taking a ``initialPositionCursor`` sets the initial cursor position also in the
       cursor passed as ``initialPositionCursor``.
       The passed pointer may be :cpp:expr:`nullptr`.
+
+      Returns :cpp:expr:`true` on success, otherwise returns :cpp:expr:`false`.
 
    .. cpp:function:: void text(bool crLfMode = false) const
 

@@ -120,9 +120,9 @@ public:
 
 public:
     void reset();
-    void writeTo(QIODevice *file, bool crLfMode = false) const;
-    void readFrom(QIODevice *file);
-    void readFrom(QIODevice *file, ZDocumentCursor::Position initialPosition, ZDocumentCursor *initialPositionCursor);
+    bool writeTo(QIODevice *file, bool crLfMode = false) const;
+    bool readFrom(QIODevice *file);
+    bool readFrom(QIODevice *file, ZDocumentCursor::Position initialPosition, ZDocumentCursor *initialPositionCursor);
     void setText(const QString &text);
     void setText(const QString &text, ZDocumentCursor::Position initialPosition, ZDocumentCursor *initialPositionCursor);
     QString text(bool crLfMode = false) const;
