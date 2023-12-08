@@ -264,6 +264,38 @@ TEST_CASE("inputbox-behavior", "") {
         t.compare("char-ABCDEF-5x1+2+2");
     }
 
+    SECTION("paste-XXXABCDEF-5x1+2+2") {
+        t.sendPaste("XXXABCDEF");
+        CHECK(inputbox->cursorPosition() == 9);
+        CHECK(inputbox->text() == "XXXABCDEF");
+        t.compare("char-ABCDEF-5x1+2+2");
+    }
+
+    SECTION("paste-append-ABCDEF-5x1+2+2") {
+        inputbox->setText("XXX");
+        t.sendPaste("ABCDEF");
+        CHECK(inputbox->cursorPosition() == 9);
+        CHECK(inputbox->text() == "XXXABCDEF");
+        t.compare("char-ABCDEF-5x1+2+2");
+    }
+
+    SECTION("paste-insert-ABCDEF-5x1+2+2") {
+        inputbox->setText("XXX");
+        inputbox->setCursorPosition(1);
+        t.sendPaste("ABCDEF");
+        CHECK(inputbox->cursorPosition() == 7);
+        CHECK(inputbox->text() == "XABCDEFXX");
+        t.compare("char-ABCDEFX-5x1+2+2");
+    }
+
+    SECTION("paste-newline-7x1+1+2") {
+        inputbox->setGeometry({1, 2, 7, 1});
+        t.sendPaste("A\nB");
+        CHECK(inputbox->cursorPosition() == 3);
+        CHECK(inputbox->text() == "A\nB");
+        t.compare("char-newline-7x1+1+2");
+    }
+
     SECTION("paste-zclipboard-ABCDEF-5x1+2+2") {
         t.root->findFacet<Tui::ZClipboard>()->setContents("ABCDEF");
         const bool key = GENERATE(false, true);
