@@ -169,7 +169,7 @@ TEST_CASE("menuitem", "") {
             CHECK(mi.command() == Tui::ZSymbol("blub"));
             CHECK(mi.hasSubitems() == true);
             REQUIRE(mi.subitems().size() == 1);
-            auto &subItem = mi.subitems()[0];
+            auto subItem = mi.subitems()[0];
             CHECK(subItem.markup() == "inner");
             CHECK(subItem.fakeShortcut() == "ctrl-U");
             CHECK(subItem.command() == Tui::ZSymbol("blah"));
