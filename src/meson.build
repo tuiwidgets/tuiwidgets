@@ -217,6 +217,11 @@ import('pkgconfig').generate(
   subdirs: ['.']
 )
 
+verbose_kwargs = {}
+if meson.version().version_compare('>=0.62')
+    verbose_kwargs += {'verbose': true}
+endif
+
 testlib = static_library('testlib', 'tests/catch_main.cpp', dependencies: [qt5_dep, catch2_dep])
 
 test_env = environment()
@@ -253,7 +258,8 @@ test('testtoolkitinternal',
     cpp_args: ['-fno-inline', silence_warnings]
   ),
   timeout: 240,
-  env: test_env
+  env: test_env,
+  kwargs: verbose_kwargs
 )
 
 #ide:editable-filelist
@@ -315,5 +321,6 @@ test('testtoolkit',
     cpp_args: ['-fno-inline', silence_warnings]
   ),
   timeout: 240,
-  env: test_env
+  env: test_env,
+  kwargs: verbose_kwargs
 )
