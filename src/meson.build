@@ -217,6 +217,8 @@ import('pkgconfig').generate(
   subdirs: ['.']
 )
 
+tuiwidgets_dep = declare_dependency(link_with: tuiwidgets)
+
 tests_as_installed = false
 
 subdir('tests')
