@@ -45,17 +45,19 @@ testinternal_files += [
   '../Tui/ZWidget.cpp',
 ]
 
-test('testtoolkitinternal',
-  executable('testtoolkitinternal', testinternal_files,
-    include_directories: uninstalled_headers,
-    link_with: [tuiwidgets, testlib],
-    dependencies: [qt5_dep, termpaint_dep, termpaint_image_dep, posixsignalmanager_dep, catch2_dep],
-    cpp_args: ['-fno-inline', silence_warnings]
-  ),
-  timeout: 240,
-  env: test_env,
-  kwargs: verbose_kwargs
-)
+if not tests_as_installed
+  test('testtoolkitinternal',
+    executable('testtoolkitinternal', testinternal_files,
+      include_directories: uninstalled_headers,
+      link_with: [tuiwidgets, testlib],
+      dependencies: [qt5_dep, termpaint_dep, termpaint_image_dep, posixsignalmanager_dep, catch2_dep],
+      cpp_args: ['-fno-inline', silence_warnings]
+    ),
+    timeout: 240,
+    env: test_env,
+    kwargs: verbose_kwargs
+  )
+endif
 
 #ide:editable-filelist
 test_files = [
