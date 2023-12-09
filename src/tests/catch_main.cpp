@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: BSL-1.0
 
+#include <QLoggingCategory>
+
 #define CATCH_CONFIG_RUNNER
 #include "catchwrapper.h"
 
@@ -71,5 +73,7 @@ QtMessageHandler QtDiagnosticsFallbackListener::oldMessageHandler;
 CATCH_REGISTER_LISTENER(QtDiagnosticsFallbackListener)
 
 int main (int argc, char * argv[]) {
+    // workaround for rhel, it deactivates the debug output by default in: /usr/share/qt5/qtlogging.ini
+    QLoggingCategory::setFilterRules("*.debug=true");
     return Catch::Session().run( argc, argv );
 }
