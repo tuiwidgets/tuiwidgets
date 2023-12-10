@@ -162,6 +162,8 @@ void specialDestructorUsage() {
     SpecialDestructorUsageTerminalConnectionDelegate x5;
 }
 
+void *x_buff = malloc(1024);
+
 template <typename T>
 void testInner(Kind kind, bool run, T *a, T *b) {
 
@@ -326,6 +328,10 @@ void testInner(Kind kind, bool run, T *a, T *b) {
             } else if constexpr (std::is_default_constructible_v<T>) {
                 if (run) {
                     DestructorReference<T> x;
+                }
+            } else if constexpr (!std::is_same_v<T, Tui::ZTextMetrics> && std::is_constructible_v<T, const Tui::ZTextMetrics&>) {
+                if (run) {
+                    DestructorReference<T> x(*reinterpret_cast<Tui::ZTextMetrics*>(x_buff));
                 }
             }
         } else {
