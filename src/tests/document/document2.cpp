@@ -21,25 +21,6 @@
 
 #include "../vcheck_qobject.h"
 
-static QVector<QString> docToVec(const Tui::ZDocument &doc) {
-    QVector<QString> ret;
-
-    for (int i = 0; i < doc.lineCount(); i++) {
-        ret.append(doc.line(i));
-    }
-
-    return ret;
-}
-
-static QVector<QString> snapToVec(const Tui::ZDocumentSnapshot &snap) {
-    QVector<QString> ret;
-
-    for (int i = 0; i < snap.lineCount(); i++) {
-        ret.append(snap.line(i));
-    }
-
-    return ret;
-}
 
 TEST_CASE("ZDocument2") {
     Testhelper t("unused", "unused", 2, 4);
