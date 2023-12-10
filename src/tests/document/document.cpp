@@ -44,6 +44,21 @@ static QVector<QString> snapToVec(const Tui::ZDocumentSnapshot &snap) {
 namespace {
     class TestUserData : public Tui::ZDocumentLineUserData {
     };
+
+    class ErrorIoDevice : public QIODevice {
+    public:
+        bool atEnd() const override {
+            return false;
+        }
+
+    protected:
+        qint64 readData(char *, qint64) override {
+            return -1;
+        }
+        qint64 writeData(const char *, qint64) override {
+            return -1;
+        }
+    };
 }
 
 TEST_CASE("ZDocument") {
@@ -739,6 +754,13 @@ TEST_CASE("ZDocument") {
 
             doc.writeTo(&outFile, doc.crLfMode());
             CHECK(outData == inData);
+        }
+
+        SECTION("readFrom - read error") {
+            ErrorIoDevice error;
+            REQUIRE(error.open(QIODevice::ReadOnly));
+            doc.readFrom(&error);
+            CHECK(doc.lineCount() == 1);
         }
 
         SECTION("signals") {

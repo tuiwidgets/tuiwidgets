@@ -145,6 +145,11 @@ bool ZDocument::readFrom(QIODevice *file, ZDocumentCursor::Position initialPosit
             int res = file->readLine(lineBuf.data() + lineBytes, lineBuf.size() - 1 - lineBytes);
             if (res < 0) {
                 // Some kind of error
+                // do some minimal recovery to avoid getting in a state that will just crash.
+                if (p->lines.isEmpty()) {
+                    p->lines.append(LineData());
+                }
+                p->initalUndoStep(initialPosition.codeUnit, initialPosition.line);
                 return false;
             } else if (res > 0) {
                 lineBytes += res;
