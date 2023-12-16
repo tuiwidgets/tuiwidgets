@@ -67,7 +67,12 @@ static auto parseSearchInfo(const QString &input) {
         } else {
             if (matchesMap[id].foundEnd.line == line) {
                 REQUIRE(matchesMap[id].foundEnd.codeUnit == codeUnit);
-                matchesMap[id].foundEnd.codeUnit = codeUnit + 1;
+                if (codeUnit == lines.back().size()) {
+                    matchesMap[id].foundEnd.line = line + 1;
+                    matchesMap[id].foundEnd.codeUnit = 0;
+                } else {
+                    matchesMap[id].foundEnd.codeUnit = codeUnit + 1;
+                }
             } else {
                 REQUIRE(matchesMap[id].foundEnd.line + 1 == line);
                 REQUIRE(codeUnit == 0);
@@ -975,6 +980,44 @@ TEST_CASE("regex search") {
                       {"3", MatchCaptures{ {"a"}, {}}},
                       {"4", MatchCaptures{ {"a"}, {}}},
                       {"5", MatchCaptures{ {"a"}, {}}}
+                });
+
+    }
+
+    SECTION("literal-linebreak") {
+        static auto testCases = generateTestCases(R"(
+                                                  0|some Text
+                                                   >         1
+                                                  1|same Thing
+                                                   >          2
+                                                  2|aaaa bbbb
+                                              )");
+
+        auto testCase = GENERATE(from_range(testCases));
+
+        runChecks(testCase, QRegularExpression("\\n"), Qt::CaseSensitive,
+                {
+                      {"1", MatchCaptures{ {"\n"}, {}}},
+                      {"2", MatchCaptures{ {"\n"}, {}}},
+                      {"3", MatchCaptures{ {"\n"}, {}}}
+                });
+
+    }
+
+    SECTION("multi-linebreak") {
+        static auto testCases = generateTestCases(R"(
+                                                  0|some Text
+                                                   >         1
+                                                  1|same Thing
+                                                   >11111111111
+                                                  2|aaaa bbbb
+                                              )");
+
+        auto testCase = GENERATE(from_range(testCases));
+
+        runChecks(testCase, QRegularExpression("\\n.*\\n"), Qt::CaseSensitive,
+                {
+                      {"1", MatchCaptures{ {"\nsame Thing\n"}, {}}},
                 });
 
     }

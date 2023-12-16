@@ -104,7 +104,9 @@ namespace {
             for (; line < end; line++) {
                 QString buffer = snap.line(line);
                 replaceInvalidUtf16ForRegexSearch(buffer, 0);
-                buffer += QStringLiteral("\n");
+                if (line + 1 < snap.lineCount()) {
+                    buffer += QStringLiteral("\n");
+                }
                 int foldedLine = line;
                 QRegularExpressionMatchIterator remi
                         = regex.globalMatch(buffer, 0,
@@ -121,7 +123,9 @@ namespace {
                         foldedLine += 1;
                         buffer += snap.line(foldedLine);
                         replaceInvalidUtf16ForRegexSearch(buffer, cont);
-                        buffer += QStringLiteral("\n");
+                        if (foldedLine + 1 < snap.lineCount()) {
+                            buffer += QStringLiteral("\n");
+                        }
                         remi = regex.globalMatch(buffer, 0,
                                                  foldedLine + 1 < snap.lineCount() ? QRegularExpression::MatchType::PartialPreferFirstMatch
                                                                                    : QRegularExpression::MatchType::NormalMatch,
