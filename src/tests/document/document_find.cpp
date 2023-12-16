@@ -1490,6 +1490,26 @@ TEST_CASE("regex search") {
 
     }
 
+
+    SECTION("backward literal-newline") {
+        static auto testCases = generateTestCasesBackward(R"(
+                                                  0|some Text
+                                                   >         1
+                                                  1|same Thing
+                                                   >          2
+                                                  2|aaaa bbbb
+                                              )");
+
+        auto testCase = GENERATE(from_range(testCases));
+
+        runChecksBackward(testCase, QRegularExpression("\\n"), Qt::CaseSensitive,
+        {
+              {"1", MatchCaptures{ {"\n"}, {}}},
+              {"2", MatchCaptures{ {"\n"}, {}}},
+        });
+
+    }
+
     SECTION("backward one char t - mismatched case") {
         static auto testCases = generateTestCasesBackward(R"(
                                                   0|Test

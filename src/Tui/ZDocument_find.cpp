@@ -269,7 +269,9 @@ namespace {
                 }
 
                 buffer += snap.line(i);
-                buffer += QStringLiteral("\n");
+                if (i + 1 < snap.lineCount()) {
+                    buffer += QStringLiteral("\n");
+                }
 
                 if (canceler.isCanceled()) {
                     return noMatch(snap);
@@ -480,7 +482,7 @@ namespace {
             if (start.hasSelection()) {
                 if (options & ZDocument::FindFlag::FindWrap || startLine > 0 || startCodeUnit > 1) {
                     startCodeUnit = startCodeUnit - 1;
-                    if (startCodeUnit <= 0) {
+                    if (startCodeUnit < 0) {
                         if (--startLine < 0) {
                             startLine = doc->lineCount() - 1;
                         }
