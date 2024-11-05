@@ -75,6 +75,7 @@ public:
     void deinitTerminalForInternalConnection();
     void pauseTerminalForInternalConnection();
     void unpauseTerminalForInternalConnection();
+    void updateSizeForInternalConnection();
 
     void internalConnection_integration_free();
     void internalConnection_integration_write(const char *data, int length);

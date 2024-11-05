@@ -518,10 +518,7 @@ bool ZTerminalPrivate::commonInitForInternalConnection(ZTerminal::Options option
                         if (p->options.testFlag(ZTerminal::DisableAutoResize)) {
                             return;
                         }
-                        struct winsize s;
-                        if (isatty(p->fd_read) && ioctl(p->fd_read, TIOCGWINSZ, &s) >= 0) {
-                            systemTerminal->resize(s.ws_col, s.ws_row);
-                        }
+                        p->updateSizeForInternalConnection();
                     }
                 });
             }
@@ -567,6 +564,13 @@ bool ZTerminalPrivate::commonInitForInternalConnection(ZTerminal::Options option
                      pub(), [this] (int socket) -> void { internalConnectionTerminalFdHasData(socket); });
 
     return true;
+}
+
+void ZTerminalPrivate::updateSizeForInternalConnection() {
+    struct winsize s;
+    if (isatty(fd_read) && ioctl(fd_read, TIOCGWINSZ, &s) >= 0) {
+        pub()->resize(s.ws_col, s.ws_row);
+    }
 }
 
 void ZTerminalPrivate::pauseTerminalForInternalConnection() {
