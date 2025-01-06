@@ -17,12 +17,14 @@ add_project_arguments('-finput-charset=utf-8', '-fexec-charset=utf-8', language:
 termpaint_dep = dependency('termpaint')
 termpaint_image_dep = dependency('termpaint_image')
 
-catch2_dep = dependency('catch2', required : get_option('system-catch2'))
-if not catch2_dep.found()
-  catch2_dep = declare_dependency(include_directories: include_directories('third-party'))
-else
-  if catch2_dep.version().version_compare('>=3.0')
-    catch2_dep = [catch2_dep, declare_dependency(compile_args: ['-DCATCH3'])]
+if get_option('tests')
+  catch2_dep = dependency('catch2', required : get_option('system-catch2'))
+  if not catch2_dep.found()
+    catch2_dep = declare_dependency(include_directories: include_directories('third-party'))
+  else
+    if catch2_dep.version().version_compare('>=3.0')
+      catch2_dep = [catch2_dep, declare_dependency(compile_args: ['-DCATCH3'])]
+    endif
   endif
 endif
 

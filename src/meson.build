@@ -221,4 +221,6 @@ tuiwidgets_dep = declare_dependency(link_with: tuiwidgets)
 
 tests_as_installed = false
 
-subdir('tests')
+if get_option('tests')
+    subdir('tests')
+endif

@@ -1,2 +1,3 @@
 option('system-catch2', type : 'feature', value : 'disabled')
 option('system-posixsignalmanager', type : 'feature', value : 'auto')
+option('tests', type : 'boolean', value : true)
