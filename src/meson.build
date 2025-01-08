@@ -201,6 +201,7 @@ tuiwidgets = library('tuiwidgets', tuiwidgets_sources, tuiwidgets_generated,
   link_depends : main_vscript,
   soversion: '0a',
   darwin_versions: ['1', '1'],
+  install_rpath: get_option('rpath'),
   install: true
 )
 
