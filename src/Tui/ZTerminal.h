@@ -39,6 +39,7 @@ public:
         DisableTaggedPaste = 1 << 7,
         DebugDisableBufferedIo = 1 << 8,
         ConservativeTrueColorOutput = 1 << 9,
+        Inline = 1 << 10,
     };
     Q_DECLARE_FLAGS(Options, Option)
 
@@ -137,6 +138,10 @@ public:
     int width() const;
     int height() const;
     void resize(int width, int height);
+    int inlineHeight() const;
+    void setInlineHeight(int height);
+    bool isInline() const;
+    void setInline(bool enable);
 
     void updateOutput();
     void updateOutputForceFullRepaint();

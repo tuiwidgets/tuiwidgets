@@ -2067,3 +2067,15 @@ TUIWIDGETS_0.2.1 {
         "Tui::v0::ZDocumentFindResult::ZDocumentFindResult(Tui::v0::ZDocumentCursor, QRegularExpressionMatch)";
     };
 };
+
+TUIWIDGETS_0.2.2 {
+    global: extern "C++" {
+
+        ########### ZTerminal
+
+        "Tui::v0::ZTerminal::inlineHeight() const";
+        "Tui::v0::ZTerminal::setInlineHeight(int)";
+        "Tui::v0::ZTerminal::isInline() const";
+        "Tui::v0::ZTerminal::setInline(bool)";
+    };
+};

@@ -145,6 +145,21 @@ Some of these options only apply to terminals connected directly through a kerne
       If this option is included in the terminal's options then RGB colors are converted to indexed colors for some
       terminals where the auto detection did not yield a certain result for RGB color support.
 
+   .. cpp:enumerator:: Inline
+
+      In inline mode the application claims a stripe with limited height for display.
+      This stripe starts at the line where the cursor is located.
+
+      The application needs to call :cpp:func:`~void Tui::ZTerminal::setInlineHeight(int)` to set the desired
+      height for display.
+
+      If the requested number of lines in not available the terminal will be scrolled to make the necessary
+      space available.
+      If the application requests a height that is larger than the terminal height the height is clamped to
+      the terminal height.
+      When the application terminates, the cursor is reset to the top line of the stripe and the
+      output stripe is erased.
+
 If none of the :cpp:enumerator:`~Tui::ZTerminal::Option::AllowInterrupt`,
 :cpp:enumerator:`~Tui::ZTerminal::Option::AllowSuspend` and :cpp:enumerator:`~Tui::ZTerminal::Option::AllowQuit`
 options are active the terminal might be switched into an advanced keyboard mode that supports additional key
@@ -436,6 +451,8 @@ ZTerminal
    | :cpp:func:`ZWidget *mainWidget() const`
    | :cpp:func:`void maybeRequestLayout(ZWidget *w)`
    | :cpp:func:`ZPainter painter()`
+   | :cpp:func:`int inlineHeight() const`
+   | :cpp:func:`bool isInline() const`
    | :cpp:func:`bool isPaused() const`
    | :cpp:func:`void pauseOperation()`
    | :cpp:func:`void registerPendingKeySequenceCallbacks(const Tui::ZPendingKeySequenceCallbacks &callbacks)`
@@ -448,6 +465,8 @@ ZTerminal
    | :cpp:func:`void setCursorPosition(QPoint cursorPosition)`
    | :cpp:func:`void setCursorStyle(CursorStyle style)`
    | :cpp:func:`void setIconTitle(const QString &title)`
+   | :cpp:func:`void setInline(bool enable)`
+   | :cpp:func:`void setInlineHeight(int height)`
    | :cpp:func:`void setMainWidget(ZWidget *w)`
    | :cpp:func:`void setTitle(const QString &title)`
    | :cpp:func:`ZTextMetrics textMetrics() const`
@@ -688,12 +707,15 @@ Members
 
 .. cpp:function:: int height() const
 
-   This function return the current height of the terminal as seen by ``ZTerminal``.
+   This function returns the current height of the terminal as seen by ``ZTerminal``.
 
    If :cpp:enumerator:`Tui::ZTerminal::Option::DisableAutoResize` is not in effect the height should match the
    actual terminal height unless the application has overridden the height using
    :cpp:func:`~void Tui::ZTerminal::resize(int width, int height)`. If the terminal connection does not propagate
    size changes the height might be outdated.
+
+   If :cpp:enumerator:`Tui::ZTerminal::Option::Inline` mode is active, the height returned is the height of the
+   inline display area currently in use.
 
    If :cpp:enumerator:`Tui::ZTerminal::Option::DisableAutoResize` is in effect the height returned is either the
    initial size of the terminal or the height of the last call to
@@ -714,6 +736,19 @@ Members
    Some terminals actually manage 2 titles.
    The icon title is usually shown for iconified form of the terminal window and in window choosers / taskbars.
    The normal title is usually shown for the currently active terminal in the window title.
+
+.. cpp:function:: void setInline(bool enable)
+.. cpp:function:: bool isInline() const
+
+   Switch between inline and full-screen mode.
+
+.. cpp:function:: void setInlineHeight(int height)
+.. cpp:function:: int inlineHeight() const
+
+   Set requested inline display height to ``height`` lines.
+
+   The actual height will never be larger than the height of the connected terminal.
+   To get the actual height of of the inline display, use :cpp:func:`~int Tui::ZTerminal::height() const`.
 
 .. rst-class:: tw-signal
 .. cpp:function:: void incompatibleTerminalDetected()

@@ -106,6 +106,7 @@ public:
     CursorStyle terminalCursorStyle = CursorStyle::Unset;
     bool terminalCursorVisible = true;
     int terminalCursorR = -1, terminalCursorG = -1, terminalCursorB = -1;
+    int inlineHeight = 8;
     termpaint_integration integration;
     std::unique_ptr<QSocketNotifier> inputNotifier;
 

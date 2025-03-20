@@ -773,6 +773,60 @@ void ZTerminal::resize(int width, int height) {
     forceRepaint();
 }
 
+int ZTerminal::inlineHeight() const {
+    auto *const p = tuiwidgets_impl();
+    return p->inlineHeight;
+}
+
+void ZTerminal::setInlineHeight(int height) {
+    auto *const p = tuiwidgets_impl();
+
+    if (height < 1) {
+        height = 1;
+    }
+
+    if (p->inlineHeight == height) {
+        return;
+    }
+
+    p->inlineHeight = height;
+
+    if (!p->options.testFlag(ZTerminal::Inline) || p->options.testFlag(DisableAutoResize)) {
+        return;
+    }
+
+    if (!p->externalConnection) {
+        p->updateSizeForInternalConnection();
+    } else {
+        resize(p->externalConnection->width, std::min(p->inlineHeight, p->externalConnection->height));
+    }
+}
+
+bool ZTerminal::isInline() const {
+    auto *const p = tuiwidgets_impl();
+
+    return p->options.testFlag(ZTerminal::Inline);
+}
+
+void ZTerminal::setInline(bool enable) {
+    auto *const p = tuiwidgets_impl();
+
+    if (enable == p->options.testFlag(ZTerminal::Inline)) {
+        return;
+    }
+
+    p->options.setFlag(ZTerminal::Inline, enable);
+    termpaint_terminal_set_inline(p->terminal, enable);
+
+    if (!p->options.testFlag(DisableAutoResize)) {
+        if (!p->externalConnection) {
+            p->updateSizeForInternalConnection();
+        } else {
+            resize(p->externalConnection->width, std::min(p->inlineHeight, p->externalConnection->height));
+        }
+    }
+}
+
 void ZTerminalPrivate::updateNativeTerminalState() {
     if (titleNeedsUpdate) {
         termpaint_terminal_set_title(terminal, title.toUtf8().data(), TERMPAINT_TITLE_MODE_ENSURE_RESTORE);
@@ -1176,10 +1230,17 @@ bool ZTerminal::event(QEvent *event) {
                     termpaint_terminal_disable_capability(p->terminal, TERMPAINT_CAPABILITY_TRUECOLOR_MAYBE_SUPPORTED);
                 }
 
-                termpaint_terminal_setup_fullscreen(p->terminal,
-                                                    termpaint_surface_width(p->surface),
-                                                    termpaint_surface_height(p->surface),
-                                                    nativeOptions.data());
+                if (p->options.testFlag(ZTerminal::Inline)) {
+                    termpaint_terminal_setup_inline(p->terminal,
+                                                        termpaint_surface_width(p->surface),
+                                                        std::min(p->inlineHeight, termpaint_surface_height(p->surface)),
+                                                        nativeOptions.data());
+                } else {
+                    termpaint_terminal_setup_fullscreen(p->terminal,
+                                                        termpaint_surface_width(p->surface),
+                                                        termpaint_surface_height(p->surface),
+                                                        nativeOptions.data());
+                }
 
                 if (p->initState == ZTerminalPrivate::InitState::InInitWithPendingPaintRequest) {
                     update();

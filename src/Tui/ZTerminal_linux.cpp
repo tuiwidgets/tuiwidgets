@@ -431,7 +431,11 @@ bool ZTerminalPrivate::commonInitForInternalConnection(ZTerminal::Options option
 
     struct winsize s;
     if (isatty(fd_read) && ioctl(fd_read, TIOCGWINSZ, &s) >= 0) {
-        termpaint_surface_resize(surface, s.ws_col, s.ws_row);
+        if (options.testFlag(ZTerminal::Inline)) {
+            termpaint_surface_resize(surface, s.ws_col, std::min(inlineHeight, (int)s.ws_row));
+        } else {
+            termpaint_surface_resize(surface, s.ws_col, s.ws_row);
+        }
     } else {
         termpaint_surface_resize(surface, 80, 24);
     }
@@ -569,7 +573,11 @@ bool ZTerminalPrivate::commonInitForInternalConnection(ZTerminal::Options option
 void ZTerminalPrivate::updateSizeForInternalConnection() {
     struct winsize s;
     if (isatty(fd_read) && ioctl(fd_read, TIOCGWINSZ, &s) >= 0) {
-        pub()->resize(s.ws_col, s.ws_row);
+        if (options.testFlag(ZTerminal::Inline)) {
+            pub()->resize(s.ws_col, std::min(inlineHeight, (int)s.ws_row));
+        } else {
+            pub()->resize(s.ws_col, s.ws_row);
+        }
     }
 }
 
