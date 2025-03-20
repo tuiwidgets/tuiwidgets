@@ -16,7 +16,9 @@ conf_dict = {
     'font_bold_path': '/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf',
     'font_italic_path': '/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Oblique.ttf',
     'font_bold_italic_path': '/usr/share/fonts/truetype/dejavu/DejaVuSansMono-BoldOblique.ttf',
-    'font_fallback_path': '/usr/share/fonts/truetype/unifont/unifont.ttf',
+    'font_fallback_path': '/usr/share/fonts/opentype/unifont/unifont.otf'
+                                if os.path.exists('/usr/share/fonts/opentype/unifont/unifont.otf')
+                                else '/usr/share/fonts/truetype/unifont/unifont.ttf',
 }
 
 conf_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'tpi2png.conf')
