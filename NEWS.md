@@ -1,3 +1,32 @@
+Tui Widgets 0.2.2 (2025-04-03)
+==============================
+
+This is a feature release.
+It is ABI and API compatible to 0.2.1.
+
+New inline mode
+---------------
+
+It is now possible to use Tui Widgets to render in the normal flow of terminal
+output without going to fullscreen mode.
+This could be used for progress bars, prompts or other smaller unintrusive
+interactions in a terminal commandline workflow.
+Or when it is useful to have access to the previous output in the terminal
+session while using an application.
+
+See ZTerminal::Inline and ZTerminal::setInlineHeight.
+
+Bug fixes
+---------
+
+* Fix crash in ZDocument finding methods.
+
+Misc
+----
+
+* Add build configuration option `tests` and `rpath`.
+
+
 Tui Widgets 0.2.1 (2023-12-10)
 ==========================
 
