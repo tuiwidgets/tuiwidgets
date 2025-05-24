@@ -42,7 +42,13 @@ ZColor ZPalette::getColor(ZWidget *targetWidget, ZImplicitSymbol x) {
     QList<const RuleDef*> rules;
 
     for (ZWidget *w : widgets) {
-        QSet<QString> widgetClasses = w->paletteClass().toSet();
+        QSet<QString> widgetClasses;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+        QStringList tmpPaletteClass = w->paletteClass();
+        widgetClasses = QSet<QString>(tmpPaletteClass.begin(), tmpPaletteClass.end());
+#else
+        widgetClasses = w->paletteClass().toSet();
+#endif
 
         const ZPalettePrivate &pal = *w->palette().tuiwidgets_pimpl_ptr;
 
