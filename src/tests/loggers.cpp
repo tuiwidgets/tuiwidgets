@@ -38,7 +38,12 @@ TEST_CASE("logger-file", "") {
         QFile file(fileName);
         REQUIRE(file.open(QFile::ReadOnly));
         QString ret;
-        for (QString line: QString::fromUtf8(file.readAll()).split("\n", QString::SkipEmptyParts)) {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+        const auto skip_empty_parts = Qt::SkipEmptyParts;
+#else
+        const auto skip_empty_parts = QString::SkipEmptyParts;
+#endif
+        for (QString line: QString::fromUtf8(file.readAll()).split("\n", skip_empty_parts)) {
             ret += line.mid(21) + "\n";
         }
         return ret;
