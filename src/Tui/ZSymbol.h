@@ -3,6 +3,7 @@
 #ifndef TUIWIDGETS_ZSYMBOL_INCLUDED
 #define TUIWIDGETS_ZSYMBOL_INCLUDED
 
+#include <QDebug>
 #include <QMetaType>
 #include <QString>
 
@@ -61,7 +62,7 @@ private:
     int id = 0;
 };
 
-QDebug operator<<(QDebug dbg, const ZSymbol &message);
+TUIWIDGETS_EXPORT QDebug operator<<(QDebug dbg, const ZSymbol &message);
 
 #define TUISYM_LITERAL(x) ([] { static ::Tui::ZSymbol m{QString::fromUtf8(x)}; return m; }())
 
