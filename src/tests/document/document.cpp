@@ -2426,3 +2426,47 @@ TEST_CASE("document cross doc") {
         CHECK(recorder1.noMoreEvents());
     }
 }
+
+TEST_CASE("ZDocumentLineMarker") {
+    Testhelper t("unused", "unused", 2, 4);
+    auto textMetrics = t.terminal->textMetrics();
+
+    Tui::ZDocument doc;
+
+    Tui::ZDocumentCursor cursor{&doc, [&textMetrics, &doc](int line, bool /* wrappingAllowed */) {
+            Tui::ZTextLayout lay(textMetrics, doc.line(line));
+            lay.doLayout(65000);
+            return lay;
+        }
+    };
+
+    SECTION("assignment") {
+        cursor.insertText("line1\n2\n3\4");
+        Tui::ZDocumentLineMarker marker1(&doc);
+
+        marker1.setLine(2);
+        CHECK(marker1.line() == 2);
+
+        Tui::ZDocumentLineMarker marker2(&doc);
+        CHECK(marker2.line() == 0);
+
+        marker2 = marker1;
+        CHECK(marker2.line() == 2);
+    }
+
+    SECTION("assignment lineMarkerChanged signal") {
+        cursor.insertText("line1\n2\n3\4");
+        Tui::ZDocumentLineMarker marker1{&doc, 1};
+        Tui::ZDocumentLineMarker marker2{&doc, 0};
+
+        // signal emitted async
+        EventRecorder recorder;
+        auto lineMarkerChangedSignal = recorder.watchSignal(&doc, RECORDER_SIGNAL(&Tui::ZDocument::lineMarkerChanged));
+
+        marker2 = marker1;
+        recorder.waitForEvent(lineMarkerChangedSignal);
+        CHECK(recorder.consumeFirst(lineMarkerChangedSignal, (const Tui::ZDocumentLineMarker*)&marker2));
+        CHECK(recorder.noMoreEvents());
+    }
+
+}

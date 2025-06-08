@@ -46,7 +46,7 @@ ZDocumentLineMarker &ZDocumentLineMarker::operator=(const ZDocumentLineMarker &o
         p->doc->scheduleChangeSignals();
     }
 
-    if (p->line == otherP->line) {
+    if (p->line != otherP->line) {
         p->line = otherP->line;
         p->changed = true;
         p->doc->scheduleChangeSignals();
