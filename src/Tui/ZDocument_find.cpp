@@ -201,11 +201,12 @@ namespace {
                                     i = found = -1;
                                 }
                             }
-                            if (found != -1)
+                            if (found != -1) {
                                 return ZDocumentFindAsyncResultNew({found, line},
                                                                    {parts.last().size(), line + parts.size() - 1},
                                                                    snap.revision(),
                                                                    QRegularExpressionMatch{});
+                            }
                        }
                     }
                     found = -1;
