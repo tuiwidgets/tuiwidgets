@@ -881,7 +881,7 @@ TEST_CASE("regex search") {
 
         auto checkCaptures = [&] (const Tui::ZDocumentFindResult &res) {
             REQUIRE(expectedCapturesMap.contains(testCase.marker));
-            auto &expectedCaptures = expectedCapturesMap[testCase.marker];
+            const auto &expectedCaptures = expectedCapturesMap[testCase.marker];
             CHECK(res.regexLastCapturedIndex() == expectedCaptures.captures.size() - 1);
             if (res.regexLastCapturedIndex() == expectedCaptures.captures.size() - 1) {
                 for (int i = 0; i < expectedCaptures.captures.size(); i++) {
@@ -1381,7 +1381,7 @@ TEST_CASE("regex search") {
 
         auto checkCaptures = [&] (const Tui::ZDocumentFindResult &res) {
             REQUIRE(expectedCapturesMap.contains(testCase.marker));
-            auto &expectedCaptures = expectedCapturesMap[testCase.marker];
+            const auto &expectedCaptures = expectedCapturesMap[testCase.marker];
             CHECK(res.regexLastCapturedIndex() == expectedCaptures.captures.size() - 1);
             if (res.regexLastCapturedIndex() == expectedCaptures.captures.size() - 1) {
                 for (int i = 0; i < expectedCaptures.captures.size(); i++) {
