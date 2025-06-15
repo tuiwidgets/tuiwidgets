@@ -11,6 +11,6 @@ examples_demo_headers = [
 ]
 
 executable('tuiwidgets-demo', examples_demo_sources,
-  qt5.preprocess(moc_headers: examples_demo_headers),
-  dependencies: [qt5_dep, tuiwidgets_dep])
+  qt.preprocess(moc_headers: examples_demo_headers),
+  dependencies: [qt_dep, tuiwidgets_dep])
 

@@ -1,6 +1,23 @@
 # SPDX-License-Identifier: BSL-1.0
-qt5 = import('qt5')
-qt5_dep = dependency('qt5', modules: 'Core')
+qt = import(qt_version)
+lib_name_base = 'tuiwidgets'
+
+if qt_version == 'qt5'
+  lib_name_for_meson = lib_name_base
+  pkg_filebase = 'TuiWidgets'
+  pkg_name = 'TuiWidgets'
+  pkg_description = 'Terminal User Interface Widget Library (Qt5 version)'
+  qt_dep = dependency('qt5', modules: 'Core')
+elif qt_version == 'qt6'
+  lib_name_for_meson = lib_name_base + '-qt6'
+  pkg_filebase = 'TuiWidgetsQt6'
+  pkg_name = 'TuiWidgetsQt6'
+  pkg_description = 'Terminal User Interface Widget Library (Qt6 version)'
+  qt_dep = dependency('qt6', modules: ['Core', 'Core5Compat'])
+else
+  error('Unsupported qt option value: ' + qt_version + '. Must be "qt5" or "qt6".')
+endif
+
 main_vscript = 'tuiwidgets.symver'
 if host_machine.system() == 'linux'
   # for now, only do this on linux, expand supported platforms as needed
@@ -191,11 +208,13 @@ tui_cpp_args = [
   #'-Werror=old-style-cast'
 ]
 
-tuiwidgets_generated = qt5.preprocess(moc_headers: tuiwidgets_moc_headers,
+
+tuiwidgets_generated = qt.preprocess(moc_headers: tuiwidgets_moc_headers,
   include_directories: include_directories('../src'))
 
-tuiwidgets = library('tuiwidgets', tuiwidgets_sources, tuiwidgets_generated,
-  dependencies : [qt5_dep, termpaint_dep, termpaint_image_dep, posixsignalmanager_dep],
+
+tuiwidgets_lib = library(lib_name_for_meson, tuiwidgets_sources, tuiwidgets_generated,
+  dependencies : [qt_dep, termpaint_dep, termpaint_image_dep, posixsignalmanager_dep],
   cpp_args: tui_cpp_args,
   link_args : main_ld_vscript,
   link_depends : main_vscript,
@@ -209,16 +228,16 @@ install_headers(tuiwidgets_public_headers, subdir:'Tui')
 install_headers(tuiwidgets_misc_public_headers, subdir:'Tui/Misc')
 
 import('pkgconfig').generate(
-  description: 'Terminal User Interface Widget Library',
-  filebase: 'TuiWidgets',
-  name: 'TuiWidgets',
+  description: pkg_description,
+  filebase: pkg_filebase,
+  name: pkg_name,
   url: 'https://tuiwidgets.namepad.de/',
-  libraries: [tuiwidgets],
-  requires: [qt5_dep],
+  libraries: [tuiwidgets_lib],
+  requires: [qt_dep],
   subdirs: ['.']
 )
 
-tuiwidgets_dep = declare_dependency(link_with: tuiwidgets)
+tuiwidgets_dep = declare_dependency(link_with: tuiwidgets_lib)
 
 tests_as_installed = false
 

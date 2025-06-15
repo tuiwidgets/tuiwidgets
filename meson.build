@@ -2,7 +2,16 @@
 
 project('tuiwidgets', ['cpp'], version: '0.2.2', default_options : ['buildtype=debugoptimized', 'cpp_std=c++17'])
 
-posixsignalmanager_dep = dependency('PosixSignalManager',
+qt_version = get_option('qt')
+if qt_version == 'qt5'
+    lib_name_for_PosixSignalManager = 'PosixSignalManager'
+elif qt_version == 'qt6'
+    lib_name_for_PosixSignalManager = 'PosixSignalManagerQt6'
+else
+    error('Unsupported qt option value: ' + qt_version + '. Must be "qt5" or "qt6".')
+endif
+
+posixsignalmanager_dep = dependency(lib_name_for_PosixSignalManager,
   required: get_option('system-posixsignalmanager'),
   fallback:['posixsignalmanager', 'posixsignalmanager_dep'])
 
@@ -30,6 +39,6 @@ endif
 
 subdir('src')
 
-tuiwidgets_dep = declare_dependency(link_with: tuiwidgets, include_directories: ['src'])
+tuiwidgets_dep = declare_dependency(link_with: tuiwidgets_lib, include_directories: ['src'])
 
 subdir('examples')

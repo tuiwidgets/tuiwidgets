@@ -15,7 +15,7 @@ endif
 
 testlib = static_library('testlib', 'catch_main.cpp',
   include_directories: uninstalled_headers,
-  dependencies: [qt5_dep, tuiwidgets_dep, catch2_dep]
+  dependencies: [qt_dep, tuiwidgets_dep, catch2_dep]
 )
 
 test_env = environment()
@@ -50,7 +50,7 @@ if not tests_as_installed
     executable('testtoolkitinternal', testinternal_files,
       include_directories: uninstalled_headers,
       link_with: [testlib],
-      dependencies: [qt5_dep, termpaint_dep, termpaint_image_dep, posixsignalmanager_dep, tuiwidgets_dep, catch2_dep],
+      dependencies: [qt_dep, termpaint_dep, termpaint_image_dep, posixsignalmanager_dep, tuiwidgets_dep, catch2_dep],
       cpp_args: ['-fno-inline', silence_warnings]
     ),
     timeout: 240,
@@ -115,7 +115,7 @@ test('testtoolkit',
   executable('testtoolkit', test_files,
     include_directories: uninstalled_headers,
     link_with: [testlib],
-    dependencies: [qt5_dep, termpaint_dep, tuiwidgets_dep, catch2_dep],
+    dependencies: [qt_dep, termpaint_dep, tuiwidgets_dep, catch2_dep],
     cpp_args: ['-fno-inline', silence_warnings]
   ),
   timeout: 240,
