@@ -10,6 +10,8 @@
 #include <Tui/ZPainter.h>
 #include <Tui/ZTextStyle.h>
 
+#include <Tui/Utils_p.h>
+
 
 TUIWIDGETS_NS_START
 
@@ -307,7 +309,7 @@ void ZTextLayout::layoutLine(int index, int width) {
                 // of ascii spaces should count as a break opportunity as well.
                 return;
             }
-            QTextBoundaryFinder bndFinder(QTextBoundaryFinder::Line, p->text.data() + run.offset, std::max(offset + 2 /* allow for surrogate */, p->text.size()) - run.offset);
+            QTextBoundaryFinder bndFinder(QTextBoundaryFinder::Line, p->text.data() + run.offset, std::max(offset + 2 /* allow for surrogate */, size2int(p->text.size())) - run.offset);
             bndFinder.setPosition(offset - run.offset);
             int boundary = bndFinder.isAtBoundary() ? bndFinder.position() : bndFinder.toPreviousBoundary();
             if (boundary != -1 && run.offset + boundary != ld.offset) {

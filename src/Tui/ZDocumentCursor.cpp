@@ -5,6 +5,8 @@
 
 #include <Tui/ZDocument_p.h>
 
+#include <Tui/Utils_p.h>
+
 TUIWIDGETS_NS_START
 
 ZDocumentCursorPrivate::ZDocumentCursorPrivate(ZDocumentCursor *pub, ZDocumentPrivate *doc,
@@ -419,8 +421,8 @@ void ZDocumentCursor::setPosition(ZDocumentCursor::Position pos, bool extendSele
 
 void ZDocumentCursor::setPositionPreservingVerticalMovementColumn(ZDocumentCursor::Position pos, bool extendSelection) {
     auto *const p = tuiwidgets_impl();
-    auto cursorLine = std::max(std::min(pos.line, p->doc->lines.size() - 1), 0);
-    auto cursorCodeUnit = std::max(std::min(pos.codeUnit, p->doc->lines[cursorLine].chars.size()), 0);
+    auto cursorLine = std::max(std::min(pos.line, size2int(p->doc->lines.size() - 1)), 0);
+    auto cursorCodeUnit = std::max(std::min(pos.codeUnit, size2int(p->doc->lines[cursorLine].chars.size())), 0);
 
     // We are not allowed to jump between characters. Therefore, we go once to the left and again to the right.
     if (cursorCodeUnit > 0) {
@@ -449,8 +451,8 @@ ZDocumentCursor::Position ZDocumentCursor::anchor() const {
 
 void ZDocumentCursor::setAnchorPosition(ZDocumentCursor::Position pos) {
     auto *const p = tuiwidgets_impl();
-    auto anchorLine = std::max(std::min(pos.line, p->doc->lines.size() - 1), 0);
-    auto anchorCodeUnit = std::max(std::min(pos.codeUnit, p->doc->lines[anchorLine].chars.size()), 0);
+    auto anchorLine = std::max(std::min(pos.line, size2int(p->doc->lines.size()) - 1), 0);
+    auto anchorCodeUnit = std::max(std::min(pos.codeUnit, size2int(p->doc->lines[anchorLine].chars.size())), 0);
 
     // We are not allowed to jump between characters. Therefore, we go once to the left and again to the right.
     if (anchorCodeUnit > 0) {

@@ -56,6 +56,21 @@ namespace {
     overloads<Ts...> overload(Ts... fn) {
             return overloads<Ts...>(fn...);
     }
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    inline int size2int(qsizetype input) {
+        if (input < std::numeric_limits<int>::min() || input > std::numeric_limits<int>::max()) {
+            qFatal("Out of range size does not fit into int");
+            abort();
+        }
+        return static_cast<int>(input);
+    }
+#else
+    inline int size2int(int input) {
+        return input;
+    }
+#endif
+
 }
 
 #endif // TUIWIDGETS_UTILS_P_INCLUDED

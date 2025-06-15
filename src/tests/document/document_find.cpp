@@ -13,6 +13,8 @@
 #include "../eventrecorder.h"
 #include "../Testhelper.h"
 
+#include <Tui/Utils_p.h>
+
 
 namespace {
 
@@ -108,7 +110,7 @@ static std::vector<SearchTestCase> generateTestCases(const QString &input) {
     auto [matchesMap, documentContents, lines] = parseSearchInfo(input);
 
     if (matchesMap.isEmpty()) {
-        return { {documentContents, false, {0, 0}, {lines.last().size(), lines.size() - 1}, {0, 0}, {0, 0}, {}} };
+        return { {documentContents, false, {0, 0}, {size2int(lines.last().size()), size2int(lines.size()) - 1}, {0, 0}, {0, 0}, {}} };
     }
 
     QList<MatchPosition> matches = matchesMap.values();
@@ -137,7 +139,7 @@ static std::vector<SearchTestCase> generateTestCases(const QString &input) {
         nextStart = matches[i].foundStart;
         advanceNextStart();
     }
-    ret.push_back(SearchTestCase{documentContents, true, nextStart, {lines.last().size(), lines.size() - 1}, matches[0].foundStart, matches[0].foundEnd, matches[0].marker});
+    ret.push_back(SearchTestCase{documentContents, true, nextStart, {size2int(lines.last().size()), size2int(lines.size()) - 1}, matches[0].foundStart, matches[0].foundEnd, matches[0].marker});
 
     return ret;
 }
@@ -148,7 +150,7 @@ static std::vector<SearchTestCase> generateTestCasesBackward(const QString &inpu
     auto [matchesMap, documentContents, lines] = parseSearchInfo(input);
 
     if (matchesMap.isEmpty()) {
-        return { {documentContents, false, {0, 0}, {lines.last().size(), lines.size() - 1}, {0, 0}, {0, 0}, {}} };
+        return { {documentContents, false, {0, 0}, {size2int(lines.last().size()), size2int(lines.size()) - 1}, {0, 0}, {0, 0}, {}} };
     }
 
     QList<MatchPosition> matches = matchesMap.values();
@@ -158,7 +160,7 @@ static std::vector<SearchTestCase> generateTestCasesBackward(const QString &inpu
 
     std::vector<SearchTestCase> ret;
 
-    ret.push_back(SearchTestCase{documentContents, true, matches.last().foundEnd, {lines.last().size(), lines.size() - 1},
+    ret.push_back(SearchTestCase{documentContents, true, matches.last().foundEnd, {size2int(lines.last().size()), size2int(lines.size()) - 1},
                                  matches.last().foundStart, matches.last().foundEnd, matches.last().marker});
 
     Tui::ZDocumentCursor::Position nextEnd = matches.last().foundEnd;

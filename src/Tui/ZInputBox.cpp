@@ -11,6 +11,8 @@
 #include "ZTextLayout.h"
 #include "ZTextMetrics.h"
 
+#include <Tui/Utils_p.h>
+
 TUIWIDGETS_NS_START
 
 static const QChar escapedNewLine = (QChar)(0xdc00 + (unsigned char)'\n');
@@ -100,7 +102,7 @@ void ZInputBox::setCursorPosition(int pos) {
             bnd.setPosition(pos);
             bnd.toPreviousBoundary();
             bnd.toNextBoundary();
-            p->cursorPosition = std::clamp(bnd.position(), 0, p->text.size());
+            p->cursorPosition = std::clamp(size2int(bnd.position()), 0, size2int(p->text.size()));
         }
     }
     update();

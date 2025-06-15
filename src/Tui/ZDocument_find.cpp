@@ -10,6 +10,8 @@
 
 #include <Tui/ZDocumentSnapshot.h>
 
+#include <Tui/Utils_p.h>
+
 TUIWIDGETS_NS_START
 
 
@@ -361,8 +363,8 @@ namespace {
                     }
                     if (match.capturedLength() <= 0) continue;
                     if (match.capturedStart() <= searchAt - match.capturedLength()) {
-                        res = ZDocumentFindAsyncResultNew({match.capturedStart(), line},
-                                                          {match.capturedStart() + match.capturedLength(), line},
+                        res = ZDocumentFindAsyncResultNew({size2int(match.capturedStart()), line},
+                                                          {size2int(match.capturedStart() + match.capturedLength()), line},
                                                           snap.revision(),
                                                           match);
                         continue;
