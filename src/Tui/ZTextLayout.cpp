@@ -766,9 +766,9 @@ void ZTextLineRef::draw(ZPainter painter, const QPoint &pos, ZTextStyle color, Z
             } else if (run.type == ZTextLayoutPrivate::TextRun::SPACES) {
                 // only generated with ShowTabsAndSpaces or ShowTabsAndSpacesWithColors active
                 ZTextStyle style = formattingChars;
-                QChar ch = U' ';
+                QChar ch = u' ';
                 if (textOptionFlags & ZTextOption::ShowTabsAndSpaces) {
-                    ch = U'·';
+                    ch = u'·';
                 }
                 bool highlightingTrailingWhitespace = false;
                 if (textOptionFlags & ZTextOption::ShowTabsAndSpacesWithColors) {

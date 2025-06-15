@@ -1077,11 +1077,13 @@ TEST_CASE("textlayout", "") {
         Tui::ZImage zi{t.terminal.get(), 32, 15};
         zi.painter().clearWithChar({0xff, 0xff, 0xff}, {0, 0, 0}, u'␥');
         QVector<QChar> text1 = {
-            0, 1, 0x7f,
-            0x80, 0xa0, 0xad, 0x034f, 0x061c, 0x070f, 0x115F, 0x1160, 0x17b4, 0x17b5, 0x180B, 0x180E, 0x2000, 0x200F,
-            0x2028, 0x202F, 0x205F, 0x206F, 0x3164, 0xdc00, 0xdc10, 0xFDD0, 0xFDDF, 0xFDE0, 0xFDEF, 0xFE00, 0xFE0F,
-            0xFEFF, 0xFFA0, 0xFFEF, 0xFFF0, 0xFFFE, 0xFFFF,
+            u'\0', u'\x1', u'\x7f',
+            u'\x80', u'\xa0', u'\xad', u'\x034f', u'\x061c', u'\x070f', u'\x115F', u'\x1160',
+            u'\x17b4', u'\x17b5', u'\x180B', u'\x180E', u'\x2000', u'\x200F', u'\x2028', u'\x202F', u'\x205F', u'\x206F',
+            u'\x3164', u'\xdc00', u'\xdc10', u'\xFDD0', u'\xFDDF', u'\xFDE0', u'\xFDEF', u'\xFE00', u'\xFE0F',
+            u'\xFEFF', u'\xFFA0', u'\xFFEF', u'\xFFF0', u'\xFFFE', u'\xFFFF',
         };
+
         QString text2 = U8("\U000E0000\U000E0fff\U00016FE4\U0001BCA0\U0001BCAF\U0001D173\U0001D17A");
         layout->setText(QString(text1.data(), text1.size()) + text2);
         layout->doLayout(30);
@@ -1364,7 +1366,7 @@ TEST_CASE("textlayout", "") {
         CHECK(layout->lineAt(0).textLength() == 19);
 
         QVector<QChar> text1 = {
-            0, 1, 0x7f, 0xdc00, 0xdc10
+            u'\0', u'\x1', u'\x7f', u'\xdc00', u'\xdc10'
         };
         QString text2 = U8("\U0001d173");
         layout->setText(QString(text1.data(), text1.size()) + text2);
@@ -1625,7 +1627,7 @@ TEST_CASE("textlayout", "") {
     }
 
     SECTION("nextCursorPosition-skip-word-line-break") {
-        QVector<QChar> point = { 10, 11, 12, 13, 133 };
+        QVector<QChar> point = { u'\xA', u'\xB', u'\xC', u'\xD', u'\x85' };
         QString linebreak = QString(point.data(), point.size()) + U8("\U00002028\U00002029");
 
         for (int i = 0; i < linebreak.size(); i++) {
@@ -1656,7 +1658,7 @@ TEST_CASE("textlayout", "") {
             return Tui::ZTextStyle{Tui::Colors::brightWhite, Tui::Colors::red};
         });
         QVector<QChar> text1 = {
-            0, 1, 0x7f, 0xdc00, 0xdc10
+            u'\0', u'\1', u'\x7f', u'\xdc00', u'\xdc10'
         };
         QString text2 = U8("\U0001d173");
         layout->setText(QString(text1.data(), text1.size()) + text2 + "A\t\n\tAbcDあ😎");
@@ -1728,7 +1730,7 @@ TEST_CASE("textlayout", "") {
             return Tui::ZTextStyle{Tui::Colors::brightWhite, Tui::Colors::red};
         });
         QVector<QChar> text1 = {
-            0, 1, 0x7f, 0xdc00, 0xdc10
+            u'\0', u'\1', u'\x7f', u'\xdc00', u'\xdc10'
         };
         QString text2 = U8("\U0001d173");
         layout->setText(QString(text1.data(), text1.size()) + text2 + "A\t\n\tAbcDあ😎😎");
@@ -1805,7 +1807,7 @@ TEST_CASE("textlayout", "") {
             layout->setText(layout->text() + QString(QChar(i)));
         }
         QVector<QChar> text1 = {
-            0xdc00
+            u'\xdc00'
         };
         QString text2 = U8("\U0001d173");
         layout->setText(layout->text() + QString(text1.data(), text1.size()) + text2 + "あ");

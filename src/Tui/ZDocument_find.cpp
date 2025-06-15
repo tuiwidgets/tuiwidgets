@@ -55,13 +55,13 @@ namespace {
                     i++;
                 } else {
                     // not valid utf16, replace so it doesn't break regex search
-                    buffer[i] = 0xFFFD;
+                    buffer[i] = u'\xFFFD';
                 }
             } else if (ch.isLowSurrogate()) {
                 // not valid utf16, replace so it doesn't break regex search
                 // this might be a surrogate escape but libpcre (used by QRegularExpression) can't work
                 // with surrogate escapes
-                buffer[i] = 0xFFFD;
+                buffer[i] = u'\xFFFD';
             }
         }
     }
