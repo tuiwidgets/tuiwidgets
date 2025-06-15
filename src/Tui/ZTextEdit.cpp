@@ -123,7 +123,11 @@ void ZTextEdit::emitCursorPostionChanged() {
     const auto [cursorCodeUnit, cursorLine] = p->cursor.position();
     ZTextLayout layNoWrap = textLayoutForLineWithoutWrapping(cursorLine);
     int cursorColumn = layNoWrap.lineAt(0).cursorToX(cursorCodeUnit, ZTextLayout::Leading);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    int utf8CodeUnit = QStringView{p->doc->line(cursorLine)}.left(cursorCodeUnit).toUtf8().size();
+#else
     int utf8CodeUnit = p->doc->line(cursorLine).leftRef(cursorCodeUnit).toUtf8().size();
+#endif
     cursorPositionChanged(cursorColumn, cursorCodeUnit, utf8CodeUnit, cursorLine);
 }
 
