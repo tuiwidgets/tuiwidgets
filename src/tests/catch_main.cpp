@@ -74,6 +74,6 @@ CATCH_REGISTER_LISTENER(QtDiagnosticsFallbackListener)
 
 int main (int argc, char * argv[]) {
     // workaround for rhel, it deactivates the debug output by default in: /usr/share/qt5/qtlogging.ini
-    QLoggingCategory::setFilterRules("*.debug=true");
+    QLoggingCategory::setFilterRules("*.debug=true\nqt.*=false");
     return Catch::Session().run( argc, argv );
 }
