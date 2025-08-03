@@ -36,6 +36,25 @@ ZWidget::ZWidget(ZWidget *parent)
 {
 }
 
+inline QList<QObject*> &getQObjectInternalChildrenList(QObject *obj) {
+    // This is somewhat of a hack.
+    // For managing z-ordering we need to reorder the children of a given
+    // QObject. There is no documented API for that when not using QWidget
+    // based classes.
+    // But QObject::children() is a static function and thus restricts what
+    // changes are possible in qt6 while keeping ABI stability.
+    //
+    // The only change that qt could do in the qt6 series, that doesn't break the
+    // ABI, i can think of would be to use a cached copy there instead of the
+    // real working version of the children, which seems not too likely.
+    //
+    // But we still should ask for a stable api for our usecase.
+#if QT_VERSION >= QT_VERSION_CHECK(7, 0, 0)
+#error Check the reasoning above still holds
+#endif
+    return const_cast<QList<QObject*>&>(obj->children());
+}
+
 ZWidget::ZWidget(ZWidget *parent, std::unique_ptr<ZWidgetPrivate> pimpl)
     : QObject(parent), tuiwidgets_pimpl_ptr(move(pimpl))
 {
@@ -46,7 +65,7 @@ ZWidget::ZWidget(ZWidget *parent, std::unique_ptr<ZWidgetPrivate> pimpl)
         p->effectivelyVisible = pp->effectivelyVisible;
 
         // to apply stacking layer
-        QList<QObject*> &list = parentWidget()->d_ptr->children;
+        QList<QObject*> &list = getQObjectInternalChildrenList(parentWidget());
         if (list.size() > 1) {
             list.move(list.indexOf(this), 0);
             raise();
@@ -117,7 +136,7 @@ void ZWidget::setParent(ZWidget *newParent) {
 
     // to apply stacking layer
     if (newParent) {
-        QList<QObject*>& list = parentWidget()->d_ptr->children;
+        QList<QObject*>& list = getQObjectInternalChildrenList(parentWidget());
         if (list.size() > 1) {
             list.move(list.indexOf(this), 0);
             raise();
@@ -310,7 +329,7 @@ void ZWidget::setStackingLayer(int layer) {
     }
     p->stackingLayer = layer;
     if (!parentWidget()) return;
-    QList<QObject*> &list = parentWidget()->d_ptr->children;
+    QList<QObject*> &list = getQObjectInternalChildrenList(parentWidget());
     if (list.size() > 1) {
         // this widget should end up as the top of the target layer, so raise just works.
         list.move(list.indexOf(this), 0);
@@ -354,7 +373,7 @@ void ZWidgetPrivate::updateEffectivelyVisibleRecursively() {
 
 void ZWidget::raise() {
     if (!parentWidget()) return;
-    QList<QObject*> &list = parentWidget()->d_ptr->children;
+    QList<QObject*> &list = getQObjectInternalChildrenList(parentWidget());
     if (list.size() <= 1) return;
     int to = list.size() - 1;
     while (to > 0) {
@@ -370,7 +389,7 @@ void ZWidget::raise() {
 
 void ZWidget::lower() {
     if (!parentWidget()) return;
-    QList<QObject*> &list = parentWidget()->d_ptr->children;
+    QList<QObject*> &list = getQObjectInternalChildrenList(parentWidget());
     if (list.size() <= 1) return;
     int to = 0;
     while (to < list.size() - 1) {
@@ -387,7 +406,7 @@ void ZWidget::lower() {
 void ZWidget::stackUnder(ZWidget *w) {
     if (!parentWidget()) return;
     if (this == w) return;
-    QList<QObject*> &list = parentWidget()->d_ptr->children;
+    QList<QObject*> &list = getQObjectInternalChildrenList(parentWidget());
     if (list.size() <= 1) return;
 
     if (w->stackingLayer() < stackingLayer()) {
