@@ -419,13 +419,10 @@ void ZWidget::stackUnder(ZWidget *w) {
         return;
     }
 
-    // direct access does not trigger parent change side effects!
-    list.removeOne(this);
-
+    list.move(list.indexOf(this), list.size() - 1);
     int to = list.indexOf(w);
+    list.move(list.size() - 1, std::max(0, to));
 
-    // direct access does not trigger parent change side effects!
-    list.insert(std::max(0, to), this);
     update();
 }
 
