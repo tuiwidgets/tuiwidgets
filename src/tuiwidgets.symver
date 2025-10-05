@@ -2079,3 +2079,13 @@ TUIWIDGETS_0.2.2 {
         "Tui::v0::ZTerminal::setInline(bool)";
     };
 };
+
+TUIWIDGETS_0.2.3 {
+    global: extern "C++" {
+
+        ########### ZSymbol
+
+        "Tui::v0::operator<<(QDebug, Tui::v0::ZSymbol const&)";
+
+    };
+};
