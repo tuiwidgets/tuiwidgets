@@ -8,21 +8,26 @@ if qt_version == 'qt5'
   pkg_name = 'TuiWidgets'
   pkg_description = 'Terminal User Interface Widget Library (Qt5 version)'
   qt_dep = dependency('qt5', modules: 'Core')
+  main_vscript = 'tuiwidgets.symver'
+  main_ld_vscript = '-Wl,--version-script,@0@/@1@'.format(meson.current_source_dir(), main_vscript)
 elif qt_version == 'qt6'
   lib_name_for_meson = lib_name_base + '-qt6'
   pkg_filebase = 'TuiWidgetsQt6'
   pkg_name = 'TuiWidgetsQt6'
   pkg_description = 'Terminal User Interface Widget Library (Qt6 version)'
   qt_dep = dependency('qt6', modules: ['Core', 'Core5Compat'])
+  symver_qt6 = custom_target('symver_qt6.py',
+    input: 'tuiwidgets.symver',
+    output: 'tuiwidgets.symver.qt6',
+    command: [find_program('symver_qt6.py'), '@INPUT@', '@OUTPUT@'])
+  main_vscript = symver_qt6
+  main_ld_vscript = '-Wl,--version-script,@0@'.format(symver_qt6.full_path())
 else
   error('Unsupported qt option value: ' + qt_version + '. Must be "qt5" or "qt6".')
 endif
 
-main_vscript = 'tuiwidgets.symver'
-if host_machine.system() == 'linux'
+if host_machine.system() != 'linux'
   # for now, only do this on linux, expand supported platforms as needed
-  main_ld_vscript = '-Wl,--version-script,@0@/@1@'.format(meson.current_source_dir(), main_vscript)
-else
   main_ld_vscript = []
 endif
 
