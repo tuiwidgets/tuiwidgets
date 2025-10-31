@@ -34,6 +34,10 @@ extensions = [
   'sphinx.ext.intersphinx',
 ]
 
+images_config = {
+  'default_group': "default"
+}
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
