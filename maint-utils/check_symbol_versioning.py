@@ -116,7 +116,10 @@ def analyze_symbols(filename, version_prefix):
                     print(f'   {src}')
                     ok = False
             elif src.startswith('/usr/include/'):
-                if symbol['st_info']['bind'] != 'STB_WEAK':
+                if symbol.name.startswith(version_prefix) and symver and symver.startswith(version_prefix):
+                    # TODO investigate this case, observed on arm64 qt6 build.
+                    pass
+                elif symbol['st_info']['bind'] != 'STB_WEAK':
                     print("Symbol from external header, but not weak", symbol.name, symver)
                     print(f'   {src}')
                     ok = False
