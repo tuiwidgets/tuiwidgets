@@ -28,7 +28,7 @@ void ZMenu::setItems(QVector<ZMenuItem> items) {
     auto *term = terminal();
 
     for (int i = 0; i < p->items.size(); i++) {
-        const auto& item = qAsConst(p->items)[i];
+        const auto& item = std::as_const(p->items)[i];
         if (item.markup().size()) {
             ZStyledTextLine st;
             st.setMarkup(QStringLiteral("<body> ") + item.markup() + QStringLiteral(" </body>"));
@@ -129,7 +129,7 @@ void ZMenu::paintEvent(ZPaintEvent *event) {
 
     int y = 1;
     for (int i = 0; i < p->items.size(); i++) {
-        const auto& item = qAsConst(p->items)[i];
+        const auto& item = std::as_const(p->items)[i];
         if (item.markup().size()) {
             ZStyledTextLine st;
             st.setMarkup(QStringLiteral("<body> ") + item.markup() + QStringLiteral(" </body>"));
@@ -175,7 +175,7 @@ void ZMenu::keyEvent(ZKeyEvent *event) {
             } else {
                 newSelected = p->items.size() - 1;
             }
-            if (qAsConst(p->items)[newSelected].markup().size()) {
+            if (std::as_const(p->items)[newSelected].markup().size()) {
                 p->selected = newSelected;
                 break;
             }
@@ -189,7 +189,7 @@ void ZMenu::keyEvent(ZKeyEvent *event) {
             } else {
                 newSelected = 0;
             }
-            if (qAsConst(p->items)[newSelected].markup().size()) {
+            if (std::as_const(p->items)[newSelected].markup().size()) {
                 p->selected = newSelected;
                 break;
             }
@@ -197,7 +197,7 @@ void ZMenu::keyEvent(ZKeyEvent *event) {
         update();
     } else if (event->key() == Key_Enter && event->modifiers() == 0) {
         ZCommandManager *const cmdMgr = parentWidget()->ensureCommandManager();
-        const auto& item = qAsConst(p->items)[p->selected];
+        const auto& item = std::as_const(p->items)[p->selected];
         bool isEnabled = item.command() && cmdMgr->isCommandEnabled(item.command());
         if (isEnabled) {
             if (p->parentMenu) {
@@ -225,7 +225,7 @@ void ZMenu::keyEvent(ZKeyEvent *event) {
     } else if (event->modifiers() == 0 && event->text().size()) {
         ZCommandManager *const cmdMgr = parentWidget()->ensureCommandManager();
         for (int i = 0; i < p->items.size(); i++) {
-            const auto& item = qAsConst(p->items)[i];
+            const auto& item = std::as_const(p->items)[i];
             ZStyledTextLine st;
             st.setMarkup(QStringLiteral("<body> ") + item.markup() + QStringLiteral(" </body>"));
             bool isEnabled = item.command() || cmdMgr->isCommandEnabled(item.command());

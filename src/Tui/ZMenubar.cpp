@@ -66,7 +66,7 @@ void ZMenubar::setItems(QVector<ZMenuItem> items) {
     update();
     p->shortcuts.clear();
     for (int i = 0; i < p->items.size(); i++) {
-        const auto& item = qAsConst(p->items)[i];
+        const auto& item = std::as_const(p->items)[i];
         if (item.command()) {
             p->shortcuts[item.command()];
         }
@@ -101,7 +101,7 @@ void ZMenubar::updateCacheAndRegrabKeys() {
     ZCommandManager *const cmdMgr = parentWidget()->ensureCommandManager();
     for (int i = 0; i < p->items.size(); i++) {
         p->itemX[i] = x;
-        const auto& item = qAsConst(p->items)[i];
+        const auto& item = std::as_const(p->items)[i];
         ZStyledTextLine st;
         st.setMarkup(QStringLiteral("<body> ") + item.markup() + QStringLiteral(" </body>"));
         x += st.width(term->textMetrics());
@@ -144,10 +144,10 @@ void ZMenubar::commandStateChanged(ZSymbol command) {
 void ZMenubar::respawnMenu() {
     auto *const p = tuiwidgets_impl();
     delete p->activeMenu;
-    if (qAsConst(p->items)[p->selected].hasSubitems()) {
+    if (std::as_const(p->items)[p->selected].hasSubitems()) {
         p->activeMenu = new ZMenu(parentWidget());
         p->activeMenu->setParentMenu(this);
-        p->activeMenu->setItems(qAsConst(p->items)[p->selected].subitems());
+        p->activeMenu->setItems(std::as_const(p->items)[p->selected].subitems());
         QSize submenuSize = p->activeMenu->sizeHint();
         QRect rect = {p->itemX[p->selected] - 1 + geometry().left(), 1 + geometry().top(), submenuSize.width(), submenuSize.height()};
         if (rect.right() >= parentWidget()->geometry().width()) {
@@ -225,7 +225,7 @@ void ZMenubar::paintEvent(ZPaintEvent *event) {
     p->itemX.resize(p->items.size());
     for (int i = 0; i <p->items.size(); i++) {
         p->itemX[i] = x;
-        const auto& item = qAsConst(p->items)[i];
+        const auto& item = std::as_const(p->items)[i];
         ZStyledTextLine st;
         st.setMarkup(QStringLiteral("<body> ") + item.markup() + QStringLiteral(" </body>"));
         bool isItemEnabled = (item.hasSubitems() || cmdMgr->isCommandEnabled(item.command())) && isEnabled();
@@ -252,7 +252,7 @@ void ZMenubar::keyActivate(ZKeyEvent *event) {
     auto *const p = tuiwidgets_impl();
     ZCommandManager *const cmdMgr = parentWidget()->ensureCommandManager();
     for (int i = 0; i < p->items.size(); i++) {
-        const auto &item = qAsConst(p->items)[i];
+        const auto &item = std::as_const(p->items)[i];
         ZStyledTextLine st;
         st.setMarkup(QStringLiteral("<body> ") + item.markup() + QStringLiteral(" </body>"));
         bool isEnabled = item.hasSubitems() || cmdMgr->isCommandEnabled(item.command());
@@ -284,7 +284,7 @@ void ZMenubar::keyEvent(ZKeyEvent *event) {
         close();
     } else if (event->key() == Key_Enter && event->modifiers() == 0) {
         ZCommandManager *const cmdMgr = parentWidget()->ensureCommandManager();
-        const auto &item = qAsConst(p->items)[p->selected];
+        const auto &item = std::as_const(p->items)[p->selected];
         bool isEnabled = item.command() && cmdMgr->isCommandEnabled(item.command());
         if (isEnabled) {
             close();

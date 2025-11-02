@@ -164,7 +164,7 @@ TEST_CASE("widget-base") {
         CHECK(w->mapFromTerminal({0, 0}) == QPoint(0, 0));
         CHECK(w->mapToTerminal({0, 0}) == QPoint(0, 0));
 
-        CHECK(qAsConst(w)->placeFocus() == nullptr);
+        CHECK(std::as_const(w)->placeFocus() == nullptr);
         CHECK(w->placeFocus() == nullptr);
 
         CHECK(w->resolveSizeHintChain() == w.get());
@@ -316,7 +316,7 @@ TEST_CASE("widget-misc") {
         CHECK(widget.isVisibleTo(nullptr) == false);
     }
     SECTION("placeFocus") {
-        CHECK(qAsConst(widget).placeFocus() == nullptr);
+        CHECK(std::as_const(widget).placeFocus() == nullptr);
         CHECK(widget.placeFocus() == nullptr);
     }
 }

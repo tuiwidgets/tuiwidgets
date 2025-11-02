@@ -52,7 +52,7 @@ ZColor ZPalette::getColor(ZWidget *targetWidget, ZImplicitSymbol x) {
 
         const ZPalettePrivate &pal = *w->palette().tuiwidgets_pimpl_ptr;
 
-        for (const auto &rule : qAsConst(pal.rules)) {
+        for (const auto &rule : std::as_const(pal.rules)) {
             rules.append(&rule);
         }
 
@@ -64,8 +64,8 @@ ZColor ZPalette::getColor(ZWidget *targetWidget, ZImplicitSymbol x) {
             }
         }
 
-        for (auto &rs : qAsConst(matchingRulesByLen)) {
-            for (const RuleDef *r : qAsConst(rs)) {
+        for (auto &rs : std::as_const(matchingRulesByLen)) {
+            for (const RuleDef *r : std::as_const(rs)) {
                 for (const RuleCmd &cmd : r->cmds) {
                     if (cmd.type == Publish || w == targetWidget) {
                         if (defs.contains(cmd.reference)) {

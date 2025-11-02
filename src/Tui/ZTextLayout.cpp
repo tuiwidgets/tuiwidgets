@@ -370,7 +370,7 @@ void ZTextLayout::layoutLine(int index, int width) {
             run.x = column;
             if (p->textOption.tabs().size()) {
                 auto tabs = p->textOption.tabs();
-                for (const ZTextOption::Tab &tab: qAsConst(tabs)) {
+                for (const ZTextOption::Tab &tab: std::as_const(tabs)) {
                     if (tab.position > column) {
                         column = tab.position;
                         break;
