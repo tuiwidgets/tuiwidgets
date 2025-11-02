@@ -158,10 +158,10 @@ void ZStyledTextLinePrivate::ensureCache() const {
                     [&](const MarkupParser::CharEvent &ev) {
                         //qDebug() << "char" << ev.asString();
                         if (styles.isEmpty()) {
-                            styles.append({textFromMarkup.size(), stack.last()});
+                            styles.append({size2int(textFromMarkup.size()), stack.last()});
                         } else {
                             if (styles.last().style != stack.last()) {
-                                styles.append({textFromMarkup.size(), stack.last()});
+                                styles.append({size2int(textFromMarkup.size()), stack.last()});
                             }
                         }
                         textFromMarkup.append(ev.asString());

@@ -8,6 +8,8 @@
 
 #include <optional>
 
+#include <Tui/Utils_p.h>
+
 #include <Tui/ZTerminal.h>
 #include <Tui/ZTextMetrics.h>
 
@@ -386,7 +388,7 @@ TEST_CASE("Document additional cursor adjustments") {
         int lineNo = 0;
         for (const QString &line: lines) {
             if (line.contains(ch)) {
-                return {line.indexOf(ch), lineNo};
+                return {size2int(line.indexOf(ch)), lineNo};
             }
             lineNo += 1;
         }
@@ -2593,7 +2595,7 @@ TEST_CASE("Document line marker adjustments") {
         int lineNo = 0;
         for (const QString &line: lines) {
             if (line.contains(ch)) {
-                return {line.indexOf(ch), lineNo};
+                return {size2int(line.indexOf(ch)), lineNo};
             }
             lineNo += 1;
         }

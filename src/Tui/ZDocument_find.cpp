@@ -203,7 +203,7 @@ namespace {
                             }
                             if (found != -1) {
                                 return ZDocumentFindAsyncResultNew({found, line},
-                                                                   {parts.last().size(), line + parts.size() - 1},
+                                                                   {size2int(parts.last().size()), line + size2int(parts.size()) - 1},
                                                                    snap.revision(),
                                                                    QRegularExpressionMatch{});
                             }

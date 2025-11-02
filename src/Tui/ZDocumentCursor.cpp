@@ -261,7 +261,7 @@ void ZDocumentCursor::moveCharacterLeft(bool extendSelection) {
         setPosition({lay.previousCursorPosition(currentCodeUnit, ZTextLayout::SkipCharacters), currentLine},
                     extendSelection);
     } else if (currentLine > 0) {
-        setPosition({p->doc->lines[currentLine - 1].chars.size(), currentLine - 1}, extendSelection);
+        setPosition({size2int(p->doc->lines[currentLine - 1].chars.size()), currentLine - 1}, extendSelection);
     } else {
         // here we update the selection and the vertical movemend position
         setPosition({currentCodeUnit, currentLine}, extendSelection);
@@ -291,7 +291,7 @@ void ZDocumentCursor::moveWordLeft(bool extendSelection) {
         setPosition({lay.previousCursorPosition(currentCodeUnit, ZTextLayout::SkipWords), currentLine},
                     extendSelection);
     } else if (currentLine > 0) {
-        setPosition({p->doc->lines[currentLine - 1].chars.size(), currentLine - 1}, extendSelection);
+        setPosition({size2int(p->doc->lines[currentLine - 1].chars.size()), currentLine - 1}, extendSelection);
     } else {
         // here we update the selection and the vertical movemend position
         setPosition({currentCodeUnit, currentLine}, extendSelection);
@@ -395,7 +395,7 @@ void ZDocumentCursor::moveToStartIndentedText(bool extendSelection) {
 void ZDocumentCursor::moveToEndOfLine(bool extendSelection) {
     auto *const p = tuiwidgets_impl();
     const auto [currentCodeUnit, currentLine] = position();
-    setPosition({p->doc->lines[currentLine].chars.size(), currentLine}, extendSelection);
+    setPosition({size2int(p->doc->lines[currentLine].chars.size()), currentLine}, extendSelection);
 }
 
 void ZDocumentCursor::moveToStartOfDocument(bool extendSelection) {
@@ -404,7 +404,7 @@ void ZDocumentCursor::moveToStartOfDocument(bool extendSelection) {
 
 void ZDocumentCursor::moveToEndOfDocument(bool extendSelection) {
     auto *const p = tuiwidgets_impl();
-    setPosition({p->doc->lines.last().chars.size(), p->doc->lines.size() - 1}, extendSelection);
+    setPosition({size2int(p->doc->lines.last().chars.size()), size2int(p->doc->lines.size()) - 1}, extendSelection);
 }
 
 ZDocumentCursor::Position ZDocumentCursor::position() const {

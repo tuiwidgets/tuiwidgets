@@ -3,6 +3,8 @@
 #include "ZMenu.h"
 #include "ZMenu_p.h"
 
+#include <Tui/Utils_p.h>
+
 #include <Tui/ZCommandManager.h>
 #include <Tui/ZStyledTextLine.h>
 #include <Tui/ZTerminal.h>
@@ -80,7 +82,7 @@ QSize ZMenu::minimumSizeHint() const {
     }
     width += 4;
     width = std::max(width, 20);
-    return {width, 2 + p->items.size()};
+    return {width, 2 + size2int(p->items.size())};
 }
 
 QObject *ZMenu::facet(const QMetaObject &metaObject) const {

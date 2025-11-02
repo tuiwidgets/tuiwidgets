@@ -5,6 +5,8 @@
 
 #include <QTimer>
 
+#include <Tui/Utils_p.h>
+
 #include <Tui/Misc/SurrogateEscape.h>
 //#include <Tui/ZWidget.h>
 
@@ -343,7 +345,7 @@ bool ZDocument::isModified() const {
 
 void ZDocument::setNewlineAfterLastLineMissing(bool value) {
     auto *const p = tuiwidgets_impl();
-    const auto position = ZDocumentCursor::Position{p->lines[p->lines.size() - 1].chars.size(), p->lines.size() - 1};
+    const auto position = ZDocumentCursor::Position{size2int(p->lines[p->lines.size() - 1].chars.size()), size2int(p->lines.size()) - 1};
     p->prepareModification(position);
     p->newlineAfterLastLineMissing = value;
     p->saveUndoStep(position);
@@ -1127,7 +1129,7 @@ void ZDocumentPrivate::insertIntoLine(ZDocumentCursor *cursor, int line, int cod
             if (anchorLine == line) {
                 const int anchorAdj = anchorBefore ? 0 : -1;
                 if (anchorCodeUnit + anchorAdj >= codeUnitStart) {
-                    cur->setAnchorPosition({anchorCodeUnit + data.size(), anchorLine});
+                    cur->setAnchorPosition({size2int(anchorCodeUnit + data.size()), anchorLine});
                     positionMustBeSet = true;
                 }
             }
@@ -1136,7 +1138,7 @@ void ZDocumentPrivate::insertIntoLine(ZDocumentCursor *cursor, int line, int cod
             if (cursorLine == line) {
                 const int cursorAdj = anchorBefore ? -1 : 0;
                 if (cursorCodeUnit + cursorAdj >= codeUnitStart) {
-                    cur->setPosition({cursorCodeUnit + data.size(), cursorLine}, true);
+                    cur->setPosition({size2int(cursorCodeUnit + data.size()), cursorLine}, true);
                     positionMustBeSet = false;
                 }
             }
@@ -1146,7 +1148,7 @@ void ZDocumentPrivate::insertIntoLine(ZDocumentCursor *cursor, int line, int cod
             }
         } else {
             if (cursorLine == line && cursorCodeUnit >= codeUnitStart) {
-                cur->setPosition({cursorCodeUnit + data.size(), cursorLine}, false);
+                cur->setPosition({size2int(cursorCodeUnit + data.size()), cursorLine}, false);
             }
         }
 
@@ -1154,7 +1156,7 @@ void ZDocumentPrivate::insertIntoLine(ZDocumentCursor *cursor, int line, int cod
 
     debugConsistencyCheck(cursor);
 
-    auto redoTransform = [line, codeUnitStart, codeUnits=data.size()](QVector<UndoCursor> &cursors, QVector<UndoLineMarker>&) {
+    auto redoTransform = [line, codeUnitStart, codeUnits=size2int(data.size())](QVector<UndoCursor> &cursors, QVector<UndoLineMarker>&) {
         for (UndoCursor &cur: cursors) {
             const auto [anchorCodeUnit, anchorLine] = cur.anchor;
             const auto [cursorCodeUnit, cursorLine] = cur.position;
@@ -1190,7 +1192,7 @@ void ZDocumentPrivate::insertIntoLine(ZDocumentCursor *cursor, int line, int cod
         }
     };
 
-    auto undoTransform = [line, codeUnitStart, codeUnits=data.size()](QVector<UndoCursor> &cursors, QVector<UndoLineMarker>&) {
+    auto undoTransform = [line, codeUnitStart, codeUnits=size2int(data.size())](QVector<UndoCursor> &cursors, QVector<UndoLineMarker>&) {
         for (UndoCursor &cur: cursors) {
             // anchor
             const auto [anchorCodeUnit, anchorLine] = cur.anchor;
@@ -1246,7 +1248,7 @@ void ZDocumentPrivate::removeLines(ZDocumentCursor *cursor, int start, int count
             cur->setAnchorPosition({anchorCodeUnit, anchorLine - count});
             positionMustBeSet = true;
         } else if (anchorLine >= lines.size()) {
-            cur->setAnchorPosition({lines[lines.size() - 1].chars.size(), lines.size() - 1});
+            cur->setAnchorPosition({size2int(lines[lines.size() - 1].chars.size()), size2int(lines.size()) - 1});
             positionMustBeSet = true;
         } else if (anchorLine >= start) {
             cur->setAnchorPosition({0, start});
@@ -1259,7 +1261,7 @@ void ZDocumentPrivate::removeLines(ZDocumentCursor *cursor, int start, int count
             cur->setPositionPreservingVerticalMovementColumn({cursorCodeUnit, cursorLine - count}, true);
             positionMustBeSet = false;
         } else if (cursorLine >= lines.size()) {
-            cur->setPositionPreservingVerticalMovementColumn({lines[lines.size() - 1].chars.size(), lines.size() - 1},
+            cur->setPositionPreservingVerticalMovementColumn({size2int(lines[lines.size() - 1].chars.size()), size2int(lines.size()) - 1},
                                                              true);
             positionMustBeSet = false;
         } else if (cursorLine >= start) {
@@ -1274,7 +1276,7 @@ void ZDocumentPrivate::removeLines(ZDocumentCursor *cursor, int start, int count
 
     debugConsistencyCheck(cursor);
 
-    auto redoTransform = [start, count, lineCount=lines.size(), lastLineCodeUnits=lines[lines.size() - 1].chars.size()]
+    auto redoTransform = [start, count, lineCount=lines.size(), lastLineCodeUnits=size2int(lines[lines.size() - 1].chars.size())]
             (QVector<UndoCursor> &cursors, QVector<UndoLineMarker> &markers) {
         for (UndoCursor &cur: cursors) {
             const auto [anchorCodeUnit, anchorLine] = cur.anchor;
@@ -1285,7 +1287,7 @@ void ZDocumentPrivate::removeLines(ZDocumentCursor *cursor, int start, int count
                 cur.anchor = {anchorCodeUnit, anchorLine - count};
                 cur.anchorUpdated = true;
             } else if (anchorLine >= lineCount) {
-                cur.anchor = {lastLineCodeUnits, lineCount - 1};
+                cur.anchor = {lastLineCodeUnits, size2int(lineCount - 1)};
                 cur.anchorUpdated = true;
             } else if (anchorLine >= start) {
                 cur.anchor = {0, start};
@@ -1297,7 +1299,7 @@ void ZDocumentPrivate::removeLines(ZDocumentCursor *cursor, int start, int count
                 cur.position = {cursorCodeUnit, cursorLine - count};
                 cur.positionUpdated = true;
             } else if (cursorLine >= lineCount) {
-                cur.position = {lastLineCodeUnits, lineCount - 1};
+                cur.position = {lastLineCodeUnits, size2int(lineCount - 1)};
                 cur.positionUpdated = true;
             } else if (cursorLine >= start) {
                 cur.position = {0, start};
