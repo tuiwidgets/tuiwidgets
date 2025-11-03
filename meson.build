@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: BSL-1.0
 
-project('tuiwidgets', ['cpp'], version: '0.2.2', default_options : ['buildtype=debugoptimized', 'cpp_std=c++17'])
+project('tuiwidgets', ['cpp'], version: '0.2.3', default_options : ['buildtype=debugoptimized', 'cpp_std=c++17'])
 
 qt_version = get_option('qt')
 if qt_version == 'qt5'
