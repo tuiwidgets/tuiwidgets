@@ -1,3 +1,15 @@
+Tui Widgets 0.2.3 (2025-11-03)
+==============================
+
+This release adds Qt 6.x support and fixes a few bugs.
+It is ABI and API compatible to 0.2.2.
+
+Bug fixes
+---------
+
+* ZDocumentLineMarker: Fix assignment operator. It didn't work at all.
+* ZSymbol: Export operator<< for QDebug
+
 Tui Widgets 0.2.2 (2025-04-03)
 ==============================
 
