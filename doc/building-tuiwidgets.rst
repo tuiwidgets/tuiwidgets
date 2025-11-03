@@ -13,6 +13,12 @@ For example on debian:
 
 .. code-block:: shell
 
+   apt install build-essential git meson ninja-build pkg-config qt6-base-dev qt6-5compat-dev
+
+Or for Qt 5:
+
+.. code-block:: shell
+
    apt install build-essential git meson ninja-build pkg-config qttools5-dev-tools qtbase5-dev
 
 termpaint
@@ -35,12 +41,15 @@ You also need `termpaint <https://termpaint.namepad.de>`_.
 Tui Widgets
 -----------
 
+This library supports Qt 5 and Qt 6, you need to choose the qt version at compile time via the -Dqt option to meson.
+
 .. code-block:: shell
 
    git clone https://github.com/tuiwidgets/tuiwidgets
    
    cd tuiwidgets
-   PKG_CONFIG_PATH=$HOME/opt/tuiwidgets-prefix/lib/x86_64-linux-gnu/pkgconfig meson setup _build -Dprefix=$HOME/opt/tuiwidgets-prefix
+   PKG_CONFIG_PATH=$HOME/opt/tuiwidgets-prefix/lib/x86_64-linux-gnu/pkgconfig meson setup _build -Dprefix=$HOME/opt/tuiwidgets-prefix -Dqt=qt6
    meson compile -C _build
    meson install -C _build
 
+The library will install pkg-config .pc files for TuiWidgets (qt 5.x version) or TuiWidgetsQt6.
