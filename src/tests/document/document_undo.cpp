@@ -8,14 +8,27 @@
 
 #include <optional>
 
-#include <Tui/Utils_p.h>
-
 #include <Tui/ZTerminal.h>
 #include <Tui/ZTextMetrics.h>
 
 #include "../catchwrapper.h"
 #include "../eventrecorder.h"
 #include "../Testhelper.h"
+
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    static int size2int(qsizetype input) {
+        if (input < std::numeric_limits<int>::min() || input > std::numeric_limits<int>::max()) {
+            qFatal("Out of range size does not fit into int");
+            abort();
+        }
+        return static_cast<int>(input);
+    }
+#else
+    static int size2int(int input) {
+        return input;
+    }
+#endif
 
 
 static QVector<QString> docToVec(const Tui::ZDocument &doc) {
