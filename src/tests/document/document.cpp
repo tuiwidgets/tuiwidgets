@@ -1946,6 +1946,35 @@ TEST_CASE("ZDocument") {
     }
 
 
+    SECTION("initial line revision") {
+        CHECK(doc.lineCount() == 1);
+        const unsigned int revision1 = doc.revision();
+        const unsigned int line0revision1 = doc.lineRevision(0);
+        cursor.insertText(" ");
+
+        // doc and line revision do not change on user data update
+        CHECK(doc.revision() != revision1);
+        CHECK(doc.lineRevision(0) != line0revision1);
+    }
+
+
+    SECTION("initial line revision - load") {
+        QByteArray inData = QByteArray("line1\nline2\n");
+        QBuffer inFile(&inData);
+        REQUIRE(inFile.open(QIODevice::ReadOnly));
+        doc.readFrom(&inFile);
+
+        CHECK(doc.lineCount() == 2);
+        const unsigned int revision1 = doc.revision();
+        const unsigned int line0revision1 = doc.lineRevision(0);
+        cursor.insertText(" ");
+
+        // doc and line revision do not change on user data update
+        CHECK(doc.revision() != revision1);
+        CHECK(doc.lineRevision(0) != line0revision1);
+    }
+
+
     SECTION("userdata") {
         cursor.insertText("test\ntest");
         REQUIRE(doc.lineCount() == 2);

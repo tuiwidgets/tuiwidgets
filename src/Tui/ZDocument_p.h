@@ -159,7 +159,7 @@ public:
     bool changeScheduled = false;
     bool contentsChangedSignalToBeEmitted = false;
     std::shared_ptr<std::atomic<unsigned>> revision = std::make_shared<std::atomic<unsigned>>(0);
-    int lineRevisionCounter = 0;
+    int lineRevisionCounter = 1;
 
     ZDocument *pub_ptr;
 
