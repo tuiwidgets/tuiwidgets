@@ -15,7 +15,7 @@ elif qt_version == 'qt6'
   pkg_filebase = 'TuiWidgetsQt6'
   pkg_name = 'TuiWidgetsQt6'
   pkg_description = 'Terminal User Interface Widget Library (Qt6 version)'
-  qt_dep = dependency('qt6', modules: ['Core', 'Core5Compat'])
+  qt_dep = dependency('qt6', modules: ['Core'])
   symver_qt6 = custom_target('symver_qt6.py',
     input: 'tuiwidgets.symver',
     output: 'tuiwidgets.symver.qt6',

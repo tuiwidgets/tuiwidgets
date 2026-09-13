@@ -4,7 +4,9 @@
 #include <Tui/ZPainter_p.h>
 
 #include <QRect>
+#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
 #include <QTextCodec>
+#endif
 
 #include <Tui/ZColor.h>
 #include <Tui/ZImage_p.h>
@@ -95,12 +97,20 @@ void ZPainter::writeWithColors(int x, int y, const char *stringUtf8, int utf8Cod
 }
 
 void ZPainter::writeWithColors(int x, int y, const QChar *string, int size, ZColor fg, ZColor bg) {
+#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
     QByteArray utf8 = QTextCodec::codecForMib(106)->fromUnicode(string, size);
+#else
+    QByteArray utf8 = QStringView(string, size).toUtf8();
+#endif
     writeWithColors(x, y, utf8.data(), utf8.size(), fg, bg);
 }
 
 void ZPainter::writeWithColors(int x, int y, const char16_t *string, int size, ZColor fg, ZColor bg) {
+#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
     QByteArray utf8 = QTextCodec::codecForMib(106)->fromUnicode(reinterpret_cast<const QChar*>(string), size);
+#else
+    QByteArray utf8 = QStringView(string, size).toUtf8();
+#endif
     writeWithColors(x, y, utf8.data(), utf8.size(), fg, bg);
 }
 
@@ -128,12 +138,20 @@ void ZPainter::writeWithAttributes(int x, int y, const char *stringUtf8, int utf
 }
 
 void ZPainter::writeWithAttributes(int x, int y, const QChar *string, int size, ZColor fg, ZColor bg, ZTextAttributes attr) {
+#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
     QByteArray utf8 = QTextCodec::codecForMib(106)->fromUnicode(string, size);
+#else
+    QByteArray utf8 = QStringView(string, size).toUtf8();
+#endif
     writeWithAttributes(x, y, utf8.data(), utf8.size(), fg, bg, attr);
 }
 
 void ZPainter::writeWithAttributes(int x, int y, const char16_t *string, int size, ZColor fg, ZColor bg, ZTextAttributes attr) {
+#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
     QByteArray utf8 = QTextCodec::codecForMib(106)->fromUnicode(reinterpret_cast<const QChar*>(string), size);
+#else
+    QByteArray utf8 = QStringView(string, size).toUtf8();
+#endif
     writeWithAttributes(x, y, utf8.data(), utf8.size(), fg, bg, attr);
 }
 
